@@ -1,0 +1,18 @@
+<form>
+    <vex-modal-title *ngIf="booleanAdd" [titulo]="'Acción Aprobador'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit" [titulo]="'Editar Perfil'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Detalle'"></vex-modal-title>
+    
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content class="flex flex-col">
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Observaciones</mat-label>
+            <textarea matInput #obsAdministrativa [formControl]="formGroup.controls.observacion" maxlength="256"></textarea>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar(AprobadorAccion.APROBADO)">Aprobar y firmar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar(AprobadorAccion.RECHAZADO)">Rechazar</button>
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+    </mat-dialog-actions>
+</form>

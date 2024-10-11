@@ -1,0 +1,69 @@
+<div class="h-full flex flex-col">
+    <div @stagger class="overflow-y-auto flex-auto">
+        <div class="p-gutter grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 container">
+
+            <ng-container *ngIf="(usuario$ | async)?.tipoPersona?.codigo == tipoPersonaEnum.JURIDICO || (usuario$ | async)?.tipoPersona?.codigo == tipoPersonaEnum.PJ_EXTRANJERO" >
+                <div class="card p-6 flex-1 flex flex-col items-center hover:bg-hover trans-ease-out cursor-pointer relative" matRipple (click)="nuevaSolicitud()">
+                    <div class="inline-block p-6 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+                        <mat-icon class="icon-5xl" svgIcon="mat:post_add"></mat-icon>
+                      </div>
+                    <div class="p-4 text-center" >
+                        <h2 class="title mb-1 mt-3">SOLICITAR INSCRIPCIÓN EN<br>REGISTRO DE PRECALIFICACIÓN DE<br>EMPRESAS SUPERVISORAS</h2>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="(usuario$ | async)?.tipoPersona?.codigo  == tipoPersonaEnum.NATURAL" >
+                <div class="card p-6 flex-1 flex flex-col items-center hover:bg-hover trans-ease-out cursor-pointer relative" matRipple (click)="nuevaSolicitudPostorValidar()">
+                    <div class="inline-block p-6 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+                        <mat-icon class="icon-5xl" svgIcon="mat:post_add"></mat-icon>
+                      </div>
+                    <div class="p-4 text-center" >
+                        <h2 class="title mb-1 mt-3">SOLICITAR INSCRIPCIÓN EN<br>REGISTRO DE PRECALIFICACIÓN DE<br>EMPRESAS SUPERVISORAS<br><b>POSTOR</b></h2>
+                    </div>
+                </div>
+                <div class="card p-6 flex-1 flex flex-col items-center hover:bg-hover trans-ease-out cursor-pointer relative" matRipple (click)="nuevaSolicitudPersPropuesto()">
+                    <div class="inline-block p-6 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+                        <mat-icon class="icon-5xl" svgIcon="mat:post_add"></mat-icon>
+                      </div>
+                    <div class="p-4 text-center" >
+                        <h2 class="title mb-1 mt-3">SOLICITAR INSCRIPCIÓN EN<br>REGISTRO DE PRECALIFICACIÓN DE <br>EMPRESAS SUPERVISORAS<br><b>PROFESIONAL</b></h2>
+                    </div>
+                </div>
+            </ng-container>
+            
+
+            <!--div class="card p-6 flex-1 flex flex-col items-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                <div class="inline-block p-6 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+                    <mat-icon class="icon-5xl" svgIcon="mat:edit_note"></mat-icon>
+                  </div>
+                <div class="p-4 text-center" matRipple>
+                    <h2 class="title mb-1 mt-3">SOLICITAR MODIFICACIÓN<br>EN Registro de Precalificación DE<br>EMPRESAS SUPERVISORAS</h2>
+                </div>
+            </div>
+            <div class="card p-6 flex-1 flex flex-col items-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                <div class="inline-block p-6 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+                    <mat-icon class="icon-5xl" svgIcon="mat:sync_alt"></mat-icon>
+                  </div>
+                <div class="p-4 text-center" matRipple>
+                    <h2 class="title mb-1 mt-3">ACTUALIZAR MI INFORMACIÓN<br>EN EL Registro de Precalificación DE<br>EMPRESAS SUPERVISORAS</h2>
+                </div>
+            </div>
+            <div class="card p-6 flex-1 flex flex-col items-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                <div class="inline-block p-6 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+                    <mat-icon class="icon-5xl" svgIcon="mat:dangerous"></mat-icon>
+                  </div>
+                <div class="p-4 text-center" matRipple>
+                    <h2 class="title mb-1 mt-3">SUSPENDER MI REGISTRO<br>DEL Registro de Precalificación DE<br>EMPRESAS SUPERVISORAS</h2>
+                </div>
+            </div>
+            <div class="card p-6 flex-1 flex flex-col items-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                <div class="inline-block p-6 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+                    <mat-icon class="icon-5xl" svgIcon="mat:gpp_bad"></mat-icon>
+                  </div>
+                <div class="p-4 text-center" matRipple>
+                    <h2 class="title mb-1 mt-3">CANCELAR MI REGISTRO<br>DEL Registro de Precalificación DE<br>EMPRESAS SUPERVISORAS</h2>
+                </div>
+            </div-->
+        </div>
+   </div>
+</div>

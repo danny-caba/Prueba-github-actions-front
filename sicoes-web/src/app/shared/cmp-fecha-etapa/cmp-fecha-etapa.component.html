@@ -1,0 +1,35 @@
+<div class="py-4">
+    <div class="grid sm:grid-cols-3 md:grid-cols-3 gap-x-8">
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Fecha de inicio</mat-label>
+            <mat-form-field  class="flex-auto">
+                <input [formControl]="formGroup.controls.fechaInicio" type="date" min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+                <mat-error *ngIf="formGroup.get('fechaInicio').hasError('required')">Ingrese Fecha Inicio
+                </mat-error>
+            </mat-form-field>        
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Fecha de fin</mat-label>
+            <mat-form-field  class="flex-auto">
+                <input [formControl]="formGroup.controls.fechaFin" type="date" min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+                <mat-error *ngIf="formGroup.get('fechaFin').hasError('required')">Ingrese Fecha Fin
+                </mat-error>
+            </mat-form-field>        
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Etapa</mat-label>
+            <mat-form-field  class="flex-auto">
+                <mat-select [formControl]="formGroup.controls.etapa" [compareWith]="compareSelecIdListadoDetalle" [disabled]="isDisabled" placeholder="Selecionar etapa">
+                    <mat-option *ngFor="let obj of listGrupos" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('etapa').hasError('required')">Seleccione Grupo</mat-error>
+            </mat-form-field>        
+        </div>        
+    </div>
+    <div class="py-2 flex items-center justify-end">
+        <button color="primary" mat-raised-button type="button" (click)="guardar()">Agregar</button>
+    </div>
+</div>
+

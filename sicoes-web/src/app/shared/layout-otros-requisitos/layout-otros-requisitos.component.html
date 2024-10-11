@@ -1,0 +1,77 @@
+<div class="mt-4">
+    <div *ngIf="viewEvaluacion">
+        <vex-cmp-tipo-revision [editable]="cmpTipoRevisionEdit" (changeVersion)="changeVersion($event)"></vex-cmp-tipo-revision>
+    </div>
+</div>
+
+<div *ngFor="let otro of listOtrosDocumento">
+    <div *ngIf="'OPN01'.includes(otro.tipoRequisito.codigo)" class="flex flex-col sm:gap-4">
+        <ng-container [ngTemplateOutletContext]="{ otro: otro }" [ngTemplateOutlet]="templateDniFirma"></ng-container>
+    </div>
+    <div *ngIf="['OPN02', 'OPN03', 'OPN05','OPJ01', 'OPJ02', 'OPJ03', 'OPJ04', 'OEXT01', 'OEXT02'].includes(otro.tipoRequisito.codigo)" class="flex flex-col sm:gap-4 mt-4">
+        <ng-container [ngTemplateOutletContext]="{ otro: otro }" [ngTemplateOutlet]="templateSimple"></ng-container>
+    </div>
+    <div *ngIf="['OPN04', 'OPJ05', 'OEXT03'].includes(otro.tipoRequisito.codigo)" class="flex flex-col sm:gap-4 mt-4">
+        <ng-container [ngTemplateOutletContext]="{ otro: otro }" [ngTemplateOutlet]="termino"></ng-container>
+    </div>
+</div>
+
+<ng-template #termino let-otro="otro">
+    <div class="flex flex-col sm:gap-4 mt-8">
+        <div class="flex flex-col sm:flex-row sm:gap-4 items-center">
+            <mat-checkbox color="primary" [disabled]="validarEdicion(otro)" (click)="abrirTerminos(otro, $event)" [(ngModel)]="otro.flagActivo" [formControl]="formGroup.controls.terminos">
+                Términos y condiciones de uso
+            </mat-checkbox>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #templateDniFirma let-otro="otro">
+    
+    <ng-container [ngTemplateOutletContext]="{ otro: otro }" [ngTemplateOutlet]="templateSimple"></ng-container>
+
+    <div class="ml-6 flex flex-col sm:flex-row sm:gap-4">
+        <mat-label class="w-60">¿Es DNI Electrónico?</mat-label>
+        <mat-radio-group aria-label="Select an option" class="flex gap-8"
+            (change)="setValueElectronico(otro, $event)" [(ngModel)]="otro.flagElectronico"
+            [disabled]="validarEdicion(otro)">
+            <mat-radio-button value="1">Sí</mat-radio-button>
+            <mat-radio-button value="0">No</mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <div class="ml-6 flex flex-col sm:flex-row sm:gap-4">
+        <mat-label class="w-60">¿Cuenta con firma digital?</mat-label>
+        <mat-radio-group aria-label="Select an option" class="flex gap-8"
+            (change)="setValueCheckedFirma(otro, $event)" [(ngModel)]="otro.flagFirmaDigital"
+            [disabled]="validarEdicion(otro)">
+            <mat-radio-button value="1">Sí</mat-radio-button>
+            <mat-radio-button value="0">No</mat-radio-button>
+        </mat-radio-group>
+    </div>
+</ng-template>
+
+<ng-template #templateSimple let-otro="otro">
+    <div class="flex">
+        <div class="flex flex-col">
+            <mat-checkbox color="primary" (change)="setValueChecked(otro, $event)" [(ngModel)]="otro.flagActivo"
+                [disabled]="validarEdicion(otro)">{{otro.tipoRequisito.nombre}}
+                <span *ngIf="isSubsanar"><b>
+                        <mat-label> - Resultado: {{ otro?.evaluacion?.nombre }} .</mat-label></b>
+                </span>
+            </mat-checkbox>
+            <a class="mt-1 ml-6 text-primary font-bold hover:underline cursor-pointer" (click)="descargarFormato03()"
+                *ngIf="validarCodigo(otro.tipoRequisito.codigo, 'OPN03')">Descargar Formato</a>
+            <a class="mt-1 ml-6 text-primary font-bold hover:underline cursor-pointer" (click)="descargarFormato01()"
+                *ngIf="validarCodigo(otro.tipoRequisito.codigo, 'OPJ04')">Descargar Formato</a>
+        </div>
+        <span class="flex-1"></span>
+        <vex-cmp-opcion-evaluador-documento [otro]="otro" class="flex" *ngIf="viewEvaluacion" [ultimaVersion]="ultimaVersion" [SOLICITUD]="solicitud"></vex-cmp-opcion-evaluador-documento>
+        <div *ngIf="isSubsanar" class="flex">
+            <button class="ml-2" color="primary" mat-raised-button type="button" (click)="registrarObsAcc(otro, 'view')">Ver Obs.</button>
+        </div>
+    </div>
+    <vex-form-adjuntos-btn class="ml-6" [titulo]="'Archivo (*.pdf)'" [editable]="!validarEdicion(otro)"
+        [solicitud]="solicitud"
+        [otroRequisito]="otro" [archivo]="otro.archivo" [codigo]="otro.tipoRequisito.valor">
+    </vex-form-adjuntos-btn>
+</ng-template>

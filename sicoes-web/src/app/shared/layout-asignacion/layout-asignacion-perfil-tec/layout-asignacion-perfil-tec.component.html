@@ -1,0 +1,70 @@
+<div *vexOptionRole="rol?.opcionEdit; else view">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>{{rol?.tituloEdit}}</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="mt-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+
+                <mat-form-field *ngFor="let evaAdm of listarEvaladoresAsignados" class="flex-1">
+                    <mat-label>Evaluador</mat-label>
+                    <input [value]="evaAdm.nombreUsuario" matInput [disabled]="true">
+                </mat-form-field>
+            
+                <ng-container *ngIf="SOLICITUD?.estadoEvaluacionTecnica.codigo != 'CONCLUIDO'">
+                    <mat-form-field *ngFor="let evaAdm of listEvaluadoresAdminis" class="flex-1">
+                        <mat-label>Evaluador</mat-label>
+                        <input [value]="evaAdm.nombreUsuario" matInput readonly>
+                        <button (click)="deleteEvaluadorAdmin(evaAdm)" mat-icon-button matSuffix type="button">
+                            <mat-icon svgIcon="mat:close"></mat-icon>
+                        </button>
+                    </mat-form-field>
+                </ng-container>
+                
+                <mat-form-field *ngIf="SOLICITUD?.estadoEvaluacionTecnica.codigo != 'CONCLUIDO'" class="flex-1">
+                    <mat-label>Ingrese Evaluador</mat-label>
+                    <input [formControl]="formGroup.controls.listEvaluadorAdminisCtrl" [matAutocomplete]="autoAdmin" matInput (blur)="blurEvaluadorAdminis()">
+                    <mat-autocomplete #autoAdmin="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let stateAdm of filteredStatesAdminis$ | async" [value]="stateAdm">
+                        {{ stateAdm.nombreUsuario }}
+                    </mat-option>
+                    </mat-autocomplete>
+                    <button (click)="formGroup.controls.listEvaluadorAdminisCtrl.reset()" *ngIf="formGroup.controls.listEvaluadorAdminisCtrl.value" mat-icon-button matSuffix type="button">
+                        <mat-icon svgIcon="mat:close"></mat-icon>
+                    </button>
+                    <button *ngIf="!formGroup.controls.listEvaluadorAdminisCtrl.value" mat-icon-button matSuffix type="button">
+                        <mat-icon svgIcon="mat:search"></mat-icon>
+                    </button>
+                    <!--mat-hint>Add this hint for a better UX!</mat-hint-->
+                    <mat-error *ngIf="formGroup.get('listEvaluadorAdminisCtrl').hasError('required')">Seleccione Evaluador</mat-error>
+                </mat-form-field>
+                
+            </div>
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <mat-card-actions>
+          <div class="flex">
+            <span class="flex-1"></span>
+            <button color="primary" mat-raised-button type="button" (click)="guardarEvalAdminis()">Asignar Evaluador</button>
+          </div>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
+<ng-template #view>
+    <mat-card *ngIf="listarEvaladoresAsignados?.length > 0">
+        <mat-card-header>
+            <mat-card-title>{{rol?.tituloView}}</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="mt-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                <mat-form-field *ngFor="let evaAdm of listarEvaladoresAsignados" class="flex-1">
+                    <mat-label>Evaluador</mat-label>
+                    <input [value]="evaAdm.nombreUsuario" matInput [disabled]="true">
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</ng-template>

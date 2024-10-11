@@ -1,0 +1,14 @@
+<div>
+    <vex-modal-title class="tittle" [titulo]="'Número de Proceso'"></vex-modal-title>
+    <mat-dialog-content class="flex flex-col mb-4 text-center">
+        <p>nnn-yyyy-OSINERGMIN-DIV/GER-NN</p>
+        <br>
+        <p><b>nnn:</b>correlativo</p>
+        <p><b>yyyy:</b>año</p>
+        <p><b>DIV/GER:</b>Siglas</p>
+        <p><b>NN:</b>Número de convocatoria en arábigo</p>
+    </mat-dialog-content>
+    <mat-dialog-actions class="flex items-center justify-center">
+        <button style="width: clamp(80px, 40%, 180px);" mat-raised-button color="primary" (click)="closeModal()">Aceptar</button>
+    </mat-dialog-actions>
+</div> 

@@ -1,0 +1,126 @@
+<div class="w-full h-full overflow-hidden flex flex-col">
+        <div class="py-4 px-6 bg-white">
+            <div class="flex flex-row mb-4 items-center">
+                <button (click)="openDrawer()" class="block" *ngIf="!(isDesktop$ | async)" color="primary" mat-icon-button type="button">
+                    <mat-icon svgIcon="mat:menu"></mat-icon>
+                </button>
+                <div class="">
+                    <div class="text-primary text-xl font-bold">4. Propuesta económica</div>
+                </div>
+            </div>
+            <div class="">
+                <mat-divider></mat-divider>
+            </div>
+        </div>
+        <vex-scrollbar class="px-6 flex-auto  bg-white">
+            <div class="py-2">
+                <h3 class="title text-primary font-bold m-0">1. Monto Propuesto:</h3>
+                <div class="grid sm:grid-cols-3 gap-4 mt-2">
+                    <div class="flex flex-col sm:col-span-1">
+                        <mat-label class="text-primary text-sm font-medium">Tipo de Moneda</mat-label>
+                        <mat-form-field class="flex-auto">
+                            <input [formControl]="formGroup.controls.tipoMoneda" class="text-primary font-bold" matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex flex-col sm:col-span-2">
+                        <mat-label class="text-primary text-sm font-medium">Monto</mat-label>
+                        <mat-form-field class="flex-auto">
+                            <!-- <input [formControl]="formGroup.controls.importe" maxlength="8" (keypress)="numberOnly($event)" matInput placeholder="S/. Ingrese el monto"> -->
+                            <input [formControl]="formGroup.controls.importe" (keypress)="decimalNumberOnly($event)" matInput placeholder="S/. Ingrese el monto">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="">
+                    <mat-divider></mat-divider>
+                </div>
+            </div>
+            <div class="py-4">
+                <h3 class="title text-primary font-bold m-0">2. Adjuntos</h3>
+                <div class="py-4 grid justify-center gap-2 sm:flex sm:items-center sm:justify-between">
+                    <div class="column text-primary">
+                        <mat-label class="font-bold">Adjunta tus archivos que forman parte de tu propuesta económica</mat-label><br>
+                        <mat-label>El formato de archivo soportados es PDF</mat-label><br>
+                        <mat-label>Puedes subir hasta 10 archivos,cada uno con un peso máximo de 10 MB</mat-label>
+                    </div>
+                    <button color="primary" mat-raised-button type="button" (click)="agregarDocumento()">Agregar Documento</button>
+                </div>
+            </div>
+            <div class="py-4 border-b overflow-auto">
+                <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
+                    <ng-container matColumnDef="descripcion">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
+                        <td mat-cell *matCellDef="let element" class="ajustar-texto"> {{element?.descripcion}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="archivo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Archivos</th>
+                        <td *matCellDef="let row" mat-cell>
+                            <div class="flex items-center gap-1 cursor-pointer">
+                                <div *ngIf="row.tipoArchivo" (click)="descargarArchivo(row)"
+                                    [ngClass]="['text-purple', 'bg-purple-light']"
+                                    class="rounded px-2 py-1 font-medium text-xs flex-none">
+                                    {{ row.tipoArchivo.nombre }}
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="acciones">
+                        <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                        <td *matCellDef="let row" class="w-10 text-primary" mat-cell>
+                            <div class="flex">
+                                <button (click)="actualizarVer(row, 'edit')">
+                                    <mat-icon svgIcon="mat:edit"></mat-icon>
+                                </button>
+                                <div class="v-line mx-2"></div>
+                                <button (click)="eliminarDocumento(row)">
+                                    <mat-icon svgIcon="mat:delete"></mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="loading">
+                        <td mat-footer-cell *matFooterCellDef colspan="3" class="text-center">
+                            Cargando Datos...
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vacio">
+                        <td mat-footer-cell *matFooterCellDef colspan="3" class="text-center text-primary">
+                            No se encuentran resultados para los filtros seleccionados
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': dataSource != null}"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['vacio']"
+                        [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0) }"></tr>
+                </table>
+
+                <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                    showFirstLastButtons></mat-paginator>
+            </div>
+        </vex-scrollbar>
+    <div class="bg-white px-6 py-2">
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+        <p class="py-2 text-primary font-medium"><b>Nota:</b> Puedes agregar los documentos que desees uno por uno.</p>
+    </div>
+    <div class="py-4 border-t flex flex-row">
+        <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+            Cancelar
+        </button>
+        <span class="flex-auto"></span>
+        <div class="flex flex-row gap-x-2">
+            <button color="primary" mat-stroked-button type="button" (click)="guardarPropuestaEconomica(false)">
+                Guardar y Salir
+            </button>
+            <button color="primary" mat-raised-button type="button" (click)="guardarPropuestaEconomica(true)">
+                Guardar y Continuar
+            </button>
+        </div>
+</div>
+</div>

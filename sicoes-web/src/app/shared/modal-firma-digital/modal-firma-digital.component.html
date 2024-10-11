@@ -1,0 +1,13 @@
+<div id="firmar-dialog-form">
+    <vex-modal-title [titulo]="'Firmar archivo(s)'"></vex-modal-title>
+    <div>
+        <form id="formulario" name="formulario" target="iframe" method="POST" type="POST" action="">
+            <input type="hidden" id="loginUsuario" name="loginUsuario" value="" />
+            <input type="hidden" id="passwordUsuario" name="passwordUsuario" value="" />
+            <input type="hidden" id="archivosFirmar" name="archivosFirmar" value=""/>
+        </form>
+    </div>
+    <div>
+        <iframe id="iframe" name="iframe" frameborder="0" width="570px" height="340px"></iframe>
+    </div>
+</div>

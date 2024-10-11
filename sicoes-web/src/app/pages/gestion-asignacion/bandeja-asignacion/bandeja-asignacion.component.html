@@ -1,0 +1,213 @@
+
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="card px-8 py-6">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div @fadeInUp class="flex-auto">
+                    <div class="flex items-center pb-4">
+                        <h2 class="title m-0 text-primary font-bold">Bandeja de Asignaciones</h2>
+                    </div>
+
+                    <mat-divider ></mat-divider>
+
+                </div>
+            </div>
+
+            <mat-tab-group>
+                <mat-tab label="Reasignar">
+                    <div class="py-4 flex flex-col">
+                        <div class="py-4 grid sm:grid-cols-2 md:grid-cols-2 gap-x-8">
+                            <div class="flex flex-col">
+                                <mat-form-field class="flex-auto">
+                                  <input [formControl]="formGroup.controls.usuario" matInput maxlength="30" placeholder="Nombre Completo o Usuario" [matAutocomplete]="auto">
+                                  <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let usuario of (usuariosFiltrados | async)" [value]="usuario.usuario">
+                                      {{ usuario.usuario }}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                </mat-form-field>
+                              </div>
+
+                            <div class="pt-6 ">
+                                <button color="primary" mat-raised-button type="button" class="flex-auto" (click)="buscarUsuarios()">
+                                    Buscar
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 md:grid-cols-2 gap-x-8">
+                            <div class="flex flex-col">
+                                <mat-form-field  class="flex-auto">
+                                    <input  matInput maxlength="30" [value]="nombreSeleccionado" readonly />
+                                </mat-form-field>
+                            </div>
+                            <div class="flex flex-col">
+                                <mat-form-field  class="flex-auto">
+                                    <input  matInput maxlength="30"   [value]="usuarioSeleccionado" readonly />
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="overflow-auto shadow-2xl rounded">
+                            <table [dataSource]="dataSourceReasignacion" class="w-full rounded" mat-table matSort>
+                                <ng-container matColumnDef="perfiles">
+                                  <th mat-header *matHeaderCellDef mat-sort-header style="flex: 2;">Perfiles</th>
+                                  <td mat-cell *matCellDef="let element">
+                                    {{ element?.sector?.nombre }}/
+                                    {{ element?.unidad?.nombre }}/
+                                    {{ element?.actividad?.nombre }}/<br>
+                                    {{ element?.subCategoria?.nombre }}/
+                                    {{ element?.perfil?.nombre }}
+                                </td>
+                                </ng-container>
+                                <ng-container matColumnDef="reasignar">
+                                    <th mat-header *matHeaderCellDef mat-sort-header></th>
+                                    <td mat-cell class="text-primary font-medium" *matCellDef="let element">
+                                         <button color="primary" mat-raised-button type="button" class="flex-auto" (click)="reasignar(element)">
+                                          {{ isObjectEmpty(element?.usuarioReasignacion) ? 'Reasignar' : 'Editar' }}
+                                        </button>
+                                    </td>
+                                  </ng-container>
+                                <ng-container matColumnDef="evaluador">
+                                  <th mat-header *matHeaderCellDef mat-sort-header>Evaluador Reasignado</th>
+                                  <td mat-cell *matCellDef="let element">  {{ element?.usuarioR?.nombreUsuario }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="periodo">
+                                  <th mat-header *matHeaderCellDef mat-sort-header>Periodo</th>
+                                  <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.usuarioReasignacion?.periodo }}</td>
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="loading">
+                                  <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center">Cargando Datos...</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="vacio">
+                                  <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center text-primary">No se encuentran resultados para los filtros seleccionados</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                              </table>
+                              <mat-paginator
+                              class="sticky left-0"
+                              [length]="totalElements"
+                              [pageSize]="pageSize"
+                              [pageSizeOptions]="[10, 20, 30]"
+                              (page)="pageChange($event)">
+                          </mat-paginator>
+                        </div>
+                    </div>
+
+
+                </mat-tab>
+                <mat-tab label="Historial de Reasignaciones">
+                    <div class="py-4 flex flex-col">
+                        <div class="py-4 grid sm:grid-cols-2 md:grid-cols-2 gap-x-8">
+                          <div class="flex flex-col">
+                            <mat-form-field class="flex-auto">
+                                <input  [formControl]="formGroupFiltro.controls.nombreCompletoUsuario" matInput maxlength="30" placeholder="Nombre Completo o Usuario" [matAutocomplete]="auto">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                  <mat-option *ngFor="let usuario of (usuariosFiltrados | async)" [value]="usuario.usuario">
+                                    {{ usuario.usuario }}
+                                  </mat-option>
+                                </mat-autocomplete>
+                              </mat-form-field>
+                          </div>
+                          <div class="pt-3">
+                            <button color="primary" mat-raised-button type="button" class="flex-auto" (click)="listarHistorialReasignaciones()">
+                              Buscar
+                            </button>
+                          </div>
+                        </div>
+                        <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
+                          <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">Periodo</mat-label>
+                            <mat-form-field class="flex-auto">
+                              <input type="date" min="1900-01-01" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput [formControl]="formGroupFiltro.controls.fechaInicio" />
+                              <mat-error>Ingrese Fecha Inicio</mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">.</mat-label>
+                            <mat-form-field class="flex-auto">
+                              <input type="date" min="1900-01-01" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput [formControl]="formGroupFiltro.controls.fechaFin" />
+                              <mat-error>Ingrese Fecha Fin</mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">División</mat-label>
+                            <mat-form-field>
+                              <mat-select [formControl]="formGroupFiltro.controls.idDivision" >
+                                <mat-option *ngFor="let perfil of this.dataSourceDivision.data" [value]="perfil.idDivision">{{ perfil.deDivision }}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="overflow-auto shadow-2xl rounded">
+                        <table @stagger [dataSource]="dataSourceTotalHistorial" class="w-full rounded" mat-table matSort>
+                            <ng-container matColumnDef="nombreCompleto">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Completo</th>
+                                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.usuario?.nombreUsuario }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="nombreUsuario">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre de <br> Usuario</th>
+                                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.usuario?.usuario }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="roles">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre de Reasignado</th>
+                                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.usuarioReasignacion?.usuario }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="division">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>División</th>
+                                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.division?.deDivision }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="perfil">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil Asignado</th>
+                                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.configuracionBandeja?.perfil?.valor }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="fechaInicioAsignacion">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Inicio de <b> Asignación</b></th>
+                                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.fechaInicioS }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="fechaFinAsignacion">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Fin de <b> Asignación</b></th>
+                                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.fechaFinS }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="acciones">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Acciones</th>
+                                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.proceso?.subsector?.nombre }}</td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="loading">
+                                <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center"></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="vacio">
+                                <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center text-primary"></td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsHistorial"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsHistorial"></tr>
+                            <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+                            <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+                        </table>
+                        <mat-paginator
+                        class="sticky left-0"
+                        [length]="totalElementsHistorial"
+                        [pageSize]="pageSizeHistorial"
+                        [pageSizeOptions]="[10, 20, 30]"
+                        (page)="pageChangeHistorial($event)">
+                    </mat-paginator>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+

@@ -1,0 +1,54 @@
+<!--CONTENIDO-->
+<mat-accordion multi="true">
+    <mat-expansion-panel class="mt-2" expanded="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- DATOS DE LA PERSONA NATURAL</mat-panel-title>
+        </mat-expansion-panel-header>
+        <vex-layout-datos-pers-nat #layoutDatosPersNat [SOLICITUD]="SOLICITUD"
+            [editable]="editable"></vex-layout-datos-pers-nat>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="mt-2" expanded="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- PERFILES PARA INSCRIPCIÓN</mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <vex-layout-perfil-inscripcion matExpansionPanelContent
+                [ES_PERS_NAT]="true"></vex-layout-perfil-inscripcion>
+        </ng-template>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="mt-2" expanded="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title class="font-bold">{{itemSeccion + 3}}.- GRADOS ACADÉMICOS Y TÍTULOS PROFESIONALES
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <vex-layout-grado-academico class="max-w-content" matExpansionPanelContent></vex-layout-grado-academico>
+        </ng-template>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="mt-2" expanded="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title class="font-bold">{{itemSeccion + 4}}.- CAPACITACIÓN</mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <vex-layout-capacitacion matExpansionPanelContent></vex-layout-capacitacion>
+        </ng-template>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="mt-2" expanded="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title class="font-bold">{{itemSeccion + 5}}.- DOCUMENTOS QUE SUSTENTEN LA EXPERIENCIA ESPECÍFICA, SEGÚN
+                LA CATEGORÍA Y PERFIL A ACREDITARSE</mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <vex-layout-documento-sustento-exp matExpansionPanelContent>
+            </vex-layout-documento-sustento-exp>
+        </ng-template>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="mt-2" expanded="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title class="font-bold">{{itemSeccion + 6}}.- OTROS REQUISITOS</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <vex-layout-otros-requisitos #layoutOtrosRequisitos [viewEvaluacion]="viewEvaluacion"></vex-layout-otros-requisitos>
+
+    </mat-expansion-panel>
+</mat-accordion>

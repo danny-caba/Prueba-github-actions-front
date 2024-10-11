@@ -1,0 +1,211 @@
+import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { BaseComponent } from '../../components/base.component';
+import { ParametriaService } from 'src/app/service/parametria.service';
+import { ListadoEnum } from 'src/helpers/constantes.components';
+import { PidoService } from 'src/app/service/pido.service';
+import { UbigeoUpdComponent } from '../../ubigeo-upd/ubigeo-upd.component';
+import { functionsAlert } from 'src/helpers/functionsAlert';
+import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { ListadoDetalle } from 'src/app/interface/listado.model';
+import { ErrorStateMatcher } from '@angular/material/core';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
+
+@Component({
+  selector: 'vex-layout-datos-pers-nat-postor',
+  templateUrl: './layout-datos-pers-nat-postor.component.html',
+  styleUrls: ['./layout-datos-pers-nat-postor.component.scss'],
+  animations: [
+    fadeInUp400ms
+  ]
+})
+export class LayoutDatosPersNatPostorComponent extends BaseComponent implements OnInit {
+
+  @ViewChild('formUbigeo', { static: true }) formUbigeo: UbigeoUpdComponent;
+  @Input() SOLICITUD: any;
+  @Input() editable: boolean = false;
+
+  listPais: any[]
+  listTipoDocumento: any[]
+
+  flagSne = false;
+  flagValidacion = false;
+  flagCodigoValidacion = false;
+  isDisabledBtnCorreo = true;
+  isDisabledBtnCodigo = false;
+
+  matcher = new MyErrorStateMatcher();
+
+  errorMsgSNE: string;
+  msgCodigo: string;
+
+  formGroup = this.fb.group({
+    pais: [null as ListadoDetalle, Validators.required],
+    tipoDocumento: [null as ListadoDetalle, Validators.required],
+    numeroDocumento: ['', Validators.required],
+    codigoRuc: ['', Validators.required],
+    nombreRazonSocial: ['', Validators.required],
+    direccion: ['', Validators.required],
+    codigoDepartamento: [''],
+    codigoProvincia: [''],
+    codigoDistrito: [''],
+    telefono1: ['', Validators.required],
+    telefono2: [''],
+    telefono3: [''],
+    correo: ['', [Validators.required, Validators.email]],
+    codigo: [''],
+  });
+
+  constructor(
+    private fb: FormBuilder,
+    private parametriaService: ParametriaService,
+    private pidoService: PidoService
+  ) {
+    super();
+    this.formGroup.controls['pais'].disable({ emitEvent: false })
+    this.formGroup.controls['nombreRazonSocial'].disable({ emitEvent: false })
+  }
+
+  ngOnInit(): void {
+    this.cargarCombo();
+    this.formGroup.get('correo').valueChanges.subscribe(() => this.isDisabledBtnCorreo = false)
+
+    if (!this.editable) {
+      this.disableAllForm(this.formGroup);
+    }else{
+      this.disableControls(true, ['tipoDocumento', 'numeroDocumento', 'nombreRazonSocial', 'direccion'], this.formGroup);
+    }
+  }
+
+  cargarCombo() {
+    this.parametriaService.obtenerMultipleListadoDetalle([
+      ListadoEnum.PAIS,
+      ListadoEnum.TIPO_DOCUMENTO,
+    ]).subscribe(listRes => {
+      this.listPais = listRes[0];
+      this.listTipoDocumento = listRes[1];
+    })
+  }
+
+  public validarFlagValidacion() {
+    if (!this.flagCodigoValidacion) {
+      return false;
+    }
+    return true;
+  }
+
+  public validarSNE(usu) {
+    this.pidoService.validarSNE(usu).subscribe({
+      next: (resp) => {
+        if (resp.resultCode == "N") {
+          this.errorMsgSNE = resp.message;
+          this.flagSne = true;
+        }
+        if (resp.resultCode == "A") {
+          this.errorMsgSNE = resp.message;
+          this.formGroup.controls.correo.setValue(resp.correoAfiliado)
+          this.pidoService.setSne(resp);
+          this.flagSne = false;
+          this.flagCodigoValidacion = true;
+          this.formGroup.controls['correo'].disable({ emitEvent: false })
+        }
+      },
+      error: (e) => {
+
+      }
+    }
+    );
+  }
+
+  public validarDatosPJ() {
+    this.formGroup.markAllAsTouched();
+    return this.formGroup.valid;
+  }
+
+  public getFormValues() {
+    return {
+      ...this.formGroup.getRawValue(),
+      ...this.formUbigeo.getUbigeo()
+    };
+  }
+
+  public validarDocumento(tipoDocumento, numeroDocumento) {
+    this.pidoService.buscarNroDocumento(tipoDocumento.codigo, numeroDocumento).subscribe(resp => {
+      if (true) {
+        this.formGroup.patchValue({
+          ...resp
+        })
+        this.formUbigeo.setValue(resp)
+        //this.disableControls(true);
+      } else {
+        this.editable = true;
+        functionsAlert.error(resp.deResultado);
+        this.limpiarDatosDocumento();
+        this.formGroup.controls['nombreRazonSocial'].enable({ emitEvent: true })
+        //this.disableControls(false);
+      }
+    });
+  }
+
+  public limpiarDatosDocumento() {
+    let datos = {
+      nombres: '',
+      apellidoPaterno: '',
+      apellidoMaterno: '',
+      direccion: ''
+    }
+    this.formGroup.patchValue({
+      ...datos
+    })
+    //this.formUbigeo.setValue(datos)
+  }
+
+  public validarEmail(correo) {
+
+    this.formGroup.controls.correo.markAsTouched();
+    if (!this.formGroup.controls.correo.valid) {
+      return;
+    }
+
+    this.pidoService.validarEmail(correo).subscribe(req => {
+      this.isDisabledBtnCorreo = true;
+      this.flagValidacion = true;
+      this.msgCodigo = "Verifique el código en la bandeja de entrada de su correo."
+    });
+  }
+
+  public validarCodigoEmail(codigo) {
+    this.pidoService.validarCodigoEmail(codigo).subscribe({
+      next: (resp) => {
+        functionsAlert.success("Código validado")
+        this.flagCodigoValidacion = true
+        this.isDisabledBtnCodigo = true
+        this.formGroup.controls['correo'].disable({ emitEvent: false })
+        this.msgCodigo = "Código validado"
+        return true
+      },
+      error: (e) => {
+        this.flagCodigoValidacion = false
+        this.msgCodigo = "Código ingresado incorrecto"
+        return false
+      }
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.SOLICITUD) {
+      this.setValues();
+    }
+  }
+
+  setValues() {
+    this.formGroup.patchValue(this.SOLICITUD.persona)
+    this.formUbigeo.setValue(this.SOLICITUD.persona)
+  }
+}

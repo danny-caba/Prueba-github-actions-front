@@ -1,0 +1,85 @@
+.th-center {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+
+.mat-divider {
+    border-top-color: #000090;
+}
+
+.mat-stroked-button:not([disabled]){
+    border-color: var(--color-primary)!important;
+    background-color: white;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix{
+    padding: 0.5em 0 1em 0;
+}
+.small-input.mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: .25em 0 .75em 0;
+    font-size: 14px;
+}
+.small-input.mat-form-field-appearance-outline .mat-form-field-infix .mat-select-arrow{margin-top: 10px;}
+.small-input.mat-form-field-appearance-outline .mat-select-empty + .mat-form-field-label-wrapper .mat-form-field-label{margin-top: -0.75em;}
+
+mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-field-wrapper > div.mat-form-field-flex > div.mat-form-field-infix  { padding: 0.4em 0px }
+mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-field-wrapper > div.mat-form-field-flex > div.mat-form-field-infix > span.mat-form-field-label-wrapper { top: -1.5em; }
+
+.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    transform: translateY(-1.1em) scale(.75);
+    width: 133.33333%;
+}
+::ng-deep .mat-form-field {
+    font-size: 12px; // example
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: #000090;  
+}
+  /* Font color */
+::ng-deep input.mat-input-element {
+    color: #000090;
+}
+
+.boton-descargar {
+    border: 1px solid #4D4D50;
+    color: #4D4D50;
+    display: flex;
+    align-items: center;
+    border-radius: 0.25rem;
+    padding: 0.4rem;
+    justify-content: center;
+  }
+
+  ::ng-deep .mat-tooltip-default {
+    display: none;
+  }
+
+  ::ng-deep .mat-tooltip {
+    position: relative;
+    background-color: #5c74b8; // Cambiar el color de fondo del tooltip
+    color: #fff; // Cambiar el color del texto del tooltip
+    font-size: 16px; // Cambiar el tamaño de la fuente del tooltip
+    border-radius: 5px;
+    padding: 8px;
+  }
+  
+  ::ng-deep .mat-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%; // Mostrar la flecha en la parte superior del tooltip
+    left: 50%;
+    margin-left: -8px;
+    border-width: 8px;
+    border-style: solid;
+    border: 10px;
+    border-color: #5c74b8 transparent transparent transparent; // Cambiar el color de la flecha
+  }
+  
+  ::ng-deep .mat-tooltip-text {
+    font-weight: bold;
+  }

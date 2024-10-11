@@ -1,0 +1,80 @@
+<vex-cmp-tipo-revision [editable]="cmpTipoRevisionEdit" (changeVersion)="changeVersion($event)"></vex-cmp-tipo-revision>
+
+<div class="mx-0 py-4 border-b overflow-auto">
+    <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
+        <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+            <td mat-cell *matCellDef="let element"> {{element?.tipo?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="grupo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Grupo</th>
+            <td mat-cell *matCellDef="let element"> {{element?.grupo?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha / Hora <br/> Designación</th>
+            <td mat-cell *matCellDef="let element"> {{element?.fechaRegistro}} </td>
+        </ng-container>
+        <ng-container matColumnDef="aprobador">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Aprobador</th>
+            <td mat-cell *matCellDef="let element"> {{element?.usuario?.nombreUsuario}} </td>
+        </ng-container>
+        <ng-container matColumnDef="fechaAprobacion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha / Hora <br/> Aprobación</th>
+            <td mat-cell *matCellDef="let element"> {{element?.fechaAprobacion}} </td>
+        </ng-container>
+        <ng-container matColumnDef="resultado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Resultado</th>
+            <td mat-cell *matCellDef="let element"> {{element?.evaluacion?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="observacion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Observación</th>
+            <td mat-cell *matCellDef="let element"> {{element?.observacion}} </td>
+        </ng-container>
+        
+        <!-- Action Column -->
+        <ng-container matColumnDef="acciones">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Acción</th>
+            <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ obj: row }"
+                    [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button" class="hover:bg-hover">
+                    <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="loading">
+            <td mat-footer-cell *matFooterCellDef colspan="7" class="text-center">
+                Cargando Datos...
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vacio">
+            <td mat-footer-cell *matFooterCellDef colspan="7" class="text-center text-primary">
+                No se encuentran resultados para los filtros seleccionados
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': dataSource != null}"></tr>
+        <tr mat-footer-row *matFooterRowDef="['vacio']"
+            [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0) }"></tr>
+    </table>
+
+    <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+        showFirstLastButtons></mat-paginator>
+</div>
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+    <ng-template let-obj="obj" matMenuContent>
+        <button (click)="actualizarVer(obj, 'view')" mat-menu-item>
+            <mat-icon svgIcon="mat:preview"></mat-icon>
+            <span>Ver</span>
+        </button>
+        <div *ngIf="(usuario$ | async)?.idUsuario == obj.usuario.idUsuario && !(['APROBADO', 'RECHAZADO'].includes(obj.evaluacion?.codigo))">
+            <button (click)="actualizarVer(obj, 'add')" mat-menu-item *vexOptionRole="opcion.BTN_APROBADOR_ACC">
+                <mat-icon svgIcon="mat:preview"></mat-icon>
+                <span>Aprobar</span>
+            </button>
+        </div>
+    </ng-template>
+</mat-menu>

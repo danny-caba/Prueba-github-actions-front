@@ -1,0 +1,72 @@
+<form>
+    <vex-modal-title *ngIf="booleanAdd && esPersonaNat" [titulo]="'Agregar Perfil'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit && esPersonaNat" [titulo]="'Editar Perfil'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanView && esPersonaNat" [titulo]="'Ver Perfil'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanAdd && !esPersonaNat" [titulo]="'Agregar Sector'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit && !esPersonaNat" [titulo]="'Editar Sector'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanView && !esPersonaNat" [titulo]="'Ver Sector'"></vex-modal-title>
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content class="flex flex-col">
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Sector</mat-label>
+            <mat-select [formControl]="formGroup.controls.sector" [compareWith]="compareSelecIdListadoDetalle">
+                <mat-option *ngFor="let obj of listSector" [value]="obj">
+                    {{ obj.nombre }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGroup.get('sector').hasError('required')">Ingrese Sector</mat-error>
+        </mat-form-field>
+        <mat-form-field  class="mat-input-wrapper">
+            <mat-label>Sub-Sector</mat-label>
+            <mat-select [formControl]="formGroup.controls.subsector" [compareWith]="compareSelecIdListadoDetalle">
+                <mat-option *ngFor="let obj of listSubSector" [value]="obj">
+                    {{ obj.nombre }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGroup.get('subsector').hasError('required')">Ingrese Sub-Sector</mat-error>
+        </mat-form-field>
+        <div *ngIf="esPersonaNat" class="flex flex-col">
+            <mat-form-field  class="mat-input-wrapper">
+                <mat-label>Actividad</mat-label>
+                <mat-select [formControl]="formGroup.controls.actividad" [compareWith]="compareSelecIdListadoDetalle">
+                    <mat-option *ngFor="let obj of listActividad" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('actividad').hasError('required')">Ingrese Actividad</mat-error>
+            </mat-form-field>
+            <mat-form-field  class="mat-input-wrapper">
+                <mat-label>Unidad</mat-label>
+                <mat-select [formControl]="formGroup.controls.unidad" [compareWith]="compareSelecIdListadoDetalle">
+                    <mat-option *ngFor="let obj of listUnidad" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('unidad').hasError('required')">Ingrese Unidad</mat-error>
+            </mat-form-field>
+            <mat-form-field  class="mat-input-wrapper">
+                <mat-label>Sub-Categoría</mat-label>
+                <mat-select [formControl]="formGroup.controls.subCategoria" [compareWith]="compareSelecIdListadoDetalle">
+                    <mat-option *ngFor="let obj of listSubCategoria" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('subCategoria').hasError('required')">Ingrese Sub-Categoría</mat-error>
+            </mat-form-field>
+            <mat-form-field  class="mat-input-wrapper">
+                <mat-label>Perfil</mat-label>
+                <mat-select [formControl]="formGroup.controls.perfil" [compareWith]="compareSelecIdListadoDetalle">
+                    <mat-option *ngFor="let obj of listPerfil" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('perfil').hasError('required')">Ingrese Perfil</mat-error>
+            </mat-form-field>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+    </mat-dialog-actions>
+</form>

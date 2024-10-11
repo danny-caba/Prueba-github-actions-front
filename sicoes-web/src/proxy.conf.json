@@ -1,0 +1,7 @@
+{
+    "^/sicoes-api": {
+        "target": "http://3513-190-234-127-88.ngrok.io",
+        "secure": false,
+        "logLevel":"debug"
+    }
+}

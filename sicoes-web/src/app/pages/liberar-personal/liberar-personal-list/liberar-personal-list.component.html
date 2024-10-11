@@ -1,0 +1,178 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="card px-6 py-4">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div @fadeInUp class="flex-auto">
+                    <!-- TITULO -->
+                    <h2 class="title m-0 text-primary font-bold">Gestión de bloqueo y liberación de profesional:</h2>
+                    <hr class="bg-primary">
+                    <h3 class="pt-2 text-primary font-medium">Información obligatoria para iniciar la búsqueda:</h3>
+                    <!-- FILTRO -->
+                    <div class="pt-2 grid sm:grid-cols-2 md:grid-cols-3 gap-x-6">
+                        <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">Sector</mat-label>
+                            <mat-form-field  class="flex-auto">
+                                <mat-select [formControl]="formGroup.controls.sector" [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccionar sector">
+                                    <mat-option *ngFor="let obj of listSector" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formGroup.get('sector').hasError('required')">Ingresar Sector</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">Sub sector</mat-label>
+                            <mat-form-field  class="flex-auto">
+                                <mat-select [formControl]="formGroup.controls.subsector" [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccionar sub sector">
+                                    <mat-option *ngFor="let obj of listSubSector" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formGroup.get('subsector').hasError('required')">Ingresar Sub Sector</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <h3 class="text-primary font-medium">Información opcional para iniciar la búsqueda:</h3>
+                    <div class="pt-2  grid sm:grid-cols-2 md:grid-cols-3 gap-x-6">
+                        <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">RUC</mat-label>
+                            <mat-form-field  class="flex-auto">
+                                <input [formControl]="formGroup.controls.ruc" matInput maxlength="30" placeholder="Ingresar RUC del profesional" />
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">Estado</mat-label>
+                            <mat-form-field  class="flex-auto">
+                                <mat-select [formControl]="formGroup.controls.estado"
+                                    [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccione estado">
+                                    <mat-option *ngFor="let obj of listEstado" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">Ítem</mat-label>
+                            <mat-form-field  class="flex-auto">
+                                <input [formControl]="formGroup.controls.item" matInput maxlength="100" placeholder="Ingrese nombre del ítem" />
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">Nombre del Proceso</mat-label>
+                            <mat-form-field  class="flex-auto">
+                                <input [formControl]="formGroup.controls.nombreProceso" matInput maxlength="30" placeholder="Ingrese nombre del proceso" />
+                            </mat-form-field>
+                        </div>
+                        <!-- 
+                        <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">Estado ítem</mat-label>
+                            <mat-form-field  class="flex-auto">
+                                <mat-select [formControl]="formGroup.controls.estadoItem"
+                                    [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccione estado del ítem">
+                                    <mat-option *ngFor="let obj of listEstadoItem" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        -->
+                        <div class="flex-auto flex flex-row gap-x-4 items-center">
+                            <button color="primary" mat-stroked-button type="button" (click)="limpiar()" class="flex-auto">
+                                Limpiar
+                            </button>
+                            <button color="primary" mat-raised-button type="button" (click)="buscar()" class="flex-auto">
+                                Buscar profesional
+                            </button>
+                        </div>
+                    </div>
+ <!-- 
+                    <div class="flex-auto flex flex-row gap-x-4 items-center">
+                        <button color="primary" mat-raised-button type="button" (click)="buscar()" class="flex-auto">
+                            TEMP Bloquear
+                        </button>
+                        <button color="primary" mat-raised-button type="button" (click)="buscar()" class="flex-auto">
+                            TEMP Desbloquear
+                        </button>
+                    </div>
+  -->
+                    
+                </div>
+            </div>
+            <h2 class="title mb-2 text-primary font-bold">Lista de profesionales pre calificados:</h2>
+            <div class="overflow-auto shadow-2xl rounded">
+                <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
+                    <ng-container matColumnDef="ruc">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>RUC</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.codigoRuc  }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="profesional">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Profesional</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.nombres + ' ' + element?.apellidoPaterno + ' ' + element?.apellidoMaterno }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="sector">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Sector</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.perfil?.sector?.nombre }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="subsector">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Sub sector</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.perfil?.subsector?.nombre }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.movimiento?.estado?.nombre }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="proceso">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Proceso</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.movimiento?.propuestaProfesional?.propuesta?.procesoItem?.proceso?.nombreProceso }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="item">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ítem</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.movimiento?.propuestaProfesional?.propuesta?.procesoItem?.descripcionItem }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="postor">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Postor</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ mostrarPostor(element) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="perfil">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element"> {{ element?.movimiento?.propuestaProfesional?.perfil?.nombre}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="tipo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.movimiento?.tipoMotivo?.nombre }}</td>
+                    </ng-container>
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="actions">
+                        <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                        <td *matCellDef="let row" class="w-10 text-primary text-center" mat-cell>
+                            <div class="flex gap-x-3">
+                                <button (click)="historial(row)" matTooltip="Ver historial">
+                                    <mat-icon svgIcon="mat:visibility"></mat-icon>
+                                </button>
+                                <button (click)="desbloquear(row)" matTooltip="Desbloquear" *ngIf="verBtn(row)" class="text-green">
+                                    <mat-icon svgIcon="mat:how_to_reg"></mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="loading">
+                        <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center">Ingresar criterios de busqueda...</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vacio">
+                        <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center text-primary">No se encuentran resultados para los filtros seleccionados</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+                </table>
+                <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                    showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,41 @@
+<form>
+    <vex-modal-title [titulo]="'Reasignar Evaluador'"></vex-modal-title>
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content class="flex flex-col">
+        <div class="mt-6 flex flex-col sm:flex-row sm:gap-4">
+          <mat-form-field class="flex-auto">
+            <mat-label>Evaluador</mat-label>
+            <input [formControl]="formGroup.controls.usuario" matInput maxlength="30" placeholder="Nombre Completo o Usuario" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onAutocompleteSelected($event)">
+              <mat-option *ngFor="let usuario of (usuariosFiltrados | async)" [value]="usuario.nombreUsuario">
+                {{ usuario.nombreUsuario }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      
+        <div class="grid sm:grid-cols-2 md:grid-cols-2 gap-x-8">
+            <mat-form-field class="flex-auto">
+                <input matInput [matDatepicker]="pickerInicio" placeholder="Fecha de Inicio" [disabled]="!autocompletado" (dateChange)="onFechaInicioChange($event)" />
+                <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                <mat-datepicker #pickerInicio></mat-datepicker>
+              </mat-form-field>
+              
+              <mat-form-field class="flex-auto">
+                <input matInput [matDatepicker]="pickerFin" placeholder="Fecha de Fin" [disabled]="!autocompletado" (dateChange)="onFechaFinChange($event)" />
+                <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFin></mat-datepicker>
+              </mat-form-field>
+          </div>
+      
+          <div class="flex justify-center items-center">
+            <div style="padding-top: 10px;">
+              <button color="primary" mat-raised-button type="button" [disabled]="!autocompletado" (click)="realizarReasignacion()" style="margin-right: 14px;">Reasignar</button>
+              <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+            </div>
+          </div>
+          
+      </mat-dialog-content>
+      
+
+</form>

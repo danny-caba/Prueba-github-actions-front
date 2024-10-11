@@ -1,0 +1,159 @@
+<div class="mx-0 py-4 flex flex-col gap-4">
+    <vex-cmp-tipo-revision [editable]="cmpTipoRevisionEdit" (changeVersion)="changeVersion($event)"></vex-cmp-tipo-revision>
+
+    <div *ngIf="ultimaVersion; else resulEvalAdm">
+        <div *vexOptionRole="opcion.RESUL_EVAL_ADMIN; else resulEvalAdm">
+            <div class="ml-6 flex flex-col sm:flex-row sm:gap-4">
+                <mat-label class="flex-auto">RESULTADO DE EVALUACIÓN ADMINISTRATIVA</mat-label>
+                <!--mat-radio-group aria-label="Select an option" class="flex gap-8" (change)="guardarResultadoAdmin($event)" [value]="SOLICITUD_TEMP?.resultadoAdministrativo?.idListadoDetalle" [disabled]="validarEdit(SOLICITUD_TEMP?.resultadoAdministrativo)"-->
+                <mat-radio-group aria-label="Select an option" class="flex gap-8" (change)="guardarResultadoAdmin($event)" [value]="SOLICITUD_TEMP?.resultadoAdministrativo?.idListadoDetalle">
+                    <mat-radio-button *ngFor="let opt of listOpcion" [value]="opt.idListadoDetalle" [disabled]="opt?.editable">{{opt.nombre}}</mat-radio-button>
+                </mat-radio-group>
+                <button class="ml-2" color="primary" mat-raised-button type="button" (click)="registrarObsAdm(SOLICITUD_TEMP)">Resultado</button>
+            </div>
+        </div>
+    </div>
+    <ng-template #resulEvalAdm>
+        <div class="ml-6 flex flex-col sm:flex-row sm:gap-4">
+            <mat-label class="flex-auto">RESULTADO DE EVALUACIÓN ADMINISTRATIVA</mat-label>
+            <mat-radio-group aria-label="Select an option" class="flex gap-8" [value]="SOLICITUD_TEMP?.resultadoAdministrativo?.idListadoDetalle" [disabled]="true">
+                <mat-radio-button *ngFor="let opt of listOpcion" [value]="opt.idListadoDetalle">{{opt.nombre}}</mat-radio-button>
+            </mat-radio-group>
+            <button class="ml-2" color="primary" mat-raised-button type="button" (click)="registrarObsAccAdm(SOLICITUD_TEMP, 'view')">Resultado</button>
+        </div>
+    </ng-template>
+    <div class="ml-6 flex flex-col sm:flex-row sm:gap-4">
+        <mat-label class="flex-auto font-bold">RESULTADO DE EVALUACIÓN TÉCNICA</mat-label>
+    </div>
+    <div *ngIf="ultimaVersion; else resulEvalTec">
+        <div *vexOptionRole="opcion.RESUL_EVAL_TECNI; else resulEvalTec">
+            <ng-container *ngFor="let perf of listPerfiles">
+                <div *ngIf="SOLICITUD.persona.tipoPersona.codigo == 'JURIDICO' || SOLICITUD.persona.tipoPersona.codigo == 'PJ_EXTRANJERO' ||
+                            SOLICITUD.persona.tipoPersona.codigo == 'NATURAL' || SOLICITUD.persona.tipoPersona.codigo == 'PN_POSTOR'">
+                    <div *ngIf="perf?.finalizado?.codigo != 'SI' && usuario.idUsuario == perf?.usuario?.idUsuario" class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
+                        <ng-container [ngTemplateOutletContext]="{ perf: perf }" [ngTemplateOutlet]="resulEvalTecEditItem"></ng-container>
+                    </div>
+                    <div *ngIf="perf?.finalizado?.codigo == 'SI' || usuario.idUsuario != perf?.usuario?.idUsuario" class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
+                        <ng-container [ngTemplateOutletContext]="{ perf: perf }" [ngTemplateOutlet]="resulEvalTecShowItem"></ng-container>
+                    </div>
+                </div>
+                <div *ngIf="SOLICITUD.persona.tipoPersona.codigo == 'PN_PERS_PROPUESTO'">
+                    <div *ngIf="perf?.finalizado?.codigo != 'SI' && usuario.idUsuario == perf?.usuario?.idUsuario" class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
+                        <ng-container [ngTemplateOutletContext]="{ perf: perf }" [ngTemplateOutlet]="resulEvalTecEditItem"></ng-container>
+                    </div>
+                    <div *ngIf="perf?.finalizado?.codigo == 'SI' || usuario.idUsuario != perf?.usuario?.idUsuario" class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
+                        <ng-container [ngTemplateOutletContext]="{ perf: perf }" [ngTemplateOutlet]="resulEvalTecShowItem"></ng-container>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <ng-template #resulEvalTec>
+        <div *ngFor="let perf of listPerfiles" class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
+            <ng-container [ngTemplateOutletContext]="{ perf: perf }" [ngTemplateOutlet]="resulEvalTecShowItem"></ng-container>
+        </div>
+    </ng-template>
+    <ng-container *ngIf="tipoPersonaEnum.PN_PERS_PROPUESTO.valueOf() !== this.SOLICITUD.persona.tipoPersona.codigo">
+        <div class="ml-6 flex flex-col sm:flex-row sm:gap-4">
+            <mat-label class="flex-auto font-bold">MONTO FACTURADO EVALUADO</mat-label>
+        </div>
+        <div *ngIf="ultimaVersion; else resulEvalFacturacion">
+            <div *vexOptionRole="opcion.RESUL_EVAL_TECNI; else resulEvalFacturacion">
+                <ng-container *ngFor="let perf of listDictamenEval">
+                    <div class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
+                        <ng-container [ngTemplateOutletContext]="{ perf: perf }" [ngTemplateOutlet]="resulEvalSectorShowItem"></ng-container>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #resulEvalFacturacion>
+        <div *ngFor="let perf of listDictamenEval" class="ml-6 flex flex-col sm:flex-row sm:gap-4">
+            <ng-container [ngTemplateOutletContext]="{ perf: perf }" [ngTemplateOutlet]="resulEvalSectorShowItem"></ng-container>
+        </div>
+    </ng-template>
+</div>
+
+<!-- PERFIL -->
+<ng-template #resulEvalTecEditItem let-perf="perf">
+    <mat-label class="flex-auto">{{obtenerNombrePerfil(perf)}}</mat-label>
+    <div *ngIf="SOLICITUD.persona.tipoPersona.codigo == 'JURIDICO' || SOLICITUD.persona.tipoPersona.codigo == 'PJ_EXTRANJERO' || SOLICITUD.persona.tipoPersona.codigo == 'NATURAL' || SOLICITUD.persona.tipoPersona.codigo == 'PN_POSTOR'">
+        <mat-label class="flex-auto">{{perf.montoFacturadoSector ?? 0}}</mat-label>
+    </div>
+    <section class="flex gap-8">
+        <mat-checkbox #button color="primary" *ngFor="let opt of perf.listaEvaluacion" [value]="opt.idListadoDetalle + ''" [disabled]="validarEdit(perf.evaluacion)"
+            (change)="guardarEvaluacionPerfil($event, perf, button)" [(ngModel)]="opt.seleccionado">
+            <div *ngIf="SOLICITUD.persona.tipoPersona.codigo == 'JURIDICO' || SOLICITUD.persona.tipoPersona.codigo == 'PJ_EXTRANJERO' || SOLICITUD.persona.tipoPersona.codigo == 'NATURAL' || SOLICITUD.persona.tipoPersona.codigo == 'PN_POSTOR'">
+                {{ opt.idListadoDetalle === 141 ? 'Cumple' : (opt.idListadoDetalle === 142 ? 'No Cumple' : opt.nombre) }}
+            </div>
+            <div *ngIf="SOLICITUD.persona.tipoPersona.codigo == 'PN_PERS_PROPUESTO'">
+                {{ opt.nombre }}
+            </div>        
+        </mat-checkbox>
+    </section>
+    <button class="ml-2" color="primary" mat-raised-button type="button" (click)="registrarObs(perf)">Resultado</button>
+    <div class="flex flex-col sm:flex-row sm:gap-4">
+        <span class="flex mt-1 items-center">
+            Asignado a:
+            {{perf?.usuario?.nombreUsuario}}
+        </span>
+    </div>
+</ng-template>
+
+<ng-template #resulEvalTecShowItem let-perf="perf">
+    <mat-label class="flex-auto">{{obtenerNombrePerfil(perf)}}</mat-label>
+    <div *ngIf="SOLICITUD.persona.tipoPersona.codigo == 'JURIDICO' || SOLICITUD.persona.tipoPersona.codigo == 'PJ_EXTRANJERO' || SOLICITUD.persona.tipoPersona.codigo == 'NATURAL' || SOLICITUD.persona.tipoPersona.codigo == 'PN_POSTOR'">
+        <mat-label class="flex-auto">{{perf.montoFacturadoSector ?? 0}}</mat-label>
+    </div>
+    <mat-radio-group aria-label="Select an option" class="flex gap-8" [value]="perf.evaluacion?.idListadoDetalle" [disabled]="true">
+        <mat-radio-button *ngFor="let opt of listOpcion" [value]="opt.idListadoDetalle">
+            <div *ngIf="SOLICITUD.persona.tipoPersona.codigo == 'JURIDICO' || SOLICITUD.persona.tipoPersona.codigo == 'PJ_EXTRANJERO' || SOLICITUD.persona.tipoPersona.codigo == 'NATURAL' || SOLICITUD.persona.tipoPersona.codigo == 'PN_POSTOR'">
+                {{ opt.idListadoDetalle === 141 ? 'Cumple' : (opt.idListadoDetalle === 142 ? 'No Cumple' : opt.nombre) }}
+            </div>
+            <div *ngIf="SOLICITUD.persona.tipoPersona.codigo == 'PN_PERS_PROPUESTO'">
+                {{ opt.nombre }}
+            </div>   
+        </mat-radio-button>
+    </mat-radio-group>
+    <button class="ml-2" color="primary" mat-raised-button type="button" (click)="registrarObsAcc(perf, 'view')">Resultado</button>
+    <div *ngIf="perf?.finalizado?.codigo == 'SI'" class="flex flex-col sm:flex-row sm:gap-4">
+      <span class="flex mt-1 items-center">
+        <mat-icon class="mat-icon-color mat-primary" svgIcon="mat:done"></mat-icon>
+        Finalizado
+      </span>
+    </div>
+    <div *ngIf="perf?.finalizado?.codigo == 'SI'" class="flex flex-col sm:flex-row sm:gap-4">
+        <span class="flex mt-1 items-center">
+            Evaluado por:
+            {{perf.usuario.nombreUsuario}}
+            <br/>
+            {{perf.fechaFinalizador}}
+        </span>
+    </div>
+    <button *ngIf="SOLICITUD.estadoEvaluacionTecnica.codigo == 'EN_PROCESO'" class="ml-2" color="primary" mat-raised-button type="button" (click)="solicitarRevertirEvaluacion(perf)">Revertir</button>
+</ng-template>
+
+<!-- SECTOR EVALUACION -->
+<ng-template #resulEvalSectorShowItem let-perf="perf">
+    <mat-label class="flex-auto">{{perf?.sector?.nombre}}</mat-label>
+    <div>
+        <mat-radio-group [value]="getRadioSelection()" aria-label="Select an option" class="flex gap-8" disabled>
+            <mat-radio-button value="Califica">Califica</mat-radio-button>
+            <mat-radio-button value="No Califica">No Califica</mat-radio-button>
+            <mat-radio-button value="Observado">Observado</mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <mat-form-field class="ml-2 mt-1">
+        <mat-label>Monto Facturado Evaluado</mat-label>
+        <input [value]="getDataSumary() ?? ''" matInput [disabled]="true">
+    </mat-form-field>
+</ng-template>
+
+<!--<ng-template #resulEvalSectorEditItem let-perf="perf">
+    <mat-label class="flex-auto">{{perf?.sector?.nombre}}</mat-label>
+    <mat-form-field class="flex">
+        <mat-label>Monto Facturado Evaluado</mat-label>
+        <input [value]="perf.montoFacturado ?? ''" matInput [disabled]="true" >
+    </mat-form-field>
+    <button class="ml-2" color="primary" mat-raised-button type="button" (click)="registrarDictamenEval(perf)">Guardar</button> 
+</ng-template>-->

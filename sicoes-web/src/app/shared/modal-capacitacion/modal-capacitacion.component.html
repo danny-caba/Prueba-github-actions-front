@@ -1,0 +1,79 @@
+<form>
+    <vex-modal-title *ngIf="booleanAdd" [titulo]="'Agregar Capacitación	'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit" [titulo]="'Editar Capacitación'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Capacitación'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEvaluar || booleanViewEval" [titulo]="'Capacitación'"></vex-modal-title>
+
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+
+    <mat-dialog-content class="pt-6 flex flex-col">
+        <vex-cmp-tipo-revision *ngIf="booleanEvaluar" (changeVersion)="changeVersion($event)" [editable]="cmpTipoRevisionEdit"></vex-cmp-tipo-revision>
+
+        <mat-form-field  class="flex-auto">
+            <mat-label>Tipo de Capacitación</mat-label>
+            <mat-select [formControl]="formGroup.controls.tipo" [compareWith]="compareSelecIdListadoDetalle">
+                <mat-option *ngFor="let obj of listTipo" [value]="obj">
+                    {{ obj.nombre }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGroup.get('tipo').hasError('required')">Ingrese Tipo de Capacitación</mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="flagOtroCapacitacion" class="flex-auto">
+            <mat-label>Detalle Tipo de Capacitación</mat-label>
+            <input [formControl]="formGroup.controls.detalleTipo" matInput>
+            <mat-error *ngIf="formGroup.get('detalleTipo').hasError('required')">Ingrese Detalle Tipo de Capacitación</mat-error>
+        </mat-form-field>
+        <mat-form-field  class="flex-auto">
+            <mat-label>Nombre de Capacitación</mat-label>
+            <input [formControl]="formGroup.controls.especialidad" matInput>
+            <mat-error *ngIf="formGroup.get('especialidad').hasError('required')">Ingrese Nombre de Capacitación
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field  class="flex-auto">
+            <mat-label>Institución</mat-label>
+            <input [formControl]="formGroup.controls.institucion" matInput>
+            <mat-error *ngIf="formGroup.get('institucion').hasError('required')">Ingrese Institución</mat-error>
+        </mat-form-field>
+        <div class="flex flex-col sm:flex-row sm:gap-4">
+            <mat-form-field  class="flex-auto">
+                <mat-label>Nro de Horas</mat-label>
+                <input [formControl]="formGroup.controls.hora" matInput (keypress)="numberOnly($event)">
+                <mat-error *ngIf="formGroup.get('hora').hasError('required')">Ingrese Nro de Horas</mat-error>
+            </mat-form-field>
+            <mat-form-field  class="flex-auto">
+                <mat-label>Fecha de Expedición/Vigencia</mat-label>
+                <input [formControl]="formGroup.controls.fechaVigencia" type="date" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+                <mat-error *ngIf="formGroup.get('fechaVigencia').hasError('required')">Ingrese Fecha de
+                    Expedición/Vigencia
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:gap-4">
+            <mat-form-field  class="flex-auto">
+                <mat-label>Fecha Inicio</mat-label>
+                <input [formControl]="formGroup.controls.fechaInicio" type="date" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+                <mat-error *ngIf="formGroup.get('fechaInicio').hasError('required')">Ingrese Fecha Inicio
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field  class="flex-auto">
+                <mat-label>Fecha Fin</mat-label>
+                <input [formControl]="formGroup.controls.fechaFin" type="date" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+                <mat-error *ngIf="formGroup.get('fechaFin').hasError('required')">Ingrese Fecha Fin
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <vex-form-adjuntos-btn [titulo]="'Documento'" [editable]="booleanAdd || booleanEdit" 
+            [solicitud]="solicitud"
+            [codigo]="'TA09'" #formAdjuntoBtnTA09 [archivos]="capacitacion?.archivos"></vex-form-adjuntos-btn>
+        
+        <!--vex-cmp-opcion-evaluador *ngIf="booleanEvaluar" #cmpOpcionEvaluar [objEvaluar]="capacitacion" [editable]="editableEvaluacion"></vex-cmp-opcion-evaluador-->
+        
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <!--GUARDAR EVALUACION-->
+        <button mat-raised-button color="primary" *ngIf="booleanEvaluar== true && booleanViewEval == false" (click)="evaluar()">Guardar</button>
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+    </mat-dialog-actions>
+</form>

@@ -1,0 +1,40 @@
+<form>
+    <div class="px-2">
+        <vex-modal-title *ngIf="booleanAdd" class="text-primary" [titulo]="'Agregar Miembro'"></vex-modal-title>
+        <vex-modal-title *ngIf="booleanEdit" class="text-primary" [titulo]="'Editar Miembro'"></vex-modal-title>
+        <vex-modal-title *ngIf="booleanView" class="text-primary" [titulo]="'Ver Miembro'"></vex-modal-title>
+    </div>
+
+    <mat-dialog-content class="p-4 mx-2 flex flex-col bg-white">
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Cargo</mat-label>
+            <mat-form-field  class="flex-auto">
+                <mat-select [formControl]="formGroup.controls.cargo" [compareWith]="compareSelecIdListadoDetalle">
+                    <mat-option *ngFor="let obj of listGrupos" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('cargo').hasError('required')">Seleccione Grupo</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Nombre</mat-label>
+            <mat-form-field>
+                <input [formControl]="formGroup.controls.usuario" [matAutocomplete]="autoTecnico" matInput (blur)="blurEvaluadorTecnico()">
+                <mat-autocomplete  #autoTecnico="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let state of filteredStatesTecnico$ | async" [value]="state">
+                    {{ state.nombres }}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="center">
+        <button mat-stroked-button color="primary" (click)="closeModal()">Cancelar</button>
+        <!--button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button-->
+        <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <!--GUARDAR EVALUACION-->
+    </mat-dialog-actions>
+</form>

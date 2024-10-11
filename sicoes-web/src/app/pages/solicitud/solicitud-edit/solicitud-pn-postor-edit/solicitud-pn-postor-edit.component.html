@@ -1,0 +1,39 @@
+            <!--CONTENIDO-->
+            <mat-accordion multi="true">
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- DATOS DE LA EMPRESA</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-datos-pers-nat-postor #layoutDatosPersJur [SOLICITUD]="SOLICITUD" [editable]="editable"></vex-layout-datos-pers-nat-postor>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- REPRESENTANTE LEGAL</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-datos-representante-legal #layoutRepresentanteLeg [SOLICITUD]="SOLICITUD" [editable]="editable"></vex-layout-datos-representante-legal>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 3}}.- SECTORES PARA INSCRIPCIÓN</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <vex-layout-perfil-inscripcion matExpansionPanelContent [ES_PERS_NAT]="false"></vex-layout-perfil-inscripcion>
+                    </ng-template>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 4}}.- DOCUMENTOS QUE ACREDITAN LA EXPERIENCIA EN EL SECTOR</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <vex-layout-documento-acredita-exp matExpansionPanelContent [editable]="editable"></vex-layout-documento-acredita-exp>
+                    </ng-template>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 5}}.- OTROS REQUISITOS</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    
+                    <vex-layout-otros-requisitos #layoutOtrosRequisitos [viewEvaluacion]="viewEvaluacion"></vex-layout-otros-requisitos>
+
+                </mat-expansion-panel>
+            </mat-accordion>

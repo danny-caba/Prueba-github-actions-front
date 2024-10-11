@@ -1,0 +1,108 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="card overflow-auto -mt-16">
+            <!--TITULO-->
+            <div class="px-6 py-4 border-b flex items-center">
+                <h2 class="title m-0">EXPEDIENTE: {{SOLICITUD?.numeroExpediente}}</h2>
+                <span class="flex-1"></span>
+                <div *vexOptionRole="opcion.BTN_APROBADOR_ACC">
+                    <div *ngFor="let obj of (aprobadores | async)?.content">
+                        <button *ngIf="validarUsuario(obj) && (['ASIGNADO'].includes(obj.evaluacion?.codigo)) && flag" color="primary" mat-raised-button type="button" 
+                            (click)="actualizarVer(obj, 'add')">Aprobar / Rechazar</button>
+                    </div>
+                </div>
+            </div>
+            
+            <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.JURIDICO" >
+                <vex-solicitud-pj-edit [SOLICITUD]="SOLICITUD" [viewEvaluacion]="true" [editable]="false"></vex-solicitud-pj-edit>
+            </ng-container>
+            <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.PJ_EXTRANJERO" >
+                <vex-solicitud-pj-extranjero-edit [SOLICITUD]="SOLICITUD" [viewEvaluacion]="true" [editable]="false"></vex-solicitud-pj-extranjero-edit>
+            </ng-container>
+            <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.PN_POSTOR" >
+                <vex-solicitud-pj-edit [SOLICITUD]="SOLICITUD" [viewEvaluacion]="true" [editable]="false"></vex-solicitud-pj-edit>
+            </ng-container>
+            <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.PN_PERS_PROPUESTO" >
+                <vex-solicitud-pn-edit [SOLICITUD]="SOLICITUD" [viewEvaluacion]="true" [editable]="false"></vex-solicitud-pn-edit>
+            </ng-container>
+
+            <mat-accordion multi="true">
+                <!--mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion2 + 1}}.- OBSERVACIONES ADICIONALES</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-observacion-resultado #layoutObservacionResultado></vex-layout-observacion-resultado>
+                </mat-expansion-panel-->
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion2 + 1}}.- RESULTADO</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <vex-layout-resultado matExpansionPanelContent></vex-layout-resultado>
+                    </ng-template>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion2 + 2}}.- APROBADORES TÉCNICOS</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <vex-layout-aprobacion matExpansionPanelContent></vex-layout-aprobacion>
+                    </ng-template>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion2 + 3}}.- EVIDENCIAS</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <vex-layout-evidencia matExpansionPanelContent></vex-layout-evidencia>
+                    </ng-template>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion2 + 4}}.- DOCUMENTOS DEL EXPEDIENTE N° {{SOLICITUD?.numeroExpediente}}</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <vex-layout-documento-expediente matExpansionPanelContent></vex-layout-documento-expediente>
+                    </ng-template>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+            <div class="flex flex-col px-6 py-4 border-b">
+                <mat-tab-group [selectedIndex]="0" class="border shadow rounded" #tabAsignacion>
+                    <mat-tab label="Asignaciones">
+                        <div class="p-6">
+                            <vex-layout-asignacion></vex-layout-asignacion>
+                        </div>
+                    </mat-tab>
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            Historial de<br />
+                            Aprobaciones
+                        </ng-template>
+                        <ng-template matTabContent>
+                            <div class="p-6">
+                                <vex-layout-aprobacion-historial #tabAprobacionHistorial></vex-layout-aprobacion-historial>
+                            </div>
+                        </ng-template>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+
+            <div class="px-6 py-4 flex flex-col sm:flex-row gap-2 items-center justify-end">
+                <button color="primary" mat-raised-button type="button" class="hover-class" (click)="cancelar()" *vexOptionRole="opcion.BTN_INT_REGRESAR">Regresar</button>
+            </div>
+            
+            <div class="px-6 py-2 flex flex-col sm:flex-row gap-2 items-center justify-end">
+                
+                    <button color="primary" mat-raised-button type="button" class="hover-class" *vexOptionRole="opcion.BTN_FIN_REV_ADM"
+                    (click)="finalizarRevAdmin()">Finalizar Revisión Administrativa</button>
+                
+                
+                    <button color="primary" mat-raised-button type="button" class="hover-class" *vexOptionRole="opcion.BTN_FIN_REV_TEC"
+                    (click)="finalizarRevTecni()">Finalizar Revisión Técnica</button>
+                
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,39 @@
+<vex-cmp-tipo-revision [editable]="cmpTipoRevisionEdit" (changeVersion)="changeVersion($event)"></vex-cmp-tipo-revision>
+<div *ngIf="ultimaVersion  == true; else viewEval" class="flex flex-col sm:flex-col sm:gap-4 gap-4">
+    <div *ngIf="esJuridico">
+        <vex-layout-asignacion-perfil-tec [rolInput]="'04'" [SOLICITUD]="solicitud" [listarEvaladoresAsignados]="listarEvaladoresAsignadosTecnico"></vex-layout-asignacion-perfil-tec>
+    </div>
+    <vex-layout-asignacion-perfil [rolInput]="'03'" [SOLICITUD]="solicitud" [listarEvaladoresAsignados]="listarEvaladoresAsignadosAdministrativo"></vex-layout-asignacion-perfil>
+</div>
+<ng-template #viewEval>
+    <div class="flex flex-col sm:flex-col sm:gap-4 gap-4">
+    <mat-card *ngIf="listarEvaladoresAsignadosTecnico.length > 0">
+        <mat-card-header>
+            <mat-card-title>EVALUADORES TÉCNICOS</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="mt-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                <mat-form-field *ngFor="let evaTec of listarEvaladoresAsignadosTecnico" class="flex-1">
+                    <mat-label>Evaluador</mat-label>
+                    <input [value]="evaTec.nombreUsuario" matInput [disabled]="true">
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card *ngIf="listarEvaladoresAsignadosAdministrativo.length > 0">
+        <mat-card-header>
+            <mat-card-title>EVALUADORES ADMINISTRATIVOS</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="mt-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                <mat-form-field *ngFor="let evaAdm of listarEvaladoresAsignadosAdministrativo" class="flex-1">
+                    <mat-label>Evaluador</mat-label>
+                    <input [value]="evaAdm.nombreUsuario" matInput [disabled]="true">
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    </div>
+</ng-template>

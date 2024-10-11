@@ -1,0 +1,107 @@
+<div class="mt-4 flex flex-col">
+    <div @fadeInUp class="flex-auto">
+        <div class="flex flex-col">
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field class="flex-auto">
+                    <mat-label>País</mat-label>
+                    <mat-select [formControl]="formGroup.controls.pais" [compareWith]="compareSelecIdListadoDetalle">
+                        <mat-option *ngFor="let obj of listPais" [value]="obj">
+                            {{ obj.nombre }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="formGroup.get('pais').hasError('required')">Ingrese País</mat-error>
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                    <mat-label>Tipo de Identificación Tributaria</mat-label>
+                    <mat-select [formControl]="formGroup.controls.tipoDocumento"
+                        [compareWith]="compareSelecIdListadoDetalle">
+                        <mat-option *ngFor="let obj of listTipoDocumento" [value]="obj">
+                            {{ obj.nombre }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="formGroup.get('tipoDocumento').hasError('required')">Ingrese Tipo de
+                        Identificación
+                        Tributaria</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field class="flex-auto">
+                    <mat-label>N° de Identificación Tributaria</mat-label>
+                    <input [formControl]="formGroup.controls.numeroDocumento" matInput maxlength="15"
+                        (keypress)="numberOnly($event)">
+                    <mat-error *ngIf="formGroup.get('numeroDocumento').hasError('required')">Ingrese N° de
+                        Identificación
+                        Tributaria</mat-error>
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                    <mat-label>Razón Social</mat-label>
+                    <input [formControl]="formGroup.controls.nombreRazonSocial" matInput maxlength="100">
+                    <mat-error *ngIf="formGroup.get('nombreRazonSocial').hasError('required')">Ingrese Razón Social
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <mat-form-field class="flex-auto">
+                <mat-label>Domicilio Legal</mat-label>
+                <input [formControl]="formGroup.controls.direccion" matInput maxlength="100">
+                <mat-error *ngIf="formGroup.get('direccion').hasError('required')">Ingrese Domicilio Legal
+                </mat-error>
+            </mat-form-field>
+
+            <vex-ubigeo-upd #formUbigeo layout="column" [editable]="editableUbigeo"></vex-ubigeo-upd>
+
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Partida Registral</mat-label>
+                    <input [formControl]="formGroup.controls.codigoPartidaRegistral" matInput maxlength="100">
+                    <mat-error *ngIf="formGroup.get('codigoPartidaRegistral').hasError('required')">Ingrese Partida Registral</mat-error>
+                </mat-form-field>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Teléfono 1</mat-label>
+                    <input [formControl]="formGroup.controls.telefono1" matInput maxlength="12" (keypress)="numberOnly($event)">
+                    <mat-error *ngIf="formGroup.get('telefono1').hasError('required')">Ingrese Teléfono 1</mat-error>
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                    <mat-label>Teléfono 2</mat-label>
+                    <input [formControl]="formGroup.controls.telefono2" matInput maxlength="12" (keypress)="numberOnly($event)">
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                    <mat-label>Teléfono 3</mat-label>
+                    <input [formControl]="formGroup.controls.telefono3" matInput maxlength="12" (keypress)="numberOnly($event)">
+                </mat-form-field>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Correo Electrónico</mat-label>
+                    <input type="correo" [formControl]="formGroup.controls.correo" matInput maxlength="150">
+                    <mat-error
+                        *ngIf="formGroup.get('correo').hasError('email') && !formGroup.get('correo').hasError('required')">
+                        Ingresar correo electrónico válido
+                    </mat-error>
+                    <mat-error *ngIf="formGroup.get('correo').hasError('required')">Ingresar correo
+                        electrónico</mat-error>
+                    <mat-hint class="color-red" align="start"
+                        *ngIf="errorMsgSNE"><strong>{{errorMsgSNE}}</strong></mat-hint>
+                </mat-form-field>
+                <div style="padding-top: 12px;" *ngIf="editable == true && flagSne == true">
+                    <button color="primary" mat-raised-button type="button" [disabled]="isDisabledBtnCorreo"
+                        (click)="validarEmail(formGroup.controls.correo.value)">Validar</button>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:gap-4" *ngIf="editable">
+                <mat-form-field class="flex-auto" *ngIf="flagValidacion">
+                    <mat-label fxFlex="10">Codigo de Validación</mat-label>
+                    <input [formControl]="formGroup.controls.codigo" matInput maxlength="150">
+                    <mat-hint class="color-red" align="start"><strong>{{msgCodigo}}</strong>
+                    </mat-hint>
+                </mat-form-field>
+                <div style="padding-top: 12px;" *ngIf="flagValidacion">
+                    <button color="primary" mat-raised-button type="button" [disabled]="isDisabledBtnCodigo"
+                        (click)="validarCodigoEmail(formGroup.controls.codigo.value)">Validar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

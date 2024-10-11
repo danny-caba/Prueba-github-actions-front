@@ -1,0 +1,103 @@
+<div class="mt-4 flex flex-col">
+    <div @fadeInUp class="flex-auto">
+        <div class="flex flex-col">
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Tipo de Documento</mat-label>
+                    <mat-select [formControl]="formGroup.controls.tipoDocumento"
+                        [compareWith]="compareSelecIdListadoDetalle">
+                        <mat-option *ngFor="let obj of listTipoDocumento" [value]="obj">
+                            {{ obj.nombre }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="formGroup.get('tipoDocumento').hasError('required')">Seleccione Tipo de
+                        Documento</mat-error>
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                    <mat-label>N° de Documento</mat-label>
+                    <input [formControl]="formGroup.controls.numeroDocumento" matInput maxlength="150">
+                    <mat-error *ngIf="formGroup.get('numeroDocumento').hasError('required')">Ingrese el N° de
+                        Documento</mat-error>
+                </mat-form-field>
+                <div style="padding-top: 12px;" *ngIf="editable && editableDocumento">
+                    <button color="primary" mat-raised-button type="button"
+                        (click)="validarDocumento(formGroup.controls.tipoDocumento.value, formGroup.controls.numeroDocumento.value)">Validar
+                    </button>
+                </div>
+            </div>
+            <mat-form-field>
+                <mat-label>Tipo de Persona Natural</mat-label>
+                <input [formControl]="formGroup.controls.tipoPN" matInput maxlength="150">
+            </mat-form-field>
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Nombres</mat-label>
+                    <input [formControl]="formGroup.controls.nombres" matInput maxlength="150">
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                    <mat-label>Apellido Paterno</mat-label>
+                    <input [formControl]="formGroup.controls.apellidoPaterno" matInput maxlength="150">
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                    <mat-label>Apellido Materno</mat-label>
+                    <input [formControl]="formGroup.controls.apellidoMaterno" matInput maxlength="150">
+                </mat-form-field>
+            </div>
+            <mat-form-field>
+                <mat-label>N° de Ruc</mat-label>
+                <input [formControl]="formGroup.controls.codigoRuc" matInput maxlength="11" minlength="11">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Domicilio Legal</mat-label>
+                <input [formControl]="formGroup.controls.direccion" matInput maxlength="150">
+            </mat-form-field>
+
+            <vex-ubigeo-upd #formUbigeo layout="column" [editable]="editableUbigeo"></vex-ubigeo-upd>
+
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Teléfono 1</mat-label>
+                    <input [formControl]="formGroup.controls.telefono1" matInput maxlength="12" (keypress)="numberOnly($event)">
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                    <mat-label>Teléfono 2</mat-label>
+                    <input [formControl]="formGroup.controls.telefono2" matInput maxlength="12" (keypress)="numberOnly($event)">
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                    <mat-label>Teléfono 3</mat-label>
+                    <input [formControl]="formGroup.controls.telefono3" matInput maxlength="12" (keypress)="numberOnly($event)">
+                </mat-form-field>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Correo Electrónico</mat-label>
+                    <input type="correo" [formControl]="formGroup.controls.correo" matInput maxlength="150">
+                    <mat-error
+                        *ngIf="formGroup.get('correo').hasError('email') && !formGroup.get('correo').hasError('required')">
+                        Ingresar correo electrónico válido
+                    </mat-error>
+                    <mat-error *ngIf="formGroup.get('correo').hasError('required')">Ingresar correo
+                        electrónico</mat-error>
+                    <mat-hint class="color-red" align="start"
+                        *ngIf="errorMsgSNE"><strong>{{errorMsgSNE}}</strong></mat-hint>
+                </mat-form-field>
+                <div style="padding-top: 12px;" *ngIf="editable == true && flagSne == true">
+                    <button color="primary" mat-raised-button type="button" [disabled]="isDisabledBtnCorreo"
+                        (click)="validarEmail(formGroup.controls.correo.value)">Validar</button>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:gap-4" *ngIf="editable">
+                <mat-form-field class="flex-auto" *ngIf="flagValidacion">
+                    <mat-label fxFlex="10">Código de Validación</mat-label>
+                    <input [formControl]="formGroup.controls.codigo" matInput maxlength="150">
+                    <mat-hint class="color-red" align="start"><strong>{{msgCodigo}}</strong>
+                    </mat-hint>
+                </mat-form-field>
+                <div style="padding-top: 12px;" *ngIf="flagValidacion">
+                    <button color="primary" mat-raised-button type="button" [disabled]="isDisabledBtnCodigo"
+                        (click)="validarCodigoEmail(formGroup.controls.codigo.value)">Validar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

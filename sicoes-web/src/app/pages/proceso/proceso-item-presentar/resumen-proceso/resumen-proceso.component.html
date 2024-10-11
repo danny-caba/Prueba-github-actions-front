@@ -1,0 +1,240 @@
+<div class="w-full h-full overflow-hidden flex flex-col">
+    <div class="py-4 px-6  bg-white">
+        <div class="flex flex-row mb-4 items-center">
+            <button (click)="openDrawer()" class="block" *ngIf="!(isDesktop$ | async)" color="primary" mat-icon-button type="button">
+                <mat-icon svgIcon="mat:menu"></mat-icon>
+            </button>  
+            <div class="text-primary flex flex-row items-center text-xl"><h2 class="font-bold">Presentar propuesta: </h2><span class="ml-2">Resumen</span></div>
+        </div>
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+  
+    <vex-scrollbar class="px-6 flex-auto  bg-white">
+        <ng-container *ngTemplateOutlet="seccionDatosProcesoItem"></ng-container>
+        <div class="my-4">
+            <mat-divider></mat-divider>
+        </div>
+        <ng-container *ngTemplateOutlet="seccionPropuestaTecnica"></ng-container>
+        <div class="my-4">
+            <mat-divider></mat-divider>
+        </div>
+        <ng-container *ngTemplateOutlet="seccionProfesionales"></ng-container>
+        <div class="my-4 ">
+            <mat-divider></mat-divider>
+        </div>
+        <ng-container *ngTemplateOutlet="seccionPropuestaEconomica"></ng-container>    
+    </vex-scrollbar>
+    <div class="py-4 border-t flex flex-row" *ngIf="bPresentarPropuesta == false">
+        <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+            Volver
+        </button>
+    </div>
+    <div class="py-4 border-t flex flex-row" *ngIf="bPresentarPropuesta == true">
+        <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+            Cancelar
+        </button>
+        <span class="flex-auto"></span>
+        <div class="flex flex-row gap-x-2" *ngIf="PROPUESTA; else nextPropuesta">
+            <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+                Guardar y Salir SIg
+            </button>
+            <button color="primary" mat-raised-button type="button" (click)="presentar()">
+                Presentar propuesta
+            </button>
+        </div>
+        <ng-template #nextPropuesta>
+            <div class="flex flex-row gap-x-2" #nextPropuesta>
+                <button color="primary" mat-stroked-button type="button" (click)="registrarPropuesta(false)">
+                    Guardar y Salir
+                </button>
+                <button color="primary" mat-raised-button type="button" (click)="registrarPropuesta(true)">
+                    Guardar y Continuar
+                </button>
+            </div>
+        </ng-template>
+    </div>
+  </div>
+
+<ng-template #seccionDatosProcesoItem>
+    <div class="">
+        <div class="grid md:grid-cols-2 py-4">
+            <div class="text-primary">
+                <div class="mb-4">
+                    <p class="title text-primary font-bold text-sm">Datos del proceso:</p>
+                </div>
+                <div class="">
+                    <div class="grid grid-cols-2">
+                        <label>N°: </label>
+                        <label class="font-bold">{{ formGroup.controls.numeroProceso.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Nombre del proceso: </label>
+                        <label class="font-bold">{{ formGroup.controls.nombreProceso.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>N° de expediente SIGED: </label>
+                        <label class="font-bold">{{ formGroup.controls.numeroExpediente.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Área que solicita el requerimiento: </label>
+                        <label class="font-bold">{{ formGroup.controls.unidad.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Sector:</label>
+                        <label class="font-bold">{{ formGroup.controls.sector.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Sub Sector:</label>
+                        <label class="font-bold">{{ formGroup.controls.subsector.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Estado:</label>
+                        <label class="font-bold">{{ formGroup.controls.estado.value }}</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="text-primary flex flex-col items-start justify-center md:pl-8 md:border-l-2 md:border-primary">
+                <div style="width: 100%;">
+                    <div class="mb-4">
+                        <p class="title text-primary font-bold text-sm">Datos del ítem:</p>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>N°:</label>
+                        <label class="font-bold">{{ formGroup.controls.numeroItem.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Tipo de Moneda:</label>
+                        <label class="font-bold">{{ formGroup.controls.divisa.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Nombre del ítem:</label>
+                        <label class="font-bold">{{ formGroup.controls.descripcionItem.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Monto referencial:</label>
+                        <label class="font-bold">{{ formGroup.controls.montoReferencial.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Tipo de Cambio:</label>
+                        <label class="font-bold"> {{ formGroup.controls.montoTipoCambio.value || 'No aplica'}}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Monto referencial en soles:</label>
+                        <label class="font-bold">{{ formGroup.controls.montoReferencialSoles.value || 'No aplica' }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Facturación mínima en soles:</label>
+                        <label class="font-bold">{{ formGroup.controls.facturacionMinima.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <label>Estado:</label>
+                        <label class="font-bold">{{ formGroup.controls.estadoItem.value }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-template>
+
+<ng-template #seccionPropuestaTecnica>
+    <div>
+        <div class="items-center text-primary my-2">
+            <p class="title text-primary font-bold text-sm">Propuesta técnica:</p>
+        </div>
+        <div class="text-primary flex flex-row">
+            <label>Integrante de consorcio:</label>
+            <label class="font-bold ml-2">{{ PROPUESTA?.propuestaTecnica?.consorcio?.nombre }}</label>
+        </div>
+        <div class="my-4">
+            <table mat-table [dataSource]="dataArchivosPropuestaTecnica" class="mat-elevation-z8" class="w-full">
+                <ng-container matColumnDef="archivo">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>Archivo</th>
+                    <td mat-cell *matCellDef="let element"> 
+                        <div [ngClass]="['text-orange', 'font-bold']" class="underline " (click)="descargarArchivo(element)"> 
+                            {{element.nombreReal}}
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="descripcion">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Descripción</th>
+                  <td class="text-primary font-bold ajustar-texto" mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsPropuestaTecnica"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsPropuestaTecnica;"></tr>
+              </table>              
+        </div>
+    </div>
+
+</ng-template>
+
+<ng-template #seccionProfesionales>
+    <div>
+        <div class="items-center text-primary my-2">
+            <p class="title text-primary font-bold text-sm">Equipo de profesionales:</p>
+        </div>
+        <div class="text-primary flex flex-row">
+            <label>Número de profesionales solicitados:</label>
+            <label class="font-bold ml-2">{{ cantidadElementos }}</label>
+        </div>
+        <div *ngIf="!!isCompleteInvitadosAceptados" class="text-primary flex flex-row">
+            <label>Número de profesionales con invitación aceptada:</label>
+            <label class="font-bold ml-2">{{ dataProfesionalesInvitados.length }}</label>
+        </div>
+        <div class="my-4" *ngIf="!!isCompleteInvitadosAceptados">
+            <table mat-table [dataSource]="dataProfesionalesInvitados" class="mat-elevation-z8" class="w-full text-center">
+                <ng-container matColumnDef="perfil">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Perfil</th>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.perfil.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="nombre">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Nombre del profesional</th>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{nombreProfesional(element)}} </td>
+                </ng-container>
+                <ng-container matColumnDef="estado">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Descripción</th>
+                  <td class="text-green font-bold" mat-cell *matCellDef="let element"> {{element.estado.nombre}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsProfesionalesInvitados"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsProfesionalesInvitados;"></tr>
+              </table>              
+        </div>
+    </div>
+
+</ng-template>
+<ng-template #seccionPropuestaEconomica>
+    <div>
+        <div class="items-center text-primary my-2">
+            <p class="title text-primary font-bold text-sm">Propuesta económica:</p>
+        </div>
+        <div class="text-primary grid grid-cols-4">
+            <label class="col-span-1">Tipo de moneda:</label>
+            <label class="font-bold ml-2 col-span-3">{{ formGroup.controls.divisa.value }}</label>
+        </div>
+        <div class="text-primary grid grid-cols-4">
+            <label class="col-span-1">Monto:</label>
+            <label class="font-bold ml-2 col-span-3">{{ PROPUESTA?.propuestaEconomica?.importe }}</label>
+        </div>
+        <div class="my-4">
+            <table mat-table [dataSource]="dataArchivosPropuestaEconomica" class="mat-elevation-z8" class="w-full">
+                <ng-container matColumnDef="archivo">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Archivo</th>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element">
+                    <div [ngClass]="['text-orange', 'font-bold']" class="underline " (click)="descargarArchivo(element)"> 
+                        {{element.nombreReal}}
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="descripcion">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Descripción</th>
+                  <td class="text-primary font-bold ajustar-texto" mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsPropuestaEconomica"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsPropuestaEconomica;"></tr>
+              </table>              
+        </div>
+    </div>
+</ng-template>

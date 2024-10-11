@@ -1,0 +1,15 @@
+<div *ngIf="ultimaVersion; else opn01View" class="flex">
+  <div *vexOptionRole="opcion.CPM_OTROS_DOC_EVALUAR; else opn01View" class="flex">
+    <mat-radio-group aria-label="Select an option" class="flex gap-8" (change)="guardarEstado($event, otro)" [value]="otro.evaluacion?.idListadoDetalle">
+        <mat-radio-button *ngFor="let opt of listOpcion" [value]="opt.idListadoDetalle" [disabled]="opt?.editable">{{opt.nombre}}</mat-radio-button>
+    </mat-radio-group>
+    <button class="ml-2" color="primary" mat-raised-button type="button" (click)="registrarObs(otro)">Obs.</button>
+  </div>
+</div>
+
+<ng-template #opn01View>
+  <mat-radio-group aria-label="Select an option" class="flex gap-8" [value]="otro.evaluacion?.idListadoDetalle" [disabled]="true">
+      <mat-radio-button *ngFor="let opt of listOpcion" [value]="opt.idListadoDetalle" [disabled]="true">{{opt.nombre}}</mat-radio-button>
+  </mat-radio-group>
+  <button class="ml-2" color="primary" mat-raised-button type="button" (click)="registrarObsAcc(otro, 'view')">Ver Obs.</button>
+</ng-template>

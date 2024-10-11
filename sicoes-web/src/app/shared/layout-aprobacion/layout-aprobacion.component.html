@@ -1,0 +1,120 @@
+<div class="py-2 flex flex-col gap-2" *vexOptionRole="opcion.CMP_VIEW_EVAL_TEC; else viewTecEdi">
+    <!--button color="primary" mat-raised-button type="button" (click)="agregarPerfil()">Asignar</button-->
+    <vex-cmp-aprobador #cmpAprobador (actualizarTabla)="cargarTabla()" [solicitud]="solicitud"></vex-cmp-aprobador>
+</div>
+<ng-template #viewTecEdi>
+<div class="py-2 flex flex-col gap-2" *vexOptionRole="opcion.CMP_VIEW_EVAL_ADM; else viewTecApr">
+    <!--button color="primary" mat-raised-button type="button" (click)="agregarPerfil()">Asignar</button-->
+    <vex-cmp-aprobador #cmpAprobador (actualizarTabla)="cargarTabla()" [solicitud]="solicitud"></vex-cmp-aprobador>
+</div>
+</ng-template>
+<ng-template #viewTecApr>
+    <div class="py-2 flex flex-col gap-2" *vexOptionRole="opcion.CMP_EDIT_EVAL_TEC; else viewAdmApr">
+    <!--button color="primary" mat-raised-button type="button" (click)="agregarPerfil()">Asignar</button-->
+    <vex-cmp-aprobador #cmpAprobador (actualizarTabla)="cargarTabla()" [solicitud]="solicitud"></vex-cmp-aprobador>
+    </div>
+</ng-template>
+<ng-template #viewAdmApr>
+    <div class="py-2 flex flex-col gap-2" *vexOptionRole="opcion.CMP_EDIT_EVAL_ADM">
+         <!--button color="primary" mat-raised-button type="button" (click)="agregarPerfil()">Asignar</button-->
+        <vex-cmp-aprobador #cmpAprobador (actualizarTabla)="cargarTabla()" [solicitud]="solicitud"></vex-cmp-aprobador>
+    </div>
+</ng-template>
+
+<div class="mx-0 py-4 border-b overflow-auto">
+    <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
+        <ng-container matColumnDef="usuario">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>APROBADOR</th>
+            <td mat-cell *matCellDef="let element"> {{element?.usuario?.nombreUsuario}} </td>
+        </ng-container>
+        <ng-container matColumnDef="grupo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>GRUPO</th>
+            <td mat-cell *matCellDef="let element"> {{element?.grupo?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>FECHA</th>
+            <td mat-cell *matCellDef="let element"> {{element?.fechaRegistro}} </td>
+        </ng-container>
+        <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ACCIÓN</th>
+            <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ obj: row }"
+                    [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button" class="hover:bg-hover">
+                    <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="loading">
+            <td mat-footer-cell *matFooterCellDef colspan="3" class="text-center">
+                Cargando Datos...
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vacio">
+            <td mat-footer-cell *matFooterCellDef colspan="3" class="text-center text-primary">
+                No se encuentran resultados para los filtros seleccionados
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        
+        <ng-template #view>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsView"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsView;"></tr>
+        </ng-template>
+        <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': dataSource != null}"></tr>
+        <tr mat-footer-row *matFooterRowDef="['vacio']"
+            [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0) }"></tr>
+    </table>
+
+    <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+        showFirstLastButtons></mat-paginator>
+</div>
+
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+    <ng-template let-obj="obj" matMenuContent>
+        
+        <div *vexOptionRole="opcion.CMP_EDIT_EVAL_ADM; else viewTecELi">
+            <button (click)="eliminar(obj)" mat-menu-item>
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+                <span>Eliminar</span>
+            </button>
+        </div>
+        <ng-template #viewTecELi>
+            <div *vexOptionRole="opcion.CMP_EDIT_EVAL_TEC; else viewDelete">
+            <button (click)="eliminar(obj)" mat-menu-item>
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+                <span>Eliminar</span>
+            </button>
+            </div>
+        </ng-template>
+        <ng-template #viewDelete>
+            <button mat-menu-item disabled="true">
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+                <span>Eliminar</span>
+            </button>
+        </ng-template>
+        <div *vexOptionRole="opcion.CMP_EDIT_EVAL_ADM; else viewTecMod">
+            <button (click)="modificar(obj)" mat-menu-item>
+                <mat-icon svgIcon="mat:edit"></mat-icon>
+                <span>Modificar</span>
+            </button>
+        </div>
+        <ng-template #viewTecMod>
+        <div *vexOptionRole="opcion.CMP_EDIT_EVAL_TEC; else viewModify">
+            <button (click)="modificar(obj)" mat-menu-item>
+                <mat-icon svgIcon="mat:edit"></mat-icon>
+                <span>Modificar</span>
+            </button>
+        </div>
+        </ng-template>
+        <ng-template #viewModify>
+            <button mat-menu-item disabled="true">
+                <mat-icon svgIcon="mat:edit"></mat-icon>
+                <span>Modificar</span>
+            </button>
+        </ng-template>
+    </ng-template>
+</mat-menu>

@@ -1,0 +1,16 @@
+<a [routerLinkActiveOptions]="link?.routerLinkActiveOptions || { exact: false }" *ngIf="link.status == 'active'"
+   [routerLink]="link?.route"
+   class="text-sm font-bold font-raleway flex items-center px-gutter py-2 link-estilo text-primary ltr:mr-4 rtl:ml-2 relative mb-2 transition ease-in-out duration-200 select-none"
+   matRipple
+   routerLinkActive="{{link.status}}">
+  <span class="block">{{ link?.label }}</span>
+  <span *ngIf="link.check == true" [ngClass]="['text-green']"
+        class="item-badge ml-2"
+        fxFlex="none"><mat-icon svgIcon="mat:check_circle"></mat-icon></span>
+</a>
+<a [routerLinkActiveOptions]="link?.routerLinkActiveOptions || { exact: false }" *ngIf="link.status == 'inactive'"
+   class="text-sm font-bold font-raleway flex items-center px-gutter py-2 link-estilo text-primary ltr:mr-4 rtl:ml-2 relative mb-2 transition ease-in-out duration-200 select-none"
+   matRipple
+   routerLinkActive="{{link.status}}">
+  <span class="block">{{ link?.label }}</span>
+</a>

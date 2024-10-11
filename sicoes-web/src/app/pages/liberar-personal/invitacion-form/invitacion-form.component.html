@@ -1,0 +1,169 @@
+<div class="w-full h-full p-gutter container flex flex-col bg-principal">
+    <div class="overflow-hidden flex-auto" style="background-color: transparent;">
+        <div class="chat-pattern relative pl-4">
+            <div class="w-full h-full overflow-hidden flex flex-col">
+                <div class="py-4 px-6  bg-white">
+                    <div class="flex flex-row mb-4 items-center">
+                          <div class="">
+                            <div class="text-primary text-xl font-bold">Invitaciones a profesionales</div>
+                          </div>
+                    </div>
+                    <div class="">
+                        <mat-divider></mat-divider>
+                    </div>
+                </div>
+              
+                <vex-scrollbar class="px-6 flex-auto  bg-white">
+                    <ng-container *ngTemplateOutlet="seccion"></ng-container>
+                </vex-scrollbar>
+                <div class="py-4 border-t flex flex-row">
+                    <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+                        Salir
+                    </button>
+                    <span class="flex-auto"></span>
+                    <div class="flex flex-row gap-x-6">
+                        <button *ngIf="(PROPUESTA_PROFESIONAL?.estado.codigo === 'INVITADO')" color="primary" mat-raised-button style="opacity: 0.6;" type="button" (click)="rechazar()">
+                            <span>Rechazar</span>
+                            <mat-icon class="ml-2" svgIcon="mat:info"></mat-icon>
+                        </button>
+                        <button *ngIf="(PROPUESTA_PROFESIONAL?.estado.codigo === 'INVITADO')" color="primary" mat-raised-button type="button" (click)="aceptar()">
+                            <span>Aceptar</span>
+                            <mat-icon class="ml-2" svgIcon="mat:info"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #seccion>
+    <div class="mt-4">
+        <div class="flex items-center text-primary gap-2 ">
+            <div class="rounded-full border-2 border-primary w-5 h-5 flex items-center justify-center">
+                <mat-icon svgIcon="mat:arrow_forward"></mat-icon>
+            </div>
+            <p class="title text-primary font-bold text-sm">Datos generales:</p>
+        </div>
+        <div class="grid md:grid-cols-2 px-4 py-4">
+            <div class="text-primary md:pr-8">
+                <div class="grid grid-cols-2">
+                    <label>N°:</label>
+                    <label class="font-bold">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.proceso.numeroProceso }}</label>
+                </div>
+                <div class="grid grid-cols-2">
+                    <label>Nombre del proceso:</label>
+                    <label class="font-bold">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.proceso.nombreProceso }}</label>
+                </div>
+                <div class="grid grid-cols-2">
+                    <label>N° de expediente SIGED:</label>
+                    <label class="font-bold">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.proceso.numeroExpediente }}</label>
+                </div>
+                <div class="grid grid-cols-2">
+                    <label>Área que solicita el requerimiento:</label>
+                    <label class="font-bold">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.proceso.nombreArea }}</label>
+                </div>
+                <div class="grid grid-cols-2">
+                    <label>Sector:</label>
+                    <label class="font-bold">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.proceso.sector.nombre }}</label>
+                </div>
+                <div class="grid grid-cols-2">
+                    <label>Sub Sector:</label>
+                    <label class="font-bold">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.proceso.subsector.nombre }}</label>
+                </div>
+                <div class="grid grid-cols-2">
+                    <label>Estado:</label>
+                    <label class="font-bold">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.proceso.estado.nombre }}</label>
+                </div>
+            </div>
+            <div class="text-primary flex flex-col items-center justify-end md:pl-8">
+                <a color="primary" class="text-center flex flex-auto" href="https://www.osinergmin.gob.pe/seccion/institucional/institucional/procesos-seleccion/" class="py-2" target="_blank">
+                    <div class="flex flex-auto gap-x-2">
+                        <mat-icon class="mat-icon-button" svgIcon="mat:language"></mat-icon>
+                        <p class="underline">Ver proceso de selección</p>
+                    </div>
+                    
+                  </a>
+            </div>
+        </div>
+    </div>
+    <div class="my-4">
+        <mat-divider></mat-divider>
+    </div>
+    <div>
+        <div class="flex items-center text-primary gap-2 ">
+            <div class="rounded-full border-2 border-primary w-5 h-5 flex items-center justify-center">
+                <mat-icon svgIcon="mat:arrow_forward"></mat-icon>
+            </div>
+            <p class="title text-primary font-bold text-sm">Fechas por etapas:</p>
+        </div>
+        <div class="my-4">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" class="w-full text-center">
+                <ng-container matColumnDef="nombre">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Etapa</th>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.etapa.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fechaInicio">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha de inicio</th>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.fechaInicio}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fechaFin">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha de fin</th>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element">{{element.fechaFin}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+        </div>
+    </div>
+    <div class="my-4">
+        <mat-divider></mat-divider>
+    </div>
+    <div>
+        <div class="flex items-center text-primary gap-2 ">
+            <div class="rounded-full border-2 border-primary w-5 h-5 flex items-center justify-center">
+                <mat-icon svgIcon="mat:arrow_forward"></mat-icon>
+            </div>
+            <p class="title text-primary font-bold text-sm">Ítem:</p>
+        </div>
+        <div class="text-primary px-4 py-4">
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">N°:</label>
+                <label class="font-bold md:col-span-3">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.numeroItem }}</label>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">Descripción:</label>
+                <label class="font-bold md:col-span-3">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.descripcionItem }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="my-4">
+        <mat-divider></mat-divider>
+    </div>
+    <div>
+        <div class="flex items-center text-primary gap-2 ">
+            <div class="rounded-full border-2 border-primary w-5 h-5 flex items-center justify-center">
+                <mat-icon svgIcon="mat:arrow_forward"></mat-icon>
+            </div>
+            <p class="title text-primary font-bold text-sm">Datos de la invitación:</p>
+        </div>
+        <div class="text-primary px-4 py-4">
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">Fecha de invitación:</label>
+                <label class="font-bold md:col-span-3">{{ PROPUESTA_PROFESIONAL?.fechaInvitacion }}</label>
+            </div> 
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label>Sector:</label>
+                <label class="font-bold">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.proceso.sector.nombre }}</label>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label>Sub Sector:</label>
+                <label class="font-bold">{{ PROPUESTA_PROFESIONAL?.propuesta.procesoItem.proceso.subsector.nombre }}</label>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label>Sub Sector:</label>
+                <label class="font-bold">{{ PROPUESTA_PROFESIONAL?.perfil.nombre }}</label>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,89 @@
+<form>
+    <vex-modal-title *ngIf="booleanAdd" [titulo]="'Agregar Grado y/o Título Académico'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit" [titulo]="'Editar Grado y/o Título Académico'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Grado y/o Título Académico'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEvaluar || booleanViewEval" [titulo]="'Grado y/o Título Académico'"></vex-modal-title>
+
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content class="pt-6 flex flex-col">
+        <vex-cmp-tipo-revision *ngIf="booleanEvaluar" (changeVersion)="changeVersion($event)" [editable]="cmpTipoRevisionEdit"></vex-cmp-tipo-revision>
+        
+        <mat-form-field  class="flex-auto">
+            <mat-label>Tipo</mat-label>
+            <mat-select [formControl]="formGroup.controls.tipo" [compareWith]="compareSelecIdListadoDetalle">
+                <mat-option *ngFor="let obj of listTipo" [value]="obj">
+                    {{ obj.nombre }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="flex-auto flex-row">
+            <mat-checkbox color="primary" [formControl]="formGroup.controls.flagEgresado" class="flex-auto">Egresado</mat-checkbox>
+            <mat-hint class="font-bold mt-4"> (Seleccionar esta opción solo si no cuenta con el título)</mat-hint>
+        </div>
+        
+        <mat-form-field  class="flex-auto">
+            <mat-label>Especialidad</mat-label>
+            <input [formControl]="formGroup.controls.especialidad" matInput maxlength="100">
+            <mat-error *ngIf="formGroup.get('especialidad').hasError('required')">Ingrese Especialidad</mat-error>
+        </mat-form-field>
+        <mat-form-field  class="flex-auto">
+            <mat-label>Fecha de Diploma / Vigencia O de Constancia de Egresado</mat-label>
+            <input [formControl]="formGroup.controls.fechaVigenciaGrado" matInput type="date" min='1900-01-01' max="{{dateHoy | date:'yyyy-MM-dd'}}">
+            <mat-error *ngIf="formGroup.get('fechaVigenciaGrado').hasError('required')">Ingrese Fecha de Diploma / Vigencia</mat-error>
+        </mat-form-field> 
+        <mat-form-field  class="flex-auto">
+            <mat-label>Institución</mat-label>
+            <input [formControl]="formGroup.controls.institucion" matInput maxlength="100">
+            <mat-error *ngIf="formGroup.get('institucion').hasError('required')">Ingrese Institución</mat-error>
+        </mat-form-field>
+        
+        <!--ADJUNTO TA01-->
+        <vex-form-adjuntos-btn [editable]="booleanAdd || booleanEdit" [titulo]="'Documento'" 
+            [solicitud]="solicitud"
+            [codigo]="'TA01'" #formAdjuntoBtnTA01 [archivos]="estudio?.archivos"></vex-form-adjuntos-btn>
+        <br>
+        <div *ngIf="flagTitulado" class="flex flex-col sm:flex-row sm:gap-4">
+            <mat-label class="w-60">¿Colegiado?</mat-label>
+            <mat-radio-group aria-label="Select an option" class="flex gap-8" [formControl]="formGroup.controls.flagColegiatura">
+                <mat-radio-button value="1">Sí</mat-radio-button>
+                <mat-radio-button value="0">No</mat-radio-button>
+            </mat-radio-group>
+        </div><br>
+
+        <div class="flex flex-col" *ngIf="flagColegiado">
+            <mat-form-field  class="flex-auto">
+                <mat-label>Nro Colegiatura</mat-label>
+                <input [formControl]="formGroup.controls.colegiatura" matInput maxlength="50">
+                <mat-error *ngIf="formGroup.get('colegiatura').hasError('required')">Ingrese Especialidad</mat-error>
+            </mat-form-field>
+            <mat-form-field  class="flex-auto">
+                <mat-label>Fecha de Diploma / Vigencia</mat-label>
+                <input [formControl]="formGroup.controls.fechaVigenciaColegiatura" matInput type="date" min='1900-01-01' max="{{dateHoy | date:'yyyy-MM-dd'}}">
+                <mat-error *ngIf="formGroup.get('fechaVigenciaColegiatura').hasError('required')">Ingrese Fecha de Diploma / Vigencia</mat-error>
+            </mat-form-field>
+            <mat-form-field  class="flex-auto">
+                <mat-label>Institución</mat-label>
+                <input [formControl]="formGroup.controls.institucionColegiatura" matInput maxlength="100">
+                <mat-error *ngIf="formGroup.get('institucionColegiatura').hasError('required')">Ingrese Institución</mat-error>
+            </mat-form-field>
+
+            <!--ADJUNTO TA02-->
+            <vex-form-adjuntos-btn [editable]="booleanAdd || booleanEdit" [titulo]="'Documento'" 
+                [solicitud]="solicitud"
+                [codigo]="'TA02'" #formAdjuntoBtnTA02 [archivos]="estudio?.archivos" class="mb-8"></vex-form-adjuntos-btn>
+        </div>
+
+        <!--vex-cmp-opcion-evaluador *ngIf="booleanEvaluar" #cmpOpcionEvaluar [objEvaluar]="estudio" [editable]="editableEvaluacion"></vex-cmp-opcion-evaluador-->
+        
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <!--GUARDAR EVALUACION-->
+        <button mat-raised-button color="primary" *ngIf="booleanEvaluar== true && booleanViewEval == false" (click)="evaluar()">Guardar</button>
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+    </mat-dialog-actions>
+</form>

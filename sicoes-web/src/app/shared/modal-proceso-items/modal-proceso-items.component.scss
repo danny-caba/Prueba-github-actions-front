@@ -1,0 +1,41 @@
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix{
+    padding: 0.5em 0 1em 0;
+}
+.small-input.mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: .25em 0 .75em 0;
+    font-size: 14px;
+}
+.small-input.mat-form-field-appearance-outline .mat-form-field-infix .mat-select-arrow{margin-top: 10px;}
+.small-input.mat-form-field-appearance-outline .mat-select-empty + .mat-form-field-label-wrapper .mat-form-field-label{margin-top: -0.75em;}
+
+mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-field-wrapper > div.mat-form-field-flex > div.mat-form-field-infix  { padding: 0.4em 0px }
+mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-field-wrapper > div.mat-form-field-flex > div.mat-form-field-infix > span.mat-form-field-label-wrapper { top: -1.5em; }
+
+.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    transform: translateY(-1.1em) scale(.75);
+    width: 133.33333%;
+}
+::ng-deep .mat-form-field {
+    font-size: 12px; // example
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: #000090;  
+}
+  /* Font color */
+::ng-deep input.mat-input-element {
+    color: #000090;
+}
+
+.mat-divider {
+    border-top-color: #000090;
+}
+
+.mat-stroked-button:not([disabled]){
+    border-color: var(--color-primary)!important;
+    background: white;
+}
+
+::ng-deep .sin-padding   .mat-dialog-container {
+    background: #EAF1F3;
+}

@@ -1,0 +1,25 @@
+<div class="w-full h-full p-gutter container flex flex-col bg-principal">
+    <mat-drawer-container class="overflow-hidden flex-auto" style="background-color: transparent;">
+      <mat-drawer [mode]="mobileQuery.matches ? 'over' : 'side'" #drawer
+                  (openedChange)="drawerChange($event)"
+                  [opened]="drawerOpen$ | async"
+                  class="drawer"
+                  position="start">
+        <div class="h-full flex flex-col">
+          <div class="headline font-normal m-0 p-4 text-primary  flex-none flex items-center">
+            <div class="block font-semibold">Registro de<br>Procesos Internos</div>
+          </div>
+          <div class="pl-4 pr-4">
+            <mat-divider></mat-divider>
+          </div>
+          <vex-scrollbar class="flex-auto">
+            <vex-proceso-sidenav [drawer]="drawer" [editable]="true"></vex-proceso-sidenav>
+          </vex-scrollbar>
+        </div>
+      </mat-drawer>
+  
+      <mat-drawer-content class="chat-pattern relative pl-4">
+        <router-outlet></router-outlet>
+      </mat-drawer-content>
+    </mat-drawer-container>
+  </div>

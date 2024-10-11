@@ -1,0 +1,45 @@
+<div class="mt-4 flex flex-col">
+    <div @fadeInUp class="flex-auto">
+        <div class="flex flex-col">
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field  class="flex-auto" >
+                    <mat-label>Tipo de Documento</mat-label>
+                    <mat-select [formControl]="formGroup.controls.tipoDocumento"
+                        [compareWith]="compareSelecIdListadoDetalle">
+                        <mat-option *ngFor="let obj of listTipoDocumento" [value]="obj">
+                            {{ obj.nombre }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="formGroup.get('tipoDocumento').hasError('required')">Ingrese Tipo de Documento
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field  class="flex-auto" >
+                    <mat-label>N° de Documento</mat-label>
+                    <input [formControl]="formGroup.controls.numeroDocumento" matInput maxlength="12"
+                        (keypress)="numberOnly($event)">
+                    <mat-error *ngIf="formGroup.get('numeroDocumento').hasError('required')">Ingrese N° de Documento
+                    </mat-error>
+                </mat-form-field>
+                <div fxLayout="row" fxLayoutAlign="center start" style="padding-top: 12px;" *ngIf="editable == true">
+                    <button color="primary" mat-raised-button type="button" 
+                        (click)="validarDocumento(formGroup.controls.tipoDocumento.value, formGroup.controls.numeroDocumento.value)">Validar
+                    </button>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field  class="flex-auto" >
+                    <mat-label>Nombres</mat-label>
+                    <input [formControl]="formGroup.controls.nombres" [readonly]="true" matInput maxlength="50">
+                </mat-form-field>
+                <mat-form-field  class="flex-auto" >
+                    <mat-label>Apellido Paterno</mat-label>
+                    <input [formControl]="formGroup.controls.apellidoPaterno" [readonly]="true" matInput maxlength="50">
+                </mat-form-field>
+                <mat-form-field  class="flex-auto" >
+                    <mat-label>Apellido Materno</mat-label>
+                    <input [formControl]="formGroup.controls.apellidoMaterno" [readonly]="true" matInput maxlength="50">    
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+</div>

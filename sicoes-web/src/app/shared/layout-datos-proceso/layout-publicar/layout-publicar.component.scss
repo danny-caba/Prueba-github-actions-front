@@ -1,0 +1,15 @@
+table {
+    width: 100%;
+}
+
+.th-center {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+.mat-stroked-button:not([disabled]){
+    border-color: var(--color-primary)!important;
+}

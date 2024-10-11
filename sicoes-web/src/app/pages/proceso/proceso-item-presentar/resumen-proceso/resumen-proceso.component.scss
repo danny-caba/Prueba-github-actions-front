@@ -1,0 +1,21 @@
+.th-center {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+
+.mat-divider {
+    border-top-color: #000090;
+}
+
+.mat-stroked-button:not([disabled]){
+    border-color: var(--color-primary)!important;
+    background-color: white;
+}
+
+.ajustar-texto{
+    white-space: normal;    
+}

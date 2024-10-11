@@ -1,0 +1,21 @@
+<div [class.container]="isVerticalLayout$ | async" class="toolbar w-full px-gutter flex items-center">
+  
+
+
+  <span class="flex-1"></span>
+
+  <div class="-mx-1 flex items-center">
+    <div class="px-1">
+      <div #originRef
+          class="flex items-center rounded cursor-pointer relative trans-ease-out select-none py-1 pr-1 pl-3"
+          matRipple>
+        <div class="">
+          <img class="h-24" src="assets/img/logo_osinerming_b.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<vex-navigation *ngIf="(isVerticalLayout$ | async) && isNavbarBelowToolbar$ | async"
+                [class.hidden]="mobileQuery"></vex-navigation>

@@ -1,0 +1,146 @@
+<form>
+    <vex-modal-title *ngIf="booleanAdd && flagTerminos" [titulo]="'DOCUMENTOS QUE SUSTENTEN LA EXPERIENCIA ESPECÍFICA, SEGÚN LA CATEGORÍA Y PERFIL A ACREDITARSE'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanAdd && !flagTerminos" [titulo]="'Agregar Experiencia'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit" [titulo]="'Editar Experiencia'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Experiencia'"></vex-modal-title>
+    
+    <vex-modal-title *ngIf="booleanEvaluar || booleanViewEval" [titulo]="'Experiencia'"></vex-modal-title>
+
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content *ngIf="booleanAdd && flagTerminos" class="flex flex-col">
+        <div mat-dialog-content>
+            <p style="text-align: justify;" class="mt-4">
+                La Columna “experiencia” de la Matriz de Perfiles señala el requisito de cada perfil.
+            </p>
+            <br>
+            <p style="text-align: justify;">
+                Documentos que sustentan la experiencia según categoría y perfil a acreditarse:
+            </p>
+            <br>
+            <p style="text-align: justify;"><strong>* </strong>
+                Copia Simple de los contratos y su respectiva conformidad, constancias o certificados. 
+            </p>
+            <br>
+            <p style="text-align: justify;"><strong>* </strong>
+                Los documentos deberán indicar la fecha (dia, mes y año) de inicio y término del servicio prestado. En los casos que la acreditación solo señale mes de inicio y fin como fecha de inicio se tomara desde el primer dia del mes siguiente al registrado y como la fecha final el último dia del mes anterior al mes registrado.
+            </p>
+            <br>
+            <p style="text-align: justify;"><strong>* </strong>
+                De presentarse experiencia ejecutada paralelamente (traslape), para el cómputo del tiempo de dicha experiencia sólo se considerará una vez el periodo traslapado.
+            </p>
+            <br>
+            <p style="text-align: justify;"><strong>* </strong>
+                Cuando se trate de una persona natural con negocio, la documentación para acreditar la experiencia como postor puede también acreditar el cumplimiento de los requisitos como profesional del perfil de su elección.
+            </p>
+            <br>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-content *ngIf="!flagTerminos" class="pt-6 flex flex-col">
+        
+        <vex-cmp-tipo-revision *ngIf="booleanEvaluar" (changeVersion)="changeVersion($event)" [editable]="cmpTipoRevisionEdit"></vex-cmp-tipo-revision>
+
+        <div class="flex flex-col sm:flex-row sm:gap-4 mt-4">
+            <mat-form-field class="flex-auto">
+                <mat-label>Tipo de Documento</mat-label>
+                <mat-select [formControl]="formGroup.controls.tipoDocumento"
+                    [compareWith]="compareSelecIdListadoDetalle">
+                    <mat-option *ngFor="let obj of listTipoDocumento" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('tipoDocumento').hasError('required')">Seleccione Tipo de Documento
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:gap-4 mt-4">
+            <mat-form-field class="flex-auto">
+                <mat-label>País</mat-label>
+                <mat-select [formControl]="formGroup.controls.pais" [compareWith]="compareSelecIdListadoDetalle">
+                    <mat-option *ngFor="let obj of listPais" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('pais').hasError('required')">Seleccione País
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="flex-auto">
+                <mat-label>Tipo de Identificación Tributaria</mat-label>
+                <mat-select [formControl]="formGroup.controls.tipoIdentificacion"
+                    [compareWith]="compareSelecIdListadoDetalle">
+                    <mat-option *ngFor="let obj of listTipoidentificacion" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('tipoIdentificacion').hasError('required')">Seleccione Tipo de
+                    Identificación Tributaria
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:gap-4 mt-4">
+            <mat-form-field class="flex-auto">
+                <mat-label>N° de Identificación Tributaria</mat-label>
+                <input [formControl]="formGroup.controls.numeroDocumento" maxlength="15" (keypress)="numberOnly($event)"
+                    matInput>
+                <mat-error *ngIf="formGroup.get('numeroDocumento').hasError('required')">Ingrese N° de
+                    Identificación Tributaria
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="flex-auto">
+                <mat-label>Razón Social</mat-label>
+                <input [formControl]="formGroup.controls.nombreEntidad" maxlength="150" matInput>
+                <mat-error *ngIf="formGroup.get('nombreEntidad').hasError('required')">Ingrese Razón Social
+                </mat-error>
+            </mat-form-field>
+            <div style="padding-top: 12px;" *ngIf="booleanView == false">
+                <button (click)="consultaRuc()" color="primary" mat-raised-button [disabled]="!flagValidar"
+                    type="button">Validar</button>
+            </div>
+        </div>
+        <mat-form-field >
+            <mat-label>Empresa / Entidad</mat-label>
+            <input [formControl]="formGroup.controls.nombreEntidad" matInput maxlength="150">
+        </mat-form-field>
+        <mat-form-field >
+            <mat-label>Descripción del Servicio Prestado</mat-label>
+            <input [formControl]="formGroup.controls.descripcionContrato" matInput maxlength="150">
+        </mat-form-field>
+        <div class="flex flex-col sm:flex-row sm:gap-4 mt-4">
+            <mat-form-field  class="flex-auto">
+                <mat-label>Fecha Inicio</mat-label>
+                <input [formControl]="formGroup.controls.fechaInicio" type="date" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+                <mat-error *ngIf="formGroup.get('fechaInicio').hasError('required')">Ingrese Fecha Inicio
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field  class="flex-auto">
+                <mat-label>Fecha Fin</mat-label>
+                <input [formControl]="formGroup.controls.fechaFin" type="date" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+                <mat-error *ngIf="formGroup.get('fechaFin').hasError('required')">Ingrese Fecha Fin
+                </mat-error>
+            </mat-form-field>
+            <div style="padding-top: 12px;">
+                <mat-checkbox color="primary" [formControl]="formGroup.controls.flagVigente" >Vigente</mat-checkbox>
+            </div>
+        </div>
+        <mat-form-field >
+            <mat-label>Duración</mat-label>
+            <input [formControl]="formGroup.controls.duracion" [readonly]="true" matInput>
+        </mat-form-field>
+        <vex-form-adjuntos-btn [titulo]="'Documento'" [codigo]="'TA08'" #formAdjuntoBtn [archivo]="documento?.archivo" 
+            [solicitud]="solicitud"
+            [editable]="booleanAdd || booleanEdit"></vex-form-adjuntos-btn>
+        
+        <!--vex-cmp-opcion-evaluador *ngIf="booleanEvaluar" #cmpOpcionEvaluar [objEvaluar]="documento" [editable]="editableEvaluacion"></vex-cmp-opcion-evaluador-->
+        
+    </mat-dialog-content>
+    <mat-dialog-actions align="end" *ngIf="flagTerminos">
+        <button mat-raised-button color="primary" (click)="entendido()">Entendido</button>
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+    </mat-dialog-actions>
+    <mat-dialog-actions align="end" *ngIf="!flagTerminos">
+        <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <!--GUARDAR EVALUACION-->
+        <button mat-raised-button color="primary" *ngIf="booleanEvaluar== true && booleanViewEval == false" (click)="evaluar()">Guardar</button>
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+    </mat-dialog-actions>
+</form>

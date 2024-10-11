@@ -1,0 +1,17 @@
+<form>
+  <!-- <vex-modal-title *ngIf="booleanAdd" [titulo]="'Registrar Resultado de la evaluación'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Resultado de la evaluación'"></vex-modal-title> -->
+    <vex-modal-title [titulo]="'Monto Facturado'"></vex-modal-title>
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+  <mat-dialog-content class="flex flex-col">
+      <mat-form-field  class="mt-6 flex-auto">
+          <!-- <mat-label>Ingrese monto</mat-label> -->
+          <input [formControl]="formGroup.controls.montoFacturadoSector" matInput placeholder="Ingresar monto" />
+          <mat-error *ngIf="formGroup.get('montoFacturadoSector').hasError('required')">Ingrese Monto</mat-error>
+      </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+      <button mat-raised-button color="primary" *ngIf="!formGroup.get('montoFacturadoSector').hasError('required')" (click)="guardar()">Guardar</button>
+      <button mat-raised-button color="primary" (click)="closeModal(false)">Cancelar</button>
+  </mat-dialog-actions>
+</form>

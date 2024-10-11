@@ -1,0 +1,19 @@
+::ng-deep .custom-option{
+    margin: 1.5rem 0;
+    overflow: visible;
+    line-height: initial!important;
+    word-wrap: break-word!important;
+    white-space: pre-wrap;
+    height: auto!important;
+}
+
+::ng-deep .custom-option i{
+    display: block!important;
+    font-size: 1.5rem;
+    opacity: 0.6;
+    margin-left: 0.5rem; 
+}
+
+.mat-divider {
+    border-top-color: rgba(0, 0, 0, 0.12);
+}

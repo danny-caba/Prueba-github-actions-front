@@ -1,0 +1,57 @@
+<div class="mx-0 py-4 border-b flex-col">
+    <vex-cmp-tipo-revision [editable]="cmpTipoRevisionEdit" (changeVersion)="changeVersion($event)"></vex-cmp-tipo-revision>
+
+    <div class="p-4 card text-center bg-title">
+        <h2 class="title font-bold">Observaciones</h2>
+    </div>
+
+    <div *ngIf="ultimaVersion; else viewObsAdm">
+        <div *vexOptionRole="opcion.CMP_EDIT_OBS_ADM; else viewObsAdm">
+            <div class="flex flex-col sm:flex-row sm:gap-4" >
+                <mat-form-field class="mt-4 flex-auto" >
+                    <mat-label>Observaciones Administrativas</mat-label>
+                    <textarea matInput #obsAdministrativa [formControl]="formGroup.controls.ctrlObsAdmini" maxlength="256" placeholder="Ingrese Observaciones Administrativas..."></textarea>
+                    <mat-hint align="end">{{obsAdministrativa.value.length}} / 256</mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
+                <button color="primary" mat-raised-button type="button" class="hover-class"(click)="guadarObsAdmin()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #viewObsAdm>
+        <div class="flex flex-col sm:flex-row sm:gap-4">
+            <mat-form-field class="mt-4 flex-auto" >
+                <mat-label>Observaciones Administrativas</mat-label>
+                <textarea matInput #obsAdministrativa [formControl]="formGroup.controls.ctrlObsAdmini" maxlength="256" readonly="true"></textarea>
+                <mat-hint align="end">{{obsAdministrativa.value.length}} / 256</mat-hint>
+            </mat-form-field>
+        </div>
+    </ng-template>
+    
+    <div *ngIf="ultimaVersion; else viewObsTec">
+        <div *vexOptionRole="opcion.CMP_EDIT_OBS_TEC; else viewObsTec">
+            <div class="flex flex-col sm:flex-row sm:gap-4">
+                <mat-form-field class="mt-4 flex-auto" >
+                    <mat-label>Observaciones Técnicas</mat-label>
+                    <textarea matInput #obsTecnica [formControl]="formGroup.controls.ctrlObsTecnic" maxlength="256" placeholder="Ingrese Observaciones Tenicas..."></textarea>
+                    <mat-hint align="end">{{obsTecnica.value.length}} / 256</mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
+                <button color="primary" mat-raised-button type="button" class="hover-class"(click)="guadarObsTecn()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #viewObsTec>
+        <div class="flex flex-col sm:flex-row sm:gap-4">
+            <mat-form-field class="mt-4 flex-auto" >
+                <mat-label>Observaciones Técnicas</mat-label>
+                <textarea matInput #obsTecnica [formControl]="formGroup.controls.ctrlObsTecnic" maxlength="256" readonly="true"></textarea>
+                <mat-hint align="end">{{obsTecnica.value.length}} / 256</mat-hint>
+            </mat-form-field>
+        </div>
+    </ng-template>
+</div>

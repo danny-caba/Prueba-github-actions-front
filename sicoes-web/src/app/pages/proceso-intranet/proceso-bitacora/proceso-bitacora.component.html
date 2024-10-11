@@ -1,0 +1,116 @@
+<div class="w-full h-full p-gutter container flex flex-col bg-principal">
+    <div class="flex-auto" style="background-color: transparent;">
+        <div class="chat-pattern relative pl-4">
+            <div class="w-full h-full overflow-hidden flex flex-col">
+                <div class="my-2 text-primary">
+                    <h2 class="tittle font-bold text-lg pb-2">Bitácora de estados de ítem</h2>
+                    <p class="font-medium"><strong>Bandeja de procesos internos > N° de proceso: {{PROCESO?.numeroProceso}} ></strong> bitácora</p>
+                </div>
+              
+                <vex-scrollbar class="flex-auto">
+                    <ng-container *ngTemplateOutlet="seccion"></ng-container>
+                </vex-scrollbar>
+                <div class="py-4 border-t flex flex-row">
+                    <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+                        Volver a bandeja
+                    </button>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #seccion>
+    <div class="p-4 bg-white my-2">
+        <div class="flex items-center text-primary ">
+            <div class="flex flex-row gap-1">
+                <label>N° de proceso:</label>
+                <label class="font-bold">{{PROCESO?.numeroProceso}}</label>
+            </div>
+            <div class="md:border-l-2 md:border-primary px-4 mx-4 md:border-r-2">
+                <div class="py-2 flex flex-row gap-1">
+                    <label>Nombre del proceso:</label>
+                    <label class="font-bold">{{PROCESO?.nombreProceso}}</label>
+                </div>
+            </div>
+            <div class="flex flex-row gap-1">
+                <label>Estado del proceso:</label>
+                <label class="font-bold">{{PROCESO?.estado.nombre}}</label>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white p-4 flex justify-between items-center">
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Ítem</mat-label>
+            <mat-form-field class="">
+                <mat-select [formControl]="formGroup.controls.item" placeholder="Seleccionar ítem">
+                    <mat-option *ngFor="let obj of items" [value]="obj">
+                        {{ obj?.numeroItem + ' - ' + obj?.descripcionItem }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <!--button color="primary" mat-raised-button type="button" (click)="buscarPrcocesoItem()">
+            Buscar ítem
+        </button-->
+    </div>
+    <div class="px-4">
+        <mat-divider></mat-divider>
+    </div>
+    <div class="bg-white p-4 flex justify-between items-center">
+        <div class="text-primary">
+            <label>Resultado de ítem: </label>
+            <label class="font-bold"> {{textoBusqueda}} </label>
+        </div>
+        <div class="flex gap-2">
+            <button color="primary" mat-stroked-button type="button" (click)="cambiarEstado()">
+                Cambiar estado de ítem
+            </button>
+        </div>
+    </div>
+    <div class="p-4 bg-white">
+        <vex-scrollbar>
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 text-sm" class="w-full text-center">
+                <ng-container matColumnDef="fechaHora">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha - Hora de cambio</th>
+                    <td class="text-primary font-medium" *matCellDef="let element" mat-cell > {{element?.fechaRegistro}} </td>
+                </ng-container>
+                <ng-container matColumnDef="usuario">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>Usuario</th>
+                    <td class="text-primary font-medium" *matCellDef="let element" mat-cell> {{ element?.usuario?.nombreUsuario }} </td>
+                </ng-container>
+                <ng-container matColumnDef="estadoInicial">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>Estado Inicial</th>
+                    <td class="text-primary font-medium" *matCellDef="let element" mat-cell > {{element?.estadoAnterior?.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="estadoFinal">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>Estado Final</th>
+                    <td class="text-primary font-medium" *matCellDef="let element" mat-cell > {{element?.estado?.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="justificacion">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>Justificación</th>
+                    <td class="text-primary font-medium" *matCellDef="let element" mat-cell > {{element?.descripcion}} </td>
+                </ng-container>
+                    
+                <ng-container matColumnDef="loading">
+                    <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center">
+                        Cargando Datos...
+                    </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="vacio">
+                    <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">
+                        No se encuentran resultados para los filtros seleccionados
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': postulantes != null}"></tr>
+                <tr mat-footer-row *matFooterRowDef="['vacio']"
+                [ngClass]="{'hide': !(postulantes!=null && postulantes.length==0) }"></tr>
+            </table>    
+            <mat-paginator #paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
+        </vex-scrollbar>
+    </div>
+</ng-template>

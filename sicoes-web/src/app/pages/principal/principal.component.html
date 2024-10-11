@@ -1,0 +1,26 @@
+<div class="text-center py-24 header">
+    <div class="container">
+      <div @stagger
+           class="mt-24 -mb-16 mx-auto"
+           fxLayout="row"
+           fxLayout.xs="column"
+           fxLayoutGap="24px"
+           fxLayoutGap.xs="16px">
+        <a #rla="routerLinkActive"
+           *ngFor="let link of links;"
+           @fadeInUp
+           [class.border-primary]="rla.isActive"
+           [routerLink]="link.route"
+           class="card block text-center p-6 hover:bg-app-bar trans-ease-out cursor-pointer relative no-underline text-dark border-2"
+           fxFlex
+           fxFlex.xs="auto"
+           fxLayout="column"
+           fxLayoutAlign="center center"
+           matRipple
+           routerLinkActive>
+          <!--ic-icon [class.text-primary]="rla.isActive" [icon]="link.icon" class="text-hint" size="42px"></ic-icon-->
+          <h3 class="title mb-0 mt-4">{{ link.label }}</h3>
+        </a>
+      </div>
+    </div>
+  </div>

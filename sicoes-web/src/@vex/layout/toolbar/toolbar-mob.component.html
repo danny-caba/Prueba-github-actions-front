@@ -1,0 +1,19 @@
+<div [class.container]="isVerticalLayout$ | async" class="toolbar w-full px-gutter flex items-center" [class.hidden]="!mobileQuery">
+  <button (click)="openSidenav()" [class.hidden]="!mobileQuery" mat-icon-button type="button">
+    <mat-icon svgIcon="mat:menu"></mat-icon>
+  </button>
+  <!--div [class.hidden]="!mobileQuery">
+    <h2 class="title ltr:pl-4 rtl:pr-4 select-none flex-auto">SICOES</h2>
+  </div-->
+
+  <span class="flex-1"></span>
+
+  <div class="-mx-1 flex items-center w-full">
+    <div *ngIf="userVisible$ | async" class="px-1 w-full">
+      <vex-toolbar-user-mob></vex-toolbar-user-mob>
+    </div>
+  </div>
+</div>
+
+<vex-navigation *ngIf="(isVerticalLayout$ | async) && isNavbarBelowToolbar$ | async"
+                [class.hidden]="mobileQuery"></vex-navigation>

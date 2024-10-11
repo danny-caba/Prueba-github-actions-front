@@ -1,0 +1,21 @@
+<form>
+    <vex-modal-title *ngIf="booleanAdd" [titulo]="'Agregar Evidencia'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit" [titulo]="'Editar Evidencia'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Evidencia'"></vex-modal-title>
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content class="flex flex-col">
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Descripción</mat-label>
+            <input [formControl]="formGroup.controls.descripcion" matInput>
+            <mat-error *ngIf="formGroup.get('descripcion').hasError('required')">Ingrese Descripción
+            </mat-error>
+        </mat-form-field>
+        <vex-form-adjuntos-memory [titulo]="'Archivo'" [editable]="true" [codigo]="'TA10'" #formAdjuntoBtnTA10 [editable]="booleanAdd || booleanEdit"
+            [archivo]="evidencia"></vex-form-adjuntos-memory>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+    </mat-dialog-actions>
+</form>

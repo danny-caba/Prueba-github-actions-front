@@ -1,0 +1,160 @@
+<!--CONTENIDO-->
+<mat-accordion multi="true">
+    <mat-expansion-panel class="mt-2" expanded="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title class="font-bold">DATOS DE LA EMPRESA</mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-container *ngTemplateOutlet="formPJ"></ng-container>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="mt-2" expanded="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title class="font-bold">REPRESENTANTE LEGAL</mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-container *ngTemplateOutlet="formPJRepresentante"></ng-container>
+    </mat-expansion-panel>
+</mat-accordion>
+
+<ng-template #formPJRepresentante>
+    <div class="mt-4 flex flex-col">
+        <div @fadeInUp class="flex-auto">
+            <div class="flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                    <mat-form-field  class="flex-auto" >
+                        <mat-label>Tipo de Documento</mat-label>
+                        <mat-select [formControl]="formGroupRepresentante.controls.tipoDocumento">
+                            <mat-select [formControl]="formGroupRepresentante.controls.tipoDocumento">
+                                <mat-select [formControl]="formGroupRepresentante.controls.tipoDocumento">
+                                    <mat-option [value]="formGroupRepresentante.controls.tipoDocumento.value">
+                                        {{ formGroupRepresentante.controls.tipoDocumento.value.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-select>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field  class="flex-auto" >
+                        <mat-label>N° de Documento</mat-label>
+                        <input [formControl]="formGroupRepresentante.controls.numeroDocumento" matInput maxlength="12">
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                    <mat-form-field  class="flex-auto" >
+                        <mat-label>Nombres</mat-label>
+                        <input [formControl]="formGroupRepresentante.controls.nombres" [readonly]="true" matInput maxlength="50">
+                    </mat-form-field>
+                    <mat-form-field  class="flex-auto" >
+                        <mat-label>Apellido Paterno</mat-label>
+                        <input [formControl]="formGroupRepresentante.controls.apellidoPaterno" [readonly]="true" matInput maxlength="50">
+                    </mat-form-field>
+                    <mat-form-field  class="flex-auto" >
+                        <mat-label>Apellido Materno</mat-label>
+                        <input [formControl]="formGroupRepresentante.controls.apellidoMaterno" [readonly]="true" matInput maxlength="50">    
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #formPJ>
+    <div class="mt-4 flex flex-col">
+        <div class="flex-auto">
+            <div class="flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>País</mat-label>
+                        <mat-select [formControl]="formGroup.controls.pais">
+                            <mat-option [value]="formGroup.controls.pais.value">
+                                {{ formGroup.controls.pais.value.nombre }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Tipo de Identificación Tributaria</mat-label>
+                        <mat-select [formControl]="formGroup.controls.tipoDocumento">
+                            <mat-select [formControl]="formGroup.controls.tipoDocumento">
+                                <mat-option [value]="formGroup.controls.tipoDocumento.value">
+                                    {{ formGroup.controls.tipoDocumento.value.nombre }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>N° de Identificación Tributaria</mat-label>
+                        <input [formControl]="formGroup.controls.numeroDocumento" matInput maxlength="15"
+                            (keypress)="numberOnly($event)">
+                        <mat-error *ngIf="formGroup.get('numeroDocumento').hasError('required')">Ingrese N° de
+                            Identificación
+                            Tributaria</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Razón Social</mat-label>
+                        <input [formControl]="formGroup.controls.nombreRazonSocial" matInput maxlength="100">
+                    </mat-form-field>
+                </div>
+                <mat-form-field class="flex-auto">
+                    <mat-label>Domicilio Legal</mat-label>
+                    <input [formControl]="formGroup.controls.direccion" matInput maxlength="100">
+                </mat-form-field>
+    
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Departamento</mat-label>
+                        <mat-select [formControl]="formGroup.controls.nombreDepartamento">
+                            <mat-option [value]="formGroup.controls.nombreDepartamento.value">
+                                {{ formGroup.controls.nombreDepartamento.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Provincia</mat-label>
+                        <mat-select [formControl]="formGroup.controls.nombreProvincia">
+                            <mat-option [value]="formGroup.controls.nombreProvincia.value">
+                                {{ formGroup.controls.nombreProvincia.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Distrito</mat-label>
+                        <mat-select [formControl]="formGroup.controls.nombreDistrito">
+                            <mat-option [value]="formGroup.controls.nombreDistrito.value">
+                                {{ formGroup.controls.nombreDistrito.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+    
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Partida Registral</mat-label>
+                        <input [formControl]="formGroup.controls.codigoPartidaRegistral" matInput maxlength="100">
+                        <mat-error *ngIf="formGroup.get('codigoPartidaRegistral').hasError('required')">Ingrese Partida
+                            Registral
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Teléfono 1</mat-label>
+                        <input [formControl]="formGroup.controls.telefono1" matInput maxlength="12">
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Teléfono 2</mat-label>
+                        <input [formControl]="formGroup.controls.telefono2" matInput maxlength="12">
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Teléfono 3</mat-label>
+                        <input [formControl]="formGroup.controls.telefono3" matInput maxlength="12">
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Correo Electrónico</mat-label>
+                        <input type="correo" [formControl]="formGroup.controls.correo" matInput maxlength="150">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

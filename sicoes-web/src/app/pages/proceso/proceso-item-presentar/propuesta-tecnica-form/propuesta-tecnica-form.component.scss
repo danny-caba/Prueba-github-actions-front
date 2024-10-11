@@ -1,0 +1,29 @@
+.th-center {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+.mat-divider {
+    border-top-color: #000090;
+}
+
+.bordecmb:last-child{
+    border-left: 1px solid #000090;
+    padding-left: 10px;
+}
+
+.mat-stroked-button:not([disabled]){
+    border-color: var(--color-primary)!important;
+    background-color: white;
+}
+
+.v-line{
+    border-left: 2px solid #5c74b8;
+}
+
+.ajustar-texto{
+    white-space: normal;
+}

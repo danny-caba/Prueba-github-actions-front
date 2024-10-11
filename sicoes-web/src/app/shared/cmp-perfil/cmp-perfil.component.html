@@ -1,0 +1,49 @@
+<div class="flex flex-col sm:flex-row sm:gap-4">
+    <mat-label class="w-60">Seleccione su formación profesional</mat-label>
+</div>
+<div class="flex flex-col sm:flex-row sm:gap-4">
+    <mat-radio-group aria-label="Seleccionar profesión" class="flex-auto" (change)="listarDivisionesPorProfesion($event)" [(ngModel)]="idProfesionSeleccionada"
+        [disabled]="idProfesionSeleccionada && isProfesionDivisionDefinidos ? true : false">
+        <mat-radio-button *ngFor="let pr of listaProfesiones" name="listadoProdesiones" [value]="pr.idProfesion" style="margin: 10px">
+            {{ pr.deProfesion }}
+        </mat-radio-button>
+    </mat-radio-group>
+</div>
+
+<div class="flex flex-col sm:flex-row sm:gap-4">
+    <mat-form-field class="flex-auto">
+        <mat-label>Elija la división a participar</mat-label>
+        <mat-select (selectionChange)="listarPerfilesPorProfesionDivision($event)" [(ngModel)]="idDivisionSeleccionada"
+            [disabled]="idDivisionSeleccionada && isProfesionDivisionDefinidos ? true : false">
+            <mat-option *ngFor="let division of listaDivisiones" [value]="division.idDivision">
+                {{ division.deDivision }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+
+<div class="flex flex-col sm:flex-row sm:gap-4">
+    <mat-form-field class="flex-auto">
+        <mat-label>Ingrese Perfil</mat-label>
+        <input [formControl]="formGroup.controls.aprobador" [matAutocomplete]="autoTecnico" matInput (blur)="blurEvaluadorTecnico()">
+        <mat-autocomplete #autoTecnico="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let state of filteredStatesTecnico$ | async" [value]="state"  class="custom-option">
+                <span class="body-1 font-bold">{{ state.perfil.nombre }}</span>
+                <span class="text-hint"> | </span>
+                <span class="caption text-secondary">Detalle: {{ state.detalle }}</span>
+                <mat-divider></mat-divider>
+            </mat-option>
+        </mat-autocomplete>
+        <button (click)="formGroup.controls.aprobador.reset()" *ngIf="formGroup.controls.aprobador.value" mat-icon-button matSuffix type="button">
+            <mat-icon svgIcon="mat:close"></mat-icon>
+        </button>
+        <button *ngIf="!formGroup.controls.aprobador.value" mat-icon-button matSuffix type="button">
+            <mat-icon svgIcon="mat:search"></mat-icon>
+        </button>
+        <mat-error *ngIf="formGroup.get('aprobador').hasError('required')">Seleccione Perfil</mat-error>
+    </mat-form-field>
+
+    <div style="padding-top: 10px;">
+        <button color="primary" mat-raised-button type="button" (click)="guardar()">Guardar</button>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<div @stagger class="py-4">
+  <vex-proceso-sidenav-link (click)="closeDrawer()"
+                         *ngFor="let link of linksAdd"
+                         @fadeInUp
+                         [link]="link">
+                        </vex-proceso-sidenav-link>
+</div>

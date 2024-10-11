@@ -1,0 +1,17 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="flex flex-col sm:flex-row gap-4">
+            <div @fadeInUp class="card flex-auto">
+
+                <div class="flex flex-col">
+                    <mat-accordion>
+                        <mat-expansion-panel class="mt-2" expanded="true">
+                            <vex-layout-datos-usuario ></vex-layout-datos-usuario>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

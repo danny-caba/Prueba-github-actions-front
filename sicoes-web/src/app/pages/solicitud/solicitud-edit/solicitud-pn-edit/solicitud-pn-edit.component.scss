@@ -1,0 +1,19 @@
+.mat-expansion-panel-header.mat-expanded,
+.mat-expansion-panel-header.mat-expanded:hover,
+.mat-expansion-panel-header.mat-expanded:focus {
+    background-color: rgba(12, 12, 12, 0.048);
+}
+
+.mat-expansion-panel-header,
+.mat-expansion-panel-header:hover,
+.mat-expansion-panel-header:focus {
+    background-color: rgba(12, 12, 12, 0.048);
+}
+
+::ng-deep .mat-expansion-indicator::after{
+    border-color: rgb(68, 68, 68, 0.86);
+}
+
+::ng-deep .mat-tab-label{
+    background-color: rgba(12, 12, 12, 0.048);
+}

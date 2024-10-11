@@ -1,0 +1,18 @@
+<form>
+    <vex-modal-title *ngIf="booleanAdd" [titulo]="'Monto Facturado Evaluado por Sector'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit" [titulo]="'Editar Resultado de la evaluación'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Resultado de la evaluación'"></vex-modal-title>
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content class="flex flex-col">
+        <mat-form-field class="mt-6 flex-auto">
+          <mat-label>Monto Facturado Evaluado por Sector</mat-label>
+          <input type="number" matInput [formControl]="formGroup.controls.observacionAdmnistrativa">
+          <mat-error *ngIf="formGroup.get('montoFacturado').hasError('required')">Ingrese el monto</mat-error>
+        </mat-form-field>
+      </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guadarObsAdmin()">Guardar</button>
+        <!--button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button-->
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+    </mat-dialog-actions>
+</form>

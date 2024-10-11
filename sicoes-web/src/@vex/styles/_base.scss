@@ -1,0 +1,40 @@
+input, textarea {
+  box-sizing: content-box;
+  line-height: 1.5;
+}
+
+button:focus {
+  outline: unset !important;
+}
+
+code {
+  background: var(--background-app-bar);
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 85%;
+  padding: .2em .4em;
+}
+
+blockquote {
+  background: rgba(var(--color-primary), 0.1);
+  border-left: 3px solid theme('backgroundColor.primary');
+  color: rgba(0, 0, 0, .87);
+  font-style: normal;
+  margin: 1em 0 1.5em;
+  padding: 1em 1.5em;
+
+  > * {
+    margin: 0;
+  }
+}
+
+.btn-cancelar-alerta{
+  background: #FFF !important;
+  color: #000090 !important;
+  border: 1px #000090 solid !important;
+}
+
+.btn-cancelar-alerta:hover{
+  background: rgba(0, 0, 144, 0.2) !important;
+}

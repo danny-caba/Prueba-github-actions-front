@@ -1,0 +1,14 @@
+
+a.active {
+  background: var(--color-yelow-1);
+}
+
+a:not(.active):hover {
+  @apply bg-hover;
+}
+
+
+.link-estilo{
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}

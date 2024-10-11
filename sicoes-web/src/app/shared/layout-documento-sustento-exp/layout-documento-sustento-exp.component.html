@@ -1,0 +1,127 @@
+<div class="py-2 flex items-center justify-end gap-2" *vexOptionRole="opcion.BTN_DOC_EXP_AGREGAR">
+    <button color="primary" mat-raised-button type="button" (click)="agregarDocumento()">Agregar</button>
+</div>
+<div class="py-2 flex items-center justify-end gap-2">
+    <mat-label class="font-bold font-medium">Experiencia Total: </mat-label>
+    <mat-label class="font-bold font-medium">{{TOTAL_FECHA || ' -'}}</mat-label>
+</div>
+<div class="mx-0 py-4 border-b overflow-auto">
+    <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
+        <ng-container matColumnDef="nombreEntidad">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa / Entidad</th>
+            <td mat-cell *matCellDef="let element"> {{element?.numeroDocumento + " / " + element?.nombreEntidad}} </td>
+        </ng-container>
+        <ng-container matColumnDef="descripcionContrato">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripcion del<br>Servicio Prestado</th>
+            <td mat-cell *matCellDef="let element"> {{element?.descripcionContrato}} </td>
+        </ng-container>
+        <ng-container matColumnDef="fechaInicio">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Inicio</th>
+            <td mat-cell *matCellDef="let element"> {{element?.fechaInicio}} </td>
+        </ng-container>
+        <ng-container matColumnDef="fechaFin">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Termino</th>
+            <td mat-cell *matCellDef="let element"> {{element?.fechaFin || 'VIGENTE'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="duracion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Duración</th>
+            <td mat-cell *matCellDef="let element"> {{element?.duracion}} </td>
+        </ng-container>
+        <ng-container matColumnDef="archivo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Archivo</th>
+            <td *matCellDef="let element" mat-cell>
+                <div class="flex items-center gap-1 cursor-pointer">
+                    <div *ngIf="element.archivo" (click)="descargarArchivo(element.archivo)"
+                        [ngClass]="['text-purple', 'bg-purple-light']"
+                        class="rounded px-2 py-1 font-medium text-xs flex-none">
+                        {{ element.archivo?.nombre }}
+                    </div>
+                </div>
+            </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Resultado</th>
+            <td mat-cell *matCellDef="let element"> {{element?.evaluacion?.nombre}} </td>
+        </ng-container>                             -->
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="acciones">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Acción</th>
+            <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+              <button (click)="$event.stopPropagation()"
+                      [matMenuTriggerData]="{ obj: row }"
+                      [matMenuTriggerFor]="actionsMenu"
+                      mat-icon-button
+                      type="button" class="hover:bg-hover">
+                <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+              </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="loading">
+            <td mat-footer-cell *matFooterCellDef colspan="7" class="text-center">
+                Cargando Datos...
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vacio">
+            <td mat-footer-cell *matFooterCellDef colspan="7" class="text-center text-primary">
+                No se encuentran resultados para los filtros seleccionados
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': dataSource != null}"></tr>
+        <tr mat-footer-row *matFooterRowDef="['vacio']"
+            [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0) }"></tr>
+    </table>
+
+    <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+        showFirstLastButtons></mat-paginator>
+</div>
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+    <ng-template let-obj="obj" matMenuContent>
+        <div *vexOptionRole="opcion.VIEW_EVALUACION_EXT; else viewEval">
+            <!--button *ngIf="['RE_04', 'RE_07'].includes(obj.evaluacion?.codigo); else viewEval"
+                (click)="actualizarVer(obj, 'verObservacion')" mat-menu-item>
+                <mat-icon svgIcon="mat:preview"></mat-icon>
+                <span>Ver Observación</span>
+            </button-->
+            <button (click)="actualizarVer(obj, 'view')" mat-menu-item>
+                <mat-icon svgIcon="mat:preview"></mat-icon>
+                <span>Ver</span>
+            </button>
+        </div>
+        <ng-template #viewEval>
+            <button (click)="actualizarVer(obj, 'viewEval')" mat-menu-item *vexOptionRole="opcion.VIEW_EVALUACION; else verSimple">
+                <mat-icon svgIcon="mat:preview"></mat-icon>
+                <span>Ver</span>
+            </button>
+            <ng-template #verSimple>
+                <button (click)="actualizarVer(obj, 'view')" mat-menu-item>
+                    <mat-icon svgIcon="mat:preview"></mat-icon>
+                    <span>Ver</span>
+                </button>
+            </ng-template>
+        </ng-template>
+        <button mat-menu-item (click)="actualizarVer(obj,'editEval')" *vexOptionRole="opcion.MEN_DOC_EXP_EVALUAR">
+            <mat-icon svgIcon="mat:edit" size="18px"></mat-icon>
+            <span>Evaluar</span>
+        </button>
+        <div *ngIf="['RE_01', 'RE_04', 'RE_07'].includes(obj.evaluacion?.codigo)">
+            <button (click)="actualizarVer(obj, 'edit')" mat-menu-item *vexOptionRole="opcion.MEN_GRA_ACA_EDITAR">
+                <mat-icon svgIcon="mat:edit"></mat-icon>
+                <span *ngIf="obj.evaluacion?.codigo == 'RE_01'">Editar</span>
+                <span *ngIf="obj.evaluacion?.codigo == 'RE_04'">Subsanar</span>
+                <span *ngIf="obj.evaluacion?.codigo == 'RE_07'">Editar Respuesta</span>
+            </button>
+        </div>
+        <div *ngIf="obj.evaluacion?.codigo == 'RE_01'">
+            <button (click)="eliminarDocumento(obj)" mat-menu-item *vexOptionRole="opcion.MEN_DOC_EXP_ELIMINAR">
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+                <span>Eliminar</span>
+            </button>
+        </div>
+    </ng-template>
+</mat-menu>

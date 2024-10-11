@@ -1,0 +1,21 @@
+<form>
+    <vex-modal-title class="text-primary font-bold tittle" *ngIf="booleanAdd" [titulo]="'Agregar Documento Técnico'"></vex-modal-title>
+    <vex-modal-title class="text-primary font-bold tittle" *ngIf="booleanEdit" [titulo]="'Editar Documento Técnico'"></vex-modal-title>
+    <vex-modal-title class="text-primary font-bold tittle" *ngIf="booleanView" [titulo]="'Ver Documento Técnico'"></vex-modal-title>
+    <mat-dialog-content class="flex flex-col mb-4">
+        <mat-label class="text-primary font-medium">Descripción para los documentos</mat-label>
+        <mat-form-field class="">
+            <textarea rows="4" [formControl]="formGroup.controls.descripcion" matInput></textarea>
+            <mat-error *ngIf="formGroup.get('descripcion').hasError('required')">Ingrese Descripción
+            </mat-error>
+        </mat-form-field>
+        <vex-form-adjuntos-memory [titulo]="'Adjunta los documentos que validen la información ingresada'" [editable]="true" [codigo]="'TA19'" #formAdjuntoBtnTA19 [editable]="booleanAdd || booleanEdit"
+           [propuesta]="propuesta"
+        [archivo]="evidencia"></vex-form-adjuntos-memory>
+    </mat-dialog-content>
+    <mat-dialog-actions class="flex items-center justify-center">
+        <button style="width: clamp(80px, 40%, 180px);" mat-stroked-button color="primary" (click)="closeModal()">Cancelar</button>
+        <button style="width: clamp(80px, 40%, 180px);" mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Agregar</button>
+        <button style="width: clamp(80px, 40%, 180px);" mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+    </mat-dialog-actions>
+</form> 

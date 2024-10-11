@@ -1,0 +1,13 @@
+.th-center {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+::ng-deep {
+    .mat-menu-panel {
+        max-width: 300px !important;
+    }
+}

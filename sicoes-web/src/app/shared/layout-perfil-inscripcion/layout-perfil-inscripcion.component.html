@@ -1,0 +1,112 @@
+<div class="py-2 flex flex-col gap-2" *vexOptionRole="opcion.BTN_PER_INS_AGREGAR">
+    <vex-cmp-perfil *ngIf="ES_PERS_NAT == true" [solicitud]="solitidud" (actualizarTabla)="cargarTabla()"></vex-cmp-perfil>
+</div>
+<div class="py-2 flex items-center justify-end gap-2" *vexOptionRole="opcion.BTN_PER_INS_AGREGAR">
+    <button color="primary" *ngIf="ES_PERS_NAT == false" mat-raised-button type="button" (click)="agregarPerfil()">Agregar</button>
+</div>
+<div class="mx-0 py-4 border-b overflow-auto">
+    <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
+        <ng-container matColumnDef="sector">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>SECTOR</th>
+            <td mat-cell *matCellDef="let element"> {{element?.sector?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="subSector">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>SUB-SECTOR</th>
+            <td mat-cell *matCellDef="let element"> {{element?.subsector?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="actividad">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ACTIVIDAD</th>
+            <td mat-cell *matCellDef="let element"> {{element?.actividad?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="unidad">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>UNIDAD</th>
+            <td mat-cell *matCellDef="let element"> {{element?.unidad?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="categoria">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>SUB-CATEGORIA</th>
+            <td mat-cell *matCellDef="let element"> {{element?.subCategoria?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="perfil">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>PERFIL</th>
+            <td mat-cell *matCellDef="let element"> {{element?.perfil?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="division">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>DIVISIÓN</th>
+            <td mat-cell *matCellDef="let element"> {{ getDivisionCode(element?.actividadArea?.codigo) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="areaSubCategoria">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>AREA/SUB-CATEGORIA<th>
+            <td mat-cell *matCellDef="let element"> {{element?.actividadArea?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="evaluador">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>EVALUADOR ASIGNADO</th>
+            <td mat-cell *matCellDef="let element"> {{element?.usuario?.nombreUsuario}} </td>
+        </ng-container>
+        <ng-container matColumnDef="fechaAsignacion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>FECHA ASIGNACIÓN</th>
+            <td mat-cell *matCellDef="let element"> {{element?.fechaAsignacion}} </td>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="acciones">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Acción</th>
+            <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ obj: row }"
+                    [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button" class="hover:bg-hover">
+                    <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="loading">
+            <td mat-footer-cell *matFooterCellDef colspan="7" class="text-center">
+                Cargando Datos...
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vacio">
+            <td mat-footer-cell *matFooterCellDef colspan="7" class="text-center text-primary">
+                No se encuentran resultados para los filtros seleccionados
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': dataSource != null}"></tr>
+        <tr mat-footer-row *matFooterRowDef="['vacio']"
+            [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0) }"></tr>
+    </table>
+
+    <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+        showFirstLastButtons></mat-paginator>
+</div>
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+    <ng-template let-obj="obj" matMenuContent>
+        <button (click)="actualizarVer(obj, 'view')" mat-menu-item >
+            <mat-icon svgIcon="mat:preview"></mat-icon>
+            <span>Ver</span>
+        </button>
+        <button (click)="actualizarVer(obj, 'edit')" mat-menu-item *vexOptionRole="opcion.MEN_PER_INS_MODIFICAR">
+            <mat-icon svgIcon="mat:edit"></mat-icon>
+            <span>Modificar</span>
+        </button>
+        <button (click)="actualizarEvaluador(obj, 'modify')" [disabled]="!obj.usuario?.idUsuario" mat-menu-item *vexOptionRole="opcion.CMP_EDIT_EVAL_TEC">
+            <mat-icon svgIcon="mat:edit"></mat-icon>
+            <span>Modificar Evaluador</span>
+        </button>
+        <button (click)="eliminarPerfil(obj)" mat-menu-item *vexOptionRole="opcion.MEN_PER_INS_ELIMINAR">
+            <mat-icon svgIcon="mat:delete"></mat-icon>
+            <span>Eliminar</span>
+        </button>
+        <div *ngIf="ES_PERS_NAT == true">
+            <button (click)="asignarPerfil(obj)" mat-menu-item [disabled]="obj.usuario?.idUsuario" *vexOptionRole="opcion.CMP_EDIT_EVAL_TEC" >
+                <mat-icon svgIcon="mat:person"></mat-icon>
+                <span>Asignar Evaluador</span>
+            </button>
+        </div>
+        <button (click)="registrarRevertirEvaluacion(obj)" mat-menu-item [disabled]="obj.estadoReversion?.codigo != 'REV_SOLICITADO'" *vexOptionRole="opcion.CMP_EDIT_EVAL_TEC" >
+            <mat-icon svgIcon="mat:undo"></mat-icon>
+            <span>Revertir Evaluación</span>
+        </button>
+    </ng-template>
+</mat-menu>

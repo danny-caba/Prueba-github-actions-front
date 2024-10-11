@@ -1,0 +1,143 @@
+<div class="w-full h-full overflow-hidden flex flex-col">
+    <div class="py-4 px-6 bg-white">
+        <div class="flex flex-row mb-4 items-center">
+            <button (click)="openDrawer()" class="block" *ngIf="!(isDesktop$ | async)" color="primary" mat-icon-button type="button">
+                <mat-icon svgIcon="mat:menu"></mat-icon>
+            </button>
+            <div class="">
+                <div class="text-primary text-xl font-bold">3. Invitar Profesionales</div>
+            </div>
+        </div>
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <vex-scrollbar class="px-6 flex-auto  bg-white">
+        <div class="py-4">
+            <div class="flex items-center text-primary gap-2 ">
+                <div class="rounded-full border-2 border-primary w-5 h-5 flex items-center justify-center">
+                    <mat-icon svgIcon="mat:arrow_forward"></mat-icon>
+                </div>
+                <p class="title text-primary font-bold text-sm">Perfiles que solicita el proceso:</p>
+            </div>
+            <div class="lista-prof mt-4" >
+                <ul class="px-4 py-2 text-primary font-medium" *ngFor="let itemPerfil of listPerfiles">
+                    <li class="flex">
+                        <div style="width: 60px;"><span>Cant:</span><br><span>{{itemPerfil.nroProfesionales}}</span></div>
+                        <div><span>Perfil:</span><br><span><strong>{{itemPerfil.perfil.nombre}}</strong> | Detalle: {{itemPerfil.sector.nombre + ' / ' + itemPerfil.subsector.nombre}}</span></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div @fadeInUp class="py-4">
+            <div class="flex items-center text-primary gap-2 ">
+                <div class="rounded-full border-2 border-primary w-5 h-5 flex items-center justify-center">
+                    <mat-icon svgIcon="mat:arrow_forward"></mat-icon>
+                </div>
+                <p class="title text-primary font-bold text-sm">Invitar profesionales   :</p>
+            </div>
+            <div class="grid sm:grid-cols-3 gap-x-8 pt-4">
+                <div class="flex flex-col sm:col-span-1">
+                    <mat-label class="text-primary text-sm font-medium">Perfil</mat-label>
+                    <mat-form-field  class="flex-auto">
+                        <mat-select [formControl]="formGroup.controls.perfil" placeholder="Seleccione un perfil">
+                            <mat-option *ngFor="let obj of listPerfiles" [value]="obj">
+                                {{ obj.perfil.nombre }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col sm:col-span-2">
+                    <mat-label class="text-primary txt-sm font-medium">Nombre del Profesional</mat-label>
+                    <mat-form-field  class="flex-auto">
+                        <mat-select [formControl]="formGroup.controls.profesional" placeholder="Ingresar nombre del profesional">
+                        <mat-option *ngFor="let obj of listProfesionales" [value]="obj">
+                            {{ obj.nombres + ' ' + obj.apellidoPaterno + ' ' + obj.apellidoMaterno }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="formGroup.get('profesional').hasError('ProfesionaNoVacio')">Seleccionar Profesional</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="flex justify-end">
+                <button color="primary" mat-raised-button type="button" (click)="enviarInvitacion()">
+                    Enviar Invitación
+                </button>
+            </div>
+        </div>
+        <div class="py-4 border-b overflow-auto">
+            <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
+                <ng-container matColumnDef="fechaInvitacion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha<br>Invitación</th>
+                    <td mat-cell class="text-primary font-medium" *matCellDef="let element"> {{element?.fechaInvitacion}} </td>
+                </ng-container>
+                <ng-container matColumnDef="perfil">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</th>
+                    <td mat-cell class="text-primary font-medium" *matCellDef="let element"> {{element?.perfil?.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="nombreProfesional">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del Profesional</th>
+                    <td mat-cell class="text-primary font-medium" *matCellDef="let element"> {{element?.supervisora?.nombres+" "+element?.supervisora?.apellidoPaterno+" "+element?.supervisora?.apellidoMaterno}} </td>
+                </ng-container>
+                <ng-container matColumnDef="estado">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                    <td mat-cell class="text-primary font-medium" *matCellDef="let element"> {{element?.estado?.nombre}} </td>
+                </ng-container>
+                <!-- Action Column -->
+                <ng-container matColumnDef="acciones">
+                    <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                    <td *matCellDef="let row" class="w-10 text-primary text-center" mat-cell>
+                        <button (click)="cancelarInvitacion(row)" *ngIf="valirdarBtn(row)">
+                            <mat-icon svgIcon="mat:close"></mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="loading">
+                    <td mat-footer-cell *matFooterCellDef colspan="4" class="text-center">
+                        Cargando Datos...
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="vacio">
+                    <td mat-footer-cell *matFooterCellDef colspan="4" class="text-center text-primary">
+                        No se encuentran resultados para los filtros seleccionados
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': dataSource != null}"></tr>
+                <tr mat-footer-row *matFooterRowDef="['vacio']"
+                    [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0) }"></tr>
+            </table>
+
+            <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                showFirstLastButtons></mat-paginator>
+        </div>
+    </vex-scrollbar>
+
+    <div class= "py-4 px-6 bg-white">
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+        <p class="py-2 text-primary font-medium"><b>Nota:</b> Puedes agregar los perfiles que desees uno por uno.</p>
+    </div>
+    <div class="py-4 border-t flex flex-row">
+        <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+            Cancelar
+        </button>
+        <span class="flex-auto"></span>
+        <div class="flex flex-row gap-x-2">
+            <button color="primary" mat-raised-button type="button" (click)="guardar(true)">
+                Siguiente
+            </button>
+            <!--button color="primary" mat-stroked-button type="button" (click)="guardar(false)">
+                Guardar y Salir
+            </button>
+            <button color="primary" mat-raised-button type="button" (click)="guardar(true)">
+                Guardar y Continuar
+            </button-->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<form>
+    <vex-modal-title *ngIf="booleanAdd" [titulo]="'Registrar Resultado de la evaluación'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit" [titulo]="'Editar Resultado de la evaluación'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Resultado de la evaluación'"></vex-modal-title>
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content class="flex flex-col">
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Resultado de la evaluación</mat-label>
+            <textarea #observacionDescripcion rows="10" cdkTextareaAutosize matNativeControl [formControl]="formGroup.controls.observacion" maxlength="3000" [disabled]="true" ></textarea>
+            <mat-error *ngIf="formGroup.get('observacion').hasError('required')">Ingrese Resultado de la evaluación</mat-error>
+            <mat-hint align="end">{{observacionDescripcion.value.length}} / 3000</mat-hint>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
+        <!--button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button-->
+        <button mat-raised-button color="primary" (click)="closeModal(false)">Cancelar</button>
+    </mat-dialog-actions>
+</form>

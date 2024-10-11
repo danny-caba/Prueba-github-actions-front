@@ -1,0 +1,185 @@
+<div class="w-full h-full overflow-hidden flex flex-col">
+    <div class="py-4 px-6  bg-white">
+        <div class="flex flex-row mb-4 items-center">
+            <button (click)="openDrawer()" class="block" *ngIf="!(isDesktop$ | async)" color="primary" mat-icon-button type="button">
+                <mat-icon svgIcon="mat:menu"></mat-icon>
+              </button>  
+              <div class="">
+                <div class="text-primary text-xl font-bold">1. Datos del proceso</div>
+              </div>
+        </div>
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+  
+    <vex-scrollbar class="px-6 flex-auto  bg-white">
+        <ng-container *ngTemplateOutlet="seccion"></ng-container>
+    </vex-scrollbar>
+    <div class="py-4 border-t flex flex-row">
+        <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+            Cancelar
+        </button>
+        <span class="flex-auto"></span>
+        <div class="flex flex-row gap-x-2" *ngIf="PROPUESTA; else nextPropuesta">
+            <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+                Guardar y Salir 
+            </button>
+            <button color="primary" mat-raised-button type="button" (click)="siguiente()">
+                Guardar y Continuar 
+            </button>
+        </div> 
+        <ng-template #nextPropuesta>
+            <div class="flex flex-row gap-x-2" #nextPropuesta>
+                <button color="primary" mat-stroked-button type="button" (click)="registrarPropuesta(false)">
+                    Guardar y Salir
+                </button>
+                <button color="primary" mat-raised-button type="button" (click)="registrarPropuesta(true)">
+                    Guardar y Continuar
+                </button>
+            </div>
+        </ng-template>
+    </div>
+  </div>
+
+<ng-template #seccion>
+    <div class="mt-4">
+        <div class="flex items-center text-primary gap-2 ">
+            <div class="rounded-full border-2 border-primary w-5 h-5 flex items-center justify-center">
+                <mat-icon svgIcon="mat:arrow_forward"></mat-icon>
+            </div>
+            <p class="title text-primary font-bold text-sm">Datos generales:</p>
+        </div>
+        <div class="grid md:grid-cols-2 px-4 py-4">
+            <div class="text-primary md:pr-8">
+                <div class="grid grid-cols-2">
+                    <label>N°: </label>
+                    <label class="font-bold">{{ formGroup.controls.numeroProceso.value }}</label>
+                </div>
+                <div class="grid grid-cols-2">
+                    <label>Nombre del proceso: </label>
+                    <label class="font-bold">{{ formGroup.controls.nombreProceso.value }}</label>
+                </div>
+                <div class="grid grid-cols-2">
+                    <label>N° de expediente SIGED: </label>
+                    <label class="font-bold">{{ formGroup.controls.numeroExpediente.value }}</label>
+                </div>
+                <div class="grid grid-cols-2">
+                    <label>Área que solicita el requerimiento: </label>
+                    <label class="font-bold">{{ formGroup.controls.unidad.value }}</label>
+                </div>
+            </div>
+            <div class="text-primary flex flex-col items-start justify-center md:pl-8 md:border-l-2 md:border-primary">
+                <div style="width: 100%;">
+                    <div class="grid grid-cols-2 md:grid-cols-4">
+                        <label class="md:col-span-1">Sector:</label>
+                        <label class="font-bold md:col-span-3">{{ formGroup.controls.sector.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4">
+                        <label class="md:col-span-1">Sub Sector:</label>
+                        <label class="font-bold md:col-span-3">{{ formGroup.controls.subsector.value }}</label>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4">
+                        <label class="md:col-span-1">Estado:</label>
+                        <label class="font-bold md:col-span-3">{{ formGroup.controls.estado.value }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="my-4">
+        <mat-divider></mat-divider>
+    </div>
+    <div>
+        <div class="flex items-center text-primary gap-2 ">
+            <div class="rounded-full border-2 border-primary w-5 h-5 flex items-center justify-center">
+                <mat-icon svgIcon="mat:arrow_forward"></mat-icon>
+            </div>
+            <p class="title text-primary font-bold text-sm">Fechas por etapas:</p>
+        </div>
+        <div class="my-4">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" class="w-full text-center">
+                <ng-container matColumnDef="nombre">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Etapa</th>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fechaInicio">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha de inicio</th>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.fechaInicio}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fechaFin">
+                  <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha de fin</th>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.fechaFin}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>              
+        </div>
+    </div>
+    <div class="my-4">
+        <mat-divider></mat-divider>
+    </div>
+    <div>
+        <div class="flex items-center text-primary gap-2 ">
+            <div class="rounded-full border-2 border-primary w-5 h-5 flex items-center justify-center">
+                <mat-icon svgIcon="mat:arrow_forward"></mat-icon>
+            </div>
+            <p class="title text-primary font-bold text-sm">Ítem:</p>
+        </div>
+        <div class="text-primary px-4 py-4">
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">N°:</label>
+                <label class="font-bold md:col-span-3">{{ formGroup.controls.numeroItem.value }}</label>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">Nombre del ítem:</label>
+                <label class="font-bold md:col-span-3">{{ formGroup.controls.descripcionItem.value }}</label>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">Tipo de Moneda:</label>
+                <label class="font-bold md:col-span-3">{{ formGroup.controls.divisa.value }}</label>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">Valor estimado:</label>
+                <label class="font-bold md:col-span-3">{{ formGroup.controls.montoReferencial.value }} </label>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">Tipo de Cambio:</label>
+                <label class="font-bold md:col-span-3">{{ formGroup.controls.montoTipoCambio.value || 'No aplica'}}</label>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">Valor estimado en soles:</label>
+                <label class="font-bold md:col-span-3">{{ formGroup.controls.montoReferencialSoles.value || 'No aplica' }}</label>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">Facturación mínima en soles:</label>
+                <label class="font-bold md:col-span-3">{{ formGroup.controls.facturacionMinima.value }}</label>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <label class="md:col-span-1">Estado:</label>
+                <label class="font-bold md:col-span-3">{{ formGroup.controls.estadoItem.value }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="my-4">
+        <table mat-table [dataSource]="datosPerfiles" class="mat-elevation-z8" class="w-full text-center">
+            <ng-container matColumnDef="perfil">
+                <th class="text-center" mat-header-cell *matHeaderCellDef>Perfil</th>
+                <td class="text-primary" mat-cell *matCellDef="let element">
+                    <div class="flex flex-row">
+                        <label class="font-bold"> {{element?.perfil?.nombre}} </label>
+                        <div class=" border-l border-primary mx-2"></div>
+                        <label class="font-medium"> Detalle: {{element?.sector?.nombre}} / {{element?.subsector?.nombre}}</label>
+                    </div>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="cantidad">
+                <th class="text-center" mat-header-cell *matHeaderCellDef>Cantidad</th>
+                <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element?.nroProfesionales}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+            </table>              
+    </div>
+    
+</ng-template>

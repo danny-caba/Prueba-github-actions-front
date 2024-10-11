@@ -1,0 +1,105 @@
+
+    <vex-modal-title-2 class="font-bold text-primary" *ngIf="booleanAdd" [titulo]="'Agregar Item:'"></vex-modal-title-2>
+    <vex-modal-title-2 class="font-bold text-primary" *ngIf="booleanEdit" [titulo]="'Editar Item:'"></vex-modal-title-2>
+    <vex-modal-title-2 class="font-bold text-primary" *ngIf="booleanView" [titulo]="'Ver Items'"></vex-modal-title-2>
+    <mat-dialog-content class="p-0 m-0">
+    <form class="px-6 bg-white">
+        <div class="flex flex-col">
+            <div class="py-2 grid sm:grid-cols-3 md:grid-cols-3 gap-x-8">
+                <div class="flex flex-col">
+                    <mat-label class="text-primary text-sm font-medium">N°</mat-label>
+                    <mat-form-field  class="">
+                        <input [formControl]="formGroup.controls.numeroItem" matInput (keypress)="numberOnly($event)" (paste)="pegarSoloNumeros($event)" placeholder="Ingrese el N°" maxlength="2">
+                        <mat-error *ngIf="formGroup.get('numeroItem').hasError('required')">Ingrese Nro de Item</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col col-span-2">
+                    <mat-label class="text-primary text-sm font-medium">Ingresar nombre del ítem</mat-label>
+                    <mat-form-field  class="flex-auto">
+                        <input matInput #descripcion [formControl]="formGroup.controls.descripcionItem" maxlength="200"  placeholder="Ingrese nombre">
+                        <mat-hint align="end">{{descripcion.value.length}} / 200</mat-hint>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="pb-2 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
+                <div class="flex flex-col">
+                    <mat-label class="text-primary text-sm font-medium">Tipo de Moneda</mat-label>
+                    <mat-form-field class="flex-auto">
+                        <mat-select [formControl]="formGroup.controls.divisa" [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccionar">
+                            <mat-option *ngFor="let obj of listTipoCambio" [value]="obj">
+                                {{ obj.nombre }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="formGroup.get('divisa').hasError('required')">Seleccione Moneda</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col">
+                    <mat-label class="text-primary text-sm font-medium">Valor estimado</mat-label>
+                    <mat-form-field  class="flex-auto">
+                        <input [formControl]="formGroup.controls.montoReferencial" matInput (keypress)="decimalOnly($event)" (paste)="pegarSoloNumeros($event)" placeholder="Ingrese valor estimado">
+                        <mat-error *ngIf="formGroup.get('montoReferencial').hasError('required')">Ingrese valor estimado</mat-error>
+                        <mat-error *ngIf="formGroup.get('montoReferencial').hasError('valorEstimadoInvalido')">El valor estimado no debe ser cero.</mat-error>
+
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col">
+                    <mat-label class="text-primary font-medium">Estado</mat-label>
+                    <mat-form-field class="flex-auto">
+                        <mat-select [formControl]="formGroup.controls.estado" [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccion es el estado">
+                            <mat-option *ngFor="let obj of listEstadoItem" [value]="obj" [disabled]="obj.disabled">
+                                {{ obj.nombre }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="formGroup.get('estado').hasError('required')">Seleccione estado
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
+                <div class="flex flex-col">
+                    <mat-label class="text-primary text-sm font-medium">Tipo de Cambio</mat-label>
+                    <mat-form-field class="flex-auto">
+                        <input [formControl]="formGroup.controls.montoTipoCambio" (keypress)="decimalOnly($event)" matInput placeholder="">
+                        <mat-error *ngIf="formGroup.get('montoTipoCambio').hasError('required')">Ingrese Tipo de
+                            Cambio
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col">
+                    <mat-label class="text-primary text-sm font-medium">Valor estimado en Soles</mat-label>
+                    <mat-form-field  class="flex-auto">
+                        <input [formControl]="formGroup.controls.montoReferencialSoles" matInput (keypress)="numberOnly($event)" placeholder="">
+                        <mat-error *ngIf="formGroup.get('montoReferencialSoles').hasError('required')">Ingrese valor estimado en soles</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col">
+                    <mat-label class="text-primary text-sm font-medium">Facturación mínima en soles</mat-label>
+                    <mat-form-field  class="flex-auto">
+                        <input [formControl]="formGroup.controls.facturacionMinima" matInput (keypress)="numberOnly($event)" placeholder="">
+                        <mat-error *ngIf="formGroup.get('facturacionMinima').hasError('required')">Facturación mínima en soles</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div>
+                <p class="pb-2 text-primary font-medium"><b>Nota:</b>Recuerda que la facturación mínima es el 50% del monto referencial.</p>
+                <mat-divider class="text-border"></mat-divider>
+            </div>
+            <div class="mt-4">
+                <vex-layout-item-perfil [PROCESO]="PROCESO" [procesoItem]="procesoItem" [listProcesoItemPerfil]="listProcesoItemPerfil" [booleanView]="booleanViewPerfil"></vex-layout-item-perfil>
+            </div>
+            <div>
+                <mat-divider class="text-border"></mat-divider>
+                <p class="py-2 text-primary font-medium">Recuerda que puedes agregar varios perfiles uno por uno.</p>
+            </div>
+        </div>
+        </form>
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="center">
+        <button style="width: max(180px, 120px);" mat-stroked-button type="button" color="primary" (click)="closeModal()">Cancelar</button>
+        <button style="width: max(180px, 120px);" mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
+        <button style="width: max(180px, 120px);" mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <!--GUARDAR EVALUACION-->
+
+    </mat-dialog-actions>

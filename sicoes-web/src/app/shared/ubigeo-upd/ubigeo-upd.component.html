@@ -1,0 +1,29 @@
+<div class="flex flex-col sm:flex-row sm:gap-4">
+<mat-form-field class="flex-auto" >
+    <mat-label>Departamento</mat-label>
+    <mat-select [formControl]="parentForm.controls.departamento" [compareWith]="compareCodigoUbigeo">
+        <mat-option *ngFor="let departamentoObj of departamentos" [value]="departamentoObj">
+            {{departamentoObj.nombre}}
+        </mat-option>
+    </mat-select>              
+    <mat-error *ngIf="parentForm.get('departamento').hasError('required')">Seleccionar Departamento</mat-error>
+</mat-form-field>
+<mat-form-field class="flex-auto" >
+    <mat-label>Provincia</mat-label>
+    <mat-select [formControl]="parentForm.controls.provincia" [compareWith]="compareCodigoUbigeo">
+        <mat-option *ngFor="let provincia of provincias" [value]="provincia">
+            {{provincia.nombre}}
+        </mat-option>
+    </mat-select>
+    <mat-error *ngIf="parentForm.get('provincia').hasError('required')">Seleccionar Provincia</mat-error>
+</mat-form-field>
+<mat-form-field class="flex-auto" >
+    <mat-label>Distrito</mat-label>
+    <mat-select [formControl]="parentForm.controls.distrito" [compareWith]="compareCodigoUbigeo">
+        <mat-option *ngFor="let distrito of distritos" [value]="distrito">
+            {{distrito.nombre}}
+        </mat-option>
+    </mat-select>
+    <mat-error *ngIf="parentForm.get('distrito').hasError('required')">Seleccionar Distrito</mat-error>
+</mat-form-field>
+</div>

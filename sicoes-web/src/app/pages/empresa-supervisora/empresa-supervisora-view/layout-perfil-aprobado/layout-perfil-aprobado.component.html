@@ -1,0 +1,51 @@
+<div class="mx-0 py-4 border-b overflow-auto">
+    <table mat-table [dataSource]="dataSource" class="w-full" matSort>
+        <ng-container matColumnDef="expediente">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>N° EXPEDIENTE</th>
+            <td mat-cell *matCellDef="let element"> {{element?.numeroExpediente}} </td>
+        </ng-container>
+        <ng-container matColumnDef="perfiles">
+            <ng-container *ngIf="SUPERVISORA?.tipoPersona?.codigo == tipoPersonaEnum.JURIDICO || SUPERVISORA?.tipoPersona?.codigo == tipoPersonaEnum.PN_POSTOR || SUPERVISORA?.tipoPersona?.codigo == tipoPersonaEnum.PJ_EXTRANJERO" >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Sector/Sub-Sector</th>
+                <td mat-cell *matCellDef="let element">
+                    <span><b>Sector: </b>{{element.sector.nombre}}</span><br>
+                    <span><b>Sub-Sector: </b>{{element.subsector.nombre}}</span><br>
+                </td>
+            </ng-container>
+            <ng-container *ngIf="SUPERVISORA?.tipoPersona?.codigo == tipoPersonaEnum.PN_PERS_PROPUESTO" >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>PERFILES</th>
+                <td mat-cell *matCellDef="let element">
+                    <span><b>Sector: </b>{{element.sector.nombre}}</span><br>
+                    <span><b>Sub-Sector: </b>{{element.subsector.nombre}}</span><br>
+                    <span><b>Actividad: </b>{{element.actividad.nombre}}</span><br>
+                    <span><b>Unidad: </b>{{element.unidad.nombre}}</span><br>
+                    <span><b>Sub-Categoria: </b>{{element.subCategoria.nombre}}</span><br>
+                    <span><b>Perfil: </b>{{element.perfil.nombre}}</span><br>
+                </td>
+            </ng-container>
+        </ng-container>
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>FECHA</th>
+            <td mat-cell *matCellDef="let element"> {{element?.fechaIngreso}} </td>
+        </ng-container>
+        <ng-container matColumnDef="loading">
+            <td mat-footer-cell *matFooterCellDef colspan="3" class="text-center">
+                Cargando Datos...
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vacio">
+            <td mat-footer-cell *matFooterCellDef colspan="3" class="text-center text-primary">
+                No se encuentran resultados para los filtros seleccionados
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': dataSource != null}"></tr>
+        <tr mat-footer-row *matFooterRowDef="['vacio']"
+            [ngClass]="{'hide': !(dataSource!=null && dataSource.length==0) }"></tr>
+    </table>
+
+    
+</div>

@@ -1,0 +1,17 @@
+table {
+    width: 100%;
+}
+
+.th-center {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+  
+.mat-paginator-sticky {
+    bottom: 0px;
+    position: sticky;
+    z-index: 10;
+}

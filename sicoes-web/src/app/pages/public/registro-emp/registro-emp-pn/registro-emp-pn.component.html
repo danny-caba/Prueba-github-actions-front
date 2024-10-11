@@ -1,0 +1,80 @@
+<!-- FILTRO PERSONAS JURIDICAS-->
+<div class="px-6 py-4 flex flex-col">
+    <div class="flex flex-col sm:flex-row sm:gap-4">
+        <mat-form-field  class="flex-auto">
+            <mat-label>RUC</mat-label>
+            <input [formControl]="formGroup.controls.ruc" matInput maxlength="15" />
+        </mat-form-field>
+        <mat-form-field  class="flex-auto">
+            <mat-label>Apellidos y nombres</mat-label>
+            <input [formControl]="formGroup.controls.nombres" matInput maxlength="60" />
+        </mat-form-field>
+        <mat-form-field  class="flex-auto">
+            <mat-label>Perfil</mat-label>
+            <input [formControl]="formGroup.controls.perfil" matInput maxlength="15" />
+        </mat-form-field>
+        <mat-form-field  class="flex-auto">
+            <mat-label>Fecha de ingreso</mat-label>
+            <input [formControl]="formGroup.controls.fechaInicio" type="date" matInput>
+        </mat-form-field>
+        <!--BOTONES-->
+        <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end mb-6">
+            <button color="primary" mat-raised-button type="button" (click)="buscar()">
+                Buscar
+            </button>
+            <button color="primary" mat-raised-button type="button" (click)="limpiar()">
+                Limpiar
+            </button>
+        </div>
+    </div>
+</div>
+<!--TABLA PERSONAS JURIDICAS-->
+<div class="px-6 py-4 card overflow-auto">
+    <table @stagger [dataSource]="dataSource" class="w-full border" mat-table matSort>
+        <ng-container matColumnDef="nroIdentTributaria">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>RUC</th>
+            <td mat-cell *matCellDef="let element">{{ element?.supervisora.codigoRuc }}</td>
+        </ng-container>
+        <ng-container matColumnDef="apellidosNombres">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Apellidos y nombres</th>
+            <td mat-cell *matCellDef="let element">{{ obtenerNombres(element) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="tipoPersona">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>Persona</th>
+            <td mat-cell *matCellDef="let element">{{ element?.supervisora?.tipoPersona?.nombre }}</td>
+        </ng-container>
+        <ng-container matColumnDef="perfil">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</th>
+            <!--td mat-cell *matCellDef="let element">{{obtenerPerfil(element)}}</td-->
+            <td mat-cell *matCellDef="let element">
+                <span><b>Sector: </b>{{element.sector?.nombre}}</span><br>
+                <span><b>Sub-Sector: </b>{{element.subsector?.nombre}}</span><br>
+                <span *ngIf="element.actividad?.nombre"><b>Actividad: </b>{{element.actividad?.nombre}}</span><br>
+                <span *ngIf="element.unidad?.nombre"><b>Unidad: </b>{{element.unidad?.nombre}}</span><br>
+                <span *ngIf="element.subCategoria?.nombre"><b>Sub-Categoria: </b>{{element.subCategoria?.nombre}}</span><br>
+                <span *ngIf="element.perfil?.nombre"><b>Perfil: </b>{{element.perfil?.nombre}}</span><br>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="fechaIngreso">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de ingreso</th>
+            <td mat-cell *matCellDef="let element">{{ element?.fechaIngreso }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="loading">
+            <td mat-footer-cell *matFooterCellDef colspan="5" class="text-center">Cargando Datos...</td>
+        </ng-container>
+
+        <ng-container matColumnDef="vacio">
+            <td mat-footer-cell *matFooterCellDef colspan="5" class="text-center text-primary">No se
+                encuentran resultados para los filtros seleccionados</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsNatural"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsNatural"></tr>
+        <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+        <tr mat-footer-row *matFooterRowDef="['vacio']"
+            [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+    </table>
+    <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+        showFirstLastButtons></mat-paginator>
+</div>

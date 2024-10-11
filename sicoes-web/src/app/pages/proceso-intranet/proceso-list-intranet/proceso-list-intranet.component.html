@@ -1,0 +1,173 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <mat-tab-group selectedIndex="1" #tabgroup (selectedIndexChange)="nuevaProceso()" class="estilos-tab" >
+            <mat-tab label="Registrar proceso" class="estilo-tab-activo"></mat-tab>
+            <mat-tab label="Buscar proceso">
+                <div class="card px-8 py-6">
+                    <div class="flex flex-col sm:flex-row gap-x8">
+                        <div @fadeInUp class="flex-auto">
+                            <!-- TITULO -->
+                            <h2 class="title m-0 text-primary font-bold">Bandeja de Procesos:</h2>
+                            <h3 class="text-xs text-primary">Puedes buscar por 1 o varios filtros</h3>
+                            
+                            <!-- FILTRO -->
+                            <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">Fecha de inicio</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <input [formControl]="formGroup.controls.fechaDesde" type="date" min="1900-01-01" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput/>
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">Sector</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <mat-select [formControl]="formGroup.controls.sector" [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccionar">
+                                            <mat-option *ngFor="let obj of listSector" [value]="obj">
+                                                {{ obj.nombre }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">N°. del proceso</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <input [formControl]="formGroup.controls.nroProceso" matInput maxlength="30" placeholder="Ingresar número" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">Fecha fin</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <input [formControl]="formGroup.controls.fechaHasta" type="date" min="1900-01-01" matInput />
+                                        <mat-error *ngIf="formGroup.get('fechaHasta').hasError('required')">Ingrese Fecha Fin</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">Sub sector</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <mat-select [formControl]="formGroup.controls.subsector" [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccionar">
+                                            <mat-option *ngFor="let obj of listSubSector" [value]="obj">
+                                                {{ obj.nombre }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="formGroup.get('sector').hasError('required')">Ingrese Sector</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">Nombre del Proceso</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <input [formControl]="formGroup.controls.nombreProceso" matInput maxlength="100" placeholder="Nombre del proceso" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">N° de Expediente</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <input [formControl]="formGroup.controls.nroExpediente" matInput maxlength="20" placeholder="Ingresar número de Expediente"/>
+                                    </mat-form-field>    
+                                </div>
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">Estado</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <mat-select [formControl]="formGroup.controls.estado"
+                                            [compareWith]="compareSelecIdListadoDetalle"
+                                            placeholder="Seleccionar">
+                                            <mat-option *ngFor="let obj of listEstado" [value]="obj">
+                                                {{ obj.nombre }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <!--BOTONES-->
+                                <div class="flex-auto flex flex-row gap-x-4 items-center">
+                                    <button color="primary" mat-stroked-button type="button" (click)="limpiar()" class="flex-auto">
+                                        Limpiar
+                                    </button>
+                                    <button color="primary" mat-raised-button type="button" (click)="buscar()" class="flex-auto">
+                                        Buscar Proceso
+                                    </button>
+                                </div>
+                            </div>
+                        
+                        </div>
+                    </div>
+                    <div class="overflow-auto shadow-2xl rounded">
+                        <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
+                            <ng-container matColumnDef="fechaRegistro">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha<br>Convocatoria</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaPublicacion }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="sectorNombre">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Sector</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.sector?.nombre }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="subsectorNombre">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Sub<br>Sector</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.subsector?.nombre }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="numeroExpediente">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Expediente</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.numeroExpediente }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="numeroProceso">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>N° del Proceso</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.numeroProceso }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="nombreProceso">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del<br>Proceso</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.nombreProceso }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="estadoProceso">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estado?.nombre }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="verPostulante">
+                                <th *matHeaderCellDef mat-header-cell mat-sort-header>Postulante</th>
+                                <td *matCellDef="let row; let i = index" class="w-10 text-primary" mat-cell>
+                                    <div class="flex">
+                                        <button matTooltip="Ver Postulantes" (click)="verPostulante(row, i)" *ngIf="validarBotonVer(row.estado)">
+                                            <mat-icon svgIcon="mat:visibility" class="icon-color"></mat-icon>
+                                        </button>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <!-- Action Column -->
+                            <ng-container matColumnDef="actions">
+                                <th *matHeaderCellDef mat-header-cell mat-sort-header class="text-center">Acciones</th>
+                                <td *matCellDef="let row" class="w-10 text-primary" mat-cell>
+                                    <div class="flex">
+                                        <button matTooltip="Editar" (click)="editar(row)" *ngIf="row.editar == true">
+                                            <mat-icon svgIcon="mat:edit"></mat-icon>
+                                        </button>
+                                        <div class="v-line mx-2"></div>
+                                        <button matTooltip="Ver proceso" (click)="verProceso(row)">
+                                            <mat-icon svgIcon="mat:visibility"></mat-icon>
+                                        </button>
+                                        <div class="v-line mx-2"></div>
+                                        <button matTooltip="Bitacora" (click)="verBitacora(row)" *ngIf="row.editar == true && row.estado.codigo != 'EN_ELABORACION'">
+                                            <mat-icon svgIcon="mat:assignment"></mat-icon>
+                                        </button>
+                                    </div>
+                                </td>
+                            </ng-container>
+        
+                            <ng-container matColumnDef="loading">
+                                <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center">Cargando Datos...</td>
+                            </ng-container>
+        
+                            <ng-container matColumnDef="vacio">
+                                <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">No se encuentran resultados para los filtros seleccionados</td>
+                            </ng-container>
+        
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+                            <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+                        </table>
+                        <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                            showFirstLastButtons></mat-paginator>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </vex-page-layout-content>
+</vex-page-layout>

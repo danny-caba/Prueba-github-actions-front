@@ -1,0 +1,191 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="card px-6 py-4">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div @fadeInUp class="flex-auto">
+                    <!-- TITULO -->
+                    <div class="flex items-center pb-4">
+                        <h2 class="title m-0">Bandeja de Solicitudes en Proceso de Atención</h2>
+                    </div>
+                    <mat-divider class="-mr-6 -ml-6"></mat-divider>
+                    <!-- FILTRO -->
+                    <div class="py-4 flex flex-col">
+                        <div class="flex flex-col sm:flex-row sm:gap-4">
+                            <mat-form-field  class="flex-auto">
+                                <mat-label>N° de Expediente</mat-label>
+                                <input [formControl]="formGroup.controls.nroExpediente" matInput maxlength="15" />
+                            </mat-form-field>
+                            <mat-form-field  class="flex-auto">
+                                <mat-label>Solicitante</mat-label>
+                                <input [formControl]="formGroup.controls.solicitante" matInput maxlength="100" />
+                            </mat-form-field>
+                            <mat-form-field  class="flex-auto">
+                                <mat-label>Tipo de Solicitud</mat-label>
+                                <mat-select [formControl]="formGroup.controls.tipoSolicitud"
+                                    [compareWith]="compareSelecIdListadoDetalle">
+                                    <mat-option *ngFor="let obj of listTipoSolicitud" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:gap-4">
+                            <mat-form-field  class="flex-auto">
+                                <mat-label>Estado de Revisión</mat-label>
+                                <mat-select [formControl]="formGroup.controls.estadoRevision"
+                                    [compareWith]="compareSelecIdListadoDetalle">
+                                    <mat-option *ngFor="let obj of listEstadoRevision" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field  class="flex-auto">
+                                <mat-label>Estado de Evaluación Técnica</mat-label>
+                                <mat-select [formControl]="formGroup.controls.estadoEvalTecnica"
+                                    [compareWith]="compareSelecIdListadoDetalle">
+                                    <mat-option *ngFor="let obj of listEstadoEvaluacion" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field  class="flex-auto">
+                                <mat-label>Estado de Evaluación Administrativa</mat-label>
+                                <mat-select [formControl]="formGroup.controls.estadoEvalAdministrativa"
+                                    [compareWith]="compareSelecIdListadoDetalle">
+                                    <mat-option *ngFor="let obj of listEstadoEvaluacion" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        
+                        <!--BOTONES-->
+                        <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
+                            <button color="primary" mat-raised-button type="button" (click)="buscar()">
+                                Buscar
+                            </button>
+                            <button color="primary" mat-raised-button type="button" (click)="limpiar()">
+                                Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-auto shadow-2xl rounded">
+                <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
+                    <ng-container matColumnDef="nroExpediente">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Expediente</th>
+                        <td mat-cell *matCellDef="let element">{{ element?.numeroExpediente }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="solicitante">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Solicitante</th>
+                        <td mat-cell *matCellDef="let element">{{ element?.persona?.solicitante }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="tipoPersona">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo<br>Persona</th>
+                        <td mat-cell *matCellDef="let element">{{ element?.persona?.tipoPersona?.nombre }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="tipoSolicitud">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo<br>Solicitud</th>
+                        <td mat-cell *matCellDef="let element">{{ element.tipoSolicitud?.nombre }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fechaRegistro">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de<br>Ingreso</th>
+                        <td mat-cell *matCellDef="let element">{{ element.fechaRegistro }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fechaLimiteEvaluacion">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite<br>Evaluación Técnica
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.fechaPlazoTecnico }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fechaLimiteRespuesta">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite<br>Respuesta
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.fechaPlazoResp }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="estadoRevision">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Revisión</th>
+                        <td mat-cell *matCellDef="let element">{{ element?.estadoRevision?.nombre }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="estadoEvalTecnica">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluación<br>Técnica</th>
+                        <td mat-cell *matCellDef="let element">{{ element?.estadoEvaluacionTecnica?.nombre }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="estadoEvalAdministrativa">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluación<br>Administrativa
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.estadoEvaluacionAdministrativa?.nombre }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="notificacionRespuesta">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Notificación<br>Respuesta
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.flagRespuesta == 1 ? 'Si' : 'No' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="notificacionArchivamiento">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Notificación<br>Archivamiento
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.flagArchivamiento == 1 ? 'Si' : 'No' }}</td>
+                    </ng-container>
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="actions">
+                        <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                        <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                            <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ customer: row }"
+                                [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                                <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="loading">
+                        <td mat-footer-cell *matFooterCellDef colspan="12" class="text-center">Cargando Datos...
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vacio">
+                        <td mat-footer-cell *matFooterCellDef colspan="12" class="text-center text-primary">No se
+                            encuentran resultados para los filtros seleccionados</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['vacio']"
+                        [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+                </table>
+                <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                    showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+    <ng-template let-row="customer" matMenuContent>
+        <button (click)="ver(row)" mat-menu-item>
+            <mat-icon svgIcon="mat:preview"></mat-icon>
+            <span>Ver</span>
+        </button>
+        <button (click)="evaluar(row)" *ngIf="mostrarOpcion('EVALUAR', row)" mat-menu-item>
+            <mat-icon svgIcon="mat:update"></mat-icon>
+            <span>Evaluar</span>
+        </button>
+        <button *ngIf="mostrarOpcion('ARCHIVAMIENTO', row)" (click)="notificacion(row, 'ARCHIVAMIENTO', 'add')" mat-menu-item>
+            <mat-icon svgIcon="mat:circle_notifications"></mat-icon>
+            <span>Notificación de Archivamiento</span>
+        </button>
+        <button *ngIf="mostrarOpcion('VIEW_ARCHIVAMIENTO', row)" (click)="notificacion(row, 'ARCHIVAMIENTO', 'view')" mat-menu-item>
+            <mat-icon svgIcon="mat:circle_notifications"></mat-icon>
+            <span>Notificación de Archivamiento</span>
+        </button>
+        <button *ngIf="mostrarOpcion('RESPUESTA', row);" (click)="notificacion(row, 'RESPUESTA', 'add')" mat-menu-item>
+            <mat-icon svgIcon="mat:circle_notifications"></mat-icon>
+            <span>Notificación de Respuesta</span>
+        </button>
+        <button *ngIf="mostrarOpcion('VIEW_RESPUESTA', row);" (click)="notificacion(row, 'RESPUESTA', 'view')" mat-menu-item>
+            <mat-icon svgIcon="mat:circle_notifications"></mat-icon>
+            <span>Ver Notificación de Respuesta</span>
+        </button>
+    </ng-template>
+</mat-menu>

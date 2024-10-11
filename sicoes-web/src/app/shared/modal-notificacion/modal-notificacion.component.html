@@ -1,0 +1,43 @@
+<form>
+    <div *ngIf="booleanRespuesta; else titleArchiv">
+        <vex-modal-title *ngIf="booleanAdd" [titulo]="'Registrar Notificación de Respuesta'"></vex-modal-title>
+        <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Notificación de Respuesta'"></vex-modal-title>
+    </div>
+    <ng-template #titleArchiv>
+        <vex-modal-title *ngIf="booleanAdd" [titulo]="'Registrar Notificación de Archivamiento'"></vex-modal-title>
+        <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Notificación de Archivamiento'"></vex-modal-title>
+    </ng-template>
+    
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+
+    <mat-dialog-content class="pt-6 flex flex-col">
+        
+        <mat-form-field  class="flex-auto">
+            <mat-label>Fecha de Notificación</mat-label>
+            <input [formControl]="formGroup.controls.fechaNotificacion" type="date" matInput>
+            <mat-error *ngIf="formGroup.get('fechaNotificacion').hasError('required')">Ingrese Fecha de Notificación</mat-error>
+        </mat-form-field>
+        
+        <div *ngIf="booleanRespuesta; else docArch">
+            <vex-form-adjuntos-btn [titulo]="'Documento'" [editable]="booleanAdd || booleanEdit" 
+                [solicitud]="solicitud"
+                [codigo]="'TA15'" #formAdjuntoBtnTA [archivo]="solicitudNotificacion?.archivo"></vex-form-adjuntos-btn>
+        </div>
+        <ng-template #docArch>
+            <vex-form-adjuntos-btn [titulo]="'Documento'" [editable]="booleanAdd || booleanEdit" 
+                [solicitud]="solicitud"
+                [codigo]="'TA16'" #formAdjuntoBtnTA [archivo]="solicitudNotificacion?.archivo"></vex-form-adjuntos-btn>
+        </ng-template>
+        
+        <mat-form-field class="mt-4 flex-auto" >
+            <mat-label>Detalle</mat-label>
+            <textarea matInput #observacion [formControl]="formGroup.controls.observacion" maxlength="256" placeholder="Ingrese Detalle"></textarea>
+            <mat-hint align="end">{{observacion.value.length}} / 256</mat-hint>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
+        <!--GUARDAR EVALUACION-->
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+    </mat-dialog-actions>
+</form>

@@ -1,0 +1,31 @@
+<div class="w-full h-full overflow-hidden flex flex-col">
+    <div class="p-4  bg-white">
+        <div class="flex flex-row mb-4 items-center">
+            <button (click)="openDrawer()" class="block" *ngIf="!(isDesktop$ | async)" color="primary" mat-icon-button type="button">
+                <mat-icon svgIcon="mat:menu"></mat-icon>
+              </button> 
+              <div class="">
+                <div class="text-primary text-xl font-bold">Publicar</div>
+              </div>
+        </div>
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="px-4 pt-2 flex-auto  bg-white">
+        <div class="py-4 items-center">
+            <h3 class="text-xs text-primary"><strong>Para que tu proceso pueda ser visualizado por los postores interesados, selecciona publicar.</strong></h3>
+            <h3 class="text-xs text-primary">Asegúrate que la información de este registro este completo y correcto.</h3>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end mb-4">
+            <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+                Ir a bandeja
+            </button>
+            <button color="primary" mat-raised-button type="button" (click)="publicar()">
+                Publicar
+            </button>
+        </div>
+    </div>
+   
+</div>
+

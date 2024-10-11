@@ -1,0 +1,44 @@
+<form>
+    <div class="px-2">
+        <vex-modal-title *ngIf="booleanAdd"  class="p-0 m-0 text-primary" [titulo]="'Agregar Etapa'"></vex-modal-title>
+        <vex-modal-title *ngIf="booleanEdit" class="p-0 m-0 text-primary" [titulo]="'Editar Etapa'"></vex-modal-title>
+        <vex-modal-title *ngIf="booleanView" class="p-0 m-0 text-primary" [titulo]="'Ver Etapa'"></vex-modal-title>
+    </div>
+    <mat-dialog-content class="p-4 mx-2 flex flex-col bg-white">
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Etapa</mat-label>
+            <mat-form-field  class="flex-auto">   
+                <mat-select [formControl]="formGroup.controls.etapa" [compareWith]="compareSelecIdListadoDetalle">
+                    <mat-option *ngFor="let obj of listGrupos" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('etapa').hasError('required')">Seleccione Grupo</mat-error>
+            </mat-form-field>  
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Fecha de inicio</mat-label>
+            <mat-form-field  class="flex-auto">
+                
+                <input [formControl]="formGroup.controls.fechaInicio" type="date" min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+                <mat-error *ngIf="formGroup.get('fechaInicio').hasError('required')">Ingrese Fecha Inicio
+                </mat-error>
+            </mat-form-field>
+        </div> 
+
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Fecha Fin</mat-label>
+            <mat-form-field  class="flex-auto">
+                <input [formControl]="formGroup.controls.fechaFin" type="date"  min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+                <mat-error *ngIf="formGroup.get('fechaFin').hasError('required')">Ingrese de fin
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-stroked-button color="primary" (click)="closeModal()">Cancelar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>  
+    </mat-dialog-actions>
+</form>

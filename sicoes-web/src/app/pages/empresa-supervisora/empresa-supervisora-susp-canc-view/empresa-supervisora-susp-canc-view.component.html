@@ -1,0 +1,4 @@
+<vex-empresa-supervisora-cancelar *ngIf="tipoSuspensionCancelacionEnum.CANCELADA == SUSPENCION_CANCELACION?.tipo?.codigo"
+    [SUSPENCION_CANCELACION]="SUSPENCION_CANCELACION" [editable]="editable"></vex-empresa-supervisora-cancelar>
+<vex-empresa-supervisora-suspender *ngIf="tipoSuspensionCancelacionEnum.SUSPENDIDA == SUSPENCION_CANCELACION?.tipo?.codigo"
+    [SUSPENCION_CANCELACION]="SUSPENCION_CANCELACION" [editable]="editable"></vex-empresa-supervisora-suspender>

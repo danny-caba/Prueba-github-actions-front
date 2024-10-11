@@ -1,0 +1,49 @@
+table {
+    width: 100%;
+}
+
+.th-center {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+.mat-stroked-button:not([disabled]){
+    border-color: var(--color-primary)!important;
+}
+
+
+::ng-deep .mat-tooltip-default {
+    display: none;
+  }
+
+  ::ng-deep .mat-tooltip {
+    position: relative;
+    background-color: #5c74b8; // Cambiar el color de fondo del tooltip
+    color: #fff; // Cambiar el color del texto del tooltip
+    font-size: 16px; // Cambiar el tamaño de la fuente del tooltip
+    border-radius: 5px;
+    padding: 8px;
+  }
+  
+  ::ng-deep .mat-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%; // Mostrar la flecha en la parte superior del tooltip
+    left: 50%;
+    margin-left: -8px;
+    border-width: 8px;
+    border-style: solid;
+    border: 10px;
+    border-color: #5c74b8 transparent transparent transparent; // Cambiar el color de la flecha
+  }
+  
+  ::ng-deep .mat-tooltip-text {
+    font-weight: bold;
+  }
+
+  .v-line{
+    border-left: 1px solid #5c74b8;
+   }

@@ -1,0 +1,121 @@
+
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="card px-8 py-6">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div @fadeInUp class="flex-auto">
+                    <!-- TITULO -->
+                    <div class="flex items-center pb-4">
+                        <h2 class="title m-0 text-primary font-bold">Bandeja de Usuarios</h2>
+
+                    </div>
+
+                    <mat-divider ></mat-divider>
+                    <!-- FILTRO -->
+                    <div class="py-4 flex flex-col">
+                        <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
+                            <div class="flex flex-col">
+
+                                  <mat-form-field class="flex-auto">
+                                    <input  [formControl]="formGroup.controls.usuario" matInput maxlength="30" placeholder="Ingrese usuario" [matAutocomplete]="auto">
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                      <mat-option *ngFor="let usuario of (usuariosFiltrados | async)" [value]="usuario.usuario">
+                                        {{ usuario.usuario }}
+                                      </mat-option>
+                                    </mat-autocomplete>
+                                  </mat-form-field>
+
+                            </div>
+
+                            <div class="flex-auto flex flex-row gap-x-4 items-center">
+
+                                <button color="primary" mat-raised-button type="button" class="flex-auto" (click)="obtenerDatosContribuyente2()" >
+                                    Buscar
+                                </button>
+                                <button color="primary" mat-raised-button type="button" (click)="crearUsuario()" class="flex-auto">
+                                    Crear Usuario
+                                </button>
+                            </div>
+                        </div>
+                        <!--BOTONES-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-auto shadow-2xl rounded">
+                <table [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
+                    <ng-container matColumnDef="nombreCompleto">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Completo</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.nombreUsuario }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="nombreUsuario">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre de <br> Usuario</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.usuario }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="roles">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Roles</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">
+                            {{ getRolesAsCommaSeparatedList(element) }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">
+                            {{ element?.estadoUsuario === '0' ? 'Inhabilitado' : (element?.estadoUsuario === '1' ? 'Habilitado' : 'Inhabilitado') }}
+                          </td>
+                    </ng-container>
+                    <ng-container matColumnDef="habilitar/deshabilitar">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Habilitar/Deshabilitar</th>
+                        <td mat-cell class="text-primary font-medium" *matCellDef="let element">
+                            <mat-slide-toggle [checked]="element.estadoUsuario === '1'" [ngClass]="{ 'inhabilitado': element.estadoUsuario === '0', 'habilitado': element.estadoUsuario === '1' }" (change)="toggleEstadoUsuario(element)"></mat-slide-toggle>
+
+                            <span [ngClass]="{ 'inhabilitado': element.estadoUsuario === '0', 'habilitado': element.estadoUsuario === '1' }"></span>
+                          </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="acciones">
+                        <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                        <td *matCellDef="let row" class="w-10 text-primary text-center" mat-cell>
+                          <div class="flex gap-x-3">
+                            <!-- <button matTooltip="" (click)="editarUsuario(row)">
+                              <mat-icon class="icon-color" svgIcon="mat:airplay"></mat-icon>Editar
+                            </button> -->
+                            <button (click)="editarUsuario(row)"  mat-menu-item>
+                                <mat-icon svgIcon="mat:edit"></mat-icon>
+                                <span>Editar</span>
+                            </button>
+                          </div>
+                        </td>
+                      </ng-container>
+
+
+
+                      <ng-container matColumnDef="loading">
+                        <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center"></td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vacio">
+                        <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center text-primary"></td>
+                    </ng-container>
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+                </table>
+                <mat-paginator
+                    #paginator
+                    class="sticky left-0"
+                    [length]="totalElements"
+                    [pageSize]="pageSize"
+                    [pageSizeOptions]="[10, 20, 30]"
+                    (page)="pageChange($event)">
+                </mat-paginator>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+

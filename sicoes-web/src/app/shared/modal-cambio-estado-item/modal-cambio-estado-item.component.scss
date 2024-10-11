@@ -1,0 +1,13 @@
+::ng-deep .modal-editar-etapa   .mat-dialog-container {
+    background: #EAF1F3;
+}
+
+.mat-stroked-button:not([disabled]){
+    background: #FFF !important;
+    color: #000090 !important;
+    border: 1px #000090 solid !important;
+  }
+  
+  .btn-cancelar-alerta:hover{
+    background: rgba(0, 0, 144, 0.2) !important;
+  }

@@ -1,0 +1,37 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="card overflow-auto -mt-16">
+            <!--TITULO-->
+            <div class="px-6 py-4 border-b flex items-center">
+                <h2 class="title m-0">REGISTRO DE PRECALIFICACIÓN DE EMPRESAS SUPERVISORAS</h2>
+            </div>
+            <ng-container *ngIf="SUPERVISORA?.tipoPersona?.codigo == tipoPersonaEnum.JURIDICO" >
+                <vex-empresa-supervisora-pj-view [SUPERVISORA]="SUPERVISORA"></vex-empresa-supervisora-pj-view>
+            </ng-container>
+            <ng-container *ngIf="SUPERVISORA?.tipoPersona?.codigo == tipoPersonaEnum.PJ_EXTRANJERO" >
+                <vex-empresa-supervisora-pj-view [SUPERVISORA]="SUPERVISORA"></vex-empresa-supervisora-pj-view>
+            </ng-container>
+            <ng-container *ngIf="SUPERVISORA?.tipoPersona?.codigo == tipoPersonaEnum.PN_PERS_PROPUESTO" >
+                <vex-empresa-supervisora-pn-view [SUPERVISORA]="SUPERVISORA"></vex-empresa-supervisora-pn-view>
+            </ng-container>
+            <ng-container *ngIf="SUPERVISORA?.tipoPersona?.codigo == tipoPersonaEnum.PN_POSTOR" >
+                <vex-empresa-supervisora-pn-postor-view [SUPERVISORA]="SUPERVISORA"></vex-empresa-supervisora-pn-postor-view>
+            </ng-container>
+            <mat-accordion multi="true">
+                <mat-expansion-panel class="mt-2" expanded="false" *ngIf="SUPERVISORA">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">DETALLE DE PERFILES APROBADOS</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-perfil-aprobado [SUPERVISORA]="SUPERVISORA"></vex-layout-perfil-aprobado>
+                </mat-expansion-panel>
+            </mat-accordion>
+        
+            <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="cancelar()">Regresar</button>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

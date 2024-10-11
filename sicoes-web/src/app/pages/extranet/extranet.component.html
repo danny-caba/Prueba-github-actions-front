@@ -1,0 +1,54 @@
+<div class="w-full h-full bg-pattern flex flex-col items-center justify-center">
+  <div @fadeInUp class="card overflow-auto w-full max-w-4xl">
+    <div class="my-6 container flex flex-col sm:flex-row items-stretch sm:items-start gap-6">
+      <div @fadeInUp class="p-6 flex-1 flex flex-col items-stretch gap-4">
+        <button class="bg-externo p-8" color="primary" mat-raised-button type="button" (click)="openRegistro()">Ver registro de Precalificación de<br>Empresas Supervisoras</button>
+        <button class="bg-externo p-8" color="primary" mat-raised-button type="button" (click)="openRegistroSuspCanc()">Ver registro de <br>Empresas Suspendidas/Canceladas</button>
+        <button class="bg-externo p-8" color="primary" mat-raised-button type="button" (click)="procesoSeleccion()">Procesos de<br>Selección</button>
+      </div>
+      <div class=" p-0 flex-1 flex flex-col">
+        <div class="p-0 flex-1 flex flex-col items-center">
+          <div class="fill-current text-center">
+            <img class="h-32" src="./assets/logo_login.png">
+          </div>
+          <h1 class="text-center text-primary mt-0 extrabold text-5xl">SICOES</h1>
+          <h2 class="text-center text-primary mt-4 font-bold">Sistema de Registro y Contratación de<br>Empresas Supervisoras</h2>
+          <div class="flex flex-col items-center gap-4 mt-8">
+            <mat-label>Inicia sesión con:</mat-label>
+            <button (click)="send()" color="primary" mat-raised-button type="button" class="w-full">Clave SOL</button>
+            <button (click)="openLoginExtranjero()" color="primary" mat-raised-button type="button" class="w-full">Inicio de Empresas Extranjeras</button>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 mt-8">
+          <a class="caption font-bold cursor-pointer hover:underline" (click)="descargarManualUsuario()">Ver Instructivo</a>
+          <a class="caption font-bold cursor-pointer hover:underline" (click)="abrirTerminos()">Términos y Condiciones</a>
+          <a class="caption font-bold cursor-pointer hover:underline" href="https://forms.office.com/r/TmU5AQHZWQ" target="_blank">Envía tus consultas aquí.</a>
+        </div>
+
+        <div *ngIf="true" class="my-8 flex flex-row gap-2">
+          <button *ngIf="usuarioExternos" mat-raised-button [matMenuTriggerFor]="menu">Usuarios Externos</button>
+          <button *ngIf="usuarioInternos" mat-raised-button [matMenuTriggerFor]="menuInternos" >Usuarios Internos</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<mat-menu #menu>
+  <div *ngFor="let usu of listUsuarioSissged;" class="flex-1">
+    <button mat-menu-item (click)="sendFake(usu)">
+      <span>{{usu.username}}</span>
+    </button>
+  </div>
+</mat-menu>
+
+<mat-menu #menuInternos>
+  <div *ngFor="let usu of listUsuarioIntranet;" class="flex-1">
+    <button mat-menu-item (click)="sendFakeIntra(usu)">
+      <span>{{usu.username + '-' + usu.codigo}}</span>
+    </button>
+  </div>
+</mat-menu>

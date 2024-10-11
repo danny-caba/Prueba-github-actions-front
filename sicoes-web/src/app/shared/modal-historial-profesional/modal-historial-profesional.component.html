@@ -1,0 +1,80 @@
+
+    <vex-modal-title-2 class="font-bold text-primary" *ngIf="booleanAdd" [titulo]="'Historial de Profesional'"></vex-modal-title-2>
+    <vex-modal-title-2 class="font-bold text-primary" *ngIf="booleanEdit" [titulo]="'Historial de Profesional:'"></vex-modal-title-2>
+    <vex-modal-title-2 class="font-bold text-primary" *ngIf="booleanView" [titulo]="'Historial de Profesional'"></vex-modal-title-2>
+    <mat-dialog-content class="p-0 m-0">
+    <form class="px-6 bg-white">
+        <div class="flex flex-col">            
+            <div class="mt-4">
+                <div class="mx-0 py-4 border-b overflow-auto">
+                    <table mat-table [dataSource]="dataSource" class="w-full" matSort>
+                        <ng-container matColumnDef="accion">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Acción</th>
+                            <td mat-cell *matCellDef="let element"> {{element?.accion?.nombre}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="fecha">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha y hora</th>
+                            <td mat-cell *matCellDef="let element"> {{element?.fechaRegistro}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="usuario">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario</th>
+                            <td mat-cell *matCellDef="let element"> {{element?.propuestaProfesional?.supervisora?.nombres +' ' + element?.propuestaProfesional?.supervisora?.apellidoPaterno + ' ' +element?.propuestaProfesional?.supervisora?.apellidoMaterno }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="sector">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Sector</th>
+                            <td mat-cell *matCellDef="let element"> {{element?.sector?.nombre}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="subsector">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Subsector</th>
+                            <td mat-cell *matCellDef="let element"> {{element?.subsector?.nombre}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="perfil">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</th>
+                            <td mat-cell *matCellDef="let element"> {{element?.propuestaProfesional?.perfil?.nombre}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="proceso">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Proceso</th>
+                            <td mat-cell *matCellDef="let element"> {{element?.propuestaProfesional?.propuesta?.procesoItem?.proceso?.nombreProceso}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="item">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Ítem</th>
+                            <td mat-cell *matCellDef="let element"> {{element?.propuestaProfesional?.propuesta?.procesoItem?.descripcionItem}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="postor">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Postor</th>
+                            <td mat-cell *matCellDef="let element"> {{element?.propuestaProfesional?.propuesta?.supervisora?.codigoRuc+' - '+element?.propuestaProfesional?.propuesta?.supervisora?.nombreRazonSocial}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="motivo">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Motivo</th>
+                            <td mat-cell *matCellDef="let element"> {{verMotivo(element)}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="loading">
+                            <td mat-footer-cell *matFooterCellDef colspan="10" class="text-center">
+                                Cargando Datos...
+                            </td>
+                        </ng-container>
+                
+                        <ng-container matColumnDef="vacio">
+                            <td mat-footer-cell *matFooterCellDef colspan="10" class="text-center text-primary">
+                                No se encuentran resultados para los filtros seleccionados
+                            </td>
+                        </ng-container>
+                
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+                    </table>
+                
+                    <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                    showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+        </div>
+        </form>
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="center">
+        <button style="width: max(180px, 120px);" mat-raised-button color="primary" (click)="closeModal()">Volver a Bandeja</button>
+    </mat-dialog-actions>

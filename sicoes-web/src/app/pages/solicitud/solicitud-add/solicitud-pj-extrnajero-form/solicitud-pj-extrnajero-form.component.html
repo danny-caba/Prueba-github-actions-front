@@ -1,0 +1,33 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="flex flex-col sm:flex-row gap-4">
+            <div @fadeInUp class="card flex-auto">
+                <!-- TITULO -->
+                <div class="px-6 py-4 border-b flex items-center">
+                    <h2 class="title m-0">SOLICITUD DE INSCRIPCIÓN EN REGISTRO DE PRECALIFICACIÓN DE EMPRESAS SUPERVISORAS</h2>
+                </div>
+                <div class="flex flex-col">
+                    <mat-accordion multi="true">
+                        <mat-expansion-panel class="mt-2" expanded="true">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="font-bold">1.- DATOS DE LA EMPRESA</mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <vex-layout-datos-pers-jur-extranjero #layoutDatos [editable]="true"></vex-layout-datos-pers-jur-extranjero>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel class="mt-2" expanded="true">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="font-bold">2.- REPRESENTANTE LEGAL</mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <vex-layout-datos-representante-legal #layoutRepresentanteLeg [editable]="true"></vex-layout-datos-representante-legal>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                    <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end p-4">
+                        <button color="primary" mat-raised-button type="button" class="hover-class" (click)="borrador()">Siguiente</button>
+                        <button color="primary" mat-raised-button type="button" class="hover-class" (click)="cancelar()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

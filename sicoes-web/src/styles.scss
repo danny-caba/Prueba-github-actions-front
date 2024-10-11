@@ -1,0 +1,90 @@
+@import "~simplebar/dist/simplebar.css";
+@import "~highlight.js/styles/androidstudio.css";
+// Vex Core
+@import "./@vex/styles/core";
+
+/*
+  You can override any CSS Variable or style here
+  Example:
+
+  :root {
+   --sidenav-background: #333333;
+  }
+
+  All possible variables can be found in @vex/styles/core or by simply inspecting the element you want to change
+  in Chrome/Firefox DevTools
+*/
+
+/**
+  Uncomment the below code and adjust the values to fit your colors, the application will automatically adjust
+ */
+
+// #000090 rgb(0, 0, 144)
+// #fed13a rgb(254, 209, 58)
+
+// #000090 rgb(0, 0, 144)
+// #fed13a rgb(254, 209, 58)
+
+.extrabold { font-weight:800; font-family: 'Raleway', sans-serif;}
+
+:root {
+  --font: 'Raleway';
+  --font-weight: 800;
+  --font-weight-medium: 800;
+
+  --color-primary: #000090;
+  --color-primary-contrast: #5c74b8;
+  --color-yelow-1: #fed13a;
+  --color-yelow-2: #ffdf4f;
+
+  --sidenav-background: var(--color-primary-contrast);
+  --sidenav-item-background-active: var(--color-yelow-1);
+  --sidenav-item-background-hover: var(--color-primary);
+  --sidenav-toolbar-background: var(--color-primary);
+  --sidenav-item-color: white;
+  --sidenav-item-color-active: var(--color-primary);
+  --sidenav-item-icon-color: var(--color-primary);
+  --sidenav-item-icon-color-active: var(--color-primary);
+  --sidenav-item-icon-size: 14px;
+  
+  --toolbar-background: var(--color-primary);
+  --toolbar-color: white;
+
+  --toolbar-height: 64px;
+
+  .mat-raised-button.mat-primary:hover:not([disabled]) {
+    background-color: var(--color-yelow-1);
+    color: var(--color-primary)
+  }
+
+  --background-base: #EAF1F3;
+}
+
+.mat-header-cell{
+  background: #5c74b8;
+  color: white;
+}
+
+.mat-input-element:disabled {
+  color: rgba(128, 128, 128, 0.80);
+}
+
+.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-label {
+  color: rgba(128, 128, 128, 0.80);
+}
+
+.mat-select-disabled .mat-select-value {
+  color: rgba(128, 128, 128, 0.80);
+}
+
+.bg-principal{
+  background-color: #EAF1F3;
+}
+
+::ng-deep .mat-stroked-button:not([disabled]){
+  border-color: var(--color-primary)!important;
+}
+
+.mat-stroked-button:not(.mat-button-disabled) {
+  border-color: var(--color-primary);
+}

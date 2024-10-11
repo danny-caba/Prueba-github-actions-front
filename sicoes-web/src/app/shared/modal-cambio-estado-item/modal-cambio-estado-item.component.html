@@ -1,0 +1,58 @@
+<form>
+    <div class="px-2">
+        <vex-modal-title *ngIf="booleanAdd"  class="p-0 m-0 text-primary" [titulo]="'Agregar Etapa'"></vex-modal-title>
+        <vex-modal-title *ngIf="booleanEdit" class="p-0 m-0 text-primary" [titulo]="'Cambio de estado de ítem:'"></vex-modal-title>
+        <vex-modal-title *ngIf="booleanView" class="p-0 m-0 text-primary" [titulo]="'Ver Etapa'"></vex-modal-title>
+    </div>
+    <div class="px-3 py-1 mx-2 my-3 bg-orange-200">
+        <div class="flex items-center text-primary ">
+            <div class="flex flex-row gap-1">
+                <label>Ítem:</label>
+                <label class="font-bold">{{data.proceso_item?.numeroItem + ' - ' + data.proceso_item?.descripcionItem}}</label>
+            </div>
+            <div class="md:border-l-2 md:border-primary px-4 mx-4 md:border-r-2">
+                <div class="flex flex-row gap-1">
+                    <label>N° de proceso:</label>
+                    <label class="font-bold">{{data.proceso?.numeroProceso}}</label>
+                </div>
+            </div>
+            <div class="py-2 flex flex-row gap-1">
+                <label>Nombre del proceso:</label>
+                <label class="font-bold">{{data.proceso?.nombreProceso}}</label>
+            </div>
+        </div>
+    </div>
+    <mat-dialog-content class="p-4 mx-2 flex flex-col bg-white">
+        <div class="flex my-2 gap-2">
+            <mat-label class="text-primary text-sm font-medium">Estado actual del ítem: </mat-label>
+            <mat-label class="text-primary text-sm">{{data.proceso_item?.estado?.nombre}}</mat-label>
+        </div>
+        <div class="bg-white flex mt-3">
+            <div class="flex flex-col">
+                <mat-label class="text-primary text-sm font-medium">Estado actualizar</mat-label>
+                <mat-form-field >
+                    <mat-select [formControl]="formGroup.controls.estado" [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccionar estado">
+                        <mat-option *ngFor="let obj of listEstado" [value]="obj">
+                            {{ obj.nombre }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="formGroup.get('estado').hasError('required')">Seleccione estado</mat-error>
+                </mat-form-field>  
+            </div>
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Justificación</mat-label>
+            <mat-form-field  class="flex-auto">
+                <textarea #observacionDescripcion rows="5" cdkTextareaAutosize matNativeControl [formControl]="formGroup.controls.descripcion" maxlength="3000" [disabled]="true" placeholder="Ingresar justificación"></textarea>
+                <mat-error *ngIf="formGroup.get('descripcion').hasError('required')">Ingrese Resultado de la evaluación</mat-error>
+                <mat-hint align="end">{{observacionDescripcion.value.length}} / 3000</mat-hint>
+            </mat-form-field>
+        </div> 
+
+        
+    </mat-dialog-content>
+    <mat-dialog-actions align="center" class="p-4 mx-2 mb-4 bg-white">
+        <button mat-stroked-button color="primary" (click)="closeModal()">Cancelar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Guardar</button>  
+    </mat-dialog-actions>
+</form>

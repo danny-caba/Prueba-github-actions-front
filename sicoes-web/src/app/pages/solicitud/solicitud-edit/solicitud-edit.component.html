@@ -1,0 +1,70 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="card overflow-auto -mt-16">
+            <!--TITULO-->
+            <div class="px-6 py-4 border-b flex items-center" *ngIf="isSubsanar; else titulo">
+                <h2 class="title m-0">SUBSANAR OBSERVACIONES SOLICITUD DE INSCRIPCIÓN EN REGISTRO DE PRECALIFICACIÓN DE EMPRESAS SUPERVISORAS</h2>
+            </div>
+            <ng-template #titulo>
+                <div class="px-6 py-4 border-b flex items-center">
+                    <h2 class="title m-0">SOLICITUD DE INSCRIPCIÓN EN REGISTRO DE PRECALIFICACIÓN DE EMPRESAS SUPERVISORAS</h2>
+                </div>
+            </ng-template>
+            <mat-accordion multi="true" *ngIf="isSubsanar || mostrarResultado == true">
+                <mat-expansion-panel class="" expanded="false" *ngIf="isSubsanar">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">RUC - {{ SOLICITUD?.persona?.numeroDocumento }} - SOLICITUD NRO {{ SOLICITUD?.numeroExpediente }}</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-subsanar></vex-layout-subsanar>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">RESULTADO</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-resultado></vex-layout-resultado>
+                </mat-expansion-panel>
+                <!--mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">OBSERVACIONES ADICIONALES</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-observacion-resultado></vex-layout-observacion-resultado>
+                </mat-expansion-panel-->
+            </mat-accordion>
+            <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.JURIDICO" >
+                <vex-solicitud-pj-edit [SOLICITUD]="SOLICITUD" [editable]="editable" [isSubsanar]="isSubsanar" #solicitudPjEditComponent></vex-solicitud-pj-edit>
+            </ng-container>
+            <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.PJ_EXTRANJERO" >
+                <vex-solicitud-pj-extranjero-edit [SOLICITUD]="SOLICITUD" [editable]="editable" [isSubsanar]="isSubsanar" #solicitudPjExtranjeroEditComponent></vex-solicitud-pj-extranjero-edit>
+            </ng-container>
+            <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.PN_POSTOR" >
+                <vex-solicitud-pn-postor-edit [SOLICITUD]="SOLICITUD" [editable]="editable" [isSubsanar]="isSubsanar" #solicitudPnPostorEditComponent></vex-solicitud-pn-postor-edit>
+            </ng-container>
+            <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.PN_PERS_PROPUESTO" >
+                <vex-solicitud-pn-edit [SOLICITUD]="SOLICITUD" [editable]="editable" [isSubsanar]="isSubsanar" #solicitudPnEditComponent></vex-solicitud-pn-edit>
+            </ng-container>
+
+            <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="editable == true">
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="borrador()">Actualizar</button>
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="enviar()">Enviar</button>
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="cancelar()">Cancelar</button>
+            </div>
+
+            <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="isSubsanar == true">
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="borrador()">Borrador</button>
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="enviarSubsanacion()">Enviar Subsanación de Observaciones</button>
+            </div>
+
+            <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="editable === false && isSubsanar === false">
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="regresar()">Regresar</button>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,22 @@
+
+    <vex-modal-title-2 class="font-bold text-primary" *ngIf="booleanAdd" [titulo]="'Desbloquear profesional'"></vex-modal-title-2>
+    <vex-modal-title-2 class="font-bold text-primary" *ngIf="booleanEdit" [titulo]="'Desbloquear profesional:'"></vex-modal-title-2>
+    <vex-modal-title-2 class="font-bold text-primary" *ngIf="booleanView" [titulo]="'Desbloquear profesional'"></vex-modal-title-2>
+    <mat-dialog-content class="p-0 m-0">
+    <form class="px-6 bg-white">
+        <div class="flex flex-col">            
+            <mat-label class="text-primary font-medium text-sm mt-4">Registro de motivo de bloqueo</mat-label>
+            <mat-form-field  class="">
+                <textarea #motivoDescripcion rows="4" [formControl]="formGroup.controls.motivoDescripcion" matInput placeholder="Digitar el motivo de bloqueo para el perfil."></textarea>
+                <!--mat-error *ngIf="formGroup.get('descripcion').hasError('required')">Digitar el motivo de bloqueo para el perfil.</mat-error-->
+                <mat-hint align="end">{{motivoDescripcion.value.length}} / 300</mat-hint>
+            </mat-form-field>
+        </div>
+    </form>
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="center">
+        <button style="width: max(180px, 120px);" mat-stroked-button color="primary" (click)="closeModal()">Cancelar</button>
+        <button style="width: max(180px, 120px);" mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+    </mat-dialog-actions>

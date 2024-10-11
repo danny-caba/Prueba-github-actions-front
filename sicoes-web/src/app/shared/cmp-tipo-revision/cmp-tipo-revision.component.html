@@ -1,0 +1,10 @@
+<div class="flex flex-col">
+    <mat-form-field  class="flex-auto">
+        <mat-label>Tipo de Revisión</mat-label>
+        <mat-select [formControl]="ctrlTipoRevision">
+            <mat-option *ngFor="let obj of listTipoRevision" [value]="obj">
+                {{ obj.valor }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

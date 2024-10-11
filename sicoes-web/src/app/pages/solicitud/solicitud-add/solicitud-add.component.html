@@ -1,0 +1,10 @@
+<ng-container *ngIf="(usuario$ | async)?.tipoPersona?.codigo == tipoPersonaEnum.JURIDICO" >
+    <vex-solicitud-pj-form></vex-solicitud-pj-form>
+</ng-container>
+<ng-container *ngIf="(usuario$ | async)?.tipoPersona?.codigo == tipoPersonaEnum.PJ_EXTRANJERO" >
+    <vex-solicitud-pj-extrnajero-form></vex-solicitud-pj-extrnajero-form>
+</ng-container>
+<ng-container *ngIf="(usuario$ | async)?.tipoPersona?.codigo == tipoPersonaEnum.NATURAL" >
+    <vex-solicitud-pn-form *ngIf="tipoPersonaEnum.PN_PERS_PROPUESTO == $tipoPers"></vex-solicitud-pn-form>
+    <vex-solicitud-pn-postor-form *ngIf="tipoPersonaEnum.PN_POSTOR == $tipoPers"></vex-solicitud-pn-postor-form>
+</ng-container>

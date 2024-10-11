@@ -1,0 +1,31 @@
+<div class="py-4">
+    <div class="grid sm:grid-cols-3 md:grid-cols-3 gap-x-8">
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Cargo</mat-label>
+            <mat-form-field  class="flex-auto">
+                <mat-select [formControl]="formGroup.controls.cargo" [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccione cargo">
+                    <mat-option *ngFor="let obj of listGrupos" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('cargo').hasError('required')">Seleccione Grupo</mat-error>
+            </mat-form-field>        
+        </div>
+        <div class="flex flex-col col-span-2">
+            <mat-label class="text-primary text-sm font-medium">Nombre</mat-label>
+            <mat-form-field>
+                <input [formControl]="formGroup.controls.usuario" [matAutocomplete]="autoTecnico" placeholder="Ingrese el nombre del miembro" matInput (blur)="blurEvaluadorTecnico()">
+                <mat-autocomplete  #autoTecnico="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let state of filteredStatesTecnico$ | async" [value]="state">
+                    {{ state.nombres }}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="flex justify-between items-center">
+            <h3 class="text-xs text-primary">Importante: para publicar un proceso, <strong>tienes que registrarte como miembro del comité.</strong></h3>
+            <button color="primary" mat-raised-button type="button" (click)="guardar()">Agregar</button>
+    </div>
+    
+</div>

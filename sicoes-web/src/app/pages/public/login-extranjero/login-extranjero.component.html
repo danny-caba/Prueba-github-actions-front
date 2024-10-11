@@ -1,0 +1,68 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="flex flex-col sm:flex-col gap-4 items-center justify-center">
+            <div @fadeInUp class="card overflow-hidden w-full max-w-4xl">
+                <!-- TITULO -->
+                <div class="px-6 py-4 border-b text-center">
+                    <h2 class="title m-0">Inicio de Sesión de Empresas Extranjeras</h2>
+                </div>
+                <!-- CAMPOS-->
+                <div class="px-6 py-4 flex flex-col">
+                    <div class="d-flex justify-content-center">
+                        <div class="flex flex-col items-center">
+                            <mat-form-field [style.width.px]=500>
+                                <mat-label>País</mat-label>
+                                <mat-select [formControl]="formGroup.controls.pais" [compareWith]="compareSelecIdListadoDetalle">
+                                    <mat-option *ngFor="let obj of listPais" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formGroup.get('pais').hasError('required')">Seleccione País
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field [style.width.px]=500>
+                                <mat-label>Tipo de Identificación Tributaria</mat-label>
+                                <mat-select [formControl]="formGroup.controls.tipoIdentificacion"
+                                    [compareWith]="compareSelecIdListadoDetalle">
+                                    <mat-option *ngFor="let obj of listTipoidentificacion" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formGroup.get('tipoIdentificacion').hasError('required')">Seleccione Tipo de
+                                    Identificación Tributaria
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field  [style.width.px]=500>
+                                <mat-label>N° de Identificación Tributaria</mat-label>
+                                <input [formControl]="formGroup.controls.ruc" matInput maxlength="15" />
+                                <mat-error *ngIf="formGroup.get('ruc').hasError('required')">Ingrese Identificación Tributaria</mat-error>
+                            </mat-form-field>
+                            <mat-form-field  [style.width.px]=500>
+                                <mat-label>Contraseña</mat-label>
+                                <input [type]="inputType" [formControl]="formGroup.controls.password" matInput required>
+                                <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Toggle Visibility" type="button">
+                                    <mat-icon *ngIf="visible" svgIcon="mat:visibility"></mat-icon>
+                                    <mat-icon *ngIf="!visible" svgIcon="mat:visibility_off"></mat-icon>
+                                </button>
+                                <mat-error *ngIf="formGroup.get('password').hasError('required')">Ingrese Contraseña</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!--BOTONES-->
+                        <div class="flex flex-col sm:flex-col sm:gap-2 items-center justify-center">
+                            <button color="primary" mat-raised-button type="button" (click)="iniciarSesion()" [style.width.px]=250>
+                                Ingresar
+                            </button>
+                            <a class="caption font-bold cursor-pointer hover:underline" (click)="olvideContrasenia()" fxFlex="auto">
+                                Olvidé mi contraseña
+                            </a>
+                            <button color="primary" mat-raised-button type="button" (click)="crearCuenta()" [style.width.px]=250>
+                                Crear cuenta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

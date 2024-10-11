@@ -1,0 +1,180 @@
+<div class="w-full h-full overflow-hidden flex flex-col">
+    <div class="p-4  bg-white">
+        <div class="flex flex-row mb-4 items-center">
+            <button (click)="openDrawer()" class="block" *ngIf="!(isDesktop$ | async)" color="primary" mat-icon-button type="button">
+                <mat-icon svgIcon="mat:menu"></mat-icon>
+              </button>
+              <div class="">
+                <div class="text-primary text-xl font-bold">{{title}}</div>
+              </div>
+        </div>
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+
+    <vex-scrollbar class="px-4 flex-auto  bg-white">
+        <ng-container *ngTemplateOutlet="form"></ng-container>
+    </vex-scrollbar>
+
+    <div class="py-4 border-t flex flex-row">
+
+        <span class="flex-auto"></span>
+        <div class="flex flex-row gap-x-2" *ngIf="bView != true">
+            <button color="primary" mat-raised-button type="button" (click)="elegirOpcion()">
+                Guardar
+            </button>
+            <button color="primary" mat-raised-button type="button" (click)="confPerfil()" [disabled]="!enabledPerfil">
+               Configurar Perfil
+            </button>
+            <button color="primary" mat-raised-button type="button" (click)="cancelar()">
+                Cancelar
+             </button>
+        </div>
+        <div class="flex flex-row gap-x-2" *ngIf="bView == true">
+            <button color="primary" mat-stroked-button type="button" (click)="siguienteView()">
+                Siguiente
+            </button>
+        </div>
+    </div>
+  </div>
+
+<ng-template #form>
+    <div class="pt-4 grid sm:grid-cols-1 md:grid-cols-3 gap-x-8">
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Usuarios</mat-label>
+                <mat-form-field *ngIf="!disableEdit">
+                    <input  [formControl]="formGroup.controls.nombreUsuarioSiged" matInput maxlength="200" placeholder="Ingrese usuario" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+                      <mat-option *ngFor="let usuario of (usuariosFiltrados | async)" [value]="usuario.nombres">
+                        {{ usuario.nombres }}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field *ngIf="disableEdit">
+                    <input  [formControl]="formGroup.controls.nombreUsuarioSiged" matInput maxlength="200" placeholder="Ingrese usuario" readonly>
+
+                </mat-form-field>
+                <mat-error *ngIf="formGroup.get('nombreUsuarioSiged').hasError('required')">Ingrese usuario</mat-error>
+        </div>
+        <div class="md:col-span-2 sm:col-span-1 flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Correo Electrónico</mat-label>
+            <mat-form-field>
+                <input [formControl]="formGroup.controls.correoUsuario" [readonly]="disableEdit" placeholder="" matInput maxlength="100">
+                <mat-error *ngIf="formGroup.get('correoUsuario').hasError('required')">Ingrese nombre del proceso</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Ingresar Nombre de Usuario</mat-label>
+            <mat-form-field>
+                <input [formControl]="formGroup.controls.nombreUsuario" matInput maxlength="20" placeholder="Ingresar Nombre de Usuario"
+                (input)="actualizarCorreoUsuario()">
+                <mat-error *ngIf="formGroup.get('nombreUsuario').hasError('required')">Ingresar Nombre de Usuario</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+</ng-template>
+
+
+<div class="w-full h-full overflow-hidden flex flex-col">
+    <div class="p-4  bg-white">
+        <div class="flex flex-row mb-4 items-center">
+            <button (click)="openDrawer()" class="block" *ngIf="!(isDesktop$ | async)" color="primary" mat-icon-button type="button">
+                <mat-icon svgIcon="mat:menu"></mat-icon>
+              </button>
+              <div class="">
+                <div class="text-primary text-xl font-bold">Roles del Usuario</div>
+              </div>
+        </div>
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+
+    <vex-scrollbar class="px-4 flex-auto  bg-white">
+        <ng-container *ngTemplateOutlet="form1"></ng-container>
+    </vex-scrollbar>
+
+
+<ng-template #form1>
+    <div class="pt-4 grid sm:grid-cols-1 md:grid-cols-3 gap-x-8">
+        <div class="md:col-span-2 sm:col-span-1 flex flex-col">
+
+            <mat-form-field>
+                <mat-select [formControl]="formGroupRole.controls.selectedRole"  required>
+                    <mat-option *ngFor="let role of this.dataSourceRol.data" [value]="role.idRol">{{ role.nombre }}</mat-option>
+                </mat-select>
+
+            </mat-form-field>
+        </div>
+        <div class="pt-6" >
+            <button color="primary" mat-raised-button type="button" (click)="agregarRolUsuario()">
+                Agregar
+            </button>
+        </div>
+
+    </div>
+
+    <div>
+
+        <div class="md:col-span-2 sm:col-span-1 flex flex-col">
+            <table   [dataSource]="dataSourceRoles"  class="w-full rounded" mat-table matSort>
+                <ng-container matColumnDef="nombreCompleto">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Rol</th>
+                    <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.rol?.nombre }}</td>
+                </ng-container>
+                <ng-container matColumnDef="nombreUsuario">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario de Creación del <br> Rol</th>
+                    <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element.usuario.usuario}}</td>
+                </ng-container>
+                <ng-container matColumnDef="roles">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Asignación del <br> Rol</th>
+                    <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.fecCreacion }}</td>
+                </ng-container>
+                <ng-container matColumnDef="estado">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario de Actualización del <br> Rol</th>
+                    <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element.usuario.usuario }}</td>
+                </ng-container>
+                <ng-container matColumnDef="habilitar/deshabilitar">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de  <br> Modificación</th>
+                    <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.fecActualizacion }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                    <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                    <td *matCellDef="let row" class="w-10 text-primary text-center" mat-cell>
+                      <div class="flex gap-x-3">
+                        <button matTooltip="Eliminar" (click)="eliminarRolUsuario(row)">
+                            <mat-icon svgIcon="mat:delete"></mat-icon>
+                        </button>
+
+                      </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="loading">
+                    <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center">Cargando Datos...</td>
+                </ng-container>
+
+                <ng-container matColumnDef="vacio">
+                    <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center text-primary">No se encuentran resultados para los filtros seleccionados</td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+            </table>
+
+            <mat-paginator
+            class="sticky left-0"
+            [length]="totalElements"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[10, 20, 30]"
+            (page)="pageChange($event)">
+        </mat-paginator>
+        </div>
+
+    </div>
+
+</ng-template>

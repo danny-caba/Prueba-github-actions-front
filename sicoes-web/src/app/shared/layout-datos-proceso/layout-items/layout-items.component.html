@@ -1,0 +1,137 @@
+<div class="w-full h-full overflow-hidden flex flex-col">
+    <div class="p-4  bg-white">
+        <div class="flex flex-row mb-4 items-center">
+            <button (click)="openDrawer()" class="block" *ngIf="!(isDesktop$ | async)" color="primary" mat-icon-button type="button">
+                <mat-icon svgIcon="mat:menu"></mat-icon>
+              </button> 
+              <div class="">
+                <div class="text-primary text-xl font-bold">4. Ítems</div>
+              </div>
+        </div>
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="px-4 pt-2 flex-auto  bg-white">
+        <div class="py-4 flex justify-between items-center" *ngIf="verBtnAgregarItem()">
+            <h3 class="text-xs text-primary font-bold">Registrar Ítems</h3>
+            <button color="primary" mat-raised-button type="button" (click)="agregarItems()">Agregar Nuevo Ítem</button>
+        </div>
+        <div class="mx-0 py-4 border-b overflow-auto">
+            <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
+                <ng-container matColumnDef="numeroItem">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nro.</th>
+                    <td mat-cell *matCellDef="let element" class="text-primary font-medium"> {{element?.numeroItem}} </td>
+                </ng-container>
+                <ng-container matColumnDef="montoReferencialSoles">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor estimado</th>
+                    <td mat-cell *matCellDef="let element" class="text-primary font-medium"> {{element?.montoReferencialSoles}} </td>
+                </ng-container>
+                <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre de ítem</th>
+                    <td mat-cell *matCellDef="let element" class="text-primary font-medium"> {{element?.descripcionItem}} </td>
+                </ng-container>
+                <ng-container matColumnDef="tipoMoneda">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>cambio</th>
+                    <td mat-cell *matCellDef="let element" class="text-primary font-medium"> {{element?.divisa.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="facturacionMinima">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Facturación mínima<br>en soles</th>
+                    <td mat-cell *matCellDef="let element" class="text-primary font-medium"> {{element?.facturacionMinima}} </td>
+                </ng-container>
+                <ng-container matColumnDef="estado">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                    <td mat-cell *matCellDef="let element" class="text-primary font-medium"> {{element?.estado.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Acciones</th>
+                    <td *matCellDef="let row" class="w-10 text-primary font-medium" mat-cell>
+                        <div class="flex gap-x-3">
+                            <button matTooltip="Ver" (click)="verItems(row)">
+                                <mat-icon svgIcon="mat:visibility"></mat-icon>
+                            </button>
+                            <button matTooltip="Editar" (click)="actualizarItems(row)" *ngIf="bEdit == true">
+                                <mat-icon svgIcon="mat:edit"></mat-icon>
+                            </button>
+                            <button matTooltip="Eliminar" (click)="eliminarItems(row)" *ngIf="bEdit == true">
+                                <mat-icon svgIcon="mat:delete"></mat-icon>
+                            </button>
+                              <!--
+                            <div class="v-line mx-2"></div>
+                            <button>
+                                <mat-icon svgIcon="mat:keyboard_arrow_down"></mat-icon>
+                            </button>
+                            -->
+                        </div>
+                         <!--
+                        <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ obj: row }"
+                            [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button" class="hover:bg-hover">
+                            <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                        </button->
+                        -->
+                    </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="loading">
+                    <td mat-footer-cell *matFooterCellDef colspan="7" class="text-center">
+                        Cargando Datos...
+                    </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="vacio">
+                    <td mat-footer-cell *matFooterCellDef colspan="7" class="text-center text-primary">
+                        No se encuentran resultados para los filtros seleccionados
+                    </td>
+                </ng-container>
+        
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                
+                <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': dataSource != null}"></tr>
+                <tr mat-footer-row *matFooterRowDef="['vacio']"
+                    [ngClass]="{'hide': !(dataSource!=null && dataSource.data.length==0) }"></tr>
+            </table>
+        
+            <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                showFirstLastButtons></mat-paginator>
+        </div>
+        <!--
+        <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+            <ng-template let-obj="obj" matMenuContent>
+                <button mat-menu-item (click)="actualizarItems(obj)">
+                    <mat-icon svgIcon="mat:edit"></mat-icon>
+                    <span>Editar</span>
+                </button>
+                <button mat-menu-item (click)="eliminarItems(obj)">
+                    <mat-icon svgIcon="mat:delete"></mat-icon>
+                    <span>Eliminar</span>
+                </button>
+            </ng-template>
+        </mat-menu>
+        -->
+    </div>
+    <div class="p-4  bg-white">
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+        <h3 class="text-xs mt-2 text-primary">Recuerda que puedes agregar varios ítems a este proceso.</h3>
+    </div>
+    <div class="py-4 border-t flex flex-row">
+        <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+            Cancelar
+        </button>
+        <span class="flex-auto"></span>
+        <div class="flex flex-row gap-x-2">
+            <!--button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+                Guardar y Salir
+            </button>
+            <button color="primary" mat-raised-button type="button" (click)="siguiente()">
+                Guardar y Continuar
+            </button-->
+            <button color="primary" mat-raised-button type="button" (click)="siguiente()" *ngIf="PROCESO?.items == true && bEdit == true && PROCESO?.estado?.codigo == EstadoProcesoEnum.EN_ELABORACION">
+                Siguiente
+            </button>
+        </div>
+    </div> 
+</div>
+

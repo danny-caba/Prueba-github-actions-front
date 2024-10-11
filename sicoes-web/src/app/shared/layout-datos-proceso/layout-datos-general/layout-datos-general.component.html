@@ -1,0 +1,132 @@
+<div class="w-full h-full overflow-hidden flex flex-col">
+    <div class="p-4  bg-white">
+        <div class="flex flex-row mb-4 items-center">
+            <button (click)="openDrawer()" class="block" *ngIf="!(isDesktop$ | async)" color="primary" mat-icon-button type="button">
+                <mat-icon svgIcon="mat:menu"></mat-icon>
+              </button>
+              <div class="">
+                <div class="text-primary text-xl font-bold">1. Datos generales</div>
+              </div>
+        </div>
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+
+    <vex-scrollbar class="px-4 flex-auto  bg-white">
+        <ng-container *ngTemplateOutlet="form"></ng-container>
+    </vex-scrollbar>
+
+    <div class="py-4 border-t flex flex-row">
+        <button color="primary" mat-stroked-button type="button" (click)="cancelar()">
+            Cancelar
+        </button>
+        <span class="flex-auto"></span>
+        <div class="flex flex-row gap-x-2" *ngIf="bView != true">
+            <button color="primary" mat-stroked-button type="button" (click)="borrador(false)">
+                Guardar y Salir
+            </button>
+            <button color="primary" mat-raised-button type="button" (click)="borrador(true)">
+                Guardar y Continuar
+            </button>
+        </div>
+        <div class="flex flex-row gap-x-2" *ngIf="bView == true">
+            <button color="primary" mat-stroked-button type="button" (click)="siguienteView()">
+                Siguiente
+            </button>
+        </div>
+    </div>
+  </div>
+
+<ng-template #form>
+    <div class="pt-4 grid sm:grid-cols-1 md:grid-cols-3 gap-x-8">
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">N°</mat-label>
+            <mat-form-field>
+                <!--input [formControl]="formGroup.controls.numeroProceso" matInput placeholder="Ingresar número" maxlength="30" [inputMask]="osiInputMask"-->
+                <input [formControl]="formGroup.controls.numeroProceso" matInput placeholder="Ingresar número" maxlength="50">
+                <mat-error *ngIf="formGroup.get('numeroProceso').hasError('required')">Ingrese número</mat-error>
+                <!--button matSuffix mat-icon-button (click)="openInfo()">
+                    <mat-icon class="text-primary" svgIcon="mat:help_outline"></mat-icon>
+                </button-->
+            </mat-form-field>
+        </div>
+        <div class="md:col-span-2 sm:col-span-1 flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Nombre del proceso</mat-label>
+            <mat-form-field>
+                <input [formControl]="formGroup.controls.nombreProceso" placeholder="Ingresar nombre del proceso" matInput maxlength="100">
+                <mat-error *ngIf="formGroup.get('nombreProceso').hasError('required')">Ingrese nombre del proceso</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">N° de expediente SIGED</mat-label>
+            <mat-form-field>
+                <input [formControl]="formGroup.controls.numeroExpediente" matInput maxlength="20" placeholder="Ingresar número de expediente" (keypress)="numberOnly($event)" (paste)="pegarSoloNumeros($event)">
+                <mat-error *ngIf="formGroup.get('numeroExpediente').hasError('required')">Ingrese número de expediente SIGED</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Área que solicita el requerimiento</mat-label>
+            <mat-form-field>
+                <input [formControl]="formGroup.controls.unidad" [matAutocomplete]="autoTecnico" placeholder="Ingresar el nombre del área" matInput (blur)="blurEvaluadorTecnico()">
+                <mat-autocomplete  #autoTecnico="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let state of filteredStatesTecnico$ | async" [value]="state">
+                    {{ state.nombreUnidad }}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="formGroup.get('unidad').hasError('required')">Ingrese área que solicita el requerimiento</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Sector</mat-label>
+            <mat-form-field  class="flex-auto">
+                <mat-select [formControl]="formGroup.controls.sector" [compareWith]="compareSelecIdListadoDetalle" placeholder="Ingresar Sector">
+                    <mat-option *ngFor="let obj of listSector" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('sector').hasError('required')">Ingrese Sector</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Sub Sector</mat-label>
+            <mat-form-field  class="flex-auto">
+                <mat-select [formControl]="formGroup.controls.subsector" [compareWith]="compareSelecIdListadoDetalle" placeholder="Ingresar Sub Sector">
+                    <mat-option *ngFor="let obj of listSubSector" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('subsector').hasError('required')">Ingrese Sub-Sector</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Estado</mat-label>
+            <mat-form-field  class="flex-auto">
+                <mat-select [formControl]="formGroup.controls.estado" [compareWith]="compareSelecIdListadoDetalle">
+                    <mat-option *ngFor="let obj of listEstado" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-x-8">
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Tipo de facturación requerida</mat-label>
+            <mat-form-field  class="flex-auto">
+                <mat-select [formControl]="formGroup.controls.tipoFacturacion" [compareWith]="compareSelecIdListadoDetalle" placeholder="Ingrese Tipo de facturación requerida">
+                    <mat-option *ngFor="let obj of listTipoFacturacion" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formGroup.get('tipoFacturacion').hasError('required')">Ingresar tipo de facturación requerida</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="bg-white py-2">
+        <div class="">
+            <mat-divider></mat-divider>
+        </div>
+        <p class="py-2 text-primary font-medium"><b>Nota:</b> Seleccione el tipo de facturación requerida para determinar si al momento en que los postores presenten su propuesta, se validará su experiencia total o únicamente la experiencia del sector al que pertenece el proceso.</p>
+    </div>
+</ng-template>

@@ -1,0 +1,44 @@
+<div class="py-2 flex flex-col gap-2" *ngIf="booleanView == false">
+    <vex-cmp-item-perfil [PROCESO]="PROCESO" [procesoItem]="procesoItem" (actualizarTabla)="actualizarTablaLocal($event)"></vex-cmp-item-perfil>
+</div>
+<div class="mx-0 py-4 border-b overflow-auto">
+    <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
+        <ng-container matColumnDef="perfil">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</th>
+            <td mat-cell *matCellDef="let element"> {{element?.perfil?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="cantidad">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</th>
+            <td mat-cell *matCellDef="let element"> {{element?.nroProfesionales}} </td>
+        </ng-container>
+        <!-- Action Column -->
+        <ng-container matColumnDef="acciones">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+            <td *matCellDef="let row; let i = index" class="w-10 text-primary" mat-cell>
+                <button matTooltip="Eliminar" (click)="eliminarItemPerfil(row, i)" *ngIf="booleanView == false">
+                    <mat-icon svgIcon="mat:delete"></mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="loading">
+            <td mat-footer-cell *matFooterCellDef colspan="3" class="text-center">
+                Cargando Datos...
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vacio">
+            <td mat-footer-cell *matFooterCellDef colspan="3" class="text-center text-primary">
+                No se encuentran resultados para los filtros seleccionados
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide': listProcesoItemPerfil != null}"></tr>
+        <tr mat-footer-row *matFooterRowDef="['vacio']"
+            [ngClass]="{'hide': !(listProcesoItemPerfil!=null && listProcesoItemPerfil.length==0) }"></tr>
+    </table>
+
+    <mat-paginator #paginator class="sticky left-0" [pageSizeOptions]="[5, 20, 30]" showFirstLastButtons></mat-paginator>
+</div>

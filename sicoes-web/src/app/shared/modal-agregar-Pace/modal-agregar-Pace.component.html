@@ -1,0 +1,67 @@
+<form>
+    <!-- <vex-modal-title *ngIf="booleanAdd" [titulo]="'Acción Aprobador'"></vex-modal-title> -->
+    <vex-modal-title  [titulo]="'Editar Perfil'"></vex-modal-title>
+    <!-- <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Detalle'"></vex-modal-title> -->
+
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+
+    <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
+
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Area Usuario</mat-label>
+            <mat-form-field class="flex-auto">
+                <input [formControl]="formGroup.controls.areaUsuaria" matInput maxlength="30" placeholder=""
+                    [disabled]="true" />
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Mes de convocatoria programada</mat-label>           
+            <mat-form-field  class="flex-auto" >
+                <mat-select [formControl]="formGroup.controls.mesConvocatoria"   
+                    placeholder="Seleccionar">
+                    <mat-option *ngFor="let obj of meses" [value]="obj">
+                        {{ obj.nombre }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>                    
+        </div>
+ 
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Presupuesto</mat-label>
+            <mat-form-field class="flex-auto">
+                <input [formControl]="formGroup.controls.presupuesto" matInput maxlength="30" placeholder=""
+                (keypress)="decimalNumberOnly($event)" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="py-1 grid sm:grid-cols-1 md:grid-cols-1 gap-x-1">
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Síntesis por Item</mat-label>
+            <mat-form-field class="flex-auto">                
+                <textarea #observacionDescripcion3 rows="2" cdkTextareaAutosize matNativeControl
+                    [formControl]="formGroup.controls.sintesis" maxlength="1000"  ></textarea>
+            </mat-form-field>
+
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Antecedente / Convocatoria</mat-label>
+            <mat-form-field class="flex-auto">                
+                <textarea #observacionDescripcion2 rows="2" cdkTextareaAutosize matNativeControl
+                    [formControl]="formGroup.controls.antecedentes" maxlength="100"  ></textarea>
+            </mat-form-field>
+        </div>
+
+
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Relación con el Programa Anual de Supervisión</mat-label>
+            <mat-form-field class="flex-auto">                
+                <textarea #observacionDescripcion rows="2" cdkTextareaAutosize matNativeControl
+                    [formControl]="formGroup.controls.relacionProgramaAnualSupervision" maxlength="1000"  ></textarea>
+            </mat-form-field>
+        </div>
+    </div>   
+    <mat-dialog-actions align="end">        
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+        <button mat-raised-button color="primary" *ngIf="data.evento=='E'" (click)="guardar()">Actualizar</button>
+    </mat-dialog-actions>
+</form>

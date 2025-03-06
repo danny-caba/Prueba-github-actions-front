@@ -1,0 +1,167 @@
+# Author: @jnunez                                                                                                                                                              
+# Variables Bitbucket: $BITBUCKET_PROJECT_KEY; $BITBUCKET_REPO_SLUG; $BITBUCKET_BUILD_NUMBER                                                                                         
+                                                                                                                                                                                     
+image: node:16.16.0
+definitions:                                                                                                                                                                         
+  caches:                                                                                                                                                                            
+    sonar: ~/.sonar/cache  # Caching SonarCloud artifacts will speed up your build                                                                                                   
+  steps:                                                                                                                                                                             
+    - step: &BuildFeature                                                                                                                                                            
+        name: Build Feature                                                                                                                                                          
+        caches:                                                                                                                                                                      
+          - node                                                                                                                                                                     
+        script:                                                                                                                                                                      
+          - cd $_PATHSOURCE                                                                                                                                                           
+          - npm i exceljs                                                                                                                                                            
+          - npm i pdfmake                                                                                                                                                            
+          - npm install --force
+          - npm install                                                                                                                                                              
+    - step: &BuildTestCert                                                                                                                                                           
+        name: Build and Test CERT                                                                                                                                                    
+        caches:                                                                                                                                                                      
+          - node                                                                                                                                                                     
+        script:                                                                                                                                                                      
+          - cd $_PATHSOURCE                                                                                                                                                           
+#          - npm i exceljs                                                                                                                                                            
+#          - npm i pdfmake                                                                                                                                                            
+#          - npm install                                                                                                                                                              
+#          - npm run build:cert                                                                                                                                                       
+          - npm install --force
+          - npm run build:cert
+          - npm pack                                                                                                                                                                 
+          - mv $_ARTIFACTSOLDNAME $_ARTIFACTSNAMECERT                                                                                                                                  
+          - echo $URLNEXUS/$_COD_APP/$_ARTIFACTNAME/$BITBUCKET_BUILD_NUMBER/cert/
+          - ls -ltr
+          - curl -v -u $USERNEXUS:$PASSNEXUS --upload-file $_ARTIFACTSNAMECERT $URLNEXUS/$_COD_APP/$_ARTIFACTNAME/$BITBUCKET_BUILD_NUMBER/cert/
+          - if curl --head --silent --fail -u $USERNEXUS:$PASSNEXUS $URLNEXUS/$_COD_APP/$_ARTIFACTNAME/$BITBUCKET_BUILD_NUMBER/cert/$_ARTIFACTSNAMECERT > /dev/null; then echo "El archivo subio correctamente al NEXUS-OSINERGMIN"; else echo "Error en subida de archivo al NEXUS-OSINERGMIN"; exit 1; fi
+#        after-script:                                                                                                                                                                
+          
+    - step: &BuildTestProd                                                                                                                                                           
+        name: Build and Test PROD                                                                                                                                                    
+        caches:                                                                                                                                                                      
+          - node                                                                                                                                                                     
+        script:                                                                                                                                                                      
+          - cd $_PATHSOURCE                                                                                                                                                           
+#          - npm i exceljs                                                                                                                                                            
+#          - npm i pdfmake                                                                                                                                                            
+#          - npm install                                                                                                                                                              
+#          - npm run build:prod                                                                                                                                                       
+          - npm install --force
+          - npm run build --prod
+          - npm run build:prod
+          - npm pack   
+          - ls -ltr                                                                                                                                                              
+          - mv $_ARTIFACTSOLDNAME $_ARTIFACTSNAMEPROD                                                                                                                                  
+          - echo $URLNEXUS/$_COD_APP/$_ARTIFACTNAME/$BITBUCKET_BUILD_NUMBER/PROD/prod/
+          - curl -v -u $USERNEXUS:$PASSNEXUS --upload-file $_ARTIFACTSNAMEPROD $URLNEXUS/$_COD_APP/$_ARTIFACTNAME/$BITBUCKET_BUILD_NUMBER/prod/
+          - if curl --head --silent --fail -u $USERNEXUS:$PASSNEXUS $URLNEXUS/$_COD_APP/$_ARTIFACTNAME/$BITBUCKET_BUILD_NUMBER/prod/$_ARTIFACTSNAMEPROD > /dev/null; then echo "El archivo subio correctamente al NEXUS-OSINERGMIN"; else echo "Error en subida de archivo al NEXUS-OSINERGMIN"; exit 1; fi          
+#        after-script:                                                                                                                                                                
+          
+    - step: &SonarQube                                                                                                                                                               
+        name: SonarQube                                                                                                                                                              
+        image: node:16.16.0
+        caches:                                                                                                                                                                      
+          - sonar                                                                                                                                                                    
+        script:                                                                                                                                                                      
+          - cd $_PATHSOURCE                                                                                                                                                           
+          - export SONAR_SCANNER_OPTS="-Xmx8192m"                                                                                                                                    
+          - pipe: sonarsource/sonarqube-scan:2.0.1                                                                                                                                   
+            variables:                                                                                                                                                               
+              SONAR_HOST_URL: $SONAR_HOST_URL                                                                                                                                        
+              SONAR_TOKEN: $SONAR_API_TOKEN                                                                                                                                          
+              SONAR_SCANNER_OPTS: -Dsonar.projectKey=$BITBUCKET_REPO_SLUG -Dsonar.projectName=$BITBUCKET_REPO_SLUG -Dsonar.projectVersion=$BITBUCKET_BUILD_NUMBER -Dsonar.sources=src
+
+    - step: &SecurityScan                                                                                                                                                            
+        name: Security Scan                                                                                                                                                          
+        script:                                                                                                                                                                      
+          - pipe: atlassian/git-secrets-scan:0.5.1                                                                                                                                   
+    - step: &TagsVersion                                                                                                                                                             
+        name: Tags Version                                                                                                                                                           
+        script:                                                                                                                                                                      
+          - git tag -a $BITBUCKET_BUILD_NUMBER -m "version number"                                                                                                                   
+          - git push origin --tags                                                                                                                                                   
+    - step: &Deploy_Stage                                                                                                                                                            
+        runs-on:                                                                                                                                                                     
+          - srvbamboo04                                                                                                                                                              
+          - self.hosted                                                                                                                                                              
+          - linux.shell                                                                                                                                                              
+        clone:                                                                                                                                                                       
+          enabled: false                                                                                                                                                             
+        script:                                                                                                                                                                      
+          - echo "Download package"
+          - curl -v -u $USERNEXUS:$PASSNEXUS -L -X GET $URLNEXUS/$_COD_APP/$_ARTIFACTNAME/$BITBUCKET_BUILD_NUMBER/$_ENV_TYPE/$_SITE_TGZ --output $_SITE_TGZ
+          - echo "ls -l"
+          - echo "Eliminar deploy"
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV sudo rm -rf $_WORKSPACE  || true
+          - echo "Crear deploy"
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV mkdir -p $_WORKSPACE
+          - echo "Copiar paquete"
+          - scp -i $_ID_RSA_PATH $_SITE_TGZ root@$_IP_SERVER_ENV:$_WORKSPACE
+          - echo "Descomprimir paquete"
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV tar xvfC $_WORKSPACE/$_SITE_TGZ $_WORKSPACE/
+          - echo "Eliminar backup"
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV sudo rm -rf $_WEBSITE_ROOT/$_WEBSITE_NAME/backup || true
+          - echo "Crear backup"
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV mv $_WEBSITE_ROOT/$_WEBSITE_NAME/$_APP_NAME $_WEBSITE_ROOT/$_WEBSITE_NAME/backup || true
+          - echo "Instalar nueva version"
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV mv $_WORKSPACE/$_UNZIPPED/$_APP_NAME $_WEBSITE_ROOT/$_WEBSITE_NAME/
+          - echo "Permisos en la carpeta"
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV chown -R apache.apache ${_WEBSITE_ROOT}/${_WEBSITE_NAME}/${_APP_NAME}
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV chmod -R 550 ${_WEBSITE_ROOT}/${_WEBSITE_NAME}/${_APP_NAME}
+          - echo "Reiniciar servicio"
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV service httpd restart
+          - if [ $_ENV_TYPE = "cert" ]; then ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV service httpd restart; fi
+          - if [ $_ENV_TYPE = "prod" ]; then ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV systemctl restart httpd@httpd1.service, systemctl restart httpd@httpd2.service; fi          
+          - echo "Eliminar carpeta de despliegue"
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV sudo rm -rf $_WORKSPACE
+          - ssh -i $_ID_RSA_PATH root@$_IP_SERVER_ENV ls -l
+
+options:
+  size: 8x
+  runtime:
+    cloud:
+      atlassian-ip-ranges: true
+
+pipelines:                                                                                                                                                                           
+  default:                                                                                                                                                                           
+#    - step: *BuildFeature                                                                                                                                                            
+    - parallel:                                                                                                                                                                    
+        - step: *SecurityScan                                                                                                                                                      
+    - parallel:                                                                                                                                                                    
+        - step: *BuildTestCert                                                                                                                                                     
+        - step: *BuildTestProd                                                                                                                                                     
+    - step:                                                                                                                                                                        
+        <<: *Deploy_Stage                                                                                                                                                          
+        name: Deploy to CRT1-N1                                                                                                                                                        
+        deployment: CRT1-N1                                                                                                                                                            
+        trigger: manual                                                                                                                                                            
+    - step:                                                                                                                                                                        
+        <<: *Deploy_Stage                                                                                                                                                          
+        name: Deploy to CRT2-N1                                                                                                                                                        
+        deployment: CRT2-N1                                                                                                                                                            
+        trigger: manual
+  branches:                                                                                                                                                                          
+    master:                                                                                                                                                                          
+      - parallel:                                                                                                                                                                    
+#          - step: *SonarQube                                                                                                                                                         
+          - step: *SecurityScan                                                                                                                                                      
+      - parallel:                                                                                                                                                                    
+          - step: *BuildTestCert                                                                                                                                                     
+          - step: *BuildTestProd                                                                                                                                                     
+      - step: *TagsVersion                                                                                                                                                           
+      - parallel:
+          - step:                                                                                                                                                                        
+              <<: *Deploy_Stage                                                                                                                                                          
+              name: Deploy to CRT1-N1                                                                                                                                                        
+              deployment: CRT1-N1                                                                                                                                                            
+              trigger: manual                                                                                                                                                            
+          - step:                                                                                                                                                                        
+              <<: *Deploy_Stage                                                                                                                                                          
+              name: Deploy to CRT2-N1                                                                                                                                                        
+              deployment: CRT2-N1                                                                                                                                                            
+              trigger: manual    
+          - step:                                                                                                                                                                        
+              <<: *Deploy_Stage                                                                                                                                                          
+              name: Deploy to PRD1-N1                                                                                                                                                        
+              deployment: PRD1-N1                                                                                                                                                            
+              trigger: manual                                                                                                                                                            

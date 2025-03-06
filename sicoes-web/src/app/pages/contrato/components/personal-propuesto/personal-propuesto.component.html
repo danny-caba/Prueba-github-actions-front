@@ -1,0 +1,151 @@
+
+<mat-form-field appearance="outline" class="w-full">
+    <mat-label>Personal Propuesto</mat-label>
+    <mat-select [(ngModel)]="profesionalSeleccionado" (selectionChange)="onChangeRequisito($event)" [disabled]="CONTRATO?.estadoProcesoSolicitud !== '1'">
+        <mat-option *ngFor="let profesional of profesionales" [value]="profesional">
+            {{ profesional?.supervisora?.nombres }} {{ profesional?.supervisora?.apellidoPaterno }} {{ profesional?.supervisora?.apellidoMaterno }}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field  class="mt-6 flex-auto" *ngIf="profesionalSeleccionado">
+    <mat-label>Perfil</mat-label>
+    <input matInput disabled="true" [value]="profesionalSeleccionado?.dePerfilProfesional" maxlength="50">
+</mat-form-field>
+
+<div *ngFor="let requisito of requisitos">
+    <div *ngIf="esArchivo(requisito)" class="flex flex-col sm:gap-4">
+        <ng-container [ngTemplateOutletContext]="{ requisito }" [ngTemplateOutlet]="templateArchivo"></ng-container>
+    </div>
+</div>
+
+<div class="flex justify-end mb-4" *ngIf="profesionalSeleccionado">
+    <button color="primary" mat-raised-button type="button" class="hover-class"
+        (click)="agregarPersonal()">Agregar</button>
+</div>
+
+<div class="my-4 overflow-auto">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" class="w-full text-center">
+        <ng-container matColumnDef="documento">
+          <th class="text-center" mat-header-cell *matHeaderCellDef>Tipo de Documento</th>
+          <td class="text-primary font-bold" mat-cell *matCellDef="let element">{{ element?.supervisora?.numeroDocumento.length > 0 ? 'DNI' : null }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nroDocumento">
+          <th class="text-center" mat-header-cell *matHeaderCellDef>Número de Documento</th>
+          <td class="text-primary font-bold" mat-cell *matCellDef="let element">{{ element?.supervisora?.numeroDocumento }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombres">
+          <th class="text-center" mat-header-cell *matHeaderCellDef>Nombres y Apellidos</th>
+          <td class="text-primary font-bold" mat-cell *matCellDef="let element">{{ element?.supervisora?.apellidoPaterno }} {{ element?.supervisora?.apellidoMaterno }}, {{ element?.supervisora?.nombres }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nepotismo">
+          <th class="text-center" mat-header-cell *matHeaderCellDef>DJ del personal propuesto por la empresa (Nepotismo)</th>
+          <td class="text-primary font-bold" mat-cell *matCellDef="let element">
+            <button (click)="descargar(element?.archivos[0])" matTooltip="Descargar DJ" *ngIf="element?.archivos[0]?.nombre !== 'No se adjuntó archivo'">
+                <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+            </button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="impedimento">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>DJ impedimentos / Incompatib. y prohibiciones</th>
+            <td class="text-primary font-bold" mat-cell *matCellDef="let element">
+                <button (click)="descargar(element?.archivos[1])" matTooltip="Descargar DJ" *ngIf="element?.archivos[1]?.nombre !== 'No se adjuntó archivo'">
+                    <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+                </button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="vinculo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>DJ No Vinculo Contractual con Agente Supervisado</th>
+            <td class="text-primary font-bold" mat-cell *matCellDef="let element">
+                <button (click)="descargar(element?.archivos[2])" matTooltip="Descargar DJ" *ngIf="element?.archivos[2]?.nombre !== 'No se adjuntó archivo'">
+                    <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+                </button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="otros">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Otros documentos</th>
+            <td class="text-primary font-bold" mat-cell *matCellDef="let element">
+                <button (click)="descargar(element?.archivos[3])" matTooltip="Descargar DJ" *ngIf="element?.archivos[3]?.nombre !== 'No se adjuntó archivo'">
+                    <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+                </button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="estado" *ngIf="this.editable && this.esSubsanacion">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Estado</th>
+            <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                {{ evaluarTextoEstado(row.procRevision) }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="actions" *ngIf="!evaluar">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+            <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                <button (click)="$event.stopPropagation()"
+                    *ngIf="editable && row.procRevision !== '1'"
+                    [matMenuTriggerData]="{ customer: row }"
+                    [matMenuTriggerFor]="actionsMenu"
+                    mat-icon-button
+                    type="button">
+                <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="evaluacion" *ngIf="!this.editable">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Evaluación</th>
+            <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                <vex-cmp-evaluacion-contrato [requisito]="row" *ngIf="!editable" [editable]="evaluar && !view" [esPersonal]="true"></vex-cmp-evaluacion-contrato>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+      showFirstLastButtons></mat-paginator>
+
+</div>
+
+<!-- templates -->
+
+<ng-template #templateArchivo let-requisito="requisito">
+    <ng-container [ngTemplateOutletContext]="{ requisito }" [ngTemplateOutlet]="templateSimple"></ng-container>
+</ng-template>
+
+<ng-template #templateSimple let-requisito="requisito">
+    <div class="flex justify-between mb-4" (change)="setValueChecked(requisito, $event)" *ngIf="requisito.archivo === undefined">
+        <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
+            <mat-checkbox color="primary" [disabled]="true" [checked]="requisito.archivo !== undefined && requisito.archivo !== null">
+            </mat-checkbox>
+            <span class="break-words text-sm font-sans">{{ requisito.requisito.deSeccionRequisito }}</span>
+        </div>
+        <vex-form-adjuntos-btn *ngIf="!evaluar && editable" class="ml-6" [titulo]="'Archivo (*.pdf)'" [editable]="evaluar === false && !(requisito?.procRevision === '1') && editable" [codigo]="'ADJUNTAR ARCHIVO'"
+            [contrato]="requisito" [archivo]="requisito.archivo">
+        </vex-form-adjuntos-btn>
+        
+    </div>
+
+    <div class="flex justify-between mb-4" (change)="setValueChecked(requisito, $event)" *ngIf="requisito.archivo !== undefined">
+        <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
+            <mat-checkbox color="primary" [disabled]="true" [checked]="requisito.archivo !== undefined && requisito.archivo !== null">
+            </mat-checkbox>
+            <span class="break-words text-sm font-sans">{{ requisito.requisito.deSeccionRequisito }}</span>
+        </div>
+        <div class="flex flex-col gap-y-2 items-end">
+            <vex-form-adjuntos-btn [titulo]="'Archivo (*.pdf)'" [editable]="evaluar === false && !(requisito?.procRevision === '1') && editable" [codigo]="'ADJUNTAR ARCHIVO'"
+                [contrato]="requisito" [archivo]="requisito.archivo">
+            </vex-form-adjuntos-btn>
+            <vex-cmp-evaluacion-contrato [requisito]="requisito" *ngIf="!editable" [editable]="evaluar && !view"></vex-cmp-evaluacion-contrato>
+        </div>
+    </div>
+</ng-template>
+
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+    <ng-template let-row="customer" matMenuContent>
+        <button mat-menu-item (click)="eliminarPersonal(row)">
+            <mat-icon svgIcon="mat:delete"></mat-icon>
+            <span>Eliminar</span>
+        </button>
+        <button mat-menu-item (click)="editarPersonal(row)">
+            <mat-icon svgIcon="mat:edit"></mat-icon>
+            <span>Editar</span>
+        </button>
+    </ng-template>
+</mat-menu>

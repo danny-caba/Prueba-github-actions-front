@@ -1,0 +1,159 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+
+
+        <div class="card px-8 py-6">
+            <div class="flex flex-col sm:flex-row gap-x8">
+                <div @fadeInUp class="flex-auto">
+                    <!-- TITULO -->
+                    <div class="flex items-center pb-4">
+                        <h2 class="title m-0">Programa Anual de Contratación de Empresas Supervidoras</h2>
+                    </div>
+                    <mat-divider class="-mr-6 -ml-6"></mat-divider>
+
+                    <!-- FILTRO -->
+                    <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
+
+                        <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">División</mat-label>
+                            <mat-form-field class="flex-auto">
+                                <mat-select [formControl]="formGroup.controls.areaUsuaria" placeholder="Seleccionar">
+                                    <mat-option *ngFor="let obj of listaDivisiones" [value]="obj">
+                                        {{ obj.deDivision }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col">
+                            <mat-label class="text-primary text-sm font-medium">Estados</mat-label>
+                            <mat-form-field class="flex-auto">
+                                <mat-select [formControl]="formGroup.controls.estado"
+                                    [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccionar">
+                                    <mat-option *ngFor="let obj of listEstado" [value]="obj">
+                                        {{ obj.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col">
+
+                        </div>
+
+                        <div class="flex-auto flex flex-row gap-x-4 items-center">
+                            <button color="primary" mat-raised-button type="button"
+                                [disabled]="!habilitarAprobarMasivo()" (click)="aprobacionMasiva()" class="flex-auto">
+                                Enviar PACES a GAF
+                            </button>
+                            <button color="primary" mat-raised-button type="button" (click)="buscar()"
+                                class="flex-auto">
+                                Buscar
+                            </button>
+                            <button color="primary" mat-stroked-button type="button" (click)="limpiar()"
+                                class="flex-auto">
+                                Limpiar
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="overflow-auto shadow-2xl rounded">
+                <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
+                    <ng-container matColumnDef="seleccionar">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <!-- <mat-checkbox 
+                                (change)="toggleSelectAll($event)" 
+                                [checked]="isAllSelected()" 
+                                [indeterminate]="isIndeterminate()">
+                            </mat-checkbox> -->
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <mat-checkbox color="primary" (change)="toggleSelectElement(element)" *ngIf="CheckBoxVisible(element)">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <!-- <ng-container matColumnDef="fechaRegistro">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 150px;">Area<br>Usuaria</th>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{
+                            mostrarArea(element?.division) }}</td>
+                    </ng-container> -->
+                    <ng-container matColumnDef="numeroProceso">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Mes <br> Programado</th>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{
+                            mostrarMes(element?.deMes) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="nombreProceso" style="width: 450px;">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Sintesis por Item</th>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.deItemPaces
+                            }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="estadoProceso">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 150px;">Estado</th>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{
+                            mostrarEstado(element?.idTipoEstado) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fechaAprobacion">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 150px;">Fecha Aprobación
+                        </th>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+                            </td>
+                    </ng-container>
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="actions">
+                        <th *matHeaderCellDef mat-header-cell mat-sort-header class="text-center" >
+                            Acciones</th>
+
+                        <!-- <td mat-cell *matCellDef="let row" class="w-20 text-primary" style="width: 350px;">
+                            <div class="flex items-center gap-3">                             
+                                <button mat-raised-button color="primary" (click)="verObservacion(row)" *ngIf="!desactivarBotonResultado(row)"  >
+                                    Resultado
+                                </button>
+                            </div>
+                        </td> -->
+
+                        <td *matCellDef="let row" class="w-10 text-primary" mat-cell>
+                            <div class="flex">                                
+                                <!-- <button matTooltip="Ver proceso" (click)="ver(row)">
+                                    <mat-icon svgIcon="mat:visibility"></mat-icon>
+                                </button>                                 -->
+                                <!-- <div class="v-line mx-2"></div>                                 -->
+                                <button matTooltip="Cancelar" (click)="cancelarPACE(row)" *ngIf="validarAbilitarBotonCancelar(row)" style="padding-right: 10px;">
+                                    <mat-icon svgIcon="mat:remove_moderator"></mat-icon>
+                                </button>                                
+                                <!-- <div class="v-line mx-2"></div> -->
+                                <button matTooltip="Aprobar" (click)="aprobarEnviar(row)" *ngIf="validarAbilitarBotonCancelar(row)">
+                                    <mat-icon svgIcon="mat:list_alt"></mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="aprobador">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 100px;"></th>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{
+                            element?.detalleEstado }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="loading">
+                        <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center">Cargando Datos...</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vacio">
+                        <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">No se
+                            encuentran resultados para los filtros seleccionados</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['vacio']"
+                        [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+                </table>
+                <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                    showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+
+
+    </vex-page-layout-content>
+</vex-page-layout>

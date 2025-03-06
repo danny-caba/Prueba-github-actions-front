@@ -1,0 +1,95 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="card px-8 py-6">
+            <!-- Seccion 01 -->
+            <div class="pb-4 bg-white md:flex justify-between">
+                <div class="md:w-1/3 md:text-left md:border-r-2 md:border-r-slate-300">
+                    <p class="text-primary">N° de proceso: <span class="font-bold">{{ numeroProceso }}</span></p>
+                </div>
+                <div class="md:w-1/3 md:text-center md:border-r-2 md:border-r-slate-300">
+                    <p class="text-primary">Nombre del proceso: <span class="font-bold">{{ nombreProceso }}</span></p>
+                </div>
+                <div class="md:w-1/3 md:text-right">
+                    <p class="text-primary">Estado del proceso: <span class="font-bold">{{ estadoProceso }}</span></p>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+
+
+            <!-- Seccion 02 -->
+            <div class="py-6 bg-white flex justify-center items-center flex-col gap-y-4">
+                <h2 class="text-primary text-xl font-bold">REGISTRO DE CONSULTAS</h2>
+                <div class="flex justify-items-center gap-x-3">
+                    <button color="primary" mat-raised-button type="button" (click)="nuevaConsulta('Registrar')">Nuevo</button>
+                    <button color="primary" mat-raised-button type="button" (click)="enviarConsulta()">Enviar</button>
+                    <button color="primary" mat-raised-button type="button" (click)="goBack()">Cancelar</button>
+                </div>
+            </div>
+
+            <!-- Seccion 03 -->
+            <div class="pb-4 bg-white flex justify-center items-center flex-col gap-y-4">
+                <p class="text-primary">Recuerde ENVIAR sus consulas dentro del plazo señalado en el cronograma del concurso</p>
+                <div class="w-full rounded mt-4 overflow-auto shadow-2xl">
+                    <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
+                        <ng-container matColumnDef="numero">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>N°</th>
+                            <td mat-cell class="text-primary font-medium" *matCellDef="let element; index as nroRegistro">{{ getRowIndex(nroRegistro) }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="seccion">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Sección</th>
+                            <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.seccion?.nombre }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="numeral">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Numeral</th>
+                            <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.deNumeral }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="literal">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Literal</th>
+                            <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.deLiteral }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="pagina">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Página</th>
+                            <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.dePagina }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="descripcion">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Consulta</th>
+                            <td mat-cell style="text-wrap: wrap;" class="text-primary font-medium py-2" *matCellDef="let element">{{ element?.deConsulta | truncateWord: 200 }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="articuloNorma">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Artículo o norma que vulnera</th>
+                            <td mat-cell style="text-wrap: wrap;" class="text-primary font-medium" *matCellDef="let element">{{ element?.deArticuloNorma | truncateWord: 200 }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="estado">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                            <td mat-cell style="text-wrap: wrap;" class="text-primary" *matCellDef="let element"><span class="py-1 px-2 rounded-full text-xs font-bold" [ngClass]="{'bg-gray-200 text-gray-400': element?.estado.nombre === 'Pendiente', 'bg-green-200 text-green-500': element?.estado.nombre !== 'Pendiente'}">{{ element?.estado.nombre }}</span></td>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="actions">
+                            <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                            <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                                <button *ngIf="row?.estado.nombre === 'Pendiente'" (click)="nuevaConsulta('Actualizar', row)"
+                                    mat-icon-button type="button">
+                                    <mat-icon svgIcon="mat:edit"></mat-icon>
+                                </button>
+                                <button *ngIf="row?.estado.nombre === 'Pendiente'" (click)="eliminarConsulta(row)"
+                                    mat-icon-button type="button">
+                                    <mat-icon svgIcon="mat:delete"></mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                    <mat-divider></mat-divider>
+                    <div class="flex justify-between items-center p-4">
+                        <button class="h-12" color="primary" mat-stroked-button type="button" (click)="goToBandejaProceso()">Volver a bandeja</button>
+                        <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                            showFirstLastButtons></mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

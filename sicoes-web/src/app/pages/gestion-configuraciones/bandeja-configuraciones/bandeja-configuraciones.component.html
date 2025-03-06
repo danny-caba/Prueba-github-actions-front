@@ -1,0 +1,13 @@
+<vex-page-layout mode="card">
+  <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+  <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+    <mat-tab-group selectedIndex="0" #tabgroup class="bg-white">
+        <mat-tab label="Secciones" class="estilo-tab-activo">
+            <vex-seccion></vex-seccion>
+        </mat-tab>
+        <mat-tab label="Requisitos">
+            <vex-requisito></vex-requisito>
+        </mat-tab>
+    </mat-tab-group>
+  </vex-page-layout-content>
+</vex-page-layout>

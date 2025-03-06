@@ -1,0 +1,24 @@
+<form>
+    <vex-modal-title [titulo]="'Seleccione la empresa para el consorcio'"></vex-modal-title>
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content class="flex flex-col">
+        <div class="mt-6 flex flex-col sm:flex-row sm:gap-4">
+            <mat-form-field class="flex-auto">
+                <mat-label>Ingrese nombre de empresa</mat-label>
+                <input [formControl]="formGroup.controls.empresas" [(ngModel)]="empresaSeleccionada" matInput maxlength="100" placeholder="Razón social" [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onAutocompleteSelected($event)">
+                    <mat-option *ngFor="let empresas of (empresasFiltradas | async)" [value]="empresas.nombreRazonSocial">
+                        {{ empresas.nombreRazonSocial }}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+
+        <div class="flex justify-center items-center">
+            <div style="padding-top: 10px;">
+                <button color="primary" mat-raised-button type="button" [disabled]="!autocompletado" (click)="realizarAsignacion()" style="margin-right: 14px;">Asignar empresa</button>
+                <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </mat-dialog-content>
+</form>

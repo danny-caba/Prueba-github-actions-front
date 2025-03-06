@@ -1,0 +1,23 @@
+<form>
+    <!-- <vex-modal-title *ngIf="booleanAdd" [titulo]="'Acción Aprobador'"></vex-modal-title> -->
+    <vex-modal-title  [titulo]="'Observación'"></vex-modal-title>
+    <!-- <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Detalle'"></vex-modal-title> -->
+
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+
+  
+    <div class="py-1 grid sm:grid-cols-1 md:grid-cols-1 gap-x-1">
+        
+        <div class="flex flex-col">
+            <!-- <mat-label class="text-primary text-sm font-medium">Observación</mat-label> -->
+            <mat-form-field class="flex-auto"  >                
+                <textarea #observacionDescripcion2 [disabled]="this.evento!='E'" rows="2" cdkTextareaAutosize matNativeControl
+                    [formControl]="formGroup.controls.observacion" maxlength="100"  ></textarea>
+            </mat-form-field>
+        </div>       
+    </div>   
+    <mat-dialog-actions align="end">        
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="guardar()"  *ngIf="this.evento=='E'" >Actualizar</button>
+    </mat-dialog-actions>
+</form>

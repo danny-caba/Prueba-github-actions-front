@@ -1,0 +1,180 @@
+<vex-page-layout mode="card">
+  <vex-page-layout-header class="h-6"></vex-page-layout-header>
+
+  <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+    <div class="flex flex-col sm:flex-col gap-4 items-center justify-center">
+      <div @fadeInUp class="card overflow-hidden w-full">
+        <!-- TITULO -->
+        <div class="px-6 py-4 border-b flex justify-between items-center">
+          <!-- Este contenedor mantiene el título centrado -->
+          <div class="titulo-centrado">
+            <h2 class="title m-0">PROCESOS DE SELECCIÓN</h2>
+          </div>
+          <!-- Botón en la derecha -->
+          <div class="boton-derecha">
+            <a mat-raised-button color="primary" href="https://www.osinergmin.gob.pe/seccion/institucional/institucional/procesos-seleccion/presentacion" target="_blank">
+              Procesos de Selección Portal Osinergmin
+            </a>
+          </div>
+        </div>        
+        <!-- FILTRO PERSONAS JURIDICAS-->
+        <div class="px-6 py-4 flex flex-col">
+          <div class="flex flex-col sm:flex-row sm:gap-4">
+            <!-- <div class="flex flex-col"> -->
+            <mat-form-field class="flex-auto" appearance="outline">
+              <mat-label>Descripción del Objeto</mat-label>
+              <input
+                [formControl]="formGroup.controls.nombreProceso"
+                matInput
+                maxlength="300"
+              />
+            </mat-form-field>
+            <mat-form-field class="flex-auto">
+              <mat-label>Elija divivision</mat-label>
+              <mat-select [formControl]="formGroup.controls.nombreArea">
+                <mat-option value>Todos</mat-option>
+                <mat-option
+                  *ngFor="let obj of listAreas"
+                  [value]="obj.nombreUnidad"
+                >
+                  {{ obj.nombreUnidad }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="flex-auto">
+              <mat-label>Seleccione Estado</mat-label>
+              <mat-select [formControl]="formGroup.controls.idEstado">
+                <mat-option value>Todos</mat-option>
+                <mat-option
+                  *ngFor="let obj of listEstado"
+                  [value]="obj.idListadoDetalle"
+                >
+                  {{ obj.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <!--BOTONES-->
+            <div
+              class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end mb-6"
+            >
+              <button
+                color="primary"
+                mat-raised-button
+                type="button"
+                (click)="buscar()"
+              >
+                Buscar
+              </button>
+              <button
+                color="primary"
+                mat-raised-button
+                type="button"
+                (click)="limpiar()"
+              >
+                Limpiar
+              </button>
+            </div>
+          </div>
+        </div>
+        <!--TABLA PERSONAS JURIDICAS-->
+        <div class="px-6 py-4 card overflow-auto">
+          <table
+            @stagger
+            [dataSource]="dataSource"
+            class="w-full border"
+            mat-table
+            matSort
+          >
+            <ng-container matColumnDef="numero">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>N°</th>
+              <td mat-cell *matCellDef="let element; let i = index">
+                {{ i + 1 }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="division">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                División
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.nombreArea }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="fecHrPubli">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Fecha y Hora de Publicación
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.fechaPublicacion }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="descripcion">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Descripción del Objeto
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.nombreProceso }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="accion">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Acciones
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <button
+                  color="primary"
+                  (click)="verDetalle(element)"
+                  mat-menu-item
+                >
+                  <mat-icon svgIcon="mat:visibility"></mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="loading">
+              <td
+                mat-footer-cell
+                *matFooterCellDef
+                colspan="7"
+                class="text-center"
+              >
+                Cargando Datos...
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="vacio">
+              <td
+                mat-footer-cell
+                *matFooterCellDef
+                colspan="7"
+                class="text-center text-primary"
+              >
+                No se encuentran resultados para los filtros seleccionados
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr
+              mat-footer-row
+              *matFooterRowDef="['loading']"
+              [ngClass]="{ hide: dataSource != null }"
+            ></tr>
+            <tr
+              mat-footer-row
+              *matFooterRowDef="['vacio']"
+              [ngClass]="{
+                hide: !(dataSource != null && dataSource.data.length == 0)
+              }"
+            ></tr>
+          </table>
+          <mat-paginator
+            class="sticky left-0"
+            [pageSizeOptions]="[10, 20, 30]"
+            (page)="pageChange($event)"
+            showFirstLastButtons
+          ></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </vex-page-layout-content>
+</vex-page-layout>

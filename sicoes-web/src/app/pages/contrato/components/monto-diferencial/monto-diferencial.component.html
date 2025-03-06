@@ -1,0 +1,70 @@
+<form [formGroup]="formGroup">
+    <div *ngFor="let requisito of requisitos">
+        <div *ngIf="esDato(requisito)" class="flex flex-col sm:gap-4">
+            <ng-container [ngTemplateOutletContext]="{ requisito }" [ngTemplateOutlet]="templateDato"></ng-container>
+        </div>
+    </div>
+
+    <div *ngFor="let requisito of requisitos">
+        <div *ngIf="esArchivo(requisito)" class="flex flex-col sm:gap-4">
+            <ng-container [ngTemplateOutletContext]="{ requisito }" [ngTemplateOutlet]="templateArchivo"></ng-container>
+        </div>
+    </div>
+
+    <mat-divider class="my-4"></mat-divider>
+
+    <div>
+        <p class="text-gray-500">De acuerdo al literal b) del numeral 34.3: Cuando la propuesta económica es inferior al 90% del valor estimado del concurso, para la suscripción del contrato, el postor designado debe presentar una garantía adicional por un monto equivalente al cien por ciento (100%) de la diferencia entre el valor estimado y la propuesta económica. Dicha garantía debe mantenerse vigente hasta la conformidad de la recepción de la prestación final a cargo del contratista.</p>
+    </div>
+
+    <ng-template #templateArchivo let-requisito="requisito">
+        
+        <ng-container [ngTemplateOutletContext]="{ requisito }" [ngTemplateOutlet]="templateSimple"></ng-container>
+
+    </ng-template>
+
+    <ng-template #templateDato let-requisito="requisito">
+        
+        <mat-form-field>
+            <mat-label>{{ requisito?.requisito?.deSeccionRequisito }}</mat-label>
+            <input matInput
+                [type]="tipoDatoEntrada(requisito)"
+                [formControlName]="requisito.idSolicitudSeccion"
+            >
+            <vex-cmp-evaluacion-contrato [requisito]="requisito" *ngIf="!editable" [editable]="evaluar && !view"></vex-cmp-evaluacion-contrato>
+            <span *ngIf="requisito?.procRevision === '1' &&  !evaluar" class="italic text-green-600">Estado de evaluación: cumple</span>
+        </mat-form-field>
+
+    </ng-template>
+
+    <ng-template #templateSimple let-requisito="requisito">
+        <div class="flex justify-between mb-4" (change)="setValueChecked(requisito, $event)" *ngIf="requisito.archivo === undefined">
+            <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
+                <mat-checkbox color="primary" [disabled]="true" [checked]="requisito.archivo !== undefined && requisito.archivo !== null">
+                </mat-checkbox>
+                <span class="break-words text-sm font-sans">{{ requisito.requisito.deSeccionRequisito }}</span>
+            </div>
+            <div class="flex flex-col gap-y-2 items-end">
+                <vex-cmp-evaluacion-contrato [requisito]="requisito" *ngIf="!editable" [editable]="evaluar && !view"></vex-cmp-evaluacion-contrato>
+                <vex-form-adjuntos-btn *ngIf="!evaluar && editable" class="ml-6" [titulo]="'Archivo (*.pdf)'" [editable]="evaluar === false && !(requisito?.procRevision === '1') && editable" [codigo]="'ADJUNTAR ARCHIVO'"
+                    [contrato]="requisito" [archivo]="requisito.archivo">
+                </vex-form-adjuntos-btn>
+            </div>
+            
+        </div>
+    
+        <div class="flex justify-between mb-4" (change)="setValueChecked(requisito, $event)" *ngIf="requisito.archivo !== undefined">
+            <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
+                <mat-checkbox color="primary" [disabled]="true" [checked]="requisito.archivo !== undefined && requisito.archivo !== null">
+                </mat-checkbox>
+                <span class="break-words text-sm font-sans">{{ requisito.requisito.deSeccionRequisito }}</span>
+            </div>
+            <div class="flex flex-col gap-y-2 items-end">
+                <vex-form-adjuntos-btn class="ml-6" [titulo]="'Archivo (*.pdf)'" [editable]="evaluar === false && !(requisito?.procRevision === '1') && editable" [codigo]="'ADJUNTAR ARCHIVO'"
+                    [contrato]="requisito" [archivo]="requisito.archivo">
+                </vex-form-adjuntos-btn>
+                <vex-cmp-evaluacion-contrato [requisito]="requisito" *ngIf="!editable" [editable]="evaluar && !view"></vex-cmp-evaluacion-contrato>
+            </div>
+        </div>
+    </ng-template>
+</form>

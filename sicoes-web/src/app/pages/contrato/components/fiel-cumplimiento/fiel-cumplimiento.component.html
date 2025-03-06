@@ -1,0 +1,79 @@
+<form [formGroup]="formGroup">
+    <mat-radio-group class="flex gap-x-4 justify-center mb-4" 
+        [disabled]="true" 
+        [(ngModel)]="tipoCartaSeleccionado"
+        [ngModelOptions]="{standalone: true}">
+        <mat-radio-button value="1">Carta Fianza de Fiel Cumplimiento</mat-radio-button>
+        <mat-radio-button value="2">Retención 10%</mat-radio-button>
+    </mat-radio-group>
+    
+    <div *ngFor="let requisito of requisitosFiltrado">
+        <div *ngIf="esDato(requisito)" class="flex flex-col sm:gap-4">
+            <ng-container [ngTemplateOutletContext]="{ requisito }" [ngTemplateOutlet]="templateDato"></ng-container>
+        </div>
+    </div>
+    
+    <div *ngFor="let requisito of requisitos">
+        <div *ngIf="esArchivo(requisito)" class="flex flex-col sm:gap-4">
+            <ng-container [ngTemplateOutletContext]="{ requisito }" [ngTemplateOutlet]="templateArchivo"></ng-container>
+        </div>
+    </div>
+    
+    <mat-divider class="my-4"></mat-divider>
+    
+    <div>
+        <p class="text-gray-500">De acuerdo al (literal a) del numeral 34.3: Cuando el monto del Contrato de Supervisión supere el cincuenta por ciento (50%) del límite máximo establecido para la Adjudicación Simplificada para Servicios en las normas presupuestales anuales el postor deberá presentar una garantía de fiel cumplimiento. El monto de esta garantía es equivalente al diez por ciento (10%) del monto del Contrato de Supervisión y debe mantenerse vigente hasta la conformidad de la recepción de la prestación final a cargo del contratista.
+        En caso el postor designado sea una micro y pequeña empresa debidamente inscrita en el Registro Nacional de la Micro y Pequeña Empresa (REMYPE), se establece como mecanismo alternativo a la presentación de la Carta Fianza como Garantía de Fiel Cumplimiento, la retención del diez por ciento (10%) del monto total del Contrato de Supervisión. Dicha retención se efectúa durante la primera mitad del número total de pagos a realizarse, de forma prorrateada, en cada pago, con cargo a ser devuelto a la finalización del Contrato de Supervisión, a cuyo efecto debe ser solicitado por el postor designado.</p>
+    </div>
+    
+    <ng-template #templateArchivo let-requisito="requisito">
+        
+        <ng-container [ngTemplateOutletContext]="{ requisito }" [ngTemplateOutlet]="templateSimple"></ng-container>
+    
+    </ng-template>
+    
+    <ng-template #templateDato let-requisito="requisito">
+        <mat-form-field>
+            <mat-label>{{ requisito?.requisito?.deSeccionRequisito }}</mat-label>
+            <input matInput
+                [type]="tipoDatoEntrada(requisito)"
+                [formControlName]="requisito.idSolicitudSeccion"
+            >
+            <vex-cmp-evaluacion-contrato [requisito]="requisito" *ngIf="!editable" [editable]="evaluar && !view"></vex-cmp-evaluacion-contrato>
+            <span *ngIf="requisito?.procRevision === '1' &&  !evaluar" class="italic text-green-600">Estado de evaluación: cumple</span>
+        </mat-form-field>
+    </ng-template>
+    
+    <ng-template #templateSimple let-requisito="requisito">
+        <div class="flex justify-between mb-4" (change)="setValueChecked(requisito, $event)" *ngIf="requisito.archivo === undefined">
+            <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
+                <mat-checkbox color="primary" [disabled]="true" [checked]="requisito.archivo !== undefined && requisito.archivo !== null">
+                </mat-checkbox>
+                <span class="break-words text-sm font-sans">{{ requisito.requisito.deSeccionRequisito }}</span>
+            </div>
+            <div class="flex flex-col gap-y-2 items-end">
+                <vex-cmp-evaluacion-contrato [requisito]="requisito" *ngIf="!editable" [editable]="evaluar && !view"></vex-cmp-evaluacion-contrato>
+                <vex-form-adjuntos-btn *ngIf="!evaluar && editable" class="ml-6" [titulo]="'Archivo (*.pdf)'" [editable]="evaluar === false && !(requisito?.procRevision === '1') && editable" [codigo]="'ADJUNTAR ARCHIVO'"
+                    [contrato]="requisito" [archivo]="requisito.archivo">
+                </vex-form-adjuntos-btn>
+                <span *ngIf="requisito?.procRevision === '1' &&  !evaluar" class="italic text-green-600">Estado de evaluación: cumple</span>
+            </div>
+            
+        </div>
+    
+        <div class="flex justify-between mb-4" (change)="setValueChecked(requisito, $event)" *ngIf="requisito.archivo !== undefined">
+            <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
+                <mat-checkbox color="primary" [disabled]="true" [checked]="requisito.archivo !== undefined && requisito.archivo !== null">
+                </mat-checkbox>
+                <span class="break-words text-sm font-sans">{{ requisito.requisito.deSeccionRequisito }}</span>
+            </div>
+            <div class="flex flex-col gap-y-2 items-end">
+                <vex-form-adjuntos-btn class="ml-6" [titulo]="'Archivo (*.pdf)'" [editable]="evaluar === false && !(requisito?.procRevision === '1') && editable" [codigo]="'ADJUNTAR ARCHIVO'"
+                    [contrato]="requisito" [archivo]="requisito.archivo">
+                </vex-form-adjuntos-btn>
+                <vex-cmp-evaluacion-contrato [requisito]="requisito" *ngIf="!editable" [editable]="evaluar && !view"></vex-cmp-evaluacion-contrato>
+                <span *ngIf="requisito?.procRevision === '1' &&  !evaluar" class="italic text-green-600">Estado de evaluación: cumple</span>
+            </div>
+        </div>
+    </ng-template>
+</form>

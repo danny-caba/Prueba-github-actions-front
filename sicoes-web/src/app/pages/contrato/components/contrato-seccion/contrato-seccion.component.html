@@ -1,0 +1,46 @@
+<mat-expansion-panel class="mt-2" expanded="false">
+    <mat-expansion-panel-header>
+        <mat-panel-title class="font-bold">{{ SECCION?.deSeccion | uppercase }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <vex-documento-contrato #documentoContrato 
+        [SECCION]="SECCION"
+        [CONTRATO]="CONTRATO"
+        [tipoContratoSeleccionado]="tipoContratoSeleccionado"
+        [evaluar]="evaluar"
+        [esSubsanacion]="esSubsanacion"
+        [editable]="editable"
+        [view]="view"
+        *ngIf="seccionDocumentoContrato() && tipoContratoSeleccionado"
+        ></vex-documento-contrato>
+        <vex-personal-propuesto #personalPropuesto 
+        [CONTRATO]="CONTRATO"
+        [SECCION]="SECCION" 
+        [tipoContratoSeleccionado]="tipoContratoSeleccionado" 
+        [evaluar]="evaluar"
+        [esSubsanacion]="esSubsanacion"
+        [editable]="editable"
+        [view]="view"
+        *ngIf="seccionPersonalPropuesto() && tipoContratoSeleccionado"
+        ></vex-personal-propuesto>
+        <vex-fiel-cumplimiento #fielCumplimiento 
+        [SECCION]="SECCION" 
+        [CONTRATO]="CONTRATO"
+        [tipoContratoSeleccionado]="tipoContratoSeleccionado" 
+        [evaluar]="evaluar"
+        [esSubsanacion]="esSubsanacion"
+        [editable]="editable"
+        [view]="view"
+        [listTipoContrato]="listTipoContrato"
+        *ngIf="seccionFielCumplimiento() && tipoContratoSeleccionado"
+        ></vex-fiel-cumplimiento>
+        <vex-monto-diferencial #montoDiferencial
+        [SECCION]="SECCION"
+        [CONTRATO]="CONTRATO"
+        [tipoContratoSeleccionado]="tipoContratoSeleccionado" 
+        [evaluar]="evaluar"
+        [esSubsanacion]="esSubsanacion"
+        [editable]="editable"
+        [view]="view"
+        *ngIf="seccionMontoDiferencial() && tipoContratoSeleccionado"
+    ></vex-monto-diferencial>
+</mat-expansion-panel>

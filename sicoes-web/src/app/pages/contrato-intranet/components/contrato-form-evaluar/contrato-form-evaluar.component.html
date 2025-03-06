@@ -1,0 +1,50 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <form action="">
+            <div class="card px-8 py-6">
+                <div class="flex flex-col sm:flex-row gap-x-8">
+                    <div class="flex-auto">
+                        <!-- Title -->
+                        <h2 class="text-lg font-bold">Requisitos de Contrato - Evaluación</h2>
+                        <mat-divider></mat-divider>
+                    </div>
+                </div>
+    
+                <div class="flex border rounded-lg py-2 px-4 mt-4 mb-8">
+                   <label for="tipoContrato" class="mr-8">Seleccione su tipo de contratación:</label>
+                    <mat-radio-group class="flex gap-x-4" (change)="obtenerTipoContrato($event)" [value]="tipoContratoSeleccionado" [disabled]="true">
+                        <mat-radio-button *ngFor="let tipoContrato of listTipoContrato; let i = index" [value]="tipoContrato.idListadoDetalle" class="mr-5">
+                            {{ tipoContrato.nombre }}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <mat-accordion multi="true" *ngIf="contrato !== undefined && contrato !== null">
+                    <vex-contrato-seccion *ngFor="let seccion of secciones; let i = index" 
+                        [SECCION]="seccion" [ORDEN]="i + 1" 
+                        [CONTRATO]="contrato"
+                        (documentoContratoInitialized)="onDocumentoContratoInitialized($event)" 
+                        (personalPropuestoInitialized)="onPersonalPropuestoInitialized($event)"
+                        (fielCumplimientoInitialized)="onFielCumplimientoInitialized($event)"
+                        (montoDiferencialInitialized)="onMontoDiferencialInitialized($event)"
+                        [tipoContratoSeleccionado]="tipoContratoSeleccionado"
+                        [evaluar]="evaluar"
+                        [editable]="editable"
+                        [listTipoContrato]="listTipoContrato"
+                        [view]="view"
+                    ></vex-contrato-seccion>
+                </mat-accordion>
+                
+                <div class="py-4 border-t flex flex-row justify-end gap-x-4">
+                    <button color="primary" mat-raised-button type="button" (click)="toGoBandejaContratos()">
+                        Cancelar
+                    </button>
+                    <button color="primary" mat-raised-button type="button" (click)="registrarRevision()" *ngIf="evaluar && !view">
+                        Finalizar Revisión
+                    </button>
+                </div>
+            </div>
+        </form>
+    </vex-page-layout-content>
+</vex-page-layout>

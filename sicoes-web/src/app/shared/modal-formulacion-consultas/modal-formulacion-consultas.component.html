@@ -1,0 +1,43 @@
+<form>
+    <div class="flex items-center" mat-dialog-title>
+        <p class="font-bold flex-auto text-center">{{ title }} DE FORMULACIÓN DE CONSULTAS REFERIDO A LAS BASES</p>
+    </div>
+    <mat-dialog-content class="flex flex-col">
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Sección</mat-label>
+            <mat-select [formControl]="formGroup.controls.seccion"
+            [compareWith]="compareSelecIdListadoDetalle">
+            <mat-option *ngFor="let seccion of listTipoSeccion" [value]="seccion">
+                {{ seccion.nombre }}
+            </mat-option>
+        </mat-select>
+        </mat-form-field>
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Numeral</mat-label>
+            <input matInput [formControl]="formGroup.controls.deNumeral" maxlength="50">
+        </mat-form-field>
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Literal</mat-label>
+            <input matInput [formControl]="formGroup.controls.deLiteral" maxlength="50">
+        </mat-form-field>
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Página</mat-label>
+            <input matInput [formControl]="formGroup.controls.dePagina" maxlength="50">
+        </mat-form-field>
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Consulta</mat-label>
+            <textarea matInput [formControl]="formGroup.controls.deConsulta" maxlength="5000"></textarea>
+            <mat-hint align="end">{{formGroup.controls.deConsulta.value.length}} / 5000</mat-hint>
+        </mat-form-field>
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Artículo o norma que se vulnera al caso de consulta</mat-label>
+            <textarea matInput [formControl]="formGroup.controls.deArticuloNorma" maxlength="5000"></textarea>
+            <mat-hint align="end">{{formGroup.controls.deArticuloNorma.value.length}} / 5000</mat-hint>
+        </mat-form-field>
+    </mat-dialog-content>
+    <p class="italic text-red-600">(*) Campos obligatorios</p>
+    <mat-dialog-actions align="center">
+        <button mat-raised-button color="primary" (click)="accion('GUARDAR')">{{ btnValue }}</button>
+        <button mat-raised-button color="primary" (click)="accion('CANCELAR')" >Cancelar</button>
+    </mat-dialog-actions>
+</form>

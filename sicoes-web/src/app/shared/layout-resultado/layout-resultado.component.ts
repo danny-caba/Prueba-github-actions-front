@@ -234,7 +234,7 @@ export class LayoutResultadoComponent
   }
 
   registrarMontoItem(event,perf,button) {
-    if (['GSM_ACTIVIDAD_1','DSR-E_ACTIVIDAD_1','DSE_ACTIVIDAD_1','DSR-HC_ACTIVIDAD_1','DSGN_ACTIVIDAD_1','DSR-HC_ACTIVIDAD_1','DSHL_ACTIVIDAD_1'].includes(perf?.actividadArea?.codigo)) {
+    if ( (perf?.actividadArea && this.isDateAfterEval('16/10/2024')) || !(perf?.perfil) ) {
       const dialogRef = this.dialog.open(
         ModalResultMontoEvaTecComponent,
         {
@@ -301,14 +301,16 @@ export class LayoutResultadoComponent
 
     if (result.isConfirmed) {
       await this.listarAsignados(event, this.SOLICITUD.solicitudUuid);
-
       if (this.asignado) {
         this.registrarEvaluacion(event, perf, idOpcion);
         this.otroRequisitoService
           .finalizarOtroRequisito(perf)
           .subscribe((res) => {
-            functionsAlert.success("Requisito Actualizado").then(() => {});
+            functionsAlert.success("Requisito Actualizado").then(() => {
+            // Recargar la lista de perfiles después de finalizar
+            this.listarPerfiles();
           });
+        });
       }
     } else {
       perf.listaEvaluacion.forEach((opcion) => {
@@ -344,6 +346,9 @@ export class LayoutResultadoComponent
     }
 
     this.perfilService.evaluarPerfil(perf).subscribe((res) => {
+      // Volver a listar los perfiles para actualizar la vista
+      this.listarPerfiles();
+      
       if (this.isCalifica) {
         perf.observacion = "Cumple con los requisitos solicitados";
         this.perfilService.evaluarPerfil(perf).subscribe((res) => {
@@ -351,9 +356,10 @@ export class LayoutResultadoComponent
           functionsAlert
             .success("Resultado Técnico Actualizado")
             .then((result) => {
-              this.listarPerfilesGuardado();
-              this.validarFinalizarRevTecni();
-            });
+            this.listarPerfilesGuardado();
+            this.listarPerfiles();
+            this.validarFinalizarRevTecni();
+          });
         });
       } else {
         if (this.respuesta) {
@@ -484,7 +490,42 @@ export class LayoutResultadoComponent
     }
   }
   
-  
+  isDateAfter(targetDate: string): boolean {
+    // Parse SOLICITUD.fechaRegistro using the correct format
+    const [day, month, year] = this.SOLICITUD.fechaRegistro.split('/');
+    const fechaRegistro = new Date(+year, +month - 1, +day);  // month is 0-indexed in JS
+
+    const [targetDay, targetMonth, targetYear] = targetDate.split('/');
+    const target = new Date(+targetYear, +targetMonth - 1, +targetDay);
+
+    return fechaRegistro > target;
+  }
+
+  isDateAfterEval(targetDate: string): boolean {
+    // Parse SOLICITUD.fechaRegistro using the correct format
+    const [day, month, year] = this.SOLICITUD.fechaRegistro.split('/');
+    const fechaRegistro = new Date(+year, +month - 1, +day);  // month is 0-indexed in JS
+
+    const [targetDay, targetMonth, targetYear] = targetDate.split('/');
+    const target = new Date(+targetYear, +targetMonth - 1, +targetDay);
+
+    return fechaRegistro > target;
+  }
+
+  shouldValidateBoth(perf: any, usuario: any): boolean {
+    const fechaValid = this.isDateAfterEval('16/10/2024'); //Nuevo flujo, para solicitudes entrantes a partir del 16/10/2024
+    if (fechaValid) {
+      return perf?.finalizado?.codigo != 'SI' && usuario.idUsuario == perf?.usuario?.idUsuario;
+    }
+    return perf?.finalizado?.codigo != 'SI';
+  }
+  shouldValidateBothc(perf: any, usuario: any): boolean {
+    const fechaValid = this.isDateAfterEval('16/10/2024'); //Nuevo flujo, para solicitudes entrantes a partir del 16/10/2024
+    if (fechaValid) {
+      return perf?.finalizado?.codigo == 'SI' || usuario.idUsuario != perf?.usuario?.idUsuario;
+    }
+    return perf?.finalizado?.codigo == 'SI';
+  }
 
   registrarObsAccAdm(otro, accion) {
     this.dialog.open(ModalObservacionAdministrativaComponent, {

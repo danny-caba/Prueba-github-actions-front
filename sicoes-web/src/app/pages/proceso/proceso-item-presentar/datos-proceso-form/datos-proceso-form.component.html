@@ -98,21 +98,37 @@
             <p class="title text-primary font-bold text-sm">Fechas por etapas:</p>
         </div>
         <div class="my-4">
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" class="w-full text-center">
+            <table mat-table [dataSource]="dataSource3" class="mat-elevation-z8" class="w-full text-center">
                 <ng-container matColumnDef="nombre">
                   <th class="text-center" mat-header-cell *matHeaderCellDef>Etapa</th>
-                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.etapa.nombre}} </td>
                 </ng-container>
                 <ng-container matColumnDef="fechaInicio">
                   <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha de inicio</th>
-                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.fechaInicio}} </td>
+                  <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.fechaInicio}}</td>
                 </ng-container>
                 <ng-container matColumnDef="fechaFin">
                   <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha de fin</th>
                   <td class="text-primary font-bold" mat-cell *matCellDef="let element"> {{element.fechaFin}} </td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <ng-container matColumnDef="estadoEtapa">
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef>Estado</th>
+                    <td mat-cell class="font-medium text-primary" *matCellDef="let element">{{ evaluarFechaPorEtapa(element?.fechaInicio, element?.fechaFin) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="actionsEtapa">
+                    <th *matHeaderCellDef mat-sort-header mat-header-cell >Acciones</th>
+                    <td *matCellDef="let element" class="w-10 text-primary text-center" mat-cell>
+                        <ng-container *ngIf="mostrarBotonAccion(element)">
+                            <div class="flex gap-x-3">
+                                <button class="button-osi" matTooltip="Presentar Consulta" (click)="formularConsultas()">
+                                    <mat-icon class="icon-color" svgIcon="mat:assignment"></mat-icon>
+                                </button>
+                            </div>
+                        </ng-container>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
               </table>              
         </div>
     </div>

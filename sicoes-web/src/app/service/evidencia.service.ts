@@ -42,8 +42,13 @@ export class EvidenciaService {
     return this.http.put<Evidencia>(urlEndpoint, request);
   }
 
-  eliminar(id: any) {
+  eliminar(id: any):Observable<any> {
     let urlEndpoint = `${this._path_serve}/api/archivos/${id}`
+    return this.http.delete<Evidencia>(urlEndpoint);
+  }
+
+  eliminarPorCodigo(codigo: string):Observable<any> {
+    let urlEndpoint = `${this._path_serve}/api/archivos/codigo/${codigo}`
     return this.http.delete<Evidencia>(urlEndpoint);
   }
 }

@@ -184,10 +184,14 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
         this.flag = false;
         this.ngOnInit();
         this.router.navigate([Link.INTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_LIST_APROBACION]);
+        this.listaNroExpedienteSeleccionado = [];
+        this.listaSolicitudUuidSeleccionado = [];
       }else{
         this.flag = true;
         this.tabAprobacionHistorial?.cargarTabla();
       }
+      
+      // this.listaNroExpedienteSeleccionado = [];
     });
   }
 
@@ -203,5 +207,9 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       this.listaNroExpedienteSeleccionado.splice(this.listaNroExpedienteSeleccionado.indexOf(nroExpediente), 1);
       this.listaSolicitudUuidSeleccionado.splice(this.listaSolicitudUuidSeleccionado.indexOf(solicitudUuid), 1);
     }
+  }
+
+  redireccionAProbarPaces() { 
+    this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.SOLICITUDES_LIST_APROBACION_PACES]);
   }
 }

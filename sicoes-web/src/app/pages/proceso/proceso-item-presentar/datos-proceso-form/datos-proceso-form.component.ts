@@ -12,6 +12,9 @@ import { Subscription } from 'rxjs';
 import { LayoutService } from 'src/@vex/services/layout.service';
 import { ProcesoItemAddService } from '../../proceso-item-add.service';
 import { PropuestaService } from 'src/app/service/propuesta.service';
+import { PidoService } from 'src/app/service/pido.service';
+import { EvaluatorService } from 'src/app/shared/service/evaluator.service';
+import { etapasProcesoEnum } from 'src/helpers/constantes.components';
 
 
 
@@ -35,6 +38,8 @@ export class DatosProcesoFormComponent extends BaseComponent implements OnInit, 
   user$ = this.authFacade.user$; 
   @Input() PROCESO_ITEM: any;
   PROPUESTA
+
+  procesoUuid: string;
 
   formGroup = this.fb.group({
     numeroProceso: ['', Validators.required],
@@ -72,14 +77,31 @@ export class DatosProcesoFormComponent extends BaseComponent implements OnInit, 
     private layoutService: LayoutService,
     private cd: ChangeDetectorRef,
     private procesoItemAddService: ProcesoItemAddService,
-    private propuestaService: PropuestaService
+    private propuestaService: PropuestaService,
+    private evaluatorService: EvaluatorService,
+    private activeRoute: ActivatedRoute,
+    private pidoService: PidoService
   ) {
     super();
     this.formGroup.disable();
   }
-
+  procesoItemUid: string = "";
+  form_cronograma: any[] = [];
   ngOnInit(): void {
     this.suscribirProcesoItemService();
+
+    this.dataSource3 = this.PROCESO_ITEM?.proceso.etapas || [];
+    
+    // Acceder a los parámetros de la ruta padre
+    this.activeRoute.parent?.paramMap.subscribe(params => {
+      this.procesoItemUid = params.get('procesoItemUuid') || '';
+      if (this.procesoItemUid) {
+        this.pidoService.listarEtapasPublic(this.procesoItemUid).subscribe(resp => {
+          this.form_cronograma = resp.content;
+          console.error(resp.content);
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -98,6 +120,7 @@ export class DatosProcesoFormComponent extends BaseComponent implements OnInit, 
       if(pro?.procesoItem){
         this.PROPUESTA = pro;
         this.PROCESO_ITEM = pro.procesoItem;
+        this.procesoUuid = this.PROCESO_ITEM?.proceso?.procesoUuid;
         this.setValues();
       }
       
@@ -111,8 +134,11 @@ export class DatosProcesoFormComponent extends BaseComponent implements OnInit, 
   }
 
   displayedColumns: string[] = ['nombre', 'fechaInicio', 'fechaFin'];
+  displayedColumns3: string[] = ['nombre', 'fechaInicio', 'fechaFin', 'estadoEtapa', 'actionsEtapa'];
+  dataSource3: any[];
   displayedColumns2: string[] = ['perfil', 'cantidad'];
   dataSource:any;
+
   datosPerfiles:any;
 
   setValues(){
@@ -140,6 +166,10 @@ export class DatosProcesoFormComponent extends BaseComponent implements OnInit, 
     ];
     this.dataSource = valores;
     this.datosPerfiles = this.PROCESO_ITEM?.listProcesoItemPerfil;
+    const valoreses = [
+      {'nombre':this.PROCESO_ITEM?.proceso.etapas.etapa?.nombre, 'fechaInicio':this.PROCESO_ITEM?.proceso.etapas.fechaInicio, 'fechaFin':this.PROCESO_ITEM?.proceso.etapas.fechaFin}
+    ];
+    this.dataSource3 = this.PROCESO_ITEM?.proceso.etapas || [];
   }
 
   openDrawer() {
@@ -177,8 +207,25 @@ export class DatosProcesoFormComponent extends BaseComponent implements OnInit, 
     }
   }
 
+  evaluarFechaPorEtapa(fechaInicio: string, fechaFin: string): string {
+    return this.evaluatorService.evaluarFechaPorEtapa(fechaInicio, fechaFin);
+  }
+
   siguiente(){
     this.router.navigate([Link.EXTRANET, Link.PROCESOS_LIST, Link.PROCESOS_PROPUESTA, this.PROPUESTA.propuestaUuid, 'propuesta-tecnica']);
+  }
+
+  formularConsultas() {
+    this.router.navigate([Link.EXTRANET, Link.PROCESOS_LIST, Link.FORMULACION_CONSULTAS, this.procesoUuid]);
+  }
+
+  mostrarOpcion(opcion: string): boolean {
+    return etapasProcesoEnum.FORMULACION_CONSULTAS === opcion.toUpperCase();
+  }
+
+  mostrarBotonAccion(element: any): boolean {
+    const etapaEnCurso = this.evaluarFechaPorEtapa(element?.fechaInicio, element?.fechaFin) === 'En curso';
+    return this.mostrarOpcion(element.etapa.nombre) && etapaEnCurso;
   }
 
 }

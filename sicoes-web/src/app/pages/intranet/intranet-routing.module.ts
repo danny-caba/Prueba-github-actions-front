@@ -5,6 +5,7 @@ import { CustomLayoutComponent } from 'src/app/custom-layout/custom-layout.compo
 import { Link } from 'src/helpers/internal-urls.components';
 import { LoginIntranetComponent } from './login-intranet/login-intranet.component';
 import { IntranetComponent } from './intranet.component';
+import { BandejaContratosIntranetModule } from '../bandeja-contratos/bandeja-contratos-intranet.module';
 
 const routes: VexRoutes = [{
   path: '',
@@ -28,6 +29,18 @@ const routes: VexRoutes = [{
   path: Link.LIBERAR_PERSONAL_LIST,
   component: CustomLayoutComponent,
   loadChildren: () => import('../../pages/liberar-personal/liberar-personal.module').then(m => m.LiberarPersonalModule),
+}, {
+  path: Link.GESTION_CONFIGURACION,
+  component: CustomLayoutComponent,
+  loadChildren: () => import('../../pages/gestion-configuraciones/gestion-configuraciones.module').then(m => m.GestionConfiguracionesModule),
+}, {
+  path: Link.CONTRATOS_LIST,
+  component: CustomLayoutComponent,
+  loadChildren: () => import('../../pages/contrato-intranet/contrato-intranet.module').then(m => m.ContratoIntranetModule),
+}, {
+  path: Link.BANDEJA_CONTRATOS_LIST,
+  component: CustomLayoutComponent,
+  loadChildren: () => import('../../pages/bandeja-contratos/bandeja-contratos-intranet.module').then(m => m.BandejaContratosIntranetModule),
 }];
 
 @NgModule({

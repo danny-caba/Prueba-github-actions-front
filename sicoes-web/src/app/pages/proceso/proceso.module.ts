@@ -40,6 +40,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ScrollbarModule } from 'src/@vex/components/scrollbar/scrollbar.module';
 import { ResumenPropuestaComponent } from './proceso-item-presentar/resumen-proceso/resumen-proceso.component';
 import { PropuestaResumenComponent } from './propuesta-resumen/propuesta-resumen.component';
+import { FormulacionConsultasComponent } from './formulacion-consultas/formulacion-consultas.component';
+import { TruncateWordPipe } from 'src/app/shared/pipes/truncate-word.pipe';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import { PropuestaResumenComponent } from './propuesta-resumen/propuesta-resumen
     PropuestaResumenComponent,
 
     ProcesoListComponent,
-    ProcesoItemPresentarComponent
+    ProcesoItemPresentarComponent,
+    FormulacionConsultasComponent,
+    TruncateWordPipe
 
   ],
   imports: [

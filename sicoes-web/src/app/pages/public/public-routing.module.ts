@@ -8,6 +8,8 @@ import { RecuperarContraneniaComponent } from './recuperar-contrasenia/recuperar
 import { RegistroEmpExtranjeraComponent } from './registro-emp-extranjera/registro-emp-extranjera.component';
 import { RegistroEmpSuspCancComponent } from './registro-emp-susp-canc/registro-emp-susp-canc.component';
 import { RegistroEmpComponent } from './registro-emp/registro-emp.component';
+import { RegistroProcesoSeleccionComponent } from './registro-proceso-seleccion/registro-proceso-seleccion.component';
+import { RegistroProcesoDetalleComponent } from './registro-proceso-seleccion/components/registro-proceso-detalle/registro-proceso-detalle.component';
 
 const routes: VexRoutes = [{
   path: '',
@@ -18,6 +20,13 @@ const routes: VexRoutes = [{
     }, {
       path: Link.REGISTRO_EMP_SUSP_CANC,
       component: RegistroEmpSuspCancComponent
+    }, {
+      path: Link.REGISTRO_PROCESO_SELECCION,
+      component: RegistroProcesoSeleccionComponent,
+    },{
+      path:Link.REGISTRO_PROCESO_SELECCION +'/'+':procesoUuid'+'/'+ Link.REGISTRO_PROCESO_SELECCION_DETALLE,
+      // +'/:idDetalle'
+      component:RegistroProcesoDetalleComponent
     }, {
       path: Link.LOGIN_EXTRANJERO,
       component: LoginExtranjeroComponent

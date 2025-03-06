@@ -15,6 +15,31 @@ export class functionsAlert{
             confirmButtonColor: '#C00F1C',
         })
     }
+
+    static addQuestion(title:string): any{
+        return Swal.fire({
+            //title: title,
+            text:title,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, agregar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#C00F1C',
+        })
+    }
+
+    static deleteQuestion(title:string): any{
+        return Swal.fire({
+            //title: title,
+            text:title,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#C00F1C',
+        })
+    }
+
     static successDescargar(title:string): any{
         return Swal.fire({
             //title: title,
@@ -59,6 +84,17 @@ export class functionsAlert{
             //text:title,
             html:title,
             icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí',
+            cancelButtonText: 'No',
+            confirmButtonColor: '#C00F1C',
+        })
+    }
+
+    static questionSiNoEval(html: string): any{
+        return Swal.fire({
+            title: 'Finalizar Evaluación',
+            html:html,
             showCancelButton: true,
             confirmButtonText: 'Sí',
             cancelButtonText: 'No',

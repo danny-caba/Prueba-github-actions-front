@@ -17,25 +17,31 @@
             <vex-cmp-fecha-etapa #cmpFechaEtapa (actualizarTabla)="actualizarProceso()" [PROCESO]="PROCESO"></vex-cmp-fecha-etapa>
         </div>   
         <div class="mx-0 border-b overflow-auto">
-            <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
+            <table @stagger mat-table [dataSource]="dataSource" class="w-full">
                 <ng-container matColumnDef="grupo">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Inicio</th>
+                    <th mat-header-cell *matHeaderCellDef>Fecha de Inicio</th>
                     <td mat-cell *matCellDef="let element" class="text-primary font-medium"> {{element?.fechaInicio}} </td>
                 </ng-container>
                 <ng-container matColumnDef="fecha">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Fin</th>
+                    <th mat-header-cell *matHeaderCellDef>Fecha de Fin</th>
                     <td mat-cell *matCellDef="let element" class="text-primary font-medium"> {{element?.fechaFin}} </td>
                 </ng-container>
                 <ng-container matColumnDef="usuario">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Etapa</th>
-                    <td mat-cell *matCellDef="let element" class="text-primary font-medium"> {{element?.etapa?.nombre}} </td>
-                </ng-container>
+                    <th mat-header-cell *matHeaderCellDef>Etapa</th>
+                    <td mat-cell *matCellDef="let element" class="text-primary font-medium">
+                        {{ element.etapa?.nombre }}
+                      </td>
+                  </ng-container>
                 <ng-container matColumnDef="estado">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Acciones</th>
+                    <th mat-header-cell *matHeaderCellDef>Acciones</th>
                     <td *matCellDef="let row" class="w-10 text-primary" mat-cell>
                         <button (click)="actualizarEtapa(row)" matTooltip="Editar" *ngIf="bEdit == true">
                             <mat-icon svgIcon="mat:edit"></mat-icon>
-                          </button>
+                        </button>
+
+                        <button (click)="descargarXlsConsultas()" matTooltip="Descargar consultas" *ngIf="bView == true && row.etapa?.nombre == FORMULACION_CONSULTAS && evaluarFechaPorEtapa(row.fechaInicio, row.fechaFin) == 'Concluído'">
+                            <img class="w-6" src="assets/img/icons/logos/excel-icon.png" alt="Logo Excel">
+                        </button>
                     </td>
                 </ng-container>
         

@@ -51,4 +51,11 @@ export class ProcesoMiembtoService {
     let urlEndpoint = `${this._path_serve}/api/miembros/${idProcesoMiembro}/inactivar?procesoUuid=${procesoUuid}`
     return this.http.put<Proceso>(urlEndpoint, { proceso: {procesoUuid:procesoUuid}});
   }
+
+  buscarArchivosProcesoMiembro(filtro) {
+    let urlEndpoint = `${this._path_serve}/api/archivos/proceso`
+    let params = functions.obtenerParams(filtro);
+    return this.http.get<Pageable<SolicitudListado>>(urlEndpoint, { params: params });
+  }
+
 }

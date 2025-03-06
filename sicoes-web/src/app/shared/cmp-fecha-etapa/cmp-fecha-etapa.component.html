@@ -19,7 +19,7 @@
         <div class="flex flex-col">
             <mat-label class="text-primary text-sm font-medium">Etapa</mat-label>
             <mat-form-field  class="flex-auto">
-                <mat-select [formControl]="formGroup.controls.etapa" [compareWith]="compareSelecIdListadoDetalle" [disabled]="isDisabled" placeholder="Selecionar etapa">
+                <mat-select [formControl]="formGroup.controls.etapa" [compareWith]="compareSelecIdListadoDetalle" placeholder="Selecionar etapa">
                     <mat-option *ngFor="let obj of listGrupos" [value]="obj">
                         {{ obj.nombre }}
                     </mat-option>

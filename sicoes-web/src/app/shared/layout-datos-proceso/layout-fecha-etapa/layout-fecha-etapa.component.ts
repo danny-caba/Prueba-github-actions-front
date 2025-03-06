@@ -13,6 +13,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Link } from 'src/helpers/internal-urls.components';
 import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
 import { CmpFechaEtapaComponent } from '../../cmp-fecha-etapa/cmp-fecha-etapa.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { AdjuntosService } from 'src/app/service/adjuntos.service';
+import { ArchivoService } from '../../../service/archivo.service';
+import { EvaluatorService } from '../../service/evaluator.service';
 
 @Component({
   selector: 'vex-layout-fecha-etapa',
@@ -29,10 +33,13 @@ export class LayoutFechaEtapaComponent extends BasePageComponent<any> implements
   suscriptionProceso: Subscription;
   PROCESO: Partial<Proceso>
   @Input() editable: boolean = false;
+  archivoConsulta: any;
   
   bAdd = false;
   bEdit = false;
   bView = false;
+
+  FORMULACION_CONSULTAS = 'Formulación de Consultas';
 
   displayedColumns: string[] = [
     'grupo',
@@ -56,8 +63,11 @@ export class LayoutFechaEtapaComponent extends BasePageComponent<any> implements
     private activeRoute: ActivatedRoute,
     private procesoEtapaService: ProcesoEtapaService,
     private procesoAddService: ProcesoAddService,
+    private adjuntoService: AdjuntosService,
+    private archivoService: ArchivoService,
     private cd: ChangeDetectorRef,
     private layoutService: LayoutService,
+    private evaluatorService: EvaluatorService,
     private router: Router,
     private dialog: MatDialog,
   ) {
@@ -77,11 +87,35 @@ export class LayoutFechaEtapaComponent extends BasePageComponent<any> implements
     this.suscriptionProceso.unsubscribe();
   }
 
+  cargarTabla() {
+    const filtro = this.obtenerFiltro();
+    
+    // Obtenemos los datos del servicio
+    this.serviceTable(filtro).subscribe(data => {
+      const items = data.content; // Extraemos el array de datos (content)
+  
+      // Ordenamos los elementos por 'idListadoDetalle' de la propiedad 'etapa'
+      items.sort((a, b) => {
+        const idA = Number(a.etapa?.idListadoDetalle) || 0;
+        const idB = Number(b.etapa?.idListadoDetalle) || 0;
+        return idA - idB;
+      });
+  
+      // Asignamos los elementos ordenados a 'MatTableDataSource'
+      this.dataSource = new MatTableDataSource(items);
+  
+      // Si usas paginación, asegúrate de asignarla
+      this.dataSource.paginator = this.paginator;
+      this.paginator.length = data.totalElements; // Total de elementos para la paginación
+    });
+  }
+
   private suscribirSolicitud(){
     this.suscriptionProceso = this.procesoService.suscribeSolicitud().subscribe(sol => {
       this.PROCESO = sol;
       if(this.PROCESO?.procesoUuid){
         this.cargarTabla();
+        this.obtenerXlsArhivoConsultas();
       }
     });
   }
@@ -135,4 +169,19 @@ export class LayoutFechaEtapaComponent extends BasePageComponent<any> implements
       this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_EDIT, this.PROCESO.procesoUuid, 'miembros']);
     }
   }
+
+  descargarXlsConsultas() {
+    this.adjuntoService.descargarWindowsJWT(this.archivoConsulta.codigo, this.archivoConsulta.nombreReal);
+  }
+
+  evaluarFechaPorEtapa(fechaInicio: string, fechaFin: string): string {
+    return this.evaluatorService.evaluarFechaPorEtapa(fechaInicio, fechaFin);
+  }
+
+  obtenerXlsArhivoConsultas() {
+    this.archivoService.obtenerArchivoPorProceso(this.PROCESO?.idProceso).subscribe((resp) => {
+      this.archivoConsulta = resp;
+    });
+  }
+
 }

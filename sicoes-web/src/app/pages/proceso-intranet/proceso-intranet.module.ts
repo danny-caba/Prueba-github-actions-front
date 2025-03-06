@@ -35,6 +35,9 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ScrollbarModule } from 'src/@vex/components/scrollbar/scrollbar.module';
 import { ProcesoVerPostulanteComponent } from './proceso-ver-postulante/proceso-ver-postulante.component';
 import { ProcesoBitacoraComponent } from './proceso-bitacora/proceso-bitacora.component';
+import { ProcesoIntranetGestionPacesComponent } from './proceso-list-gestionPaces/proceso-list-gestionPaces.component';
+import { ProcesoIntranetAprobacionPacesComponent } from './proceso-list-aprobacionPaces/proceso-list-aprobacionPaces.component';
+import { ProcesoIntranetAprobacionPacesGerenciaComponent } from './proceso-list-aprobacionPacesGerencia/proceso-list-aprobacionPacesGerencia.component';
 
 
 @NgModule({
@@ -45,7 +48,10 @@ import { ProcesoBitacoraComponent } from './proceso-bitacora/proceso-bitacora.co
     ProcesoSidenavComponent,
     ProcesoSidenavLinkComponent,
     ProcesoVerPostulanteComponent,
-    ProcesoBitacoraComponent
+    ProcesoBitacoraComponent,
+    ProcesoIntranetGestionPacesComponent,
+    ProcesoIntranetAprobacionPacesComponent,
+    ProcesoIntranetAprobacionPacesGerenciaComponent
   ],
   imports: [
     CommonModule,

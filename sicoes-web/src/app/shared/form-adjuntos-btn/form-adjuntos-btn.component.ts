@@ -10,6 +10,8 @@ import { functionsAlert } from "src/helpers/functionsAlert";
 import { OtroRequisito } from "src/app/interface/otro-requisito.model";
 import * as uuid from 'uuid';
 import { Solicitud } from "src/app/interface/solicitud.model";
+import { EvidenciaService } from "src/app/service/evidencia.service";
+import { LayoutMiemboComponent } from "../layout-datos-proceso/layout-miembro/layout-miembro.component";
 
 
 @Component({
@@ -30,15 +32,18 @@ export class FormAdjuntosBtnComponent implements OnInit {
   @Input() otroRequisito: OtroRequisito;
   @Input() archivos: any;
   @Input() archivo: any;
+  @Input() proceso: any;
+  @Input() contrato: any;
 
   validarRequerido: boolean = false;
   modoBorrador = true;
   booleanView: boolean = false;
   nuevo: boolean = true;
 
-  constructor(private adjuntoService: AdjuntosService) { }
+  constructor(private adjuntoService: AdjuntosService,private _evidenciaServices:EvidenciaService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   clickFile(adj) {
     this.adjuntoInput = adj;
@@ -82,6 +87,14 @@ export class FormAdjuntosBtnComponent implements OnInit {
       formData.append("solicitudUuid", this.solicitud?.solicitudUuid + '');
     }
 
+    if(this.proceso){
+      formData.append("idProceso", this.proceso + '');
+    }
+
+    if(this.contrato){
+      formData.append("idSolicitudSeccion", this.contrato?.idSolicitudSeccion + '');
+    }
+    
 
     if (this.nuevo) {
       itemAdjunto.inProgress = true;
@@ -119,6 +132,9 @@ export class FormAdjuntosBtnComponent implements OnInit {
           itemAdjunto.esRequerido = false;
           if (this.otroRequisito) {
             this.otroRequisito.archivo = event.body;
+          }
+          if (this.contrato) {
+            this.contrato.archivo = event.body;
           }
         }
       });
@@ -169,12 +185,19 @@ export class FormAdjuntosBtnComponent implements OnInit {
     });
   }
 
+  @ViewChild('archivo') contentArchivo:LayoutMiemboComponent
   eliminar(adjunto) {
     functionsAlert.questionSiNo('¿Seguro que desea eliminar adjunto?').then((result) => {
       if (result.isConfirmed) {
         this.adjuntoInput = {};
+        this._evidenciaServices.eliminarPorCodigo(adjunto?.adjunto?.codigo).subscribe(res=>{
+          this.contentArchivo.contentArchivo = null
+        });
         if (this.otroRequisito) {
           this.otroRequisito.archivo = null;
+        }
+        if (this.contrato) {
+          this.contrato.archivo = null;
         }
       }
     });
@@ -184,6 +207,9 @@ export class FormAdjuntosBtnComponent implements OnInit {
     this.adjuntoInput = {};
     if (this.otroRequisito) {
       this.otroRequisito.archivo = null;
+    }
+    if (this.contrato) {
+      this.contrato.archivo = null;
     }
   }
 

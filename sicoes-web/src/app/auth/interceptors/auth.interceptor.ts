@@ -7,13 +7,14 @@ import {
 } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { EMPTY, Observable, throwError, delay } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { EMPTY, Observable, throwError, delay, from } from 'rxjs';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { LoadingDialogService } from 'src/helpers/loading';
 import Swal from 'sweetalert2';
 
 import { TokenStorageService } from '../../core/services';
 import { AuthFacade } from '../store/auth.facade';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -21,6 +22,7 @@ export class AuthInterceptor implements HttpInterceptor {
     private authFacade: AuthFacade,
     private tokenStorageService: TokenStorageService,
     private loadingDialogService: LoadingDialogService,
+    private reCaptchaV3Service: ReCaptchaV3Service, 
     private router: Router
   ) {}
 
@@ -33,20 +35,48 @@ export class AuthInterceptor implements HttpInterceptor {
     this.loadingDialogService.setLoading(true, req.url);
     this.listenToLoading();
 
-    if (accessToken && (!req.url.includes("oauth/token") && !req.url.includes("oauth/check_token"))
-          && !req.url.includes("listado-publico")
-          && !req.url.includes("usuarios/publico")
-        ) {
-      req = req.clone({
-        setHeaders: { Authorization: `Bearer ${accessToken}` },
-        // !Attention: it used only at Fake API, remove it in real app
-        // params: req.params.set('auth-token', accessToken),
-      });
+    if (this.isValidRequestForInterceptor(req.url)) {
+      return from(this.reCaptchaV3Service.execute("importantAction")).pipe( 
+        switchMap((token) => {
+          if (
+            accessToken && 
+            !req.url.includes("oauth/token") && 
+            !req.url.includes("oauth/check_token") &&
+            !req.url.includes("listado-publico") &&
+            !req.url.includes("usuarios/publico")
+          ) {
+            req = req.clone({
+              setHeaders: { 
+                Authorization: `Bearer ${accessToken}`,
+                Recaptcha: token
+              },
+            });
+          }
+          return next.handle(req).pipe(
+            s => this.handleErrors(s, req.url), 
+            finalize(() => this.loadingDialogService.setLoading(false, req.url))
+          );
+        })
+      )
+    } else {
+      if (
+        accessToken && 
+        !req.url.includes("oauth/token") && 
+        !req.url.includes("oauth/check_token") &&
+        !req.url.includes("listado-publico") &&
+        !req.url.includes("usuarios/publico")
+      ) {
+        req = req.clone({
+          setHeaders: { Authorization: `Bearer ${accessToken}` },
+          // !Attention: it used only at Fake API, remove it in real app
+          // params: req.params.set('auth-token', accessToken),
+        });
+      }
+      return next.handle(req).pipe(
+        s => this.handleErrors(s, req.url), 
+        finalize(() => this.loadingDialogService.setLoading(false, req.url)));
     }
 
-    return next.handle(req).pipe(
-      s => this.handleErrors(s, req.url), 
-      finalize(() => this.loadingDialogService.setLoading(false, req.url)));
   }
 
   private handleErrors(
@@ -132,5 +162,15 @@ export class AuthInterceptor implements HttpInterceptor {
             this.loadingDialogService.hideDialog();
         }
       });
-}
+  }
+
+  private isValidRequestForInterceptor(requestUrl: string): boolean {
+    const positionIndicator: string = "api/";
+    const position = requestUrl.indexOf(positionIndicator);
+    if (position == -1) {
+      return false;
+    }
+    return true;
+  }
+
 }

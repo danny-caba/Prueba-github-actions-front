@@ -5,6 +5,7 @@ import { Profesion } from './profesion.model';
 export class SolicitudListado {
     solicitudUuid: number
     codigo: string
+    etapa: any;
 }
 
 export class Persona {
@@ -44,7 +45,7 @@ export class Solicitud {
 
     resultadoAdministrativo: Partial<ListadoDetalle>
     asignados: any[]
-
+    fechaRegistro
     fechaPlazoResp
     fechaPlazoAsig
     fechaPlazoSub

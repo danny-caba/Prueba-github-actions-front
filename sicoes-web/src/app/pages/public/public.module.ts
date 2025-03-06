@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { PublicRoutingModule } from './public-routing.module';
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
@@ -25,6 +25,9 @@ import { RegistroEmpSuspCancPnComponent } from './registro-emp-susp-canc/registr
 import { RegistroEmpSuspCancPjComponent } from './registro-emp-susp-canc/registro-emp-susp-canc-pj/registro-emp-susp-canc-pj.component';
 import { RegistroEmpExtranjeraComponent } from './registro-emp-extranjera/registro-emp-extranjera.component';
 import { RecuperarContraneniaComponent } from './recuperar-contrasenia/recuperar-contrasenia.component';
+import { RegistroProcesoSeleccionComponent } from './registro-proceso-seleccion/registro-proceso-seleccion.component';
+import { RegistroProcesoDetalleComponent } from './registro-proceso-seleccion/components/registro-proceso-detalle/registro-proceso-detalle.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,8 @@ import { RecuperarContraneniaComponent } from './recuperar-contrasenia/recuperar
 
     RegistroEmpComponent,
     RegistroEmpSuspCancComponent,
+    RegistroProcesoSeleccionComponent,
+    RegistroProcesoDetalleComponent,
     LoginExtranjeroComponent,
     RecuperarContraneniaComponent
   ],
@@ -59,7 +64,8 @@ import { RecuperarContraneniaComponent } from './recuperar-contrasenia/recuperar
     MatTableModule,
     MatPaginatorModule,
     MatDatepickerModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatAutocompleteModule
   ]
 })
 export class PublicModule { }

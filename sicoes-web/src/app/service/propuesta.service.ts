@@ -40,6 +40,11 @@ export class PropuestaService {
     return this.http.get<Proceso>(urlEndpoint);
   }
 
+  obtenerPropuestaFacturacion(propuestaUuid: string): Observable<Propuesta> { // Cambia el tipo de retorno a Propuesta
+    const urlEndpoint = `${this._path_serve}/api/propuestas/${propuestaUuid}`;
+    return this.http.get<Propuesta>(urlEndpoint);
+  }
+
   /* listarPerfiles(filtro) {
     let urlEndpoint = `${this._path_serve}/api/itemPerfiles/listar`
     let params = functions.obtenerParams(filtro);

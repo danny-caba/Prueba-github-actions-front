@@ -24,6 +24,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { GestionUsuarioService } from 'src/app/service/gestion-usuarios.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { throws } from 'assert';
+import { Division } from 'src/app/interface/division.model';
+import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import { MatSort } from '@angular/material/sort';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -57,7 +60,6 @@ export class LayoutConfPerfilComponent extends BaseComponent implements OnInit, 
     'unidad',
     'subcategoria',
     'perfil',
-    'rol',
     'acciones'
   ];
   public role: string = '';
@@ -75,11 +77,16 @@ export class LayoutConfPerfilComponent extends BaseComponent implements OnInit, 
   public dataSourcePerfil = new MatTableDataSource<any>();
   public dataSourceRol = new MatTableDataSource<any>();
   dataSourceRoles = new MatTableDataSource<any>();
+  panelInformationPerfil = true;
+  listDivision: Division[];
+  listDivisionesUsuario: any;
+  listAllPerfilesDetalle: any;
 
   formGroup = this.fb.group({
     usuario: ['', Validators.required],
     roles: ['', Validators.required],
-    selectedPerfil: ['', Validators.required],
+    selectedPerfil: ['' as any],
+    selectedDivision: [''],
   });
   idUsuario:number;
   idRol:number;
@@ -87,6 +94,24 @@ export class LayoutConfPerfilComponent extends BaseComponent implements OnInit, 
   isDesktop$ = this.layoutService.isDesktop$;
 
   @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngAfterViewInit() {
+    this.dataSourceRoles.sort = this.sort;
+
+    this.dataSourceRoles.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'nombreSector': return item.sector?.nombre?.toLowerCase() || '';
+        case 'nombreSubSector': return item.subsector?.nombre?.toLowerCase() || '';
+        case 'actividad': return item.actividad?.nombre?.toLowerCase() || '';
+        case 'unidad': return item.unidad?.nombre?.toLowerCase() || '';
+        case 'subcategoria': return item.subCategoria?.nombre?.toLowerCase() || '';
+        case 'perfil': return item.perfil?.nombre?.toLowerCase() || '';
+        default:
+          return item[property];
+      }
+    }
+  }
 
 opciones: string[] = ["SI", "NO"];
   constructor(
@@ -106,27 +131,56 @@ opciones: string[] = ["SI", "NO"];
     this.listarRoles();
     const userData = JSON.parse(sessionStorage.getItem('userData'));
     this.idUsuario = userData.idUsuario;
-    this.formGroup.get('usuario').setValue(userData.usuario);
+    this.formGroup.get('usuario').setValue(userData.nombreUsuario);
 
     const rolesData = JSON.parse(sessionStorage.getItem('rolesData'));
     this.usuarioRoles = rolesData;
-    console.log("usuarioRoles",this.usuarioRoles);
     const rolesNombres = rolesData.map(role => role.rol?.nombre).join(', ');
     this.formGroup.get('roles').setValue(rolesNombres);
 
-
-
     this.obtenerPerfiles();
-
+    this.obtenerDivisiones();
+    this.obtenerDivisionesPorUsuario();
   }
   public listarPerfiles(): void {
 
-    this.gestioUsuarioService.listarPerfiles()
+    this.gestioUsuarioService.listarPerfilesDetalle()
       .subscribe(respuesta => {
-
         this.dataSourcePerfil.data = respuesta;
+        this.listAllPerfilesDetalle = this.dataSourcePerfil.data;
+        this.setListPerfilesDetalle(this.listAllPerfilesDetalle);
       });
   }
+
+  setListPerfilesDetalle(list: any) {
+    this.filteredStatesTecnico$ = this.formGroup.controls.selectedPerfil.valueChanges.pipe(
+      startWith(''),
+      map((value: any) => typeof value === 'string' ? value : value?.detalle),
+      map(state => state ? this.filterStatesTec(state) : list.slice())
+    );
+  }
+
+  filterStatesTec(nombreUsuario: string) {
+    return this.dataSourcePerfil.data.filter(state =>
+      state.detalle?.toLowerCase().indexOf(nombreUsuario?.toLowerCase()) >=
+      0);
+  }
+
+  private obtenerDivisiones() {
+    this.parametriaService.listarDivisiones().subscribe(
+      (response) => {
+        this.listDivision = response || [];
+      }
+    );
+  }
+
+  private obtenerDivisionesPorUsuario() {
+    this.parametriaService.listarDivisionesPorUsuario(this.idUsuario).subscribe(
+      (response) => {
+        this.listDivisionesUsuario = response || [];
+      }
+    );
+  } 
 
   public listarRoles(): void {
 
@@ -149,8 +203,6 @@ opciones: string[] = ["SI", "NO"];
   }
 
   public obtenerPerfiles() {
-    console.log("obtener todos los perfiles");
-
     this.gestioUsuarioService.obtenerPerfiles(this.currentPage, this.pageSize,this.idUsuario)
       .subscribe(respuesta => {
         this.dataSourceRoles.data = respuesta.lista;
@@ -186,28 +238,32 @@ opciones: string[] = ["SI", "NO"];
 
   agregarPerfilRolUsuario() {
     //if(this.idRol != undefined){
-      const selectedPerfilRoleId = this.formGroup.get('selectedPerfil').value;
-      if(selectedPerfilRoleId != ""){
-        const countPerfil = this.dataSourceRoles.data.filter(element => element.perfil.idListadoDetalle === selectedPerfilRoleId).length;
-        if (countPerfil < 1) {
+      const selectedPerfilRolId = this.formGroup.get('selectedPerfil').value;
+      const idDivision = this.formGroup.get('selectedDivision').value;
+      if(!this.validarSeleccion()){
+        // const countPerfil = this.dataSourceRoles.data.filter(element => element.perfil.idListadoDetalle === selectedPerfilRoleId).length;
+        // if (countPerfil < 1) {
             const request = {
               usuario: {
                 idUsuario: this.idUsuario,
               },
+              division: {
+                idDivision,
+              },
               perfil: {
-                idListadoDetalle: selectedPerfilRoleId,
+                idListadoDetalle: selectedPerfilRolId?.idListadoDetalle,
               },
               idUsuarioRolC: this.idRol,
             };
             this.realizarAsignacion(request);
-        } else {
-          functionsAlertMod2.warningMensage('El perfil ya se encuentra asignado al usuario ' + this.formGroup.get('usuario').value).then((result) => {
-          });
-        }
+        // } else {
+        //   functionsAlertMod2.warningMensage('El perfil ya se encuentra asignado al usuario ' + this.formGroup.get('usuario').value).then((result) => {
+        //   });
+        // }
 
 
       }else{
-        functionsAlertMod2.alertArribaDerrecha('Seleccione un perfil');
+        functionsAlertMod2.alertArribaDerrecha('Seleccione un perfil o una división');
         return;
       }
     //}else{
@@ -218,19 +274,41 @@ opciones: string[] = ["SI", "NO"];
 
   }
   realizarAsignacion(request: any) {
+    // console.log(request);
+    // return
     this.gestioUsuarioService.asignarPerfilRolUsuario(request).subscribe(
       (response) => {
-        functionsAlertMod2.success('Perfil asignado exitosamente').then((result) => {
-          if (response.idUsuarioRolC!=null) {
-            this.obtenerPerfilRolesUsuarioResponse(response.idUsuarioRolC);
-          }else{
-            this.obtenerPerfiles();
-          }
+        const { existentes, nuevas } = response[0];
+        const existentesStr = existentes.map((conf) => conf.perfil.nombre).join(', ');
+        const nuevasStr = nuevas.map((conf) => conf.perfil.nombre).join(', ');
 
-        });
+        if (existentes.length > 0 && nuevas.length < 1) {
+          functionsAlertMod2.warningMensage('No se registró ningún perfil, porque los perfiles <span class="font-normal text-sm">' + existentesStr + '</span> ya se encuentran asignados');
+        } else if (existentes.length > 0 && nuevas.length > 0) {
+          functionsAlertMod2.successButtonDistinto('Perfiles registrados exitosamente, excepto los perfiles <span class="font-normal text-sm">' + existentesStr + '</span> porque ya se encuentran asignados', 'Aceptar').then((result) => {
+            this.obtenerPerfiles();
+            this.obtenerDivisionesPorUsuario();
+          });
+        } else if (existentes.length < 1 && nuevas.length > 0) {
+          functionsAlertMod2.successButtonDistinto('Perfiles asignados exitosamente', 'Aceptar').then((result) => {
+            this.obtenerPerfiles();
+            this.obtenerDivisionesPorUsuario();
+          });
+        } else {
+          functionsAlertMod2.warningMensage('No se asignaron perfiles, comuníquese con el administrador');
+        }
+        
+        // functionsAlertMod2.success('Perfil asignado exitosamente').then((result) => {
+        //   if (response.idUsuarioRolC!=null) {
+        //     this.obtenerPerfilRolesUsuarioResponse(response.idUsuarioRolC);
+        //   }else{
+        //     this.obtenerPerfiles();
+        //   }
+
+        // });
       },
       (error) => {
-        console.error('Error al asignar perfil', error);
+        functionsAlertMod2.alertaConfigurable('Error al asignar el perfil', 'Aceptar', 'error');
       }
     );
   }
@@ -263,6 +341,7 @@ opciones: string[] = ["SI", "NO"];
                 this.obtenerPerfilRolesUsuarioResponse(this.idRol);
               }else{
                 this.obtenerPerfiles();
+                this.obtenerDivisionesPorUsuario();
               }
 
             },
@@ -279,4 +358,36 @@ opciones: string[] = ["SI", "NO"];
   cancelar(){
     this.router.navigate([Link.EXTRANET, Link.GESTION_USUARIO]);
   }
+
+  protected validarSeleccion(): boolean {
+    return (this.formGroup.get('selectedPerfil').value === null || this.formGroup.get('selectedPerfil').value === '') 
+      && (this.formGroup.get('selectedDivision').value === null || this.formGroup.get('selectedDivision').value === '');
+  }
+
+  limpiar() {
+    this.formGroup.get('selectedPerfil').setValue('');
+    this.formGroup.get('selectedDivision').setValue('');
+    this.setListPerfilesDetalle(this.listAllPerfilesDetalle);
+  }
+
+  listarPerfilesPorDivision(event) {
+    this.formGroup.get('selectedPerfil').setValue('');
+    const perfilesPorDivision = this.listAllPerfilesDetalle.filter(perfil => perfil.idDivision === event.value);
+    this.setListPerfilesDetalle(perfilesPorDivision);
+    
+  }
+
+  displayFn(codi: any): string {
+    return codi && codi.detalle ? codi.detalle : '';
+  }
+
+  blurEvaluadorTecnico() {
+    setTimeout(() => {
+      if (!(this.formGroup.controls.selectedPerfil.value instanceof Object)) {
+        this.formGroup.controls.selectedPerfil.setValue("");
+        this.formGroup.controls.selectedPerfil.markAsTouched();
+      }
+    }, 200);
+  }
+
 }

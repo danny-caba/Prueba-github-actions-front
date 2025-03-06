@@ -15,8 +15,12 @@ import { ProcesoVerPostulanteComponent } from './proceso-ver-postulante/proceso-
 import { PropuestaResumenComponent } from '../proceso/propuesta-resumen/propuesta-resumen.component';
 import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
 import { ProcesoBitacoraComponent } from './proceso-bitacora/proceso-bitacora.component';
+import { LayoutInfoProcesoComponent } from 'src/app/shared/layout-datos-proceso/layout-info-proceso/layout-info-proceso.component';
+import { ProcesoIntranetGestionPacesComponent } from './proceso-list-gestionPaces/proceso-list-gestionPaces.component';
+import { ProcesoIntranetAprobacionPacesComponent } from './proceso-list-aprobacionPaces/proceso-list-aprobacionPaces.component';
+import { ProcesoIntranetAprobacionPacesGerenciaComponent } from './proceso-list-aprobacionPacesGerencia/proceso-list-aprobacionPacesGerencia.component';
 
-const routes: VexRoutes = [{ 
+const routes: VexRoutes = [{
   path: '',
   children:[
     {
@@ -82,7 +86,16 @@ const routes: VexRoutes = [{
             bEdit: false,
             bView: true,
           }
-        }
+        },
+        {
+          path: 'informacion',
+          component: LayoutInfoProcesoComponent,
+          data: {
+            bAdd: false,
+            bEdit: false,
+            bView: true,
+          }
+        },
       ]
     },{
       path: Link.PROCESOS_EDIT + '/:procesoUuid',
@@ -130,6 +143,15 @@ const routes: VexRoutes = [{
           }
         },
         {
+          path: 'informacion',
+          component: LayoutInfoProcesoComponent,
+          data: {
+            bAdd: false,
+            bEdit: true,
+            bView: false,
+          }
+        },
+        {
           path: 'publicar',
           component: LayoutPublicarComponent,
           data: {
@@ -154,7 +176,24 @@ const routes: VexRoutes = [{
       path: Link.PROCESO_BITACORA + '/:procesoUuid',
       canActivate: [AuthGuardService, RoleGuardService],
       component: ProcesoBitacoraComponent
-    }]
+    }
+    ,{
+      path: 'gestionPaces',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: ProcesoIntranetGestionPacesComponent
+    }
+    ,{
+      path: 'aprobacionPaces',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: ProcesoIntranetAprobacionPacesComponent
+    }
+    ,{
+      path: 'aprobacionPacesGerencia',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: ProcesoIntranetAprobacionPacesGerenciaComponent
+    }
+    
+  ]
   }];
 
 @NgModule({

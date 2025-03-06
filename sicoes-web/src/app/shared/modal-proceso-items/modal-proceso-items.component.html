@@ -46,7 +46,7 @@
                     <mat-label class="text-primary font-medium">Estado</mat-label>
                     <mat-form-field class="flex-auto">
                         <mat-select [formControl]="formGroup.controls.estado" [compareWith]="compareSelecIdListadoDetalle" placeholder="Seleccion es el estado">
-                            <mat-option *ngFor="let obj of listEstadoItem" [value]="obj" [disabled]="obj.disabled">
+                            <mat-option *ngFor="let obj of listEstadoItem" [value]="obj">
                                 {{ obj.nombre }}
                             </mat-option>
                         </mat-select>

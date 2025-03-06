@@ -13,6 +13,7 @@ import { PropuestaEconomicaFormComponent } from './proceso-item-presentar/propue
 import { ResumenPropuestaComponent } from './proceso-item-presentar/resumen-proceso/resumen-proceso.component';
 import { PropuestaResumenComponent } from './propuesta-resumen/propuesta-resumen.component';
 import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
+import { FormulacionConsultasComponent } from './formulacion-consultas/formulacion-consultas.component';
 
 
 const routes: VexRoutes = [{ 
@@ -75,6 +76,10 @@ const routes: VexRoutes = [{
           bPresentarPropuesta: true
         }
       }]
+    },{
+      path: Link.FORMULACION_CONSULTAS + '/:procesoUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: FormulacionConsultasComponent
     }]
   }];
 

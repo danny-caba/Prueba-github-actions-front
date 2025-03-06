@@ -5,6 +5,7 @@ import { ConfigService } from 'src/app/core/services';
 import { environment } from 'src/environments/environment';
 import { functions } from 'src/helpers/functions';
 import { ListadoDetalle } from '../interface/listado.model';
+import { Division } from '../interface/division.model';
 
 @Injectable({
   providedIn: 'root'
@@ -107,6 +108,16 @@ export class ParametriaService {
   obtenerListadoDetallePorCodigo(codigo):Observable<any> {
     let urlEndpoint = `${this._path_serve}/api/listado-detalle/${codigo}`
     return this.http.get<ListadoDetalle>(urlEndpoint);
+  }
+
+  listarDivisiones(): Observable<Division[]> {
+    let urlEndpoint = `${this._path_serve}/api/divisiones`;
+    return this.http.get<Division[]>(urlEndpoint);
+  }
+
+  listarDivisionesPorUsuario(idUsuario: number): Observable<any> {
+    let urlEndpoint = `${this._path_serve}/api/divisiones/perfiles/${idUsuario}`;
+    return this.http.get<any>(urlEndpoint);
   }
 
 }

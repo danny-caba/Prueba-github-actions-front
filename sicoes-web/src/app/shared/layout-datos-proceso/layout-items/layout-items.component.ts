@@ -24,7 +24,6 @@ import { EstadoProcesoEnum } from 'src/helpers/constantes.components';
   ]
 })
 export class LayoutItemsComponent extends BasePageComponent<any> implements OnInit, OnDestroy {
-  
   EstadoProcesoEnum = EstadoProcesoEnum;
   suscriptionProceso: Subscription;
   PROCESO: Partial<Proceso>
@@ -43,14 +42,13 @@ export class LayoutItemsComponent extends BasePageComponent<any> implements OnIn
     'estado',
     'acciones'
   ];
-  
   serviceTable(filtro: any) {
     return this.procesoItemsService.buscarProcesosItems(filtro);
   }
 
   obtenerFiltro() {
-    return { 
-      procesoUuid: this.PROCESO?.procesoUuid 
+    return {
+      procesoUuid: this.PROCESO?.procesoUuid
     };
   }
   isDesktop$ = this.layoutService.isDesktop$;
@@ -72,7 +70,6 @@ export class LayoutItemsComponent extends BasePageComponent<any> implements OnIn
       this.bAdd = data.bAdd;
       this.bEdit = data.bEdit;
       this.bView = data.bView;
-      
     });
     this.suscribirSolicitud();
   }
@@ -167,7 +164,7 @@ export class LayoutItemsComponent extends BasePageComponent<any> implements OnIn
           this.procesoService.setSolicitud(resp);
           functionsAlertMod2.successButtonDistinto('Tu información se ha guardado correctamente', 'Continuar');
           this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_EDIT, this.PROCESO.procesoUuid, 'publicar']);
-        }) 
+        })
       }
     });
   }*/
@@ -185,12 +182,13 @@ export class LayoutItemsComponent extends BasePageComponent<any> implements OnIn
     }
     return false;
   }
-  
+
   siguiente(){
+
     if(this.bView){
-      this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_VIEW, this.PROCESO.procesoUuid, 'publicar']);
+      this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_VIEW, this.PROCESO.procesoUuid, 'informacion']);
     }else{
-      this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_EDIT, this.PROCESO.procesoUuid, 'publicar']);
+      this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_EDIT, this.PROCESO.procesoUuid, 'informacion']);
     }
   }
 }

@@ -7,7 +7,7 @@ import { Solicitud } from 'src/app/interface/solicitud.model';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { EvaluadorService } from 'src/app/service/evaluador.service';
 import { Asignacion } from 'src/app/interface/asignacion';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { EvaluadorRol } from 'src/helpers/constantes.components';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { AuthUser } from 'src/app/auth/store/auth.models';
@@ -36,6 +36,10 @@ export class ModalAprobadorFirmaAccionComponent extends BaseComponent implements
   booleanEdit: boolean
   booleanView: boolean = false
   esPersonaNat: boolean = true;
+
+  progreso: number = 0;
+  loadingAprobacion: boolean = false;
+  errores: string[] = [];
 
   formGroup = this.fb.group({
     observacion: [null]
@@ -98,6 +102,8 @@ export class ModalAprobadorFirmaAccionComponent extends BaseComponent implements
   aprobadores: Observable<any>
 
   guardar(tipo) {
+
+    this.errores = [];
     
     let msj = '¿Está seguro de que desea aprobar la evaluación?'
 
@@ -106,10 +112,10 @@ export class ModalAprobadorFirmaAccionComponent extends BaseComponent implements
       if (this.validarForm()) return;
     }
 
-    functionsAlert.questionSiNo(msj).then((result) => {
+    functionsAlert.questionSiNo(msj).then( async (result) => {
 
       if (result.isConfirmed) {
-        
+        this.loadingAprobacion = true;
         for (let i = 0; i < this.listaNroExpedienteSeleccionado.length; i++) {
           
           let filtro = {
@@ -117,12 +123,14 @@ export class ModalAprobadorFirmaAccionComponent extends BaseComponent implements
             solicitudUuid: this.listaSolicitudUuidSeleccionado[i]
           };
           
-          this.evaluadorService.listarAsignacionesAprobadores(filtro).subscribe(res  => {
+          // this.evaluadorService.listarAsignacionesAprobadores(filtro).subscribe(res  => {
+
+          let data$ = this.evaluadorService.listarAsignacionesAprobadores(filtro);
+          let res: any = await firstValueFrom(data$);
 
             for (let j = 0; j < res.content.length; j++) {
   
               let aprobacion: any = res.content[j];
-              
               if (this.usuario?.idUsuario == aprobacion.usuario?.idUsuario && aprobacion.evaluacion?.codigo == 'ASIGNADO') {
 
                 let obj = {
@@ -132,22 +140,42 @@ export class ModalAprobadorFirmaAccionComponent extends BaseComponent implements
                   },
                   observacion: this.formGroup.controls.observacion.getRawValue()
                 }
+
+                let data$ = this.evaluadorService.evaluarAccion(obj);
+                try {
+                  await firstValueFrom(data$);
+                } catch (error) {
+                  this.errores.push(this.listaNroExpedienteSeleccionado[i]);
+                }
+
+                this.progreso = ((i + 1) / this.listaNroExpedienteSeleccionado.length) * 100;
                 
-                this.evaluadorService.evaluarAccion(obj).subscribe(res2 => {
+                // this.evaluadorService.evaluarAccion(obj).subscribe(res2 => {
                   if (i == (this.listaNroExpedienteSeleccionado.length - 1)) {
-                    this.sleep(5000).then(any => {
-                      this.dialogRef.close('OK');
-                      functionsAlert.success('Guardado').then((result) => {
-                        if (tipo == 'APROBADO') {
-                          this.activarFirmaDigital();
-                        }
-                      });
-                    })
+                    this.dialogRef.close('OK');
+                    this.loadingAprobacion = false;
+                    // this.sleep(5000).then(any => {
+                      if (this.errores.length > 0 && this.listaNroExpedienteSeleccionado.length > 1) {
+                        functionsAlert.success('Guardado, error al procesar los siguientes expedientes: ' + this.errores.join(', ')).then((result) => {
+                          if (tipo == 'APROBADO') {
+                            this.activarFirmaDigital();
+                          }
+                        });
+                      } else if (this.errores.length > 0 && this.listaNroExpedienteSeleccionado.length === 1) {
+                        functionsAlert.error('Error al procesar el expediente: ' + this.errores);
+                      } else {
+                        functionsAlert.success('Guardado').then((result) => {
+                          if (tipo == 'APROBADO') {
+                            this.activarFirmaDigital();
+                          }
+                        });
+                      }
+                    // })
                   }
-                });
+                // });
               }
             }
-          });
+          // });
         }     
       }
     });

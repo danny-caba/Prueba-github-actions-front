@@ -13,6 +13,9 @@ import { ModalProcesoMiembroComponent } from '../../modal-proceso-miembro/modal-
 import { ActivatedRoute, Router } from '@angular/router';
 import { Link } from 'src/helpers/internal-urls.components';
 import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Solicitud } from 'src/app/interface/solicitud.model';
 
 @Component({
   selector: 'vex-layout-miembro',
@@ -21,14 +24,16 @@ import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
   animations: [
     stagger80ms
   ]
-})  
+})
 export class LayoutMiemboComponent extends BasePageComponent<any> implements OnInit, OnDestroy {
-  
+
+  flagActivo: string | null = null;
+
   @ViewChild('cmpMiembroComponent', { static: false }) cmpMiembroComponent: CmpMiembroComponent;
 
   suscriptionProceso: Subscription;
   PROCESO: Partial<Proceso>
-
+  solicitud: Partial<Solicitud>
   bAdd = false;
   bEdit = false;
   bView = false;
@@ -40,18 +45,23 @@ export class LayoutMiemboComponent extends BasePageComponent<any> implements OnI
     'estadoMiembro',
     'estado'
   ];
-  
+
+  formGroup = this.fb.group({
+    terminos: [false, Validators.required],
+  });
+
   serviceTable(filtro: any) {
     return this.procesoMiembtoService.buscarProcesosMiembro(filtro);
   }
 
   obtenerFiltro() {
-    return { 
-      procesoUuid: this.PROCESO?.procesoUuid 
+    return {
+      procesoUuid: this.PROCESO?.procesoUuid
     };
   }
   isDesktop$ = this.layoutService.isDesktop$;
   constructor(
+    private fb: FormBuilder,
     private procesoService: ProcesoService,
     private procesoMiembtoService: ProcesoMiembtoService,
     private procesoAddService: ProcesoAddService,
@@ -60,6 +70,7 @@ export class LayoutMiemboComponent extends BasePageComponent<any> implements OnI
     private dialog: MatDialog,
     private router: Router,
     private activeRoute: ActivatedRoute,
+    private snackbar: MatSnackBar,
   ) {
     super();
   }
@@ -80,6 +91,7 @@ export class LayoutMiemboComponent extends BasePageComponent<any> implements OnI
   private suscribirSolicitud(){
     this.suscriptionProceso = this.procesoService.suscribeSolicitud().subscribe(sol => {
       this.PROCESO = sol;
+      this.listArchivosMiembreProceso();
       if(this.PROCESO?.procesoUuid){
         this.cargarTabla();
       }
@@ -117,7 +129,6 @@ export class LayoutMiemboComponent extends BasePageComponent<any> implements OnI
     this.procesoAddService.drawerOpen.next(true);
     this.cd.markForCheck();
   }
-  
   cancelar(){
     this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST]);
   }
@@ -126,16 +137,41 @@ export class LayoutMiemboComponent extends BasePageComponent<any> implements OnI
     this.procesoService.obtenerProceso(this.PROCESO.procesoUuid).subscribe( resp => {
       this.PROCESO = resp;
       this.procesoService.setSolicitud(resp);
+
     })
   }
-  
+
+
+  setValueChecked(event: any) {
+    this.flagActivo = event.checked ? '1' : null;
+  }
+  contentArchivo:any = null
+  listArchivosMiembreProceso(){
+    let filter ={
+      codigo:'TA23',
+      idProceso:this.PROCESO.idProceso,
+      size:100
+    }
+    this.procesoMiembtoService.buscarArchivosProcesoMiembro(filter).subscribe(res=>{
+      this.contentArchivo = res.content[0]
+    })
+  }
+  validarEdicion() {
+    return true;
+  }
+  esValido() {
+
+    return this.contentArchivo != null;
+
+  }
+
   siguiente(){
+
     if(this.bView){
       this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_VIEW, this.PROCESO.procesoUuid, 'items']);
     }else{
       this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_EDIT, this.PROCESO.procesoUuid, 'items']);
     }
-    
   }
 
 }

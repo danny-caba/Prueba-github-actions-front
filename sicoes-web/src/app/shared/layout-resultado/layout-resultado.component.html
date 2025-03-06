@@ -30,10 +30,10 @@
             <ng-container *ngFor="let perf of listPerfiles">
                 <div *ngIf="SOLICITUD.persona.tipoPersona.codigo == 'JURIDICO' || SOLICITUD.persona.tipoPersona.codigo == 'PJ_EXTRANJERO' ||
                             SOLICITUD.persona.tipoPersona.codigo == 'NATURAL' || SOLICITUD.persona.tipoPersona.codigo == 'PN_POSTOR'">
-                    <div *ngIf="perf?.finalizado?.codigo != 'SI' && usuario.idUsuario == perf?.usuario?.idUsuario" class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
+                    <div *ngIf="shouldValidateBoth(perf, usuario)" class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
                         <ng-container [ngTemplateOutletContext]="{ perf: perf }" [ngTemplateOutlet]="resulEvalTecEditItem"></ng-container>
                     </div>
-                    <div *ngIf="perf?.finalizado?.codigo == 'SI' || usuario.idUsuario != perf?.usuario?.idUsuario" class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
+                    <div *ngIf="shouldValidateBothc(perf, usuario)" class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
                         <ng-container [ngTemplateOutletContext]="{ perf: perf }" [ngTemplateOutlet]="resulEvalTecShowItem"></ng-container>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
 <!-- SECTOR EVALUACION -->
 <ng-template #resulEvalSectorShowItem let-perf="perf">
     <mat-label class="flex-auto">{{perf?.sector?.nombre}}</mat-label>
-    <div>
+    <div *ngIf="isDateAfter('16/10/2024')">
         <mat-radio-group [value]="getRadioSelection()" aria-label="Select an option" class="flex gap-8" disabled>
             <mat-radio-button value="Califica">Califica</mat-radio-button>
             <mat-radio-button value="No Califica">No Califica</mat-radio-button>

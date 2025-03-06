@@ -160,8 +160,12 @@ export class CustomLayoutComponent implements OnInit {
       ListadoEnum.ESTADO_PRESENTACION,
       ListadoEnum.ETAPA_PROCESO,
       ListadoEnum.CARGO_MIEMBRO,
-      ListadoEnum.TIPO_FACTURACION
-      
+      ListadoEnum.TIPO_FACTURACION,
+      ListadoEnum.TIPO_SECCION,
+      ListadoEnum.TIPO_CONTRATO,
+      ListadoEnum.TIPO_DATO,
+      ListadoEnum.ENTRADA_DATO,
+      ListadoEnum.TIPO_CONTRATO,  
     ]).subscribe(listRes => {
 
     })

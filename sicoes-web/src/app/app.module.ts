@@ -18,6 +18,8 @@ import { SharedAppModule } from './shared-app/shared-app.module';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { CustomLayoutPublicModule } from './custom-layout-public/custom-layout-public.module';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+import { environment } from 'src/environments/environment';
 
 registerLocaleData(localePe);
 
@@ -36,7 +38,10 @@ registerLocaleData(localePe);
     // Vex
     VexModule,
     CustomLayoutModule,
-    CustomLayoutPublicModule
+    CustomLayoutPublicModule,
+    
+    // Recaptcha
+    RecaptchaV3Module
   ],
   providers: [
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlES},
@@ -44,7 +49,8 @@ registerLocaleData(localePe);
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     //{ provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true }
     //{ provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill', floatLabel: 'always'}}
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},
+    { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptcha.siteKey }
   ],
   bootstrap: [AppComponent]
 })

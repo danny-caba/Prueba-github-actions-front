@@ -180,4 +180,15 @@ export class GestionUsuarioService {
 
     return this.http.get<any>(urlEndpoint, { params });
   }
+
+  listarPerfilesDetalle(): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/listado-publico/perfiles/detalle`;
+    return this.http.get<any>(urlEndpoint);
+  }
+
+  listarPerfilesPorDivisionDetalle(idDivision: number): Observable<any> {
+    let urlEndpoint = `${this._path_serve}/api/listado-publico/perfiles/division/${idDivision}/detalle`;
+    return this.http.get<any>(urlEndpoint);
+  }
+  
 }

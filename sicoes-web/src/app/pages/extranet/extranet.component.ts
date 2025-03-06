@@ -54,31 +54,36 @@ export class ExtranetComponent implements OnInit {
   openRegistroSuspCanc() {
     this.router.navigate([Link.PUBLIC, Link.REGISTRO_EMP_SUSP_CANC]);
   }
+  send() {
+    window.open(environment.loginSunat)
 
+    //window.open('https://certosiservicioslinea.osinergmin.gob.pe/osiservicioslinea/pages/inicio')
+    //window.open('https://api-seguridad.sunat.gob.pe/v1/clientessol/dcdb35ac-3e61-4a90-aa82-58191e49af2a/oauth2/login?originalUrl=https://osiservicioslinea.osinergmin.gob.pe/osiservicioslinea/pages/login.jsp&state=s')
+  }
   listUsuarioIntranet = [{
     username: 'KSILVAP',
     codigo: 'RESP_ADM//EVA_ADM',
-    xxyyxxx: 'fuARzUzp8xG3lgf5ZwXxJdYem7YGJtpVyNMCa/r/1jMFvWBdmH7E/MAi87FqfS2Gp2j3 p8PJciaWN5Bpk1/FJWMQ1Q/3SV6TRMmSsKL8hj4puomyHh2K3FetCBImEIKmP2z8e0bvHgbQdtGOfWm/28IA2HRa6DyB073lnnzpDpvp/zOOAd8Xuhyp2wxySk5'
+    xxyyxxx: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDc0OTYzNDEsInVzZXJfbmFtZSI6IktTSUxWQVAiLCJqdGkiOiJlZTVlZmU2OS1iMWMyLTQyNTYtYjgzZi00YWE1ZjMxZDRiODQiLCJjbGllbnRfaWQiOiJhcHAiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiaWRVc3VhcmlvIjo4NX0.ZwwBKRd2AEMIBsFy7vWyvyDw7g-r8NVNuigvj4-NNlU'
   }, {
     username: 'RZEGARRA',
     codigo: 'RESP_TEC//EVA_TEC',
-    xxyyxxx: '6joTjlStnSLBNBWze/2GK138J38WZ+AKzfv51GHNuyMNgowXSRdhfmrwhNoPwB2csN4BARmk0no1CyJxC463V/Qu5XTsTrTUt3RH8S30cB0hbaCJtzOmW+MA/TFhIopdC6yBpz2Ldt/AMfmnVXiyUn5nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
+    xxyyxxx: '6joTjlStnSLBNBWze/2GK138J38WZ+AKzfv51GHNuyMNgowXSRdhfmrwhNoPwB2csN4BARmk0no1CyJxC463V8PBdyjbujkKMcTWQ4HRgI7NbdDyYQvzfWcp2kIPEEDbp3mMlZzqpzTzVvf2m4xYYm8IA2HRa6DyB073lnnzpDpvp/zOOAd8Xuhyp2wxySk5'
   }, {
     username: 'JURCIA',
     codigo: 'EVA_ADM//EVA_TEC',
-    xxyyxxx: 'xnMXR4naxvz2fZT9SMLlRh8m6rFXnmQVVt7nnySeAzCYPcPQ2yEsc4aId086125ErZNvSOIwp0ZLBY7y9HGOaXY9ObESbDJyoVWRYRNIAT5hts2gXmvxQ1AAWWZwWkACW3eXGOJCZAb6 O/5yxyszC/2QQ btvRkFwCjU4Dykxo='
+    xxyyxxx: 'xnMXR4naxvz2fZT9SMLlRh8m6rFXnmQVVt7nnySeAzCYPcPQ2yEsc4aId086125ErZNvSOIwp0ZLBY7y9HGOaaVbtk6cww7+slbBOJgLjMCaURsqosnhWKOdL4oxfPR+9jiCBA4ayBlzLDItJwCzmvbDjjz57ybvlx0g8XFgfGQ='
   }, {
     username: 'EFIELD',
     codigo: 'EVA_ADM//EVA_TEC',
-    xxyyxxx: 'NEbs3MYOAEWJmSf3V8IOfAvzUi4JPwRutSgvwBUQkB4WMBBYkSSs9 kk6p5U9/dPYT2MTQ6Rfl99nD601UsaY3Y9ObESbDJyoVWRYRNIAT5hts2gXmvxQ1AAWWZwWkACe//GHQHaPlAH5aVuX8uXgy/2QQ btvRkFwCjU4Dykxo='
+    xxyyxxx: 'NEbs3MYOAEWJmSf3V8IOfAvzUi4JPwRutSgvwBUQkB4WMBBYkSSs9+kk6p5U9/dPYT2MTQ6Rfl99nD601UsaY6Vbtk6cww7+slbBOJgLjMCaURsqosnhWKOdL4oxfPR+9Xds6Kj8d+jmwexEMD8WB/bDjjz57ybvlx0g8XFgfGQ='
   }, {
     username: 'RVERAC',
     codigo: 'APROB-TEC',
-    xxyyxxx: 'P7DPENzlY/TtfrnvZq7vuZRQHoX3DQCz1W 8rs01QhxyjBf4HJkQoS16A07EatNm0zcGjoYvkDJwMTta5HEG5XY9ObESbDJyoVWRYRNIAT5hts2gXmvxQ1AAWWZwWkAC0QXC2i2U1cXgX9tzU25drC/2QQ btvRkFwCjU4Dykxo='
+    xxyyxxx: 'P7DPENzlY/TtfrnvZq7vuZRQHoX3DQCz1W+8rs01QhxyjBf4HJkQoS16A07EatNm0zcGjoYvkDJwMTta5HEG5aVbtk6cww7+slbBOJgLjMCaURsqosnhWKOdL4oxfPR+hmFQv3E8iAFsMAZPDCxU1vbDjjz57ybvlx0g8XFgfGQ='
   }, {
     username: 'JVASQUEZG',
     codigo: 'APROB-ADM',
-    xxyyxxx: '43ZbRa/R7YztgmDLfOaPQp6FrXMsCTEdJQCSaIZYQ7tgsuOtFG43/MQq3l5T4fYcFBZp4w0wde3PV1ZHGgFt1lTWyYdxuI TL8AyjneCasosbymyGUEJ9BnJ9JJ oVLnN3jpBnZhJL5aBah640T03/cu7zwp5OQbGJGBvjxoLW2cbV4nPKCUyHM91d06Jux0'
+    xxyyxxx: '43ZbRa/R7YztgmDLfOaPQp6FrXMsCTEdJQCSaIZYQ7tgsuOtFG43/MQq3l5T4fYcFBZp4w0wde3PV1ZHGgFt1opiTLJm/IMN7Zfq4zg2Ox0C3fqelr5RQFGlMJ+20hl3XZLnrL5ixuqier5dpTkcpX5nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
   }, {
     username: 'AOYOLA',
     codigo: 'APROB-TEC',
@@ -86,31 +91,31 @@ export class ExtranetComponent implements OnInit {
   }, {
     username: 'AOLIVERA',
     codigo: 'APROB-TEC',
-    xxyyxxx: 'wKRW7lL5/eUDGKeRPe7yXOJ8nk39BBQmL9mVMcDUywytAF14rsHYifamG1j3 HcIZJUjkR85K8XZrLXT1wpYv/Qu5XTsTrTUt3RH8S30cB3vTdo02lx83zvpJwLP6aTLbGG7lAte0ger yq/ijjJlH5nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
+    xxyyxxx: 'P7DPENzlY/TtfrnvZq7vuZRQHoX3DQCz1W+8rs01QhxyjBf4HJkQoS16A07EatNm0zcGjoYvkDJwMTta5HEG5aVbtk6cww7+slbBOJgLjMCaURsqosnhWKOdL4oxfPR+hmFQv3E8iAFsMAZPDCxU1vbDjjz57ybvlx0g8XFgfGQ=2'
   }, {
     username: 'AALFARO',
     codigo: 'RESP_TEC//EVA_TEC',
-    xxyyxxx: 'X3ZSXbOU35YAqCvLr/bVqtFh6zCMdZDIjnkAnMv7pIZYy12BqXs6iZ9PAtHiOPRrbdfHbiZ1an20Mdx gEpClZWMQ1Q/3SV6TRMmSsKL8hj4puomyHh2K3FetCBImEIKwwjDezlzyH jlBZIxdE1dG8IA2HRa6DyB073lnnzpDpvp/zOOAd8Xuhyp2wxySk5'
+    xxyyxxx: '43ZbRa/R7YztgmDLfOaPQp6FrXMsCTEdJQCSaIZYQ7tgsuOtFG43/MQq3l5T4fYcFBZp4w0wde3PV1ZHGgFt1opiTLJm/IMN7Zfq4zg2Ox0C3fqelr5RQFGlMJ+20hl3XZLnrL5ixuqier5dpTkcpX5nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
   }, {
     username: 'AALCA',
     codigo: 'RESP_ADM//EVA_ADM',
-    xxyyxxx: 'Sa2bU75VZUDSFNSTh L5wGDUCOma3K1ppp4mdyUlSsnL56aN7CrnV2UJO/skS22CLFH53Gq1QE1UpnJteBDiCRtd4t37v6KRA96g/hWON0OCJtbaWApm/8FNfrp8GsLwr7dgg0RLJB9PVgh6ZQ3zivbDjjz57ybvlx0g8XFgfGQ='
+    xxyyxxx: 'Sa2bU75VZUDSFNSThL5wGDUCOma3K1ppp4mdyUlSsnL56aN7CrnV2UJO/skS22CLFH53Gq1QE1UpnJteBDiCRtd4t37v6KRA96g/hWON0OCJtbaWApm/8FNfrp8GsLwr7dgg0RLJB9PVgh6ZQ3zivbDjjz57ybvlx0g8XFgfGQ='
   }, {
     username: 'AORTEGA',
     codigo: 'EVA_TEC',
-    xxyyxxx: '79nsoT8QOWpkZCOy49KNLHK jpHB5clrcTAoE/YJv1LEN56e3Y7zYC59hVYkFSFl0D7KCh0jQXrX119qzKH8DhwNk6VRaLkUMQyLXs h8qxl7pXc/w4y/xwNyqFKQNFYO6e2tESJQYeX//UfHkTx/m8IA2HRa6DyB073lnnzpDpvp/zOOAd8Xuhyp2wxySk5'
+    xxyyxxx: '79nsoT8QOWpkZCOy49KNLHKjpHB5clrcTAoE/YJv1LEN56e3Y7zYC59hVYkFSFl0D7KCh0jQXrX119qzKH8DhwNk6VRaLkUMQyLXsh8qxl7pXc/w4y/xwNyqFKQNFYO6e2tESJQYeX//UfHkTx/m8IA2HRa6DyB073lnnzpDpvp/zOOAd8Xuhyp2wxySk5'
   }, {
     username: 'AORTIZ',
     codigo: 'EVA_ADM',
-    xxyyxxx: '8l5GaJTvB8D2KdlKdMZJ7ctOiQDEoB/ZnJDfVrxTxuWrCagj61EeFzihjJ MB/n4EHHC R8ZyMQZToKSr2S0GgPC89Evtsk2ouwhX8C7Tihhts2gXmvxQ1AAWWZwWkACnxpf2HbDG1UK0h 7skfs2i/2QQ btvRkFwCjU4Dykxo='
+    xxyyxxx: '8l5GaJTvB8D2KdlKdMZJ7ctOiQDEoB/ZnJDfVrxTxuWrCagj61EeFzihjJMB/n4EHHCR8ZyMQZToKSr2S0GgPC89Evtsk2ouwhX8C7Tihhts2gXmvxQ1AAWWZwWkACnxpf2HbDG1UK0h7skfs2i/2QQbtvRkFwCjU4Dykxo='
   }, {
     username: 'CBANDINI',
     codigo: 'APROB-TEC',
-    xxyyxxx: 'f L1QfTIWWczOpDXWkqEHbMspq64aIowm6UC9dUNEdU4RbJrVmm/ERb1YGtAzB v7d3usC9xTLAFFdI97  1pPQu5XTsTrTUt3RH8S30cB3vTdo02lx83zvpJwLP6aTLRjP8x1xfFOrUE3c qSl4cH5nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
+    xxyyxxx: 'fL1QfTIWWczOpDXWkqEHbMspq64aIowm6UC9dUNEdU4RbJrVmm/ERb1YGtAzBv7d3usC9xTLAFFdI971pPQu5XTsTrTUt3RH8S30cB3vTdo02lx83zvpJwLP6aTLRjP8x1xfFOrUE3cqSl4cH5nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
   }, {
     username: 'CBARREDA',
     codigo: 'APROB-TEC',
-    xxyyxxx: 'uOAGbR97MIpnmMrnZ0vJLJR61W Zxx 9o/9Fy5mmAQ2/fUIpZgcn/SxEhsAVXy5VmN65 np7xICI2jhl5v2jkfQu5XTsTrTUt3RH8S30cB3vTdo02lx83zvpJwLP6aTL7g9ggYgEn/Z/GSnc0gCawH5nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
+    xxyyxxx: 'uOAGbR97MIpnmMrnZ0vJLJR61WZxx9o/9Fy5mmAQ2/fUIpZgcn/SxEhsAVXy5VmN65np7xICI2jhl5v2jkfQu5XTsTrTUt3RH8S30cB3vTdo02lx83zvpJwLP6aTL7g9ggYgEn/Z/GSnc0gCawH5nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
   }, {
     username: 'CBARRENO',
     codigo: 'APROB-TEC',
@@ -167,14 +172,8 @@ export class ExtranetComponent implements OnInit {
   //https://sicoes.osinergmin.gob.pe/sicoes/#/extranet/login-sunat?xxyyxxx=2+nGD/zXfAdFQMPXDQlygI0LTIdA/iJu8c/tCnh0SrjdYtADKtHz6ysVXzHXxJggA2V/0ONZqUG+5Qsakf+jUTQwhT76De0sOAUpAXYvpEAQEKBtpTKT7ySgtHjaLlypchn94XLX1NjIrs7J1spUFuIjIF+pXenmKWfYYyC1UlYgq1mmO8TKccUEt2rHOiMPy2gFfSSqkdVw3y1Xi+yz+Q1QeqFmwaK7pT7TZzrJ/0GO3uyv9MAgRiUgo3R7miBjcwyUtbYrj90sCF8VhatuiA==&session=994BEDB50EBAE57731D70B1168F759C2
 
   procesoSeleccion() {
-    window.open('https://www.osinergmin.gob.pe/seccion/institucional/institucional/procesos-seleccion/presentacion');
-  }
-
-  send() {
-    window.open(environment.loginSunat)
-    //this.router.navigate([Link.EXTRANET, Link.LOGIN_SUNAT]);
-    //window.open('https://certosiservicioslinea.osinergmin.gob.pe/osiservicioslinea/pages/inicio')
-    //window.open('https://api-seguridad.sunat.gob.pe/v1/clientessol/dcdb35ac-3e61-4a90-aa82-58191e49af2a/oauth2/login?originalUrl=https://osiservicioslinea.osinergmin.gob.pe/osiservicioslinea/pages/login.jsp&state=s')
+    this.router.navigate([Link.PUBLIC, Link.REGISTRO_PROCESO_SELECCION]);
+    // window.open('https://www.osinergmin.gob.pe/seccion/institucional/institucional/procesos-seleccion/presentacion');
   }
 
   toggleVisibility() {
@@ -192,7 +191,7 @@ export class ExtranetComponent implements OnInit {
   validateUsuInt(usu): String {
     for (const us of this.listUsuarioIntranet) {
         if (us.username === usu.username) {
-            return "Interno"; 
+            return "Interno";
         }
     }
   }
@@ -200,7 +199,7 @@ export class ExtranetComponent implements OnInit {
   validateUsuExt(usu): String {
     for (const us of this.listUsuarioSissged) {
         if (us.username === usu.username) {
-            return "Externo"; 
+            return "Externo";
         }
     }
   }

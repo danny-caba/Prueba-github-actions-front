@@ -23,7 +23,7 @@ export class IntranetComponent implements OnInit {
   listUsuarioSissged = [{
     username: 'KSILVAP',
     codigo: 'RESP_ADM',
-    xxyyxxx: 'fuARzUzp8xG3lgf5ZwXxJdYem7YGJtpVyNMCa/r/1jMFvWBdmH7E/MAi87FqfS2Gp2j3+p8PJciaWN5Bpk1/FCzkf8KBy9LZk40R2u9n7N6w8EN1aWJ39lYYvvF6rtYDBEM8duXAgE6VRpE9C0qVXi/2QQ+btvRkFwCjU4Dykxo='
+    xxyyxxx: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDc0OTYzNDEsInVzZXJfbmFtZSI6IktTSUxWQVAiLCJqdGkiOiJlZTVlZmU2OS1iMWMyLTQyNTYtYjgzZi00YWE1ZjMxZDRiODQiLCJjbGllbnRfaWQiOiJhcHAiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiaWRVc3VhcmlvIjo4NX0.ZwwBKRd2AEMIBsFy7vWyvyDw7g-r8NVNuigvj4-NNlU'
   },{
     username: 'RZEGARRA',
     codigo: 'EVA_ADM',

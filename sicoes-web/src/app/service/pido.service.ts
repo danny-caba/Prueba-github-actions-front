@@ -6,6 +6,8 @@ import { AuthUser } from '../auth/store/auth.models';
 import { ConfigService } from '../core/services';
 import { Pageable } from '../interface/pageable.model';
 import { Pido, Sne, Sunedu,Areas, Usuario } from '../interface/pido.model';
+import { functions } from 'src/helpers/functions';
+import { SolicitudListado } from '../interface/solicitud.model';
 
 @Injectable({
   providedIn: 'root'
@@ -125,6 +127,77 @@ export class PidoService {
   listarUsuarios() {
     const urlEndpoint = `${this._path_serve}/api/pido/listar-usuarios`
     return this.http.get<Usuario[]>(urlEndpoint);
+  }
+
+  obtenerListadoEstadoPublic(codigo):Observable<any> {
+    let urlEndpoint = `${this._path_serve}/api/listado-publico/${codigo}`
+    return this.http.get<any>(urlEndpoint);
+  }
+  obtenerListadoUnidadesPublic():Observable<any> {
+    let urlEndpoint = `${this._path_serve}/api/listado-publico-unidad`
+    return this.http.get<any>(urlEndpoint);
+  }
+
+  listadoProcesoPublic(filtro):Observable<any>{
+    let urlEndpoint = `${this._path_serve}/api/listado-publico/listar-procesos`
+    let params = functions.obtenerParams(filtro);
+    return this.http.get<Pageable<SolicitudListado>>(urlEndpoint,{params:params});
+  }
+  obtenerProcesosPublic(procesoUuid):Observable<any> {
+    let urlEndpoint = `${this._path_serve}/api/listado-publico-procesos/${procesoUuid}`
+    // let params = functions.obtenerParams(filtro);
+    return this.http.get<Pageable<SolicitudListado>>(urlEndpoint);
+  }
+  listarEtapasPublic(procesoUuid):Observable<any> {
+    let urlEndpoint = `${this._path_serve}/api/listado-publico-procesos/listar-etapas?procesoUuid=${procesoUuid}`
+    return this.http.get<Pageable<any>>(urlEndpoint);
+  }
+  obtenerDocEtapaPublic(idProceso):Observable<any> {
+    let urlEndpoint = `${this._path_serve}/api/listado-publico-procesos/listar-documento-etapas?idProceso=${idProceso}`
+    return this.http.get<Pageable<any>>(urlEndpoint);
+  }
+  public descargarWindowPublic(uuid, nombre):Observable<any>{
+    // const accessToken = this.tokenStorageService.getAccessToken();
+
+    // let anchor = document.createElement("a");
+    // document.body.appendChild(anchor);
+    let file = `${this._path_serve}/api/listado-publico/archivos/${uuid}/descarga`;
+    return this.http.get(file,{responseType:'arraybuffer'});
+    // let headers = new Headers();
+    // headers.append('Authorization', `Bearer ${accessToken}`);
+
+    // fetch(file)
+    //     .then(response => response.blob())
+    //     .then(blobby => {
+    //         let objectUrl = window.URL.createObjectURL(blobby);
+
+    //         anchor.href = objectUrl;
+    //         anchor.download = nombre;
+    //         anchor.click();
+
+    //         window.URL.revokeObjectURL(objectUrl);
+    // });
+  }
+
+  buscarNroDocumentoRepresentante(tipoDocumentoCodigo, numeroDocumento){
+    let tipoDoc = tipoDocumentoCodigo;
+    if(tipoDoc == TipoDocumentoEnum.DNI){
+      return this.buscarRepresentanteReniec(numeroDocumento)
+    }else if(tipoDoc == TipoDocumentoEnum.RUC){
+      return this.buscarRepresentanteSunat(numeroDocumento)
+    }else{
+      return this.buscarCE(numeroDocumento)
+    }
+  }
+
+  buscarRepresentanteSunat(nroDocumento) {
+    let urlEndpoint = `${this._path_serve}/api/pido/sunat/representante/${nroDocumento}`
+    return this.http.get<Pido>(urlEndpoint);
+  }
+
+  buscarRepresentanteReniec(nroDocumento) {
+    let urlEndpoint = `${this._path_serve}/api/pido/reniec/representante/${nroDocumento}`
+    return this.http.get<Pido>(urlEndpoint);
   }
 
 }

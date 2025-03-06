@@ -8,20 +8,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { ProcesoItemsService } from 'src/app/service/proceso-items.service';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { LayoutService } from 'src/@vex/services/layout.service';
 import { ProcesoItemAddService } from '../../proceso-item-add.service';
 import { PropuestaService } from 'src/app/service/propuesta.service';
 import { PropuestaTecnicaService } from 'src/app/service/propuesta-tecnica.service';
 import { InvitacionService } from 'src/app/service/invitacion.service';
-import { Console } from 'console';
 import { AdjuntosService } from 'src/app/service/adjuntos.service';
 import { Location } from '@angular/common';
 import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
 import { ProcesoService } from 'src/app/service/proceso.service';
 import { ProcesoItemsPerfilService } from 'src/app/service/proceso-items-perfil.service';
+import { etapasProcesoEnum } from '../../../../../helpers/constantes.components';
 
 import { functionsAlert } from 'src/helpers/functionsAlert';
+import { EvaluatorService } from 'src/app/shared/service/evaluator.service';
 
 
 
@@ -42,8 +43,11 @@ export class ResumenPropuestaComponent extends BaseComponent implements OnInit {
   user$ = this.authFacade.user$; 
   @Input() PROCESO_ITEM: any;
   PROPUESTA
+  consorcios
 
   bPresentarPropuesta = true;
+  etapas: any[] = [];
+  procesoUuid: string;
 
   formGroup = this.fb.group({
     numeroProceso: ['', Validators.required],
@@ -75,6 +79,7 @@ export class ResumenPropuestaComponent extends BaseComponent implements OnInit {
   displayedColumnsProfesionalesInvitados: string[] = ['perfil', 'nombre', 'estado'];
   displayedColumnsPropuestaTecnica: string[] = ['archivo', 'descripcion'];
   displayedColumnsPropuestaEconomica: string[] = ['archivo', 'descripcion'];
+  displayedColumnsCronograma: string[] = ['N°', 'fechaInicio', 'fechaFin', 'etapa', 'estado', 'actions'];
   dataProfesionalesInvitados:any = [];
   dataArchivosPropuestaTecnica:any;
   dataArchivosPropuestaEconomica:any;
@@ -82,6 +87,7 @@ export class ResumenPropuestaComponent extends BaseComponent implements OnInit {
   pageInvitadosAceptados: number = 0;
   isCompleteInvitadosAceptados: boolean = false;
   cantidadElementosAceptados: number = 0;
+  displayedColumnsConsorcio: string[] = ['Empresa / Postor', 'RUC', 'Facturación', 'Participación (%)'];
 
   constructor(
     private authFacade: AuthFacade,
@@ -98,6 +104,7 @@ export class ResumenPropuestaComponent extends BaseComponent implements OnInit {
     private invitacionService: InvitacionService,
     private activeRoute: ActivatedRoute,
     private adjuntoService: AdjuntosService,
+    private evaluatorService: EvaluatorService,
     private _location: Location
   ) {
     super();
@@ -137,10 +144,18 @@ export class ResumenPropuestaComponent extends BaseComponent implements OnInit {
           this.dataArchivosPropuestaEconomica = archivos.content;
         });
         this.cargarProfesionalesInvitadosAceptados();
-        this.propuestaService.obtenerPropuesta(this.PROPUESTA.propuestaUuid).subscribe(propuesta=>{
-          this.PROPUESTA = propuesta;
-          this.setValues();    
+        this.propuestaService.obtenerPropuesta(this.PROPUESTA.propuestaUuid).pipe(
+          switchMap(propuesta => {
+            this.PROPUESTA = propuesta;
+            this.etapas = this.PROCESO_ITEM?.proceso.etapas || [];
+            this.procesoUuid = this.PROCESO_ITEM?.proceso?.procesoUuid;
+            return this.propuestaService.obtenerPropuestaFacturacion(this.PROPUESTA.propuestaUuid);
+          })
+        ).subscribe(propuestaFacturacion => {
+          this.consorcios = propuestaFacturacion.propuestaTecnica?.consorcios;
+          this.setValues(); 
         });
+        
         this.buscarItemsPerfilesProfesional();
       }
     });
@@ -277,4 +292,22 @@ export class ResumenPropuestaComponent extends BaseComponent implements OnInit {
       this.buscarItemsPerfilesProfesional();
     })
   }
+  
+  evaluarFechaPorEtapa(fechaInicio: string, fechaFin: string): string {
+    return this.evaluatorService.evaluarFechaPorEtapa(fechaInicio, fechaFin);
+  }
+
+  mostrarOpcion(opcion: string): boolean {
+    return etapasProcesoEnum.FORMULACION_CONSULTAS === opcion.toUpperCase();
+  }
+
+  mostrarBotonAccion(element: any): boolean {
+    const etapaEnCurso = this.evaluarFechaPorEtapa(element?.fechaInicio, element?.fechaFin) === 'En curso';
+    return this.mostrarOpcion(element.etapa.nombre) && this.bPresentarPropuesta && etapaEnCurso;
+  }
+
+  formularConsultas() {
+    this.router.navigate([Link.EXTRANET, Link.PROCESOS_LIST, Link.FORMULACION_CONSULTAS, this.procesoUuid]);
+  }
+
 }

@@ -50,7 +50,7 @@ export abstract class BasePageComponent<T> extends BaseComponent{
     let filtro = this.obtenerFiltro();
     filtro.size = this.paginator.pageSize ?? 10;
     this.serviceTable(filtro).subscribe(res => {
-      this.itemsTable = res.content
+      this.itemsTable = res.content;
       this.itemsTable.length = res.totalElements;
       this.dataSource = new MatTableDataSource<T>(this.itemsTable)
       this.dataSource.sort = this.sort
@@ -158,6 +158,10 @@ export abstract class BasePageComponent<T> extends BaseComponent{
       this.MES = res.mes
     })
 
+  }
+
+  public getRowIndex(indexOnPage: number): number {
+    return 1 + indexOnPage + this.paginator.pageIndex * this.paginator.pageSize;
   }
 
 }

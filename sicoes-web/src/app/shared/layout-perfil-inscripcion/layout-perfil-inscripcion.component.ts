@@ -23,6 +23,7 @@ export class LayoutPerfilInscripcionComponent extends BasePageComponent<any> imp
 
   suscriptionSolicitud: Subscription;
   solitidud: Partial<Solicitud>
+  sector: any
   @Input() ES_PERS_NAT: boolean = true
 
   displayedColumns: string[] = [];
@@ -114,16 +115,25 @@ export class LayoutPerfilInscripcionComponent extends BasePageComponent<any> imp
   }
 
   agregarPerfil() {
+      if(this.dataSource.data.length>0) {
+        this.sector = this.dataSource.data[0].sector;
+      }else{
+        this.sector = null;
+      }
+
     this.dialog.open(ModalPerfilComponent, {
       width: '1200px',
       maxHeight: '100%',
       data: {
         solicitud: this.solitidud,
         accion: 'add',
-        esPersonaNat: this.ES_PERS_NAT
+        esPersonaNat: this.ES_PERS_NAT,
+        sector: this.sector
       },
     }).afterClosed().subscribe(() => {
       this.cargarTabla();
+
+      
     });
   }
 

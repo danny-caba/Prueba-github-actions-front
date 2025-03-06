@@ -16,11 +16,72 @@
             <div class="py-4">
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center text-primary pb-4">
                     <mat-label >¿Eres integrante de <strong>consorcio</strong>?</mat-label>
-                    <mat-radio-group aria-label="Select an option" class="flex gap-2 items-center" [formControl]="formGroup.controls.consorcio">
-                        <mat-radio-button *ngFor="let obj of listConsorcio" class="bordecmb p-1" [value]="obj.idListadoDetalle">{{ obj.nombre }}</mat-radio-button>
+                    <mat-radio-group aria-label="Select an option" class="flex gap-2 items-center" [formControl]="formGroup.controls.consorcio" [(ngModel)]="isEmpresaConsorcio" (change)="agregarEmpresaConsorcio()">
+                        <mat-radio-button *ngFor="let obj of listConsorcio" class="bordecmb p-1" [value]="obj.idListadoDetalle" [disabled]="isDisabledAddCompany">{{ obj.nombre }}</mat-radio-button>
                     </mat-radio-group>
                 </div>
-                <p class="text-primary pb-4 font-medium">Los integrantes de un consorcio no pueden presentar ofertas individales ni conformar más de un consorsio en un procedimiento de  selección, o en un determinado ítem cuando se trate de procedimientos de selección según relación de ítems.</p>
+                <p class="text-primary pb-4 font-medium">Los integrantes de un consorcio no pueden presentar ofertas individuales ni conformar más de un consorcio en un concurso, o en un determinado ítem cuando se trate de concurso según relación de ítems.</p>
+                
+                <div class="text-primary">
+                    <mat-label class="font-bold">Registre porcentaje de participación</mat-label>
+                    <div class="py-4 border-b overflow-auto">
+                        <table @stagger mat-table [dataSource]="datosEmpresas" class="w-full" matSort>
+                            <ng-container matColumnDef="empresa">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa / Postor</th>
+                                <td mat-cell *matCellDef="let element" class="ajustar-texto"> {{element?.supervisora.nombreRazonSocial}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="ruc">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>RUC</th>
+                                <td mat-cell *matCellDef="let element" class="ajustar-texto"> {{element?.supervisora.codigoRuc}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="facturacion">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Facturación</th>
+                                <td mat-cell *matCellDef="let element" class="ajustar-texto"> S/ {{element?.facturacion}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="participacion">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Participación (%)</th>
+                                <td mat-cell *matCellDef="let element" class="ajustar-texto">
+                                    <mat-form-field class="flex-auto">
+                                        <input matInput [value]="element?.participacion" (change)="verificarParticipacion()" (keypress)="numberOnly($event)" [(ngModel)]="element.participacion" type="number"/>
+                                    </mat-form-field>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="acciones">
+                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button mat-icon-button color="primary" (click)="eliminarMiembroConsorcio(element)">
+                                    <mat-icon svgIcon="mat:delete"></mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsCompany"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsCompany;"></tr>
+                        </table>
+                    </div>
+
+                    <br>
+                    <mat-label class="font-medium">Facturación total de consorcio:</mat-label>
+                    <mat-label class="font-bold" style="margin-left:40%;">S/ {{facturacionTotal}}</mat-label>
+                    <mat-label class="font-bold" style="margin-left:10%;">{{participacionTotal}}</mat-label>
+
+                    <div class="py-4 flex flex-row">
+                        <span class="flex-auto"></span>
+                        <div class="flex flex-row gap-x-2">
+                            <button color="primary" mat-stroked-button type="button" (click)="openModalEmpresaConsorcio()">
+                                Agregar miembro
+                            </button>
+                            <button color="primary" mat-raised-button type="button" (click)="registrarParticipacion()">
+                                Registrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+               
                 <div class="">
                     <mat-divider></mat-divider>
                 </div>

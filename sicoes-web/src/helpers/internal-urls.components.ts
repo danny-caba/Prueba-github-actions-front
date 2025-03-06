@@ -13,6 +13,8 @@ export enum Link {
     PUBLIC = 'public',
     REGISTRO_EMP = 'registro-emp',
     REGISTRO_EMP_SUSP_CANC = 'registro-emp-susp-canc',
+    REGISTRO_PROCESO_SELECCION = 'proceso-seleccion',
+    REGISTRO_PROCESO_SELECCION_DETALLE = 'detalle',
 
     SOLICITUDES_LIST = 'solicitudes',
     SOLICITUDES_LIST_PEND = 'pendientes',
@@ -30,8 +32,14 @@ export enum Link {
     PROCESOS_PROPUESTA_RESUMEN = 'propuesta-resumen',
     PROCESO_VIEW_POSTULANTE = 'ver-postulante',
     PROCESO_BITACORA = 'bitacora',
+
+    CONTRATOS_LIST = 'contratos',
+    BANDEJA_CONTRATOS_LIST = 'bandeja-contratos',
+    CONTRATO_SOLICITUD_EVALUAR = 'evaluar',
     
     INVITACIONES_LIST = 'invitaciones',
+
+    FORMULACION_CONSULTAS = 'formulacion-consultas',
 
     LIBERAR_PERSONAL_LIST = 'liberar-personal',
 
@@ -55,7 +63,14 @@ export enum Link {
     GESTION_USUARIO_ADD ='registrar-usuario',
     GESTION_USUARIO_CONF_PERFIL ='configurar-perfil',
 
-    GESTION_ASIGNACION='gestion-asignacion'
+    GESTION_ASIGNACION='gestion-asignacion',
+
+    SOLICITUDES_LIST_APROBACION_PACES = 'aprobacionPaces',
+
+    GESTION_CONFIGURACION='gestion-configuraciones',
+
+    CONTRATO_SOLICITUD_ADD = 'registro',
+    CONTRATO_SOLICITUD_VIEW = 'ver',
 }
 
 export enum Apis {

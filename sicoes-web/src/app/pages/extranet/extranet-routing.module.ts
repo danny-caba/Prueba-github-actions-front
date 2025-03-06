@@ -31,7 +31,7 @@ const routes: VexRoutes = [{
   loadChildren: () => import('../../pages/invitacion/invitacion.module').then(m => m.InvitacionModule),
 },{
   path: Link.GESTION_USUARIO,
-  //canActivate: [AuthGuardService],
+  canActivate: [AuthGuardService, RoleGuardService],
   component: CustomLayoutComponent,
   loadChildren: () => import('../../pages/gestion-usuarios/gestion-usuarios.module').then(m => m.GestionUsuariosModule),
 },{
@@ -39,6 +39,11 @@ const routes: VexRoutes = [{
   //canActivate: [AuthGuardService],
   component: CustomLayoutComponent,
   loadChildren: () => import('../../pages/gestion-asignacion/gestion-asignacion.module').then(m => m.GestionAsignacionModule),
+},{
+  path: Link.CONTRATOS_LIST,
+  //canActivate: [AuthGuardService],
+  component: CustomLayoutComponent,
+  loadChildren: () => import('../../pages/contrato/contrato.module').then(m => m.ContratoModule),
 }]
 
 @NgModule({

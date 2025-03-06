@@ -81,6 +81,16 @@ import { ModalReasignacionComponent } from './modal-reasignacion/modal-reasignac
 import { ModalAprobadorFirmaAccionComponent } from './modal-aprobador-firma-accion/modal-aprobador-firma-accion.component';
 import { ModalFirmaDigitalComponent } from './modal-firma-digital/modal-firma-digital.component';
 import { ModalResultMontoEvaTecComponent } from './modal-result-monto-eva-tec/modal-result-monto-eva-tec.component';
+import { ModalEmpresaConsorcio } from './modal-empresa-consorcio/modal-empresa-consorcio.component';
+import { LayoutInfoProcesoComponent } from './layout-datos-proceso/layout-info-proceso/layout-info-proceso.component';
+import { CmpInfoProceComponent } from './cmp-info-proce/cmp-info-proce.component';
+import { ModalFormulacionConsultasComponent } from './modal-formulacion-consultas/modal-formulacion-consultas.component';
+import { ModalSeccionComponent } from './modal-seccion/modal-seccion.component';
+import { ModalRequisitoComponent } from './modal-requisito/modal-requisito.component';
+import { ModalEvaluacionContratoObservacionComponent } from './modal-evaluacion-contrato-observacion/modal-evaluacion-contrato-observacion.component';
+import { ModalAgregarPaceComponent } from './modal-agregar-Pace/modal-agregar-Pace.component';
+import { ModalObservarPaceDivisionComponent } from './modal-Observar-Pace-Division/modal-observar-Pace-division.component';
+import { ModalBuscarPaceComponent } from './modal-buscar-Pace/modal-buscar-Pace.component';
 
 const sharedComponents = [
 
@@ -93,6 +103,9 @@ const sharedComponents = [
     
     CmpFechaEtapaComponent,
     CmpMiembroComponent,
+
+    CmpFechaEtapaComponent,
+    CmpInfoProceComponent,
 
     FormAdjuntosBtnComponent,
     FormAdjuntosMemoryComponent,
@@ -128,6 +141,7 @@ const sharedComponents = [
     LayoutFechaEtapaComponent,
     LayoutMiemboComponent,
     LayoutItemsComponent,
+    LayoutInfoProcesoComponent,
     LayoutItemPerfilComponent,
     LayoutPublicarComponent,
 	LayoutDatosUsuarioComponent,
@@ -164,7 +178,15 @@ const sharedComponents = [
     LayoutAsignacinPerfilAdmV2Component,
     ModalReasignacionComponent,
     ModalAprobadorFirmaAccionComponent,
-    ModalFirmaDigitalComponent
+    ModalFirmaDigitalComponent,
+    ModalEmpresaConsorcio,
+    ModalFormulacionConsultasComponent,
+    ModalSeccionComponent,
+    ModalRequisitoComponent,
+    ModalEvaluacionContratoObservacionComponent,
+    ModalAgregarPaceComponent,
+    ModalBuscarPaceComponent,
+    ModalObservarPaceDivisionComponent
   ];
 
 @NgModule({

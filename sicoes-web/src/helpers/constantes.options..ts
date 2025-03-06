@@ -57,7 +57,10 @@ export enum Opcion {
 
     //APROBADOR
     BTN_APROBADOR_ADD = 'BTN_APROBADOR_ADD',
-    BTN_APROBADOR_ACC = 'BTN_APROBADOR_ACC'
+    BTN_APROBADOR_ACC = 'BTN_APROBADOR_ACC',
+
+    //CONTRATO
+    CONTRATO_EVALUACION = 'CONTRATO_EVALUACION',
 }
 
 export const OpcionConfig = [
@@ -176,7 +179,10 @@ export const OpcionPorRol = [{
     Opcion.CMP_EDIT_EVAL_ADM,
     Opcion.CMP_VIEW_OBS_ADM,
     Opcion.CMP_VIEW_OBS_TEC,
-    Opcion.VIEW_EVALUACION
+    Opcion.VIEW_EVALUACION,
+
+    // ---
+    Opcion.CONTRATO_EVALUACION
   ]
 },{
   rol: RolEnum.RES_TECNI,
@@ -314,9 +320,6 @@ const menu10 = {
   routerLinkActiveOptions: { exact: true }
 };
 
-
-
-
 const menu11 = {
   codigo: 'menu11',
   type: 'link',
@@ -344,8 +347,73 @@ const menu13 = {
   routerLinkActiveOptions: { exact: true }
 };
 
+const menu14 = {
+  codigo: 'menu14',
+  type: 'link',
+  label: 'Solicitudes de Contrato',
+  route: '/extranet/contratos',
+  icon: 'mat:arrow_circle_right',
+  routerLinkActiveOptions: { exact: true }
+};
+
+const menu15 = {
+  codigo: 'menu15',
+  type: 'link',
+  label: 'Gestión de Configuraciones',
+  route: '/intranet/gestion-configuraciones',
+  icon: 'mat:arrow_circle_right',
+  routerLinkActiveOptions: { exact: true }
+}
+
+const menu16 = {
+  codigo: 'menu16',
+  type: 'link',
+  label: 'Solicitudes de Contrato',
+  route: '/intranet/contratos',
+  icon: 'mat:arrow_circle_right',
+  routerLinkActiveOptions: { exact: true }
+};
+
+const menu17 = {
+  codigo: 'menu17',
+  type: 'link',
+  label: 'Bandeja de Contratos',
+  route: '/intranet/bandeja-contratos',
+  icon: 'mat:arrow_circle_right',
+  routerLinkActiveOptions: { exact: true }
+};
+
+const menu18 = {
+  codigo: 'menu14',
+  type: 'link',
+  label: 'Gestión de PACES',
+  route: '/intranet/procesos/gestionPaces',
+  icon: 'mat:arrow_circle_right',
+  routerLinkActiveOptions: { exact: true }
+};
+const menu19 = {
+  codigo: 'menu14',
+  type: 'link',
+  label: 'Aprobación de PACES',
+  route: '/intranet/procesos/aprobacionPaces',
+  icon: 'mat:arrow_circle_right',
+  routerLinkActiveOptions: { exact: true }
+};
+const menu20 = {
+  codigo: 'menu14',
+  type: 'link',
+  label: 'Aprobación de PACES Gerencia',
+  route: '/intranet/procesos/aprobacionPacesGerencia',
+  icon: 'mat:arrow_circle_right',
+  routerLinkActiveOptions: { exact: true }
+};
+
+
+
 export const RolMenu = [
-  { ROL: { CODIGO: RolEnum.USU_EXTER }, MENU: [menu01, menu09, menu10], path: [
+  { ROL: { CODIGO: RolEnum.USU_EXTER }, MENU: [menu01, menu09, menu10, 
+    menu14
+  ], path: [
     'extranet/solicitudes',
     'extranet/solicitudes/opciones',
     'extranet/solicitudes/registro',
@@ -353,13 +421,14 @@ export const RolMenu = [
     'extranet/solicitudes/subsanar/',
     'extranet/solicitudes/ver/',
     'extranet/proceso',
-    'extranet/invitaciones'
+    'extranet/invitaciones',
+    'extranet/contrato',
   ]},
   { ROL: { CODIGO: RolEnum.EVA_ADMIN }, MENU: [menu02, menu04], path: [
     'intranet/solicitudes',
     'intranet/solicitudes/ver/',
     'intranet/solicitudes/evaluar/',
-    'intranet/solicitudes/atencion'
+    'intranet/solicitudes/atencion',
   ]},
   { ROL: { CODIGO: RolEnum.EVA_TECNI }, MENU: [menu02, menu04], path: [
     'intranet/solicitudes',
@@ -379,7 +448,7 @@ export const RolMenu = [
     'intranet/empresa-supervisoras/cancelar/',
     'intranet/empresa-supervisoras/susp-canc/ver'
   ]},
-  { ROL: { CODIGO: RolEnum.RES_TECNI }, MENU: [menu02, menu04, menu06, menu07], path: [
+  { ROL: { CODIGO: RolEnum.RES_TECNI }, MENU: [menu02, menu04, menu06, menu07,menu18], path: [
     'intranet/solicitudes',
     'intranet/solicitudes/ver/',
     'intranet/solicitudes/procesar/',
@@ -389,12 +458,18 @@ export const RolMenu = [
     'intranet/empresa-supervisoras/ver/',
     'intranet/empresa-supervisoras/suspender/',
     'intranet/empresa-supervisoras/cancelar/',
-    'intranet/empresa-supervisoras/susp-canc/ver'
+    'intranet/empresa-supervisoras/susp-canc/ver',
+    'intranet/procesos/gestionPaces'
+    
+    
   ]},
-  { ROL: { CODIGO: RolEnum.APROB_TEC }, MENU: [menu05], path: [
+  { ROL: { CODIGO: RolEnum.APROB_TEC }, MENU: [menu05,menu19,menu20], path: [
     'intranet/solicitudes/ver/',
     'intranet/solicitudes/aprobar/',
-    'intranet/solicitudes/aprobacion'
+    'intranet/solicitudes/aprobacion',
+    'intranet/procesos/aprobacionPaces',
+    'intranet/procesos/aprobacionPacesGerencia',
+            
   ]},
   { ROL: { CODIGO: RolEnum.APROB_ADM }, MENU: [menu05], path: [
     'intranet/solicitudes/ver/',
@@ -411,5 +486,12 @@ export const RolMenu = [
   ]},
   { ROL: { CODIGO: RolEnum.ADM_BLOQU }, MENU: [menu11,menu12/*,menu13*/], path: [
     'intranet/liberar-personal'
-  ]}
+  ]},
+  { ROL: { CODIGO: RolEnum.ADM_CONFIG }, MENU: [menu15], path: [
+    'intranet/gestion-configuraciones'
+  ]},
+  { ROL: { CODIGO: RolEnum.EVA_CONTRA }, MENU: [menu16, menu17], path: [
+    'intranet/contratos',
+    'intranet/bandeja-contratos'
+  ]},
 ]

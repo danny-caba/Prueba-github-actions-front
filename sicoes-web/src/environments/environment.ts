@@ -10,9 +10,13 @@ export const environment = {
   loginSunat: 'https://api-seguridad.sunat.gob.pe/v1/clientessol/dcdb35ac-3e61-4a90-aa82-58191e49af2a/oauth2/login?originalUrl=https://osiservicioslinea.osinergmin.gob.pe/osiservicioslinea/pages/login.jsp&state=s',
   appVersion: `${version}-dev`,
 
-  // pathServe: 'http://localhost:8090/sicoes-api',
-  // apiOauth: 'http://localhost:8090/sicoes-api',
-  // apiUrl: 'http://localhost:8090/sicoes-api',
+  recaptcha: {
+    siteKey: '6LeRJYkeAAAAANFU7ieQedx73qiEAoWy6ZEgfFXb'
+  },
+
+  // pathServe: 'http://localhost:8080/sicoes-api',
+  // apiOauth: 'http://localhost:8080/sicoes-api',
+  // apiUrl: 'http://localhost:8080/sicoes-api',
 
 
   pathServe: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes-api',

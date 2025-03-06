@@ -19,6 +19,8 @@ import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
 import { createMask } from '@ngneat/input-mask';
 import { ModalInfoNroProcesoComponent } from '../../modal-info-nro-proceso/modal-info-nro-proceso.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ModalBuscarPaceComponent } from '../../modal-buscar-Pace/modal-buscar-Pace.component';
+import { GestionUsuarioService } from 'src/app/service/gestion-usuarios.service';
 @Component({
   selector: 'vex-layout-datos-general',
   templateUrl: './layout-datos-general.component.html',
@@ -54,7 +56,7 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
     unidad: [null as Areas, Validators.required],
     sector: [null as ListadoDetalle, Validators.required],
     subsector: [null as ListadoDetalle, Validators.required],
-    estado: [ null as ListadoDetalle ],
+    estado: [null as ListadoDetalle],
     tipoFacturacion: [null as ListadoDetalle, Validators.required],
   });
 
@@ -71,10 +73,14 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
       let values = value.split('-');
       let anio = values[1]
       //console.info(anio);
-      
+
       return value;
     },
   });
+
+  public listaDivisiones: any[];
+  listEstadoPace: any[]
+  idPace: any;
 
   constructor(
     private fb: FormBuilder,
@@ -86,7 +92,8 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
     private router: Router,
     private procesoService: ProcesoService,
     private dialog: MatDialog,
-    private pidoService: PidoService) {
+    private pidoService: PidoService,
+    private gestioUsuarioService: GestionUsuarioService,) {
     super();
   }
 
@@ -104,31 +111,37 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
     })
     this.suscribirSolicitud();
 
-    if(this.bView){
+    if (this.bView) {
       this.formGroup.disable();
     }
+
+    this.listarDivisiones();
+    this.cargarComboTipoEstadoPACe();
+
+    // this.formGroup.get('nombreProceso')?.disable();
+    // this.formGroup.get('unidad')?.disable();
   }
 
-  private suscribirSolicitud(){
+  private suscribirSolicitud() {
     this.suscriptionProceso = this.procesoService.suscribeSolicitud().subscribe(sol => {
       this.PROCESO = sol;
-      let defaultValueObj:any;
-      if(this.PROCESO){
+      let defaultValueObj: any;
+      if (this.PROCESO) {
         this.setValues();
-        if(this.PROCESO.estado.codigo == EstadoProcesoEnum.EN_ELABORACION){
-          this.formGroup.controls.estado.disable(); 
-        }else{
+        if (this.PROCESO.estado.codigo == EstadoProcesoEnum.EN_ELABORACION) {
+          this.formGroup.controls.estado.disable();
+        } else {
           this.formGroup.disable();
-          if(this.bEdit == true){
+          if (this.bEdit == true) {
             this.formGroup.controls.estado.enable();
-          } 
+          }
         }
-      }else{
+      } else {
         this.formGroup.reset()
         defaultValueObj = this.listEstado.find(obj => obj.codigo == EstadoProcesoEnum.EN_ELABORACION);
         if (defaultValueObj) {
           this.formGroup.controls.estado.setValue(defaultValueObj);
-          this.formGroup.controls.estado.disable(); 
+          this.formGroup.controls.estado.disable();
         }
       }
     });
@@ -149,7 +162,7 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
       this.listTipoFacturacion = listRes[2];
     })
     this.pidoService.listarAreas().subscribe(
-      res=>{
+      res => {
         this.listAreas = res;
         this.filteredStatesTecnico$ = this.formGroup.controls.unidad.valueChanges.pipe(
           startWith(''),
@@ -157,7 +170,7 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
           map(state => state ? this.filterStatesTec(state) : this.listAreas.slice())
         );
 
-        if(functions.noEsVacio(this.PROCESO)){
+        if (functions.noEsVacio(this.PROCESO)) {
           let unidad = this.listAreas.find(u => u.idUnidad == this.PROCESO.codigoArea);
           this.formGroup.controls.unidad.setValue(unidad);
         }
@@ -166,9 +179,10 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
   }
 
   public getFormValues() {
-    let obj:any = this.formGroup.getRawValue();
-    obj.codigoArea =this.formGroup.controls.unidad.value.idUnidad;
-    obj.nombreArea =this.formGroup.controls.unidad.value.nombreUnidad;
+    let obj: any = this.formGroup.getRawValue();
+    obj.codigoArea = this.formGroup.controls.unidad.value.idUnidad;
+    obj.nombreArea = this.formGroup.controls.unidad.value.nombreUnidad;
+    obj.idPace = this.idPace;
     return obj;
   }
 
@@ -199,11 +213,21 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
     this.cd.markForCheck();
   }
 
-  cancelar(){
+  cancelar() {
     this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST]);
   }
 
-  borrador(continuar: boolean){
+  borrador(continuar: boolean) {
+
+    if (this.bAdd) {
+      if (this.idPace == undefined || this.idPace == '' || this.idPace == null) {
+
+        functionsAlertMod2.warningMensage("Por favor, debe seleccionar una PACE");
+        return;
+      }
+    }
+
+
     if (!this.validar()) {
       return;
     }
@@ -211,23 +235,23 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
       if (result.isConfirmed) {
         let formValues = this.getFormValues();
 
-        if(this.IS_NUEVO == true){
+        if (this.IS_NUEVO == true) {
           this.procesoService.registrarBorrador(formValues).subscribe(obj => {
             functionsAlertMod2.success('Datos Guardados').then((result) => {
-              if(continuar){
+              if (continuar) {
                 this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_EDIT, obj.procesoUuid, 'fecha']);
-              }else{
+              } else {
                 this.cancelar()
               }
             });
           });
-        }else{
+        } else {
           this.procesoService.actualizarBorrador(formValues, this.PROCESO.procesoUuid).subscribe(obj => {
             this.procesoService.setSolicitud(obj);
             functionsAlertMod2.success('Datos Guardados').then((result) => {
-              if(continuar){
+              if (continuar) {
                 this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_EDIT, obj.procesoUuid, 'fecha']);
-              }else{
+              } else {
                 this.cancelar()
               }
             });
@@ -255,11 +279,11 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
     return codi && codi.nombreUnidad ? codi.nombreUnidad : '';
   }
 
-  siguienteView(){
+  siguienteView() {
     this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.PROCESOS_VIEW, this.PROCESO.procesoUuid, 'fecha']);
   }
 
-  openInfo(){
+  openInfo() {
     this.dialog.open(ModalInfoNroProcesoComponent, {
       width: '400px',
       maxHeight: '100%',
@@ -272,4 +296,47 @@ export class LayoutDatosGeneralComponent extends BaseComponent implements OnInit
       event.preventDefault();
     }
   }
+
+  seleccionarPACE() {
+    this.dialog.open(ModalBuscarPaceComponent, {
+      width: '1200px',
+      maxHeight: '100%',
+      data: {
+        listaDivisiones: this.listaDivisiones,
+        listEstado: this.listEstadoPace
+      },
+    }).afterClosed().subscribe(result => {
+      if (result == null || result == undefined) {
+
+      } else {
+        console.log(result.deItemPaces)
+        console.log(result.division)
+        console.log(result.idPaces)
+
+        this.formGroup.controls.nombreProceso.patchValue(result.deItemPaces);
+        this.idPace = result.idPaces;
+
+        // this.idPace =
+      }
+    });
+
+  }
+
+  public listarDivisiones(): void {
+
+    this.gestioUsuarioService.listarDivisiones()
+      .subscribe(respuesta => {
+        this.listaDivisiones = respuesta;
+      });
+  }
+
+  cargarComboTipoEstadoPACe() {
+    this.parametriaService.obtenerMultipleListadoDetalle([
+      "TIPO_ESTADO_PACES"
+
+    ]).subscribe(listRes => {
+      this.listEstadoPace = listRes[0]
+    })
+  }
+
 }

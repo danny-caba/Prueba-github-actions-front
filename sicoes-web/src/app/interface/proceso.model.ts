@@ -61,3 +61,17 @@ export class ResponseUsuario {
     idUsuario:number;
     idUsuarioRolC:number
 }
+
+export class ProcesoConsulta {
+    idProcesoConsulta: number
+    idProceso: Proceso
+    estado: Partial<ListadoDetalle>
+    procesoConsultaUuid: string
+    seccion: Partial<ListadoDetalle>
+    deNumeral: string
+    deLiteral: string
+    dePagina: string
+    deConsulta: string
+    deArticuloNorma: string
+    fecCreacion: Date
+}

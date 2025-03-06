@@ -9,7 +9,7 @@
     <mat-dialog-content class="flex flex-col">
         <mat-form-field  class="mt-6 flex-auto">
             <mat-label>Sector</mat-label>
-            <mat-select [formControl]="formGroup.controls.sector" [compareWith]="compareSelecIdListadoDetalle">
+            <mat-select [formControl]="formGroup.controls.sector" [compareWith]="compareSelecIdListadoDetalle" >
                 <mat-option *ngFor="let obj of listSector" [value]="obj">
                     {{ obj.nombre }}
                 </mat-option>

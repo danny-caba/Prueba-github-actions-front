@@ -100,6 +100,17 @@ export class ModalPerfilComponent extends BaseComponent implements OnInit, OnDes
           this.listPerfil = res
         });
       });
+    } 
+    //solo seleccionar un sector
+    if (data.sector){
+      this.cargarCombo();
+
+      this.formGroup.controls['sector'].setValue(data.sector);
+      this.formGroup.controls['sector'].disable();
+      this.onChangeSector(data.sector);
+
+    }else{
+      this.formGroup.controls['sector'].enable();
     }
   }
 

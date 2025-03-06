@@ -73,7 +73,14 @@ export class ProcesoSidenavComponent implements OnInit, OnDestroy {
           route: ['./items'],
           icon: 'mat:drafts',
           status: 'active'
-        }
+        },
+        {
+          label: '5. Información del Proceso',
+          codigo: 'informacion',
+          route: ['./informacion'],
+          icon: 'mat:drafts',
+          status: 'active'
+        },
       ];
     }else{
       this.noEditable();
@@ -89,23 +96,28 @@ export class ProcesoSidenavComponent implements OnInit, OnDestroy {
           if(element.check){
             delete element.check;
           }
-          if(this.PROCESO.datosGenerales == true && element.codigo.includes('datos')){
+          if (this.PROCESO.datosGenerales == true && element.codigo.includes('datos')) {
             element.check = true;
             pubCount++;
           }
-          if(this.PROCESO.etapa == true && element.codigo.includes('etapa')){
+          if (this.PROCESO.etapa == true && element.codigo.includes('etapa')) {
             element.check = true;
             pubCount++;
           }
-          if(this.PROCESO.miembros == true && element.codigo.includes('miembros')){
+          if (this.PROCESO.miembros == true && element.codigo.includes('miembros')) {
             element.check = true;
             pubCount++;
           }
-          if(this.PROCESO.items == true && element.codigo.includes('items')){
+          if (this.PROCESO.items == true && element.codigo.includes('items')) {
             element.check = true;
             pubCount++;
           }
-          if(pubCount == 4 && this.linksAdd.length == 4 && this.PROCESO.estado?.codigo == EstadoProcesoEnum.EN_ELABORACION){
+    
+          if (this.PROCESO.informacion == true && element.codigo.includes('informacion')) {
+            element.check = true;
+            pubCount++;
+          }
+          if(pubCount == 4 && this.linksAdd.length == 5 && this.PROCESO.estado?.codigo == EstadoProcesoEnum.EN_ELABORACION){
             this.linksAdd.push({
               label: 'Publicar',
               codigo: 'publicar',
@@ -150,12 +162,17 @@ export class ProcesoSidenavComponent implements OnInit, OnDestroy {
         route: ['./items'],
         icon: 'mat:drafts',
         status: 'inactive'
-      }
+      },
+      {
+        label: '5. Información del Proceso',
+        route: ['./informacion'],
+        icon: 'mat:drafts',
+        status: 'inactive'
+      },
     ];
   }
 
   ngOnDestroy(): void {
     this.suscriptionProceso.unsubscribe();
   }
-  
 }

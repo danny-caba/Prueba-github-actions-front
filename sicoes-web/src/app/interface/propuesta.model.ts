@@ -26,6 +26,7 @@ export class PropuestaProfesional{
 export class PropuestaTecnica{
     idPropuestaTecnica:number
     consorcio:ListadoDetalle
+    consorcios: PropuestaConsorcio[]
 }
 
 export class PropuestaEconomica{
@@ -34,4 +35,12 @@ export class PropuestaEconomica{
     importe:number
     folioInicio:number
     folioFin:number
+}
+
+export class PropuestaConsorcio {
+    idPropuestaConsorcio:number
+    propuestaTecnica: PropuestaTecnica
+    supervisora: Supervisora
+    participacion: number
+    facturacion: number
 }

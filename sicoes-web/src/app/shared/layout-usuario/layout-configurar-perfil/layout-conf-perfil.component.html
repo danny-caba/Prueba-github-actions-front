@@ -35,36 +35,64 @@
                 <input [formControl]="formGroup.controls.roles" placeholder="Evaluador Administrativo - Evaluador Ténico" matInput readonly="true">
             </mat-form-field>
         </div>
-        <div class="flex flex-col">
+        <!-- <div class="flex flex-col">
             <mat-radio-group (change)="obtenerPerfilRolesUsuario($event)">
-              <mat-radio-button *ngFor="let role of usuarioRoles; let i = index" [value]="role.rol?.idRol" class="mr-5">
+                <mat-radio-button *ngFor="let role of usuarioRoles; let i = index" [value]="role.rol?.idRol" class="mr-5">
                 {{ role.rol?.nombre }}
-              </mat-radio-button>
+                </mat-radio-button>
             </mat-radio-group>
-          </div>
+        </div> -->
 
     </div>
 
-    <div class="pt-4 grid sm:grid-cols-1 md:grid-cols-3 gap-x-8">
-        <div class="md:col-span-2 sm:col-span-1 flex flex-col">
+    <mat-accordion>
+        <mat-expansion-panel (opened)="panelInformationPerfil = true" [expanded]="panelInformationPerfil" (closed)="panelInformationPerfil = false">
+            <mat-expansion-panel-header>
+                <mat-panel-title><mat-label class="text-sm font-medium" [ngClass]="{'text-primary': panelInformationPerfil}">Perfiles Asignados Por División</mat-label></mat-panel-title>
+                <mat-icon svgIcon="mat:account_circle"></mat-icon>
+            </mat-expansion-panel-header>
+            <div class="flex flex-wrap gap-4">
+                <div class="rounded-md bg-gray-100 py-0.5 px-2.5 border border-transparent text-sm text-white transition-all shadow-md text-gray-800" *ngFor="let division of listDivisionesUsuario">
+                    {{ division.deDivision }}
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
 
+    <div class="pt-4 mb-4 grid sm:grid-cols-1 md:grid-cols-4 gap-x-8 items-center sm:mb-0">
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">División</mat-label>
             <mat-form-field>
-                <mat-select [formControl]="formGroup.controls.selectedPerfil" required>
-                    <mat-option *ngFor="let perfil of this.dataSourcePerfil.data" [value]="perfil.idListadoDetalle">{{ perfil.nombre }}</mat-option>
+                <mat-select placeholder="Seleccione una división" [formControl]="formGroup.controls.selectedDivision" (selectionChange)="listarPerfilesPorDivision($event)">
+                    <mat-option *ngFor="let division of listDivision" [value]="division.idDivision">{{ division.deDivision }}</mat-option>
                 </mat-select>
             </mat-form-field>
-
         </div>
-        <div class="pt-6 d-flex justify-content-end">
-            <button color="primary" mat-raised-button type="button" (click)="agregarPerfilRolUsuario()" class="mr-2">
-                Agregar
-            </button>
-            <button color="primary" mat-raised-button type="button" (click)="cancelar()">
-                Cancelar
-            </button>
+        <div class="flex flex-col col-span-3">
+            <mat-label class="text-primary text-sm font-medium">Perfil</mat-label>
+            <mat-form-field>
+                <input [formControl]="formGroup.controls.selectedPerfil" [matAutocomplete]="autoTecnico" matInput (blur)="blurEvaluadorTecnico()">
+                <mat-autocomplete #autoTecnico="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let state of filteredStatesTecnico$ | async" [value]="state" class="custom-option">
+                        <span class="body-1 font-bold">{{ state.dePerfil }}</span>
+                        <span class="text-hint"> | </span>
+                        <span class="caption text-secondary">{{ " " }}{{ state.detalle }}</span>
+                        <mat-divider></mat-divider>
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
         </div>
-
-
+    </div>
+    <div class="h-fit mb-4">
+        <button color="primary" mat-raised-button type="button" (click)="agregarPerfilRolUsuario()" class="mr-2">
+            Agregar
+        </button>
+        <button color="primary" mat-raised-button type="button" (click)="limpiar()" class="mr-2">
+            Limpiar
+        </button>
+        <button color="primary" mat-raised-button type="button" (click)="cancelar()">
+            Cancelar
+        </button>
     </div>
 
     <div>
@@ -94,10 +122,6 @@
                 <ng-container matColumnDef="perfil">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>PERFIL</th>
                     <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.perfil?.nombre }}</td>
-                </ng-container>
-                <ng-container matColumnDef="rol">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ROL</th>
-                    <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{element?.nombreRol}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="acciones">

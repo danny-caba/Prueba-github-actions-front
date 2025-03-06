@@ -136,6 +136,51 @@
                 </div>
             </div>
         </div>
+        <table [dataSource] = "etapas" class="w-full rounded" mat-table>
+            <ng-container matColumnDef="N°">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>N°</th>
+                <td mat-cell class="text-primary font-medium" *matCellDef="let element; index as nroRegistro">{{ nroRegistro + 1 }}</td>
+            </ng-container>
+            <ng-container matColumnDef="fechaInicio">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Inicio</th>
+                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.fechaInicio }}</td>
+            </ng-container>
+            <ng-container matColumnDef="fechaFin">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Fin</th>
+                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element?.fechaFin }}</td>
+            </ng-container>
+            <ng-container matColumnDef="etapa">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Etapa</th>
+                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ element.etapa?.nombre }}</td>
+            </ng-container>
+            <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                <td mat-cell class="text-primary font-medium" *matCellDef="let element">{{ evaluarFechaPorEtapa(element?.fechaInicio, element?.fechaFin) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                <td *matCellDef="let element" class="w-10 text-primary text-center" mat-cell>
+                    <ng-container *ngIf="mostrarBotonAccion(element)">
+                        <div class="flex gap-x-3">
+                            <button matTooltip="Presentar Consulta" (click)="formularConsultas()">
+                                <mat-icon class="icon-color" svgIcon="mat:assignment"></mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="loading">
+                <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center">Cargando Datos...</td>
+            </ng-container>
+
+            <ng-container matColumnDef="vacio">
+                <td mat-footer-cell *matFooterCellDef colspan="11" class="text-center text-primary">No se encuentran resultados para los
+                    criterios de búsqueda ingresados</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsCronograma"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsCronograma;"></tr>
+        </table>
     </div>
 
 </ng-template>
@@ -149,6 +194,30 @@
             <label>Integrante de consorcio:</label>
             <label class="font-bold ml-2">{{ PROPUESTA?.propuestaTecnica?.consorcio?.nombre }}</label>
         </div>
+
+        <div class="my-4">
+            <table mat-table [dataSource]="consorcios" class="mat-elevation-z8" class="w-full">
+                <ng-container matColumnDef="Empresa / Postor">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>Empresa / Postor</th>
+                    <td class="text-primary font-bold ajustar-texto" mat-cell *matCellDef="let element"> {{element.supervisora?.nombreRazonSocial}} </td>
+                </ng-container>
+                <ng-container matColumnDef="RUC">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>RUC</th>
+                    <td class="text-primary font-bold ajustar-texto" mat-cell *matCellDef="let element"> {{element.supervisora?.codigoRuc}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Facturación">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>Facturación</th>
+                    <td class="text-primary font-bold ajustar-texto" mat-cell *matCellDef="let element"> {{element.facturacion}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Participación (%)">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef>Participación (%)</th>
+                    <td class="text-primary font-bold ajustar-texto" mat-cell *matCellDef="let element"> {{element.participacion}}% </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsConsorcio"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsConsorcio;"></tr>
+              </table>              
+        </div>
+        
         <div class="my-4">
             <table mat-table [dataSource]="dataArchivosPropuestaTecnica" class="mat-elevation-z8" class="w-full">
                 <ng-container matColumnDef="archivo">

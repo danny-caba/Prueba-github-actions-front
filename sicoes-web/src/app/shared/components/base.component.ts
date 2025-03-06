@@ -18,6 +18,10 @@ export abstract class BaseComponent {
     return a?.idUnidad === b?.idUnidad;
   }
 
+  compareSelectIdSeccion(a, b){
+    return a?.idSeccion === b?.idSeccion;
+  }
+
   numberOnly(event): boolean {
     return functions.numberOnly(event);;
   }

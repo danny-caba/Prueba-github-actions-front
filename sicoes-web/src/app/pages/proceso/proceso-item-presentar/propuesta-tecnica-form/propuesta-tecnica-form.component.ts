@@ -21,6 +21,9 @@ import { ProcesoItemAddService } from '../../proceso-item-add.service';
 import { Link } from 'src/helpers/internal-urls.components';
 import { Router } from '@angular/router';
 import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
+import { ModalEmpresaConsorcio } from 'src/app/shared/modal-empresa-consorcio/modal-empresa-consorcio.component';
+import { SupervisoraService } from 'src/app/service/supervisora.service';
+import { PropuestaConsorcioService } from 'src/app/service/propuesta-consorcio.service';
 
 @Component({
   selector: 'vex-propuesta-tecnica-form',
@@ -45,6 +48,20 @@ export class PropuestaTecnicaFormComponent extends BasePageComponent<any> implem
     'archivo',
     'acciones'
   ];
+
+  isEmpresaConsorcio: number;
+  isDisabledAddCompany = false;
+  displayedColumnsCompany: string[] = [
+    'empresa',
+    'ruc',
+    'facturacion',
+    'participacion',
+    'acciones'
+  ];
+  datosEmpresas:any[];
+  participacionTotal: number;
+  facturacionTotal: number;
+  facturacionMinima: number;
 
   serviceTable(filtro: any) {
     filtro.codigo = 'TA19';
@@ -75,7 +92,9 @@ export class PropuestaTecnicaFormComponent extends BasePageComponent<any> implem
     private layoutService: LayoutService,
     private procesoItemAddService: ProcesoItemAddService,
     private cd: ChangeDetectorRef,
-    private adjuntoService: AdjuntosService
+    private adjuntoService: AdjuntosService,
+    private supervisoraService:SupervisoraService,
+    private propuestaConsorcioService: PropuestaConsorcioService
   ) {
     super();
   }
@@ -93,6 +112,8 @@ export class PropuestaTecnicaFormComponent extends BasePageComponent<any> implem
     this.suscriptionPropuesta = this.propuestaService.suscribePropuesta().subscribe(pro => {
       if(pro){
         this.PROPUESTA = pro;
+        this.facturacionMinima = pro.procesoItem.facturacionMinima;
+        this.obtenerInformacionConsorcio(pro.propuestaTecnica?.idPropuestaTecnica, pro.procesoItem.proceso.sector.idListadoDetalle);
         this.cargarTabla();
         this.propuestaTecnicaService.obtenerPropuestaTecnica(this.PROPUESTA.propuestaTecnica?.idPropuestaTecnica, this.PROPUESTA.propuestaUuid).subscribe(propTec => {
           this.formGroup.controls.consorcio.setValue(propTec.consorcio?.idListadoDetalle);
@@ -192,4 +213,140 @@ export class PropuestaTecnicaFormComponent extends BasePageComponent<any> implem
     })
   }
 
+  openModalEmpresaConsorcio() {
+    //Obtener listado de empresas (655 persona juridica, 678 persona natural postor)
+    this.propuestaConsorcioService.obtenerEmpresasSupervisoraSector(this.PROPUESTA.procesoItem.proceso.sector.idListadoDetalle).subscribe(res => {
+      this.dialog.open(ModalEmpresaConsorcio, {
+        width: '800px',
+        maxHeight: '100%',
+        data: {
+          empresas: res,
+          propuestaTecnica: this.PROPUESTA.propuestaTecnica,
+          supervisora: this.PROPUESTA.supervisora,
+          primerRegistro: !this.isDisabledAddCompany,
+          sector: this.PROPUESTA.procesoItem.proceso.sector.idListadoDetalle
+        },
+      }).afterClosed().subscribe(() => {
+        this.isDisabledAddCompany = true;
+        this.obtenerInformacionConsorcio(this.PROPUESTA.propuestaTecnica?.idPropuestaTecnica, this.PROPUESTA.procesoItem.proceso.sector.idListadoDetalle);
+      });
+    })
+  }
+
+  obtenerInformacionConsorcio(idPropuestaTecnica, idSector) {
+    this.propuestaConsorcioService.obtenerEmpresasConsorcio(idPropuestaTecnica, idSector).subscribe(res => {
+      if (res.length > 0) {
+        this.facturacionTotal = 0;
+        this.participacionTotal = 0;
+        this.datosEmpresas = res;
+        
+        for (let i = 0; i < this.datosEmpresas.length; i++) {
+          this.facturacionTotal = this.facturacionTotal + this.datosEmpresas[i].facturacion;
+          this.participacionTotal = this.participacionTotal + this.datosEmpresas[i].participacion;
+        }
+
+        this.isDisabledAddCompany = true;
+      }
+    });
+  }
+
+  agregarEmpresaConsorcio() {
+    
+    if (this.isEmpresaConsorcio == 128) { //SI
+      this.openModalEmpresaConsorcio();
+    }
+    else if (this.isEmpresaConsorcio == 129) { //NO
+      
+    }
+  }
+
+  verificarParticipacion() {
+
+    if (this.datosEmpresas[0].participacion != 0 && this.datosEmpresas[0].participacion < 50) {
+      functionsAlert.error("La participación de la empresa debe ser mayor o igual al 50%").then(res => {
+        this.datosEmpresas[0].participacion = 0;
+        this.calcularParticipacionTotal();
+      });
+    }
+    else {
+      this.calcularParticipacionTotal();
+    }
+  }
+
+  eliminarMiembroConsorcio(element: any) {
+  functionsAlertMod2.preguntarSiNoIcono('¿Seguro que desea eliminar este miembro del consorcio?').then((result) => {
+    if (result.isConfirmed) {
+      // Llamar al servicio para eliminar la empresa en el backend
+      this.propuestaConsorcioService.eliminarEmpresaConsorcio(element.idPropuestaConsorcio).subscribe(() => {
+        // Actualizar el frontend eliminando la empresa de la tabla
+        this.datosEmpresas = this.datosEmpresas.filter(emp => emp !== element);
+
+        // Recalcular la facturación total y la participación total
+        this.facturacionTotal = this.datosEmpresas.reduce((acc, curr) => acc + curr.facturacion, 0);
+        this.calcularParticipacionTotal();
+
+        // Mostrar mensaje de éxito
+        functionsAlertMod2.success('Miembro del consorcio eliminado correctamente');
+      }, (error) => {
+        // Mostrar mensaje de error en caso de fallo
+        functionsAlert.error('Error al eliminar el miembro del consorcio. Inténtelo de nuevo.');
+      });
+    }
+  });
+}
+
+
+  calcularParticipacionTotal() {
+
+    let checkParticipacionNula = false;
+    this.participacionTotal = 0;
+
+    for (let i = 0; i < this.datosEmpresas.length; i++) {
+      this.participacionTotal = this.participacionTotal + this.datosEmpresas[i].participacion;
+
+      if (this.datosEmpresas[i].participacion == 0) checkParticipacionNula = true;
+    }
+    
+    if (this.participacionTotal > 100) {
+      functionsAlert.error("La participación total ingresada es mayor al 100%").then(res => {
+
+      });
+    }
+    else if (this.participacionTotal == 100) {
+      if (checkParticipacionNula) {
+        functionsAlert.error("Ingrese la participación de todas las empresas.").then(res => {
+
+        });
+      }
+      else {
+        functionsAlert.info("La participación total es igual a 100%").then(res => {
+          
+        });
+      }
+    }
+  }
+
+  registrarParticipacion() {
+
+    if (this.facturacionTotal >= this.facturacionMinima) {
+      if (this.participacionTotal == 100) {
+        this.propuestaConsorcioService.registrarParticipacion(this.datosEmpresas).subscribe(res => {
+          if (res) {
+            functionsAlert.success("Participación Registrada..");
+          }
+          else {
+            functionsAlert.error("Error al registrar la participación");
+          }
+        });
+      }
+      else {
+        functionsAlert.error("Verifique las participaciones de cada empresa");
+      }
+    }
+    else {
+      functionsAlert.error("La facturación total del consorcio es menor a la facturación mínima de: S/ " + this.facturacionMinima).then(res => {
+
+      });
+    }
+  }
 }

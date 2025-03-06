@@ -6,6 +6,10 @@ export const environment = {
   usuarioExternos: true,
   loginSunat: 'https://certosiservicioslinea.osinergmin.gob.pe/osiservicioslinea/pages/inicio',
   appVersion: `${version}-cer`,
+  
+  recaptcha: {
+    siteKey: '6LdSpOoqAAAAADEpaATcN7D1z11hK30Up7yloZkG',
+  },
 
   //pathServe: 'https://srvcertsicoes02.osinergmin.gob.pe/sicoes-api',
   //apiOauth: 'https://srvcertsicoes02.osinergmin.gob.pe/sicoes-api',

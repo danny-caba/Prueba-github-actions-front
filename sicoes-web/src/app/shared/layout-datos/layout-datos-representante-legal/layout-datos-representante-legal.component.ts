@@ -88,7 +88,7 @@ export class LayoutDatosRepresentanteLegalComponent extends BaseComponent implem
 
   public validarDocumento(tipoDocumento, numeroDocumento) {
 
-    this.pidoService.buscarNroDocumento(tipoDocumento.codigo, numeroDocumento).subscribe({
+    this.pidoService.buscarNroDocumentoRepresentante(tipoDocumento.codigo, numeroDocumento).subscribe({
       next: (resp) => {
         if (resp?.resultCode === '0000' || resp?.resultCode === '0') {
 

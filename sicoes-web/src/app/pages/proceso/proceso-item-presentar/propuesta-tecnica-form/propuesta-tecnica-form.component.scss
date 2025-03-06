@@ -27,3 +27,13 @@
 .ajustar-texto{
     white-space: normal;
 }
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix{
+    padding: 0.5em 0 1em 0;
+}
+.small-input.mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: .25em 0 .75em 0;
+    font-size: 14px;
+}
+.small-input.mat-form-field-appearance-outline .mat-form-field-infix .mat-select-arrow{margin-top: 10px;}
+.small-input.mat-form-field-appearance-outline .mat-select-empty + .mat-form-field-label-wrapper .mat-form-field-label{margin-top: -0.75em;}

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { ParametriaService } from 'src/app/service/parametria.service';
@@ -6,6 +6,8 @@ import { PidoService } from 'src/app/service/pido.service';
 import { ListadoEnum, TipoDocumentoEnum } from 'src/helpers/constantes.components';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { BaseComponent } from '../../components/base.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalAgregarRepresentanteComponent } from '../../modal-agregar-representante/modal-agregar-representante.component';
 
 @Component({
   selector: 'vex-layout-datos-representante-legal',
@@ -15,12 +17,15 @@ import { BaseComponent } from '../../components/base.component';
     fadeInUp400ms
   ]
 })
-export class LayoutDatosRepresentanteLegalComponent extends BaseComponent implements OnInit {
+export class LayoutDatosRepresentanteLegalComponent extends BaseComponent implements OnInit, OnDestroy {
 
   @Input() SOLICITUD: any;
   @Input() editable: boolean = false;
+  @Input() actualizable = false;
 
   listTipoDocumento: any[] = []
+  dataSource: any = [];
+  displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombres', 'apellidoPaterno', 'apellidoMaterno'];
 
   formGroup = this.fb.group({
     tipoDocumento: [{},Validators.required],
@@ -33,6 +38,7 @@ export class LayoutDatosRepresentanteLegalComponent extends BaseComponent implem
   constructor(
     private fb: FormBuilder,
     private pidoService: PidoService,
+    private dialog: MatDialog,
     private parametriaService: ParametriaService) {
     super();
     this.formGroup.controls['nombres'].disable({ emitEvent: false })
@@ -54,10 +60,15 @@ export class LayoutDatosRepresentanteLegalComponent extends BaseComponent implem
         this.limpiarDatosDocumento();
       })
     }
-    
+    this.cargarTabla();
   }
 
-  cargarCombo() {
+  ngOnDestroy(): void {
+    // localStorage.removeItem('historialRepresentante');
+    // localStorage.removeItem('representante');
+  }
+
+  private cargarCombo() {
     this.parametriaService.obtenerMultipleListadoDetalle([ListadoEnum.TIPO_DOCUMENTO]).subscribe(listRes => {
       listRes[0]?.forEach(item => {
         if (item.codigo != 'RUC') {
@@ -65,6 +76,11 @@ export class LayoutDatosRepresentanteLegalComponent extends BaseComponent implem
         }
       });
     })
+  }
+
+  private cargarTabla() {
+    // this.dataSource = localStorage.getItem('historialRepresentante') ? JSON.parse(localStorage.getItem('historialRepresentante')) : [];
+    this.dataSource = this.SOLICITUD?.historialRepresentante || [];
   }
 
   public validarRepresentante() {
@@ -78,6 +94,8 @@ export class LayoutDatosRepresentanteLegalComponent extends BaseComponent implem
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.SOLICITUD) {
+      // localStorage.setItem('historialRepresentante', JSON.stringify(this.SOLICITUD?.historialRepresentante || []));
+      // localStorage.setItem('representante', JSON.stringify(this.SOLICITUD?.representante || {}));
       this.setValues();
     }
   }
@@ -124,6 +142,31 @@ export class LayoutDatosRepresentanteLegalComponent extends BaseComponent implem
       ...datos
     })
     //this.formUbigeo.setValue(datos)
+  }
+
+  agregarRepresentante() {
+    this.dialog.open(ModalAgregarRepresentanteComponent, {
+      width: '700px',
+      height: 'auto'
+    }).afterClosed().subscribe((res) => {
+      console.log(res);
+      if (res !== null && res !== '') {
+        const representanteActual = this.SOLICITUD?.representante;
+        if (res.numeroDocumento == this.SOLICITUD?.representante?.numeroDocumento) {
+          functionsAlert.error('El representante ya se encuentra registrado');
+          return;
+        }
+        // let historialRepresentanteFromLocalStorage = localStorage.getItem('historialRepresentante') ? JSON.parse(localStorage.getItem('historialRepresentante')) : [];
+        // historialRepresentanteFromLocalStorage.push(representanteActual);
+        // localStorage.setItem('historialRepresentante', JSON.stringify(historialRepresentanteFromLocalStorage));
+        this.dataSource = [ representanteActual, ...this.dataSource ];
+        this.SOLICITUD.representante = res;
+        this.SOLICITUD.historialRepresentante = this.dataSource;
+        // localStorage.setItem('representante', JSON.stringify(res));
+        // this.cargarTabla();
+        this.setValues();
+      }
+    });
   }
   
 }

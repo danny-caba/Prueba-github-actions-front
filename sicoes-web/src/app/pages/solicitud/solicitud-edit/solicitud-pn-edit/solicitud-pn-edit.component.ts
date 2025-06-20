@@ -32,6 +32,8 @@ export class SolicitudPnEditComponent extends BaseComponent implements OnInit, O
 
   @Input() SOLICITUD: any;
   @Input() editable: boolean = false;
+  @Input() editModified = false;
+  @Input() actualizable = false;
   @Input() isSubsanar: boolean = false;
   @Input() viewEvaluacion: boolean;
   @Input() itemSeccion: number = 0;
@@ -59,7 +61,24 @@ export class SolicitudPnEditComponent extends BaseComponent implements OnInit, O
         this.layoutDatosPersNat.validarSNE(usu);
         this.layoutDatosPersNat.formGroup.controls['correo'].disable({ emitEvent: false })
       }
+      if (usu && this.actualizable == true) {
+        this.layoutDatosPersNat.validarSNE(usu);
+        // this.layoutDatosPersNat.formGroup.controls['correo'].disable({ emitEvent: false })
+      }
     })
+  }
+
+  actualizar() {
+    functionsAlert.questionSiNo('¿Seguro que desea actualizar la solicitud?').then((result) => {
+      if (result.isConfirmed) {
+        let formValues = this.obtenerDatos();
+        this.solicitudService.actualizarSolicitudConcluido(formValues).subscribe(obj => {
+          functionsAlert.success('Datos Actualizados').then((result) => {
+            this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST]);
+          });
+        });
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -116,6 +135,9 @@ export class SolicitudPnEditComponent extends BaseComponent implements OnInit, O
               functionsAlert.success('Datos Actualizados').then((result) => {
                 //this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, 'editar', obj.solicitudUuid]);
                 this.layoutOtrosRequisitos?.buscarOtrosDocumentos();
+                if (this.editModified) {
+                  this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST]);
+                }
               });
             });
           }
@@ -138,7 +160,7 @@ export class SolicitudPnEditComponent extends BaseComponent implements OnInit, O
       return;
     }
 
-    if (!this.layoutDatosPersNat.validarDatosPN()) {
+    if (!this.layoutDatosPersNat.validarDatosPN() && !this.editModified) {
       this.snackbar.open('Debe llenar todos los campos en la sección DATOS DE LA PERSONA NATURAL', 'Cerrar', {
         duration: 7000,
       })
@@ -153,19 +175,29 @@ export class SolicitudPnEditComponent extends BaseComponent implements OnInit, O
   }
 
   descargarArchivo(obj){
-    functionsAlert.questionSiNo('¿Desea descargar la solicitud en archivo PDF?').then((result) => {
-      if (result.isConfirmed) {
-        functionsAlert.loadProceso().then((result) => {
-          /* Read more about handling dismissals below */
-          if (result.dismiss === Swal.DismissReason.timer) {
-            this.descargarFormato();
-            this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_VIEW, obj.solicitudUuid]);
-          }
-        })
-      }else{
-        this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_VIEW, obj.solicitudUuid]);
-      }
-    });
+    if (this.editModified) {
+      functionsAlert.success('Solicitud Registrada').then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST]);
+        } else {
+          this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_VIEW, obj.solicitudUuid]);
+        }
+      });
+    } else {
+      functionsAlert.questionSiNo('¿Desea descargar la solicitud en archivo PDF?').then((result) => {
+        if (result.isConfirmed) {
+          functionsAlert.loadProceso().then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              this.descargarFormato();
+              this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_VIEW, obj.solicitudUuid]);
+            }
+          })
+        }else{
+          this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_VIEW, obj.solicitudUuid]);
+        }
+      });
+    }
   }
 
   descargarArchivoSubsanacion(obj){

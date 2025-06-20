@@ -1,9 +1,13 @@
 <div class="py-2 flex items-center justify-end gap-2" *vexOptionRole="opcion.BTN_DOC_EXP_AGREGAR">
     <button color="primary" mat-raised-button type="button" (click)="agregarDocumento()">Agregar</button>
 </div>
-<div class="py-2 flex items-center justify-end gap-2">
+<div class="pt-2 flex items-center justify-end gap-2">
     <mat-label class="font-bold font-medium">TOTAL FACTURADO:</mat-label>
     <mat-label class="font-bold font-medium">S/. {{TOTAL_FACTURADO}}</mat-label>
+</div>
+<div class="pb-2 flex items-center justify-end gap-2" *ngIf="editModified">
+    <mat-label class="font-bold font-medium">TOTAL FACTURADO EVALUADO:</mat-label>
+    <mat-label class="font-bold font-medium">S/. {{TOTAL_FACTURADO_EVALUADO}}</mat-label>
 </div>
 <div class="mx-0 py-4 border-b overflow-auto">
     <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
@@ -14,6 +18,10 @@
         <ng-container matColumnDef="subSector">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Sub Sector</th>
             <td mat-cell *matCellDef="let element"> {{element?.subSectorDoc?.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="areaSubCategoria">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Area<th>
+            <td mat-cell *matCellDef="let element"> {{element?.actividadArea?.nombre}} </td>
         </ng-container>
         <ng-container matColumnDef="descripcionContrato">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Objeto del contrato</th>
@@ -55,14 +63,23 @@
         <ng-container matColumnDef="archivo">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Archivo</th>
             <td *matCellDef="let element" mat-cell>
-                <div class="flex items-center gap-1 cursor-pointer">
-                    <div *ngIf="element.archivo" (click)="descargarArchivo(element.archivo)"
-                        [ngClass]="['text-purple', 'bg-purple-light']"
-                        class="rounded px-2 py-1 font-medium text-xs flex-none">
+                <div class="flex items-center gap-1" [class.cursor-pointer]="descargaHabilitada(element) && !isOriginalEval(element)">
+                    <div *ngIf="element.archivo"
+                        [ngClass]="{
+                            'text-purple bg-purple-light': descargaHabilitada(element) && !isOriginalEval(element),
+                            'text-gray bg-gray-light': !descargaHabilitada(element) || isOriginalEval(element)
+                        }"
+                        class="rounded px-2 py-1 font-medium text-xs flex-none"
+                        [class.cursor-not-allowed]="!descargaHabilitada(element) || isOriginalEval(element)"
+                        (click)="descargaHabilitada(element) && !isOriginalEval(element) && descargarArchivo(element.archivo)">
                         {{ element.archivo.nombre }}
                     </div>
                 </div>
             </td>
+        </ng-container>
+        <ng-container matColumnDef="estado" *ngIf="editModified">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+            <td mat-cell *matCellDef="let element">{{ element?.estado?.nombre || '' }}</td>
         </ng-container>
         <!-- <ng-container matColumnDef="estado">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Resultado</th>
@@ -73,7 +90,7 @@
         <ng-container matColumnDef="acciones">
             <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
             <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-                <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ obj: row }"
+                <button *ngIf="descargaHabilitada(row)" (click)="$event.stopPropagation()" [matMenuTriggerData]="{ obj: row }"
                     [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button" class="hover:bg-hover">
                     <mat-icon svgIcon="mat:more_horiz"></mat-icon>
                 </button>
@@ -143,6 +160,12 @@
             <button (click)="eliminarDocumento(obj)" mat-menu-item *vexOptionRole="opcion.MEN_DOC_EXP_ELIMINAR">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
                 <span>Eliminar</span>
+            </button>
+        </div>
+        <div *ngIf="editModified">
+            <button (click)="actualizarVer(obj, 'ACC_EDITAR_ARCHIVO')" mat-menu-item *vexOptionRole="opcion.BTN_DOC_EXP_EDITAR_ARCH">
+                <mat-icon svgIcon="mat:edit"></mat-icon>
+                <span>Editar</span>
             </button>
         </div>
     </ng-template>

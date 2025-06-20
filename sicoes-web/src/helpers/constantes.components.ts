@@ -197,6 +197,7 @@ export enum ListadoEnum {
     TIPO_DATO = 'TIPO_DATO',
     TIPO_CONTRATO = 'TIPO_CONTRATO',
     ENTRADA_DATO = 'ENTRADA_DATO',
+    ADJUDICACION_SIMPLIFICADA = 'ADJUDICACION_SIMPLIFICADA',
     CONST_ESTADO_PACE_REGISTRADO = "PACE_REG",
     CONST_ESTADO_PACE_ACTUALIZADO = "PACE_ACT",
     CONST_ESTADO_PACE_APROBADO_DIVISION = "PACE_APR_DV",
@@ -215,6 +216,27 @@ export enum solicitudContrato {
     ACCION_EDITAR = 'ACCION_EDITAR'
 }
 
+export enum estadosIndexPerfCont {
+    PRELIMINAR = '1',
+    EN_PROCESO = '2',
+    OBSERVADO =  '3',
+    CONCLUIDO =  '4',
+    ARCHIVADO =  '5'
+}
+
+export enum estadosPerfCont {
+    PRELIMINAR = 'Preliminar',
+    EN_PROCESO = 'En Proceso',
+    OBSERVADO = 'Observado',
+    CONCLUIDO = 'Concluído',
+    ARCHIVADO = 'Archivado'
+}
+
+export enum tipoSolicitudPerfCont {
+    INSCRIPCION = '1',
+    SUBSANACION = '2'
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -222,4 +244,14 @@ export enum solicitudContrato {
 export class Constantes {
     requisitoAdjunto = RequisitoAdjuntoEnum;
     tipoDocumento = TipoDocumentoEnum;
+}
+
+
+export enum origenRegistroEnum {
+    MODIFICACION = 'MODIFICACION'
+}
+
+export enum flagEnum {
+    VIGENTE = '1',
+    NO_VIGENTE = '0'
 }

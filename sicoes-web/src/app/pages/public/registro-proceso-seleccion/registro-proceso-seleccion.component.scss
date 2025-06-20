@@ -14,3 +14,17 @@
 .boton-derecha {
   margin-left: auto;
 }
+
+.truncate-text-num {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px; 
+}
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 500px; 
+}

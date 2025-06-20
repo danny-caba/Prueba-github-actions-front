@@ -24,11 +24,11 @@ export class DocumentoContratoComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    if (this.tipoContratoSeleccionado) {
-      this.obtenerRequisitos();
-    } else {
-      console.error('tipoContratoSeleccionado no tiene valor al iniciar');
-    }
+    // if (this.tipoContratoSeleccionado) {
+    //   this.obtenerRequisitos();
+    // } else {
+    //   console.error('tipoContratoSeleccionado no tiene valor al iniciar');
+    // }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -36,7 +36,6 @@ export class DocumentoContratoComponent implements OnInit, OnChanges {
       this.obtenerRequisitos();
     }
     this.cdr.detectChanges();
-    this.ngOnInit();
   }
 
   esArchivo(requisito: any) {
@@ -44,7 +43,12 @@ export class DocumentoContratoComponent implements OnInit, OnChanges {
   }
 
   obtenerRequisitos() {
-    this.requisitoService.obtenerRequisitosPorSeccion(this.SECCION.idSolPerConSec, this.tipoContratoSeleccionado).subscribe(
+    this.requisitoService.obtenerRequisitosPorSeccion(
+      this.SECCION.idSolPerConSec, 
+      this.tipoContratoSeleccionado, 
+      this.evaluar, 
+      this.CONTRATO.propuesta.idPropuesta
+    ).subscribe(
       (response: any) => {
         this.requisitos = response.content;
 

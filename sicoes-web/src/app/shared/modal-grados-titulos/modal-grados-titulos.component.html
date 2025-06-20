@@ -1,6 +1,6 @@
 <form>
     <vex-modal-title *ngIf="booleanAdd" [titulo]="'Agregar Grado y/o Título Académico'"></vex-modal-title>
-    <vex-modal-title *ngIf="booleanEdit" [titulo]="'Editar Grado y/o Título Académico'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit || booleanEditFile" [titulo]="'Editar Grado y/o Título Académico'"></vex-modal-title>
     <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Grado y/o Título Académico'"></vex-modal-title>
     <vex-modal-title *ngIf="booleanEvaluar || booleanViewEval" [titulo]="'Grado y/o Título Académico'"></vex-modal-title>
 
@@ -39,7 +39,7 @@
         </mat-form-field>
         
         <!--ADJUNTO TA01-->
-        <vex-form-adjuntos-btn [editable]="booleanAdd || booleanEdit" [titulo]="'Documento'" 
+        <vex-form-adjuntos-btn [editable]="booleanAdd || booleanEdit || booleanEditFile" [titulo]="'Documento'" 
             [solicitud]="solicitud"
             [codigo]="'TA01'" #formAdjuntoBtnTA01 [archivos]="estudio?.archivos"></vex-form-adjuntos-btn>
         <br>
@@ -69,7 +69,7 @@
             </mat-form-field>
 
             <!--ADJUNTO TA02-->
-            <vex-form-adjuntos-btn [editable]="booleanAdd || booleanEdit" [titulo]="'Documento'" 
+            <vex-form-adjuntos-btn [editable]="booleanAdd || booleanEdit || booleanEditFile" [titulo]="'Documento'" 
                 [solicitud]="solicitud"
                 [codigo]="'TA02'" #formAdjuntoBtnTA02 [archivos]="estudio?.archivos" class="mb-8"></vex-form-adjuntos-btn>
         </div>
@@ -82,6 +82,7 @@
     <mat-dialog-actions align="end">
         <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
         <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEditFile" (click)="actualizarArchivo()">Actualizar</button>
         <!--GUARDAR EVALUACION-->
         <button mat-raised-button color="primary" *ngIf="booleanEvaluar== true && booleanViewEval == false" (click)="evaluar()">Guardar</button>
         <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>

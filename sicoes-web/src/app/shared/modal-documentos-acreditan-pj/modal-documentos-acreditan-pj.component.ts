@@ -13,7 +13,7 @@ import { BaseComponent } from '../components/base.component';
 import { FormAdjuntosBtnComponent } from '../form-adjuntos-btn/form-adjuntos-btn.component';
 import { PidoService } from 'src/app/service/pido.service';
 import { ParametriaService } from 'src/app/service/parametria.service';
-import { ListadoEnum, SolicitudEstadoEnum, TipoPersonaEnum } from 'src/helpers/constantes.components';
+import { flagEnum, ListadoEnum, SolicitudEstadoEnum, TipoPersonaEnum } from 'src/helpers/constantes.components';
 import { DatePipe } from '@angular/common';
 import { functions } from 'src/helpers/functions';
 import { CmpOpcionEvaluadorComponent } from '../cmp-opcion/cmp-opcion-evaluador/cmp-opcion-evaluador.component';
@@ -40,6 +40,7 @@ export class ModalDocumentosAcreditanPJComponent extends BaseComponent implement
   solicitud: Solicitud
   documento: Documento
   data: any
+  originalDuracion: string;
 
   booleanAdd: boolean = true
   booleanEdit: boolean = false
@@ -48,10 +49,15 @@ export class ModalDocumentosAcreditanPJComponent extends BaseComponent implement
   booleanViewEval: boolean = false
   editableEvaluacion: boolean = true;
   cmpTipoRevisionEdit: boolean = false;
+  booleanEditFile = false;
 
   flagValidar: boolean = false;
   flagConformidad: boolean = false;
   flagVigente: boolean;
+  enableDateEditing: boolean = false;
+  isEditableDate: boolean = false;
+  flagVigenteSubscription: any;
+  fechaFinSubscription: any;
 
   formGroup = this.fb.group({
     tipoDocumento: [null, Validators.required],
@@ -124,11 +130,13 @@ export class ModalDocumentosAcreditanPJComponent extends BaseComponent implement
   }
 
   validarOpciones(data) {
+    
     this.booleanAdd = data.accion == 'add';
     this.booleanEdit = data.accion == 'edit';
     this.booleanView = data.accion == 'view';
     this.booleanEvaluar = data.accion == 'editEval';
     this.booleanViewEval = data.accion == 'viewEval';
+    this.booleanEditFile = data.accion == 'editFile';
     this.flagTerminos = data?.flagTerminos;
 
     if (this.booleanView) {
@@ -140,11 +148,19 @@ export class ModalDocumentosAcreditanPJComponent extends BaseComponent implement
       this.booleanEvaluar = true;
       this.editableEvaluacion = false;
     }
+
     if (this.booleanEvaluar) {
       this.formGroup.disable();
     }
-
-    if (!this.booleanView && !this.booleanViewEval && !this.booleanEvaluar) {
+    
+    if (this.booleanEditFile) {
+      this.formGroup.disable();
+      if (this.data?.documento?.flagVigente === flagEnum.VIGENTE) {
+        this.isEditableDate = true;
+      }
+    }
+    
+    if (!this.booleanView && !this.booleanViewEval && !this.booleanEvaluar && !this.booleanEditFile) {
       this.formGroup.controls['nombreEntidad'].disable({ emitEvent: false })
       this.formGroup.controls['duracion'].disable({ emitEvent: false })
 
@@ -167,18 +183,21 @@ export class ModalDocumentosAcreditanPJComponent extends BaseComponent implement
         this.flagConformidad = true
       })
     }
+
   }
 
   cargarDatos(idDocumento) {
-
     let cuentaConformidad = this.formGroup.controls['cuentaConformidad'].value;
     cuentaConformidad = {} ? this.flagConformidad = false : this.flagConformidad = true
 
     this.documentoService.obtenerDocumento(idDocumento).subscribe(res => {
       this.documento = res;
+      console.log(this.documento);
+      
       this.documento.fechaInicio = functions.getFechaString(this.documento.fechaInicio);
       this.documento.fechaFin = functions.getFechaString(this.documento.fechaFin);
       this.documento.fechaConformidad = functions.getFechaString(this.documento.fechaConformidad);
+      this.originalDuracion = this.documento ? this.documento.duracion : '';
       this.formGroup.patchValue(res)
       if (res.flagVigente == 0) {
         this.formGroup.controls.flagVigente.setValue(0)
@@ -196,7 +215,7 @@ export class ModalDocumentosAcreditanPJComponent extends BaseComponent implement
         }
       }
 
-      if(this.booleanView || this.booleanViewEval || this.booleanEvaluar){
+      if(this.booleanView || this.booleanViewEval || this.booleanEvaluar || this.booleanEditFile){
         this.onChangePaisView();
       }
 
@@ -467,6 +486,29 @@ export class ModalDocumentosAcreditanPJComponent extends BaseComponent implement
     return false;
   }
 
+  validarFormModified() {
+    console.log(this.formGroup);
+    
+    if (this.enableDateEditing) {
+      if (this.formGroup.get('fechaFin').value == null && this.formGroup.get('flagVigente').value == 0 ) {
+        this.snackbar.open('Valide la Fecha de Fin', 'Cerrar', {
+          duration: 7000,
+        })
+        return true;
+      }
+
+      if (this.formGroup.get('duracion').value == null) {
+        this.snackbar.open('Valide la Duración', 'Cerrar', {
+          duration: 7000,
+        })
+        return true;
+      }
+
+      return false;
+    }
+    return false;
+  }
+
   actualizar() {
     if (this.validarForm()) return;
 
@@ -494,6 +536,44 @@ export class ModalDocumentosAcreditanPJComponent extends BaseComponent implement
 
   }
 
+  modificar() {
+    if (this.validarFormModified()) return;
+    let documento: any = {
+      idDocumento: this.documento.idDocumento,
+      solicitud: {
+        solicitudUuid: this.solicitud.solicitudUuid,
+      }
+    };
+
+    let archivo = this.formAdjuntoBtn.obtenerAdjuntos();
+    if (archivo) {
+      documento.archivo = archivo;
+    }
+
+    if (this.enableDateEditing) {
+      documento = {
+        ...documento,
+        ...this.formGroup.getRawValue()
+      };
+      documento.fechaInicio = this.datePipe.transform(this.formGroup.controls['fechaInicio'].value, 'dd/MM/yyyy');
+      documento.fechaFin = this.datePipe.transform(this.formGroup.controls['fechaFin'].value, 'dd/MM/yyyy');
+      documento.flagVigente = this.formGroup.controls['flagVigente'].value ? '1' : '0';
+    }
+
+
+    this.documentoService.actualizarFile(documento).subscribe(res => {
+      const currentDuracion = this.formGroup.get('duracion').value;
+      let message = 'Registro Actualizado';
+      
+      if (this.originalDuracion !== currentDuracion && currentDuracion) {
+        message = `Registro Actualizado. La duración de la experiencia se ha modificado a ${currentDuracion}.`;
+      }
+      
+      functionsAlert.success(message).then((result) => {
+        this.closeModal()
+      });
+    });
+  }
 
   guardar() {
     if (this.validarForm()) return;
@@ -587,5 +667,52 @@ export class ModalDocumentosAcreditanPJComponent extends BaseComponent implement
     })
   }
 
+  toggleDateEditing() {
+    this.enableDateEditing = !this.enableDateEditing;
 
+    if (this.enableDateEditing) {
+        this.formGroup.controls['fechaFin'].enable({ emitEvent: false })
+        this.formGroup.controls['flagVigente'].enable({ emitEvent: false })
+
+        this.flagVigenteSubscription = this.formGroup.controls.flagVigente.valueChanges.subscribe(value => {
+          this.onChangeVigente();
+        })
+        this.fechaFinSubscription = this.formGroup.controls.fechaFin.valueChanges.subscribe(value => {
+          this.onChangeFecha();
+        })
+        this.onChangeVigente();
+    } else {
+      this.formGroup.controls['fechaFin'].disable({ emitEvent: false })
+      this.formGroup.controls['flagVigente'].disable({ emitEvent: false })
+      
+      if (this.flagVigenteSubscription) {
+        this.flagVigenteSubscription.unsubscribe();
+      }
+      if (this.fechaFinSubscription) {
+        this.fechaFinSubscription.unsubscribe();
+      }
+      // this.cargarDatos(this.data.documento.idDocumento);
+      this.formGroup.controls.flagVigente.setValue(this.documento.flagVigente === '1' ? 1 : 0)
+      this.formGroup.controls.fechaFin.setValue(this.documento.fechaFin)
+      this.formGroup.controls.duracion.setValue(this.documento.duracion)  
+
+    }
+  }
+
+  isOriginalEval() {
+    return this.data.documento?.estado?.nombre.toUpperCase() == 'ORIGINAL' && (this.booleanViewEval || this.booleanView);
+  }
+
+  // booleanEditFile
+
+  // validarFormModified() {
+  //   if (this.enableDateEditing) {
+  //     return false;
+  //   }
+  //   if (!this.formGroup.valid) {
+  //     this.formGroup.markAllAsTouched()
+  //     return true;
+  //   }
+  //   return false;
+  // }
 }

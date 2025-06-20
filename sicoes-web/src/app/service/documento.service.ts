@@ -51,4 +51,9 @@ export class DocumentoService {
     let urlEndpoint = `${this._path_serve}/api/documentos/${idRequisito}/evaluar`
     return this.http.put<Documento>(urlEndpoint,request);
   }
+
+  actualizarFile(request: any){
+    let urlEndpoint = `${this._path_serve}/api/documentos/${request.idDocumento}/modificar`
+    return this.http.put<Documento>(urlEndpoint,request);
+  }
 }

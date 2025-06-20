@@ -62,7 +62,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <vex-form-adjuntos-btn [titulo]="'Documento'" [editable]="booleanAdd || booleanEdit" 
+        <vex-form-adjuntos-btn [titulo]="'Documento'" [editable]="booleanAdd || booleanEdit || booleanEditFile" 
             [solicitud]="solicitud"
             [codigo]="'TA09'" #formAdjuntoBtnTA09 [archivos]="capacitacion?.archivos"></vex-form-adjuntos-btn>
         
@@ -72,6 +72,7 @@
     <mat-dialog-actions align="end">
         <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
         <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEditFile" (click)="actualizarArchivo()">Actualizar</button>
         <!--GUARDAR EVALUACION-->
         <button mat-raised-button color="primary" *ngIf="booleanEvaluar== true && booleanViewEval == false" (click)="evaluar()">Guardar</button>
         <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>

@@ -5,7 +5,8 @@
             <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- DATOS DE LA PERSONA NATURAL</mat-panel-title>
         </mat-expansion-panel-header>
         <vex-layout-datos-pers-nat #layoutDatosPersNat [SOLICITUD]="SOLICITUD"
-            [editable]="editable"></vex-layout-datos-pers-nat>
+            [editable]="editable"
+            [actualizable]="actualizable"></vex-layout-datos-pers-nat>
     </mat-expansion-panel>
     <mat-expansion-panel class="mt-2" expanded="false">
         <mat-expansion-panel-header>
@@ -22,7 +23,9 @@
             </mat-panel-title>
         </mat-expansion-panel-header>
         <ng-template matExpansionPanelContent>
-            <vex-layout-grado-academico class="max-w-content" matExpansionPanelContent></vex-layout-grado-academico>
+            <vex-layout-grado-academico class="max-w-content" 
+            matExpansionPanelContent
+            [editModified]="editModified"></vex-layout-grado-academico>
         </ng-template>
     </mat-expansion-panel>
     <mat-expansion-panel class="mt-2" expanded="false">
@@ -30,7 +33,9 @@
             <mat-panel-title class="font-bold">{{itemSeccion + 4}}.- CAPACITACIÓN</mat-panel-title>
         </mat-expansion-panel-header>
         <ng-template matExpansionPanelContent>
-            <vex-layout-capacitacion matExpansionPanelContent></vex-layout-capacitacion>
+            <vex-layout-capacitacion 
+            matExpansionPanelContent
+            [editModified]="editModified"></vex-layout-capacitacion>
         </ng-template>
     </mat-expansion-panel>
     <mat-expansion-panel class="mt-2" expanded="false">
@@ -39,8 +44,9 @@
                 LA CATEGORÍA Y PERFIL A ACREDITARSE</mat-panel-title>
         </mat-expansion-panel-header>
         <ng-template matExpansionPanelContent>
-            <vex-layout-documento-sustento-exp matExpansionPanelContent>
-            </vex-layout-documento-sustento-exp>
+            <vex-layout-documento-sustento-exp 
+            matExpansionPanelContent
+            [editModified]="editModified"></vex-layout-documento-sustento-exp>
         </ng-template>
     </mat-expansion-panel>
     <mat-expansion-panel class="mt-2" expanded="false">
@@ -48,7 +54,10 @@
             <mat-panel-title class="font-bold">{{itemSeccion + 6}}.- OTROS REQUISITOS</mat-panel-title>
         </mat-expansion-panel-header>
 
-        <vex-layout-otros-requisitos #layoutOtrosRequisitos [viewEvaluacion]="viewEvaluacion"></vex-layout-otros-requisitos>
+        <vex-layout-otros-requisitos #layoutOtrosRequisitos 
+            [editModified]="editModified"
+            [actualizable]="actualizable"
+            [viewEvaluacion]="viewEvaluacion"></vex-layout-otros-requisitos>
 
     </mat-expansion-panel>
 </mat-accordion>

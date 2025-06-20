@@ -74,15 +74,19 @@
                                 <th *matHeaderCellDef mat-header-cell mat-sort-header class="text-center">Acciones</th>
                                 <td *matCellDef="let row" class="w-10 text-primary" mat-cell>
                                     <div class="flex">
+                                        <button matTooltip="Configurar" (click)="configurarPace(row)" *ngIf="validarAbilitarBotonEditarEliminar(row)">
+                                            <mat-icon svgIcon="mat:settings"></mat-icon>
+                                        </button>
+                                        <div class="v-line mx-2" *ngIf="validarAbilitarBotonEditarEliminar(row)"></div>
                                         <button matTooltip="Editar" (click)="editarPace(row)" *ngIf="validarAbilitarBotonEditarEliminar(row)">
                                             <mat-icon svgIcon="mat:edit"></mat-icon>
                                         </button>
                                         <div class="v-line mx-2" *ngIf="validarAbilitarBotonEditarEliminar(row)"></div>
-                                        <button matTooltip="Ver proceso" (click)="ver(row)">
+                                        <button matTooltip="Ver" (click)="ver(row)">
                                             <mat-icon svgIcon="mat:visibility"></mat-icon>
                                         </button>
                                         <div class="v-line mx-2" *ngIf="validarAbilitarBotonEditarEliminar(row)"></div>
-                                        <button matTooltip="Bitacora" (click)="eliminar(row)"  *ngIf="validarAbilitarBotonEditarEliminar(row)">
+                                        <button matTooltip="Eliminar" (click)="eliminar(row)"  *ngIf="validarAbilitarBotonEditarEliminar(row)">
                                             <mat-icon svgIcon="mat:delete"></mat-icon>
                                         </button>
                                     </div>

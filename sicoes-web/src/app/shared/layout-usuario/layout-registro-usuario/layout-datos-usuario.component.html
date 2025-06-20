@@ -53,23 +53,29 @@
                 </mat-form-field>
                 <mat-form-field *ngIf="disableEdit">
                     <input  [formControl]="formGroup.controls.nombreUsuarioSiged" matInput maxlength="200" placeholder="Ingrese usuario" readonly>
-
                 </mat-form-field>
-                <mat-error *ngIf="formGroup.get('nombreUsuarioSiged').hasError('required')">Ingrese usuario</mat-error>
+                <!-- <mat-error *ngIf="formGroup.get('nombreUsuarioSiged').hasError('required')">Ingrese nombre del usuario</mat-error> -->
         </div>
         <div class="md:col-span-2 sm:col-span-1 flex flex-col">
             <mat-label class="text-primary text-sm font-medium">Correo Electrónico</mat-label>
             <mat-form-field>
-                <input [formControl]="formGroup.controls.correoUsuario" [readonly]="disableEdit" placeholder="" matInput maxlength="100">
+                <input [formControl]="formGroup.controls.correoUsuario" placeholder="" matInput maxlength="100" placeholder="Ingrese correo electrónico">
                 <mat-error *ngIf="formGroup.get('correoUsuario').hasError('required')">Ingrese nombre del proceso</mat-error>
             </mat-form-field>
         </div>
         <div class="flex flex-col">
-            <mat-label class="text-primary text-sm font-medium">Ingresar Nombre de Usuario</mat-label>
+            <mat-label class="text-primary text-sm font-medium">Ingresar Usuario</mat-label>
             <mat-form-field>
-                <input [formControl]="formGroup.controls.nombreUsuario" matInput maxlength="20" placeholder="Ingresar Nombre de Usuario"
+                <input [formControl]="formGroup.controls.usuario" matInput maxlength="20" placeholder="Ingresar Nombre de Usuario"
                 (input)="actualizarCorreoUsuario()">
-                <mat-error *ngIf="formGroup.get('nombreUsuario').hasError('required')">Ingresar Nombre de Usuario</mat-error>
+                <mat-error *ngIf="formGroup.get('usuario').hasError('required')">Ingresar Nombre de Usuario</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">ID Usuario SIGED</mat-label>
+            <mat-form-field>
+                <input [formControl]="formGroup.controls.idUsuario" matInput maxlength="20" placeholder="Ingresar ID de Usuario">
+                <mat-error *ngIf="formGroup.get('idUsuario').hasError('required')">Ingresar ID de Usuario</mat-error>
             </mat-form-field>
         </div>
     </div>

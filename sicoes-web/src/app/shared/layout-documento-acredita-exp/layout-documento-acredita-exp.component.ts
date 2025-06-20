@@ -7,10 +7,12 @@ import { Solicitud } from 'src/app/interface/solicitud.model';
 import { AdjuntosService } from 'src/app/service/adjuntos.service';
 import { DocumentoService } from 'src/app/service/documento.service';
 import { SolicitudService } from 'src/app/service/solicitud.service';
-import { RolEnum, SolicitudEstadoEnum } from 'src/helpers/constantes.components';
+import { EvaluadorRol, RolEnum, SolicitudEstadoEnum } from 'src/helpers/constantes.components';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { BasePageComponent } from '../components/base-page.component';
 import { ModalDocumentosAcreditanPJComponent } from '../modal-documentos-acreditan-pj/modal-documentos-acreditan-pj.component';
+import { PerfilService } from 'src/app/service/perfil.service';
+import { EvaluadorService } from 'src/app/service/evaluador.service';
 
 @Component({
   selector: 'vex-layout-documento-acredita-exp',
@@ -25,11 +27,16 @@ export class LayoutDocumentoAcreditaExpComponent extends BasePageComponent<any> 
   suscriptionSolicitud: Subscription;
   solicitud: Partial<Solicitud>
   @Input() editable: boolean = false;
-
+  @Input() editModified = false;
+  usuario: any;
   usuario$ = this.authFacade.user$;
   esExterno: boolean = false;
 
+  ACC_EDITAR_ARCHIVO = 'ACC_EDITAR_ARCHIVO';
+
   displayedColumns: string[] = [];
+  esEvaluadorTecnico: boolean;
+  
 
   serviceTable(filtro: any) {
     return this.documentoService.buscarDocumentos(filtro);
@@ -46,14 +53,83 @@ export class LayoutDocumentoAcreditaExpComponent extends BasePageComponent<any> 
     private authFacade: AuthFacade,
     private dialog: MatDialog,
     private documentoService: DocumentoService,
-    private adjuntoService: AdjuntosService
+    private adjuntoService: AdjuntosService,
+    private perfilService: PerfilService,
+    private evaluadorService: EvaluadorService
   ) {
     super();
+  }
+
+  currentUserId: number;
+  actividadAsignadaId: number[] = [];
+
+  ngOnInitBorrar(): void {
+    this.suscribirSolicitud();
+    this.validarUsuarioExterno();
   }
 
   ngOnInit(): void {
     this.suscribirSolicitud();
     this.validarUsuarioExterno();
+    
+    this.usuario$.subscribe(usu => {
+        if (usu) {
+            this.usuario = usu;
+            this.currentUserId = usu.idUsuario;
+            this.actividadAsignada();
+            
+            if (this.solicitud?.solicitudUuid) {
+                this.cargarEvaluadoresTecnicos(this.solicitud.solicitudUuid);
+            }
+        }
+    });
+  }
+
+  actividadAsignada(): void {
+    
+    if (!this.solicitud?.solicitudUuid) return;
+    
+    this.perfilService.buscarPerfiles({
+        solicitudUuid: this.solicitud.solicitudUuid
+    }).subscribe(response => {
+        this.actividadAsignadaId = response.content
+            .filter(item => item.usuario?.idUsuario === this.currentUserId)
+            .map(item => item.actividadArea?.idListadoDetalle)
+            .filter(id => id != null);
+    });
+  }
+
+  descargaHabilitada(documento: any): boolean {
+    
+    if (this.esExterno) {
+        return true;
+    }
+    if (!this.esEvaluadorTecnico) {
+        return true;
+    }
+
+    if (this.actividadAsignadaId.length === 0) return false;
+
+    return this.actividadAsignadaId.includes(documento.actividadArea?.idListadoDetalle);
+  }
+
+  listarEvaladoresAsignadosTecnico
+  cargarEvaluadoresTecnicos(solicitudUuid: string): void {
+    this.evaluadorService.listarAsignaciones({ 
+        solicitudUuid: solicitudUuid, 
+        size: 1000 
+    }).subscribe({
+        next: (listRes) => {
+            this.esEvaluadorTecnico = listRes.content?.some(obj => 
+                obj.tipo.codigo === EvaluadorRol.TECNICO_COD && 
+                obj.usuario?.idUsuario === this.currentUserId
+            ) || false;
+        },
+        error: (err) => {
+            console.error('Error al cargar evaluadores:', err);
+            this.esEvaluadorTecnico = false;
+        }
+    });
   }
 
   validarUsuarioExterno(){
@@ -88,6 +164,23 @@ export class LayoutDocumentoAcreditaExpComponent extends BasePageComponent<any> 
         //'estado',
         'acciones'
       ];
+    }else if(this.esExterno && this.editModified){
+      this.displayedColumns = [
+        'nombreEntidad',
+        'subSector',
+        'descripcionContrato',
+        'codigoContrato',
+        'fechaInicio',
+        'fechaFin',
+        'cuentaConformidad',
+        'tipoCambio',
+        'montoContratado',
+        'montoTipoCambio',
+        'montoContratoSol',
+        'archivo',
+        'estado',
+        'acciones'
+      ];
     }else if(this.esExterno){
       this.displayedColumns = [
         'nombreEntidad',
@@ -109,6 +202,7 @@ export class LayoutDocumentoAcreditaExpComponent extends BasePageComponent<any> 
       this.displayedColumns = [
         'nombreEntidad',
         'subSector',
+        'areaSubCategoria',
         'descripcionContrato',
         'codigoContrato',
         'fechaInicio',
@@ -177,6 +271,12 @@ export class LayoutDocumentoAcreditaExpComponent extends BasePageComponent<any> 
       action = 'viewEval'
       obj.idDocumento = obj.idDocumentoPadre;
     }
+    if (action == 'ACC_EDITAR_ARCHIVO' && this.isOriginal(obj)) {
+      action = 'editFile'
+    }
+    if (action == 'ACC_EDITAR_ARCHIVO' && !this.isOriginal(obj)) {
+      action = 'edit'
+    }
     this.dialog.open(ModalDocumentosAcreditanPJComponent, {
       width: '1200px',
       maxHeight: '100%',
@@ -221,6 +321,14 @@ export class LayoutDocumentoAcreditaExpComponent extends BasePageComponent<any> 
     }).afterClosed().subscribe(() => {
       this.cargarTabla();
     });
+  }
+
+  isOriginal(obj) {
+    return obj?.estado?.nombre.toUpperCase() == 'ORIGINAL';
+  }
+
+  isOriginalEval(obj) {
+    return obj?.estado?.nombre.toUpperCase() == 'ORIGINAL';
   }
 
 }

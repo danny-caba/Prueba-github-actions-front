@@ -3,6 +3,8 @@ import { DocumentoContratoComponent } from '../documento-contrato/documento-cont
 import { PersonalPropuestoComponent } from '../personal-propuesto/personal-propuesto.component';
 import { FielCumplimientoComponent } from '../fiel-cumplimiento/fiel-cumplimiento.component';
 import { MontoDiferencialComponent } from '../monto-diferencial/monto-diferencial.component';
+import { SeccionService } from 'src/app/service/seccion.service';
+import { Seccion } from 'src/app/interface/seccion.model';
 
 @Component({
   selector: 'vex-contrato-seccion',
@@ -11,7 +13,7 @@ import { MontoDiferencialComponent } from '../monto-diferencial/monto-diferencia
 export class ContratoSeccionComponent implements OnInit, AfterViewInit {
 
   @Input() CONTRATO: any;
-  @Input() SECCION: any;
+  @Input() SECCION: Seccion;
   @Input() ORDEN: any;
   @Input() tipoContratoSeleccionado: any;
   @Input() evaluar: boolean;
@@ -28,7 +30,12 @@ export class ContratoSeccionComponent implements OnInit, AfterViewInit {
   @ViewChild('fielCumplimiento', { static: false }) fielCumplimiento: FielCumplimientoComponent;
   @ViewChild('montoDiferencial', { static: false }) montoDiferencial: MontoDiferencialComponent;
 
-  constructor() { }
+  private montoSuperadoVerificado = false;
+  private noSuperaAdjudicacion = false;
+
+  constructor(
+    private seccionService: SeccionService
+  ) { }
 
   ngAfterViewInit(): void {
     if (this.documentoContrato) {
@@ -38,7 +45,7 @@ export class ContratoSeccionComponent implements OnInit, AfterViewInit {
       this.personalPropuestoInitialized.emit(this.personalPropuesto);
     }
     if (this.fielCumplimiento) {
-      this.fielCumplimientoInitialized.emit(this.fielCumplimiento);
+      this.onFielCumplimientoInit(this.fielCumplimiento);
     }
     if (this.montoDiferencial) {
       this.montoDiferencialInitialized.emit(this.montoDiferencial);
@@ -46,6 +53,9 @@ export class ContratoSeccionComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    if (this.seccionFielCumplimiento()) {
+      this.verificarMontoAdjudicacion();
+    }
   }
 
   seccionDocumentoContrato() {
@@ -61,7 +71,43 @@ export class ContratoSeccionComponent implements OnInit, AfterViewInit {
   }
 
   seccionMontoDiferencial() {
-    return this.SECCION.deSeccion.includes('4.- CARTA FIANZA DEL MONTO DIFERENCIAL');
+    return this.SECCION.deSeccion.includes('CARTA FIANZA DEL MONTO DIFERENCIAL');
   }
 
+  noSuperaMontoAdjudicacion() {
+    return this.noSuperaAdjudicacion;
+  }
+
+  verificarMontoAdjudicacion() {
+    if (this.montoSuperadoVerificado) {
+      return;
+    }
+
+    const adjudicacionStr = this.CONTRATO.valorAdjSimplificada.toString().replace(',', '.');
+    const MONTO_FIJO = Number(adjudicacionStr);
+    let importeStr = this.CONTRATO?.propuesta?.propuestaEconomica?.importe?.toString().replace(',', '.');
+    let importe = Number(importeStr);
+    
+    this.seccionService.obtenerSeccionMaestraPorId(this.SECCION.idSeccion).subscribe({
+      next: (response) => {
+        if (response.flVisibleSeccion === '0') {
+          this.noSuperaAdjudicacion = importe <= MONTO_FIJO;
+        } else {
+          this.noSuperaAdjudicacion = false;
+        }
+        this.montoSuperadoVerificado = true;
+      },
+      error: (err) => {
+        console.error('Error al obtener sección maestra:', err);
+        this.montoSuperadoVerificado = true;
+        this.noSuperaAdjudicacion = false;
+      }
+    });
+  }
+
+  onFielCumplimientoInit(component: FielCumplimientoComponent) {
+    if (!this.noSuperaAdjudicacion) {
+      this.fielCumplimientoInitialized.emit(component);
+    }
+  }
 }

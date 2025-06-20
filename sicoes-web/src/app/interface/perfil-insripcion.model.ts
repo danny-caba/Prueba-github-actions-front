@@ -9,6 +9,7 @@ export class PerfilInscripcion {
     perfil: ListadoDetalle
     sector: ListadoDetalle
     actividad: ListadoDetalle
+    actividadArea: ListadoDetalle
     subsector: ListadoDetalle
     tipo: ListadoDetalle
     solicitud: Partial<Solicitud>

@@ -7,6 +7,7 @@ export class Seccion {
     esSeccion?: string
     flReqPersonal?: string
     coSeccion?: string
+    flVisibleSeccion?: string
 }
 
 export  class Requisito {
@@ -18,6 +19,11 @@ export  class Requisito {
     tipoContrato?: ListadoDetalle
     deSeccionRequisito?: string
     esSeccionRequisito?: string
+    flagConformaConsorcio?: string
+    flagRemype?: string
+    flagVisibleFielCumplimiento?: string
+    flagVisibleRetencion?: string
+    flagVisibleSuperaPropuesta?: string
 }
 
 export class SeccionRequisito {

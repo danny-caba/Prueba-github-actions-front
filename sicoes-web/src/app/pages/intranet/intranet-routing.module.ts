@@ -30,6 +30,10 @@ const routes: VexRoutes = [{
   component: CustomLayoutComponent,
   loadChildren: () => import('../../pages/liberar-personal/liberar-personal.module').then(m => m.LiberarPersonalModule),
 }, {
+  path: Link.GESTION_USUARIO,
+  component: CustomLayoutComponent,
+  loadChildren: () => import('../../pages/gestion-usuarios/gestion-usuarios.module').then(m => m.GestionUsuariosModule),
+}, {
   path: Link.GESTION_CONFIGURACION,
   component: CustomLayoutComponent,
   loadChildren: () => import('../../pages/gestion-configuraciones/gestion-configuraciones.module').then(m => m.GestionConfiguracionesModule),

@@ -30,6 +30,7 @@ export class LayoutDatosPersNatComponent extends BaseComponent implements OnInit
   @ViewChild('formUbigeo', { static: true }) formUbigeo: UbigeoUpdComponent;
   @Input() SOLICITUD: any;
   @Input() editable: boolean = false;
+  @Input() actualizable = false;
 
   listTipoDocumento: any[] = []
 
@@ -87,6 +88,20 @@ export class LayoutDatosPersNatComponent extends BaseComponent implements OnInit
         this.formUbigeo.clear();
       })
     }
+    // if(this.actualizable){
+      // this.formGroup.controls.tipoDocumento.valueChanges.subscribe(value => {
+        // if(value?.codigo == TipoDocumentoEnum.CARNET_EXTRA){
+        //   this.disableControls(false, ['direccion'], this.formGroup);
+        //   this.editableUbigeo = true;
+        // } else {
+          // this.disableControls(true, ['direccion', 'tipoPN'], this.formGroup);
+          // this.editableUbigeo = true;
+          // this.disableControls(true, ['direccion'], this.formGroup);
+        // }
+        // this.limpiarDatosDocumento();
+        // this.formUbigeo.clear();
+      // })
+    // }
   }
 
 
@@ -250,6 +265,9 @@ export class LayoutDatosPersNatComponent extends BaseComponent implements OnInit
         this.disableControls(true, ['apellidoPaterno', 'apellidoMaterno', 'nombres', 'direccion', 'tipoPN', 'codigoRuc', 'tipoDocumento', 'numeroDocumento'], this.formGroup);
         this.editableUbigeo = false;
       }
+    } else if (this.actualizable) {
+      this.disableControls(true, ['apellidoPaterno', 'apellidoMaterno', 'nombres', 'tipoPN', 'codigoRuc', 'tipoDocumento', 'numeroDocumento'], this.formGroup);
+      this.editableUbigeo = true;
     } else {
       this.disableAllForm(this.formGroup);
     }

@@ -6,7 +6,7 @@ import { Pageable } from '../interface/pageable.model';
 import { Proceso } from '../interface/proceso.model';
 import { Propuesta, PropuestaProfesional, PropuestaTecnica } from '../interface/propuesta.model';
 import { functions } from 'src/helpers/functions';
-import { PacesAprobarDivisionDTO, PacesListado, PacesObservarDivisionDTO, PacesUpdateDTO } from '../interface/pace';
+import { AprobadoresDTO, PacesAprobarDivisionDTO, PacesListado, PacesObservarDivisionDTO, PacesUpdateDTO } from '../interface/pace';
 
 @Injectable({
     providedIn: 'root'
@@ -88,5 +88,10 @@ export class PacesService {
     aprobarEnviarMasivaPaceGerencia(request: PacesAprobarDivisionDTO[]) {
         let urlEndpoint = `${this._path_serve}/api/paces/aprobadoEnviadoMasivaPaceGerencia`
         return this.http.put<PacesAprobarDivisionDTO[]>(urlEndpoint, request);
+    }
+
+    actualizarAprobadores(request: any) {
+        let urlEndpoint = `${this._path_serve}/api/paces/actualizarAprobadores`
+        return this.http.put<AprobadoresDTO>(urlEndpoint, request);
     }
 }

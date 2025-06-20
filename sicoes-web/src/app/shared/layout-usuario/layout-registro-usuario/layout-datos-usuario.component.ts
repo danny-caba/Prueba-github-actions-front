@@ -72,13 +72,14 @@ export class LayoutDatosUsuarioComponent extends BaseComponent implements OnInit
   filteredStatesTecnico$: Observable<any[]>;
   enabledPerfil:boolean=false;
   userData:object;
+  usuarioEncontrado = false;
 
   idUsuarioRegistro:number;
   formGroup = this.fb.group({
-    nombreUsuario: ['', Validators.required],
+    idUsuario: ['', Validators.required],
+    usuario: ['', Validators.required],
     correoUsuario: ['', Validators.required,],
     nombreUsuarioSiged: ['', Validators.required],
-
   });
 
   formGroupRole = this.fbRol.group({
@@ -126,8 +127,9 @@ export class LayoutDatosUsuarioComponent extends BaseComponent implements OnInit
       this.disableEdit = true;
       this.idUsuarioRegistro = userData.idUsuario;
       this.formGroup.get('nombreUsuarioSiged').setValue(userData.nombreUsuario);
-      this.formGroup.get('nombreUsuario').setValue(userData.usuario);
+      this.formGroup.get('usuario').setValue(userData.usuario);
       this.formGroup.get('correoUsuario').setValue(userData.correo);
+      this.formGroup.get('idUsuario').setValue(userData.codigoUsuarioInterno);
       this.listarRoles();
       this.obtenerRolesUsuario();
       this.enabledPerfil = true;
@@ -161,7 +163,7 @@ export class LayoutDatosUsuarioComponent extends BaseComponent implements OnInit
   }
 
   cancelar(){
-    this.router.navigate([Link.EXTRANET, Link.GESTION_USUARIO]);
+    this.router.navigate([Link.INTRANET, Link.GESTION_USUARIO]);
   }
 
   borrador(continuar: boolean){
@@ -192,7 +194,7 @@ export class LayoutDatosUsuarioComponent extends BaseComponent implements OnInit
 
   confPerfil(){
    // sessionStorage.setItem('dataSourceRoles', JSON.stringify(this.dataSourceRoles.data));
-    this.router.navigate([Link.EXTRANET, Link.GESTION_USUARIO, Link.GESTION_USUARIO_CONF_PERFIL]);
+    this.router.navigate([Link.INTRANET, Link.GESTION_USUARIO, Link.GESTION_USUARIO_CONF_PERFIL]);
     sessionStorage.setItem('rolesData', JSON.stringify(this.dataSourceRoles.data));
   }
 
@@ -226,12 +228,29 @@ export class LayoutDatosUsuarioComponent extends BaseComponent implements OnInit
     }
   }
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-    const selectedUsuario = event.option.value; // Obten el valor seleccionado (que es usuario.nombres)
-    const selectedUsuarioId = this.findUsuarioIdByNombres(selectedUsuario); // Busca el usuario.idUsuario basado en el nombre (debes implementar esta función)
-    this.selectedUsuarioId = selectedUsuarioId; // Almacena el usuario.idUsuario
-    this.formGroup.get('correoUsuario').setValue('');
-    this.formGroup.get('nombreUsuario').setValue('');
-    this.formGroup.get('correoUsuario').disable();
+    const selectedUsuario = event.option.value;
+    const selectedUsuarioId = this.findUsuarioIdByNombres(selectedUsuario);
+    this.gestioUsuarioService.obtenerUsuarioSIGED({ idUsuario: selectedUsuarioId }).subscribe({
+      next: (response) => {
+        this.usuarioEncontrado = true;
+        this.formGroup.get('correoUsuario').setValue(response?.correoUsuario);
+        this.formGroup.get('usuario').setValue(response?.usuario);
+        this.formGroup.get('idUsuario').setValue(response?.idUsuario);
+        // this.formGroup.get('correoUsuario').disable();
+        // this.idUsuarioRegistro = response.idUsuario;
+        // this.listarRoles();
+        // this.obtenerRolesUsuario();
+        // this.enabledPerfil = true;
+        // sessionStorage.setItem('userData', JSON.stringify(response));
+      },
+      error: (error) => {
+        console.error('Error al obtener usuario SIGED', error);
+      }
+    });
+  //   this.selectedUsuarioId = selectedUsuarioId; // Almacena el usuario.idUsuario
+  //   this.formGroup.get('correoUsuario').setValue('');
+  //   this.formGroup.get('nombreUsuario').setValue('');
+  //   this.formGroup.get('correoUsuario').disable();
   }
 
   findUsuarioIdByNombres(nombres: string): number {
@@ -242,11 +261,12 @@ export class LayoutDatosUsuarioComponent extends BaseComponent implements OnInit
 
   actualizarCorreoUsuario() {
     const nombreUsuario = this.formGroup.get('nombreUsuario').value;
-    this.formGroup.get('correoUsuario').setValue(nombreUsuario + '@osinergmin.gob.pe');
-  }
+  this.formGroup.get('correoUsuario').setValue(nombreUsuario + '@osinergmin.gob.pe');
+}
 
   elegirOpcion(){
-    console.log("guardar");
+    this.formGroup.markAsTouched();
+    if(!this.isFormValid) return;
     if(this.idUsuarioRegistro != null || this.idUsuarioRegistro!= undefined) this.editarUsuario();
     else this.registrarUsuario();
   }
@@ -256,7 +276,8 @@ export class LayoutDatosUsuarioComponent extends BaseComponent implements OnInit
       // Construir un objeto Usuario a partir de los valores del formulario
       const nuevoUsuario: Usuario = {
         idUsuario:null,
-        usuario: this.formGroup.get('nombreUsuario').value,
+        usuario: this.formGroup.get('usuario').value,
+        codigoUsuarioInterno: this.formGroup.get('idUsuario').value.toString(),
         correo: this.formGroup.get('correoUsuario').value,
         nombreUsuario: this.formGroup.get('nombreUsuarioSiged').value,
         estadoUsuario:'1'
@@ -412,5 +433,9 @@ export class LayoutDatosUsuarioComponent extends BaseComponent implements OnInit
       });
 
     }
+  }
+
+  private get isFormValid(): boolean {
+    return this.formGroup.valid;
   }
 }

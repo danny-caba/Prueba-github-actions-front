@@ -119,7 +119,7 @@ export class PersonalPropuestoComponent extends BasePageComponent<any> implement
   }
 
   eliminarPersonal(personal) {
-    functionsAlert.deleteQuestion('¿Está seguro de querer eliminar el siguiente personal propuesto al formulario de Perfeccionamiento de Contrato?').then((result) => {
+    functionsAlert.deleteQuestion('¿Está seguro de querer eliminar el siguiente personal propuesto del formulario de Perfeccionamiento de Contrato?').then((result) => {
       if (result.isConfirmed) {
         this.requisitoService.descartarFlagRequisitoPersonal(personal).subscribe(
           (response: any) => {
@@ -145,15 +145,16 @@ export class PersonalPropuestoComponent extends BasePageComponent<any> implement
   }
 
   evaluarTextoEstado(texto: string = '') {
-    if (texto == '1') {
-      return 'Cumple';
-    } else if (texto == '2') {
-      return 'No cumple';
-    } else if (texto == '3') {
-      return 'Observado';
-    } else {
-      return 'No evaluado';
+    switch (texto) {
+      case '1':
+        return 'Cumple';
+      case '2':
+        return 'No cumple';
+      case '3':
+        return 'Observado';
+      default:
+        return 'No evaluado';
     }
   }
-
+  
 }

@@ -38,6 +38,7 @@ export class ModalDocumentosSustentanComponent extends BaseComponent implements 
   booleanViewEval: boolean = false
   editableEvaluacion: boolean = true;
   cmpTipoRevisionEdit: boolean = false;
+  booleanEditFile = false;
 
   flagVigente: boolean
   flagValidar: boolean = false;
@@ -86,6 +87,7 @@ export class ModalDocumentosSustentanComponent extends BaseComponent implements 
     this.booleanView = data.accion == 'view';
     this.booleanEvaluar = data.accion == 'editEval';
     this.booleanViewEval = data.accion == 'viewEval';
+    this.booleanEditFile = data.accion == 'editFile';
     this.flagTerminos = data?.flagTerminos
 
     if (this.booleanView) {
@@ -102,7 +104,11 @@ export class ModalDocumentosSustentanComponent extends BaseComponent implements 
       this.formGroup.disable();
     }
 
-    if (!this.booleanView && !this.booleanViewEval && !this.booleanEvaluar) {
+    if (this.booleanEditFile) {
+      this.formGroup.disable();
+    }
+
+    if (!this.booleanView && !this.booleanViewEval && !this.booleanEvaluar && !this.booleanEditFile) {
       this.formGroup.controls['nombreEntidad'].disable({ emitEvent: false })
       this.formGroup.controls['duracion'].disable({ emitEvent: false })
 
@@ -434,6 +440,26 @@ export class ModalDocumentosSustentanComponent extends BaseComponent implements 
 
   entendido() {
     this.flagTerminos = false;
+  }
+  
+  actualizarArchivo() {
+    let documento: any = {
+      idDocumento: this.documento.idDocumento,
+      solicitud: {
+        solicitudUuid: this.solicitud.solicitudUuid,
+      }
+    };
+    
+    let archivo = this.formAdjuntoBtn.obtenerAdjuntos();
+    if (archivo) {
+      documento.archivo = archivo;
+    }
+
+    this.documentoService.actualizarFile(documento).subscribe(res => {
+      functionsAlert.success('Registro Actualizado').then((result) => {
+        this.closeModal()
+      });
+    });
   }
 
 }

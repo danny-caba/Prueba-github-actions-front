@@ -11,7 +11,7 @@ export const environment = {
   appVersion: `${version}-dev`,
 
   recaptcha: {
-    siteKey: '6LeRJYkeAAAAANFU7ieQedx73qiEAoWy6ZEgfFXb'
+    siteKey: '6LcRBOwqAAAAAHISxc6xUVacKBhcYNKb2M8o2ocT'
   },
 
   // pathServe: 'http://localhost:8080/sicoes-api',

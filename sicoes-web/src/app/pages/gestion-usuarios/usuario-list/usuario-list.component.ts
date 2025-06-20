@@ -22,6 +22,7 @@ export class UsuarioListComponent extends BasePageComponent<GestionUsuarioModel>
 
   formGroup = this.fb.group({
     usuario: [''],
+    nombreUsuario: [''],
   });
 
   dataSource = new MatTableDataSource<any>();
@@ -80,14 +81,14 @@ export class UsuarioListComponent extends BasePageComponent<GestionUsuarioModel>
   }
 
   crearUsuario(){
-    this.router.navigate([Link.EXTRANET, Link.GESTION_USUARIO,Link.GESTION_USUARIO_ADD]);
+    this.router.navigate([Link.INTRANET, Link.GESTION_USUARIO,Link.GESTION_USUARIO_ADD]);
     sessionStorage.removeItem('userData');
     sessionStorage.removeItem('rolesData');
   }
 
 
   editarUsuario(row: any) {
-    this.router.navigate([Link.EXTRANET, Link.GESTION_USUARIO, Link.GESTION_USUARIO_ADD]);
+    this.router.navigate([Link.INTRANET, Link.GESTION_USUARIO, Link.GESTION_USUARIO_ADD]);
     sessionStorage.setItem('userData', JSON.stringify(row));
     sessionStorage.removeItem('rolesData');
   }
@@ -121,7 +122,7 @@ export class UsuarioListComponent extends BasePageComponent<GestionUsuarioModel>
 
   private obtenerDatosContribuyenteFiltro(): void {
 
-    this.gestioUsuarioService.obtenerUsuarios(0,550,'')
+    this.gestioUsuarioService.obtenerUsuarios(0,9999,'')
       .subscribe(respuesta => {
         this.dataSourceTotal.data = respuesta.content;
         this.originalData =  this.dataSourceTotal.data;

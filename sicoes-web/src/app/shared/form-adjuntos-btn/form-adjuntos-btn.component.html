@@ -6,7 +6,7 @@
       <mat-icon class="ltr:mr-1 rtl:ml-1 ltr:-ml-1 rtl:-mr-1 icon-sm" svgIcon="mat:add"></mat-icon>
       <span>Adjuntar...</span>
     </button>
-    <button *ngIf="adjuntoInput.adjunto != null" matTooltip="Descargar"
+    <button *ngIf="adjuntoInput.adjunto != null && !isOriginalEval" matTooltip="Descargar"
         color="primary"
         (click)="descargar(adjuntoInput?.adjunto)" class="text-primary leading-none flex items-center justify-center hover:bg-hover" mat-icon-button type="button">
         <mat-icon svgIcon="mat:download" size="18px"></mat-icon>

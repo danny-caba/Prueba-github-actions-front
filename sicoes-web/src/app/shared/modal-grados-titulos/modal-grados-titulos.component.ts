@@ -42,6 +42,7 @@ export class ModalGradosTitulosComponent extends BaseComponent implements OnInit
   booleanViewEval: boolean = false
   editableEvaluacion: boolean = true;
   cmpTipoRevisionEdit: boolean = false;
+  booleanEditFile = false;
 
   formGroup = this.fb.group({
     especialidad: ['', Validators.required],
@@ -94,16 +95,23 @@ export class ModalGradosTitulosComponent extends BaseComponent implements OnInit
     this.booleanView = data.accion == 'view';
     this.booleanEvaluar = data.accion == 'editEval';
     this.booleanViewEval = data.accion == 'viewEval';
+    this.booleanEditFile = data.accion == 'editFile';
 
     if (this.booleanView) {
       this.formGroup.disable();
     }
+
     if (this.booleanViewEval) {
       this.formGroup.disable();
       this.booleanEvaluar = true;
       this.editableEvaluacion = false;
     }
+
     if (this.booleanEvaluar) {
+      this.formGroup.disable();
+    }
+
+    if (this.booleanEditFile) {
       this.formGroup.disable();
     }
   }
@@ -260,7 +268,7 @@ export class ModalGradosTitulosComponent extends BaseComponent implements OnInit
 
     //Validación para el campo Egresado
     if (opt.idListadoDetalle == 92 || opt.idListadoDetalle == 93) {
-      if (!this.booleanView && !this.booleanViewEval && !this.booleanEvaluar) {
+      if (!this.booleanView && !this.booleanViewEval && !this.booleanEvaluar && !this.booleanEditFile) {
         this.formGroup.controls.flagEgresado.enable()
       }
     } else {
@@ -320,4 +328,28 @@ export class ModalGradosTitulosComponent extends BaseComponent implements OnInit
   noEsVacio(str) {
     return functions.noEsVacio(str);
   }
+
+  actualizarArchivo() {
+    let obj: any = {
+      solicitud: {
+        solicitudUuid: this.solicitud.solicitudUuid
+      }
+    }
+    obj.archivos = [];
+    let archivoTA01 = this.formAdjuntoBtnTA01?.obtenerAdjuntos();
+    let archivoTA02 = this.formAdjuntoBtnTA02?.obtenerAdjuntos();
+    if (archivoTA01) {
+      obj.archivos.push(archivoTA01);
+    }
+    if (archivoTA02) {
+      obj.archivos.push(archivoTA02);
+    }
+
+    this.estudioService.actualizarFile(obj, this.estudio.idEstudio).subscribe(res => {
+      functionsAlert.success('Registro Actualizado').then((result) => {
+        this.closeModal()
+      });
+    });
+  }
+
 }

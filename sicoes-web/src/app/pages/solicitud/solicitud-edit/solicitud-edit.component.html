@@ -32,16 +32,39 @@
                 </mat-expansion-panel-->
             </mat-accordion>
             <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.JURIDICO" >
-                <vex-solicitud-pj-edit [SOLICITUD]="SOLICITUD" [editable]="editable" [isSubsanar]="isSubsanar" #solicitudPjEditComponent></vex-solicitud-pj-edit>
+                <vex-solicitud-pj-edit 
+                    [SOLICITUD]="SOLICITUD" 
+                    [editable]="editable" 
+                    [isSubsanar]="isSubsanar" 
+                    [actualizable]="actualizable" 
+                    [editModified]="editModified" 
+                    #solicitudPjEditComponent></vex-solicitud-pj-edit>
             </ng-container>
             <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.PJ_EXTRANJERO" >
-                <vex-solicitud-pj-extranjero-edit [SOLICITUD]="SOLICITUD" [editable]="editable" [isSubsanar]="isSubsanar" #solicitudPjExtranjeroEditComponent></vex-solicitud-pj-extranjero-edit>
+                <vex-solicitud-pj-extranjero-edit 
+                    [SOLICITUD]="SOLICITUD" 
+                    [editable]="editable" 
+                    [isSubsanar]="isSubsanar" 
+                    [actualizable]="actualizable" 
+                    [editModified]="editModified" 
+                    #solicitudPjExtranjeroEditComponent></vex-solicitud-pj-extranjero-edit>
             </ng-container>
             <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.PN_POSTOR" >
-                <vex-solicitud-pn-postor-edit [SOLICITUD]="SOLICITUD" [editable]="editable" [isSubsanar]="isSubsanar" #solicitudPnPostorEditComponent></vex-solicitud-pn-postor-edit>
+                <vex-solicitud-pn-postor-edit 
+                    [SOLICITUD]="SOLICITUD" 
+                    [editable]="editable" 
+                    [isSubsanar]="isSubsanar" 
+                    [actualizable]="actualizable" 
+                    #solicitudPnPostorEditComponent></vex-solicitud-pn-postor-edit>
             </ng-container>
             <ng-container *ngIf="SOLICITUD?.persona?.tipoPersona?.codigo == tipoPersonaEnum.PN_PERS_PROPUESTO" >
-                <vex-solicitud-pn-edit [SOLICITUD]="SOLICITUD" [editable]="editable" [isSubsanar]="isSubsanar" #solicitudPnEditComponent></vex-solicitud-pn-edit>
+                <vex-solicitud-pn-edit 
+                    [SOLICITUD]="SOLICITUD" 
+                    [editable]="editable" 
+                    [isSubsanar]="isSubsanar" 
+                    [actualizable]="actualizable" 
+                    [editModified]="editModified" 
+                    #solicitudPnEditComponent></vex-solicitud-pn-edit>
             </ng-container>
 
             <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="editable == true">
@@ -53,6 +76,22 @@
                     (click)="cancelar()">Cancelar</button>
             </div>
 
+            <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="editModified">
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="borrador()">Actualizar</button>
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="enviar()">Enviar</button>
+                    <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="cancelar()">Cancelar</button>
+            </div>
+
+            <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="actualizable">
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="actualizar()">Actualizar</button>
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="regresar()">Regresar</button>
+            </div>
+
             <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="isSubsanar == true">
                 <button color="primary" mat-raised-button type="button" class="hover-class"
                     (click)="borrador()">Borrador</button>
@@ -60,7 +99,7 @@
                     (click)="enviarSubsanacion()">Enviar Subsanación de Observaciones</button>
             </div>
 
-            <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="editable === false && isSubsanar === false">
+            <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="editable === false && isSubsanar === false && actualizable === false && editModified === false">
                 <button color="primary" mat-raised-button type="button" class="hover-class"
                     (click)="regresar()">Regresar</button>
             </div>

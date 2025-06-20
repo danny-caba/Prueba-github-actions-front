@@ -1,7 +1,7 @@
 <form>
     <vex-modal-title *ngIf="booleanAdd && flagTerminos" [titulo]="'DOCUMENTOS QUE SUSTENTEN LA EXPERIENCIA ESPECÍFICA, SEGÚN LA CATEGORÍA Y PERFIL A ACREDITARSE'"></vex-modal-title>
     <vex-modal-title *ngIf="booleanAdd && !flagTerminos" [titulo]="'Agregar Experiencia'"></vex-modal-title>
-    <vex-modal-title *ngIf="booleanEdit" [titulo]="'Editar Experiencia'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit || booleanEditFile" [titulo]="'Editar Experiencia'"></vex-modal-title>
     <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Experiencia'"></vex-modal-title>
     
     <vex-modal-title *ngIf="booleanEvaluar || booleanViewEval" [titulo]="'Experiencia'"></vex-modal-title>
@@ -127,7 +127,7 @@
         </mat-form-field>
         <vex-form-adjuntos-btn [titulo]="'Documento'" [codigo]="'TA08'" #formAdjuntoBtn [archivo]="documento?.archivo" 
             [solicitud]="solicitud"
-            [editable]="booleanAdd || booleanEdit"></vex-form-adjuntos-btn>
+            [editable]="booleanAdd || booleanEdit || booleanEditFile"></vex-form-adjuntos-btn>
         
         <!--vex-cmp-opcion-evaluador *ngIf="booleanEvaluar" #cmpOpcionEvaluar [objEvaluar]="documento" [editable]="editableEvaluacion"></vex-cmp-opcion-evaluador-->
         
@@ -139,6 +139,7 @@
     <mat-dialog-actions align="end" *ngIf="!flagTerminos">
         <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
         <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEditFile" (click)="actualizarArchivo()">Actualizar</button>
         <!--GUARDAR EVALUACION-->
         <button mat-raised-button color="primary" *ngIf="booleanEvaluar== true && booleanViewEval == false" (click)="evaluar()">Guardar</button>
         <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>

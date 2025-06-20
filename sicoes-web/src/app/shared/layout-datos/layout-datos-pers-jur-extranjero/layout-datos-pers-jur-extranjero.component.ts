@@ -30,6 +30,7 @@ export class LayoutDatosPersJurExntrajeroComponent extends BaseComponent impleme
   @ViewChild('formUbigeo', { static: true }) formUbigeo: UbigeoUpdComponent;
   @Input() SOLICITUD: any;
   @Input() editable: boolean = false;
+  @Input() actualizable = false;
 
   listPais: any[]
   listTipoDocumento: any[]
@@ -81,8 +82,11 @@ export class LayoutDatosPersJurExntrajeroComponent extends BaseComponent impleme
     this.cargarCombo();
     this.formGroup.get('correo').valueChanges.subscribe(() => this.isDisabledBtnCorreo = false)
 
-    if (!this.editable) {
+    if (!this.editable && !this.actualizable) {
       this.disableAllForm(this.formGroup);
+      this.editableUbigeo = false;
+    }else if (!this.editable && this.actualizable) {
+      this.disableControls(true, ['tipoDocumento', 'numeroDocumento', 'nombreRazonSocial', 'direccion', 'codigoPartidaRegistral',], this.formGroup);
       this.editableUbigeo = false;
     }else{
       this.disableControls(true, ['tipoDocumento', 'numeroDocumento', 'nombreRazonSocial', 'correo'], this.formGroup);
@@ -238,4 +242,12 @@ export class LayoutDatosPersJurExntrajeroComponent extends BaseComponent impleme
     this.formGroup.patchValue(this.SOLICITUD.persona)
     this.formUbigeo.setValue(this.SOLICITUD.persona)
   }
+
+  mostrarBtnValidarEmail() {
+    console.log(this.editable, this.actualizable, this.flagSne);
+    
+    return (this.editable || this.actualizable) && this.flagSne;
+  }
+  
 }
+    

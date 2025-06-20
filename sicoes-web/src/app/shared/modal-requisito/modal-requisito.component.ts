@@ -32,6 +32,7 @@ export class ModalRequisitoComponent extends BaseComponent implements OnInit {
   ACC_ACTUALIZAR = 'Actualizar';
   btnValue: string;
   requisitoRef: any;
+  MONTO_FIJO: any = 0;
 
   formGroup = this.fb.group({
     seccion: ['', Validators.required],
@@ -39,7 +40,12 @@ export class ModalRequisitoComponent extends BaseComponent implements OnInit {
     deSeccionRequisito: ['', Validators.required],
     tipoDatoEntrada: ['', Validators.required],
     tipoContrato: ['', Validators.required],
-    esSeccionRequisito: [false]
+    esSeccionRequisito: [false],
+    flagConformaConsorcio: [false],
+    flagRemype: [false],
+    flagVisibleFielCumplimiento: [true],
+    flagVisibleRetencion: [true],
+    flagVisibleSuperaPropuesta: [true]
   });
 
   constructor(
@@ -57,21 +63,33 @@ export class ModalRequisitoComponent extends BaseComponent implements OnInit {
     this.requisitoRef = data.requisito;
 
     if (data.accion === this.ACC_ACTUALIZAR) {
-      console.log(data.requisito);
-      
       this.formGroup.patchValue({
         seccion: data.requisito.seccion,
         tipoDato: data.requisito.tipoDato,
         deSeccionRequisito: data.requisito.deSeccionRequisito,
         tipoDatoEntrada: data.requisito.tipoDatoEntrada,
         tipoContrato: data.requisito.tipoContrato,
-        esSeccionRequisito: data.requisito.esSeccionRequisito === '1' ? true : false
+        esSeccionRequisito: data.requisito.esSeccionRequisito === '1' ? true : false,
+        flagConformaConsorcio: data.requisito.flagConformaConsorcio === '1' ? true : false,
+        flagRemype: data.requisito.flagRemype === '1' ? true : false,
+        flagVisibleFielCumplimiento: data.requisito.flagVisibleFielCumplimiento === '1' ? true : false,
+        flagVisibleRetencion: data.requisito.flagVisibleRetencion === '1' ? true : false,
+        flagVisibleSuperaPropuesta: data.requisito.flagVisibleSuperaPropuesta === '1' ? true : false
       });
     }
   }
 
   ngOnInit(): void {
     this.cargarCombos();
+    this.cargarAdjudicacionSimplificada();
+  }
+
+  cargarAdjudicacionSimplificada() {
+    this.parametriaService.obtenerMultipleListadoDetalle([
+      ListadoEnum.ADJUDICACION_SIMPLIFICADA
+    ]).subscribe(listRes => {
+      this.MONTO_FIJO = listRes[0].filter((element) => element.orden === 1);
+    });
   }
 
   closeModal() {
@@ -109,12 +127,17 @@ export class ModalRequisitoComponent extends BaseComponent implements OnInit {
       tipoDatoEntrada: requisito.tipoDatoEntrada,
       tipoContrato: requisito.tipoContrato,
       deSeccionRequisito: requisito.deSeccionRequisito,
-      esSeccionRequisito: requisito.esSeccionRequisito ? '1' : '0'
+      esSeccionRequisito: requisito.esSeccionRequisito ? '1' : '0',
+      flagConformaConsorcio: requisito.flagConformaConsorcio ? '1' : '0',
+      flagRemype: requisito.flagRemype ? '1' : '0',
+      flagVisibleFielCumplimiento: requisito.flagVisibleFielCumplimiento ? '1' : '0',
+      flagVisibleRetencion: requisito.flagVisibleRetencion ? '1' : '0',
+      flagVisibleSuperaPropuesta: requisito.flagVisibleSuperaPropuesta ? '1' : '0'
     };
 
     this.requisitoService.registrar(newRequisito).subscribe(res => {
       if (res === null) {
-        functionsAlertMod2.warningMensage('No se puede registrar la sección');
+        functionsAlertMod2.warningMensage('No se puede registrar el requisito');
       } else {
         functionsAlertMod2.success('Registrado').then((result) => {
           this.dialogRef.close(res);
@@ -131,7 +154,12 @@ export class ModalRequisitoComponent extends BaseComponent implements OnInit {
       tipoDatoEntrada: requisito.tipoDatoEntrada,
       tipoContrato: requisito.tipoContrato,
       deSeccionRequisito: requisito.deSeccionRequisito,
-      esSeccionRequisito: requisito.esSeccionRequisito ? '1' : '0'
+      esSeccionRequisito: requisito.esSeccionRequisito ? '1' : '0',
+      flagConformaConsorcio: requisito.flagConformaConsorcio ? '1' : '0',
+      flagRemype: requisito.flagRemype ? '1' : '0',
+      flagVisibleFielCumplimiento: requisito.flagVisibleFielCumplimiento ? '1' : '0',
+      flagVisibleRetencion: requisito.flagVisibleRetencion ? '1' : '0',
+      flagVisibleSuperaPropuesta: requisito.flagVisibleSuperaPropuesta ? '1' : '0'
     };
     
     this.requisitoService.actualizar(updRequisito).subscribe(res => {
@@ -173,7 +201,6 @@ export class ModalRequisitoComponent extends BaseComponent implements OnInit {
     )
     .subscribe(filteredContent => {
       this.listTipoSeccion = filteredContent;
-      console.log(this.listTipoSeccion);
     });
   }
 

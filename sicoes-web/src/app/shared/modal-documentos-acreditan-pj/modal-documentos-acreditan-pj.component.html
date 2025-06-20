@@ -3,7 +3,7 @@
         [titulo]="'DOCUMENTOS QUE ACREDITAN LA EXPERIENCIA EN EL SECTOR'">
     </vex-modal-title>
     <vex-modal-title *ngIf="booleanAdd && !flagTerminos" [titulo]="'Agregar Experiencia'"></vex-modal-title>
-    <vex-modal-title *ngIf="booleanEdit" [titulo]="'Editar Experiencia'"></vex-modal-title>
+    <vex-modal-title *ngIf="booleanEdit || booleanEditFile" [titulo]="'Editar Experiencia'"></vex-modal-title>
     <vex-modal-title *ngIf="booleanView" [titulo]="'Ver Experiencia'"></vex-modal-title>
 
     <vex-modal-title *ngIf="booleanEvaluar || booleanViewEval" [titulo]="'Experiencia'"></vex-modal-title>
@@ -94,7 +94,7 @@
                 </mat-error>
             </mat-form-field>
             <div style="padding-top: 12px;" *ngIf="booleanView == false">
-                <button (click)="consultaRuc()" color="primary" mat-raised-button [disabled]="!flagValidar"
+                <button (click)="consultaRuc()" color="primary" mat-raised-button [disabled]="!flagValidar || booleanEditFile"
                     type="button">Validar</button>
             </div>
         </div>
@@ -115,6 +115,11 @@
                     Contrato/OS
                 </mat-error>
             </mat-form-field>
+        </div>
+        <div *ngIf="booleanEditFile && isEditableDate" class="flex flex-col sm:flex-row sm:gap-4 mt-4 justify-end">
+            <mat-checkbox color="primary" [checked]="enableDateEditing" (change)="toggleDateEditing()">
+                Habilitar edición de Fecha Fin de Contrato/OS
+            </mat-checkbox>
         </div>
         <div class="flex flex-col sm:flex-row sm:gap-4 mt-4">
             <mat-form-field class="flex-auto">
@@ -216,7 +221,8 @@
         </div>
         <vex-form-adjuntos-btn #formAdjuntoBtn [codigo]="'TA08'" [titulo]="'Documento'" [archivo]="documento?.archivo"
             [solicitud]="solicitud"
-            [editable]="booleanAdd || booleanEdit"></vex-form-adjuntos-btn>
+            [isOriginalEval]="isOriginalEval()"
+            [editable]="booleanAdd || booleanEdit || booleanEditFile"></vex-form-adjuntos-btn>
         <div *ngIf="!flagTerminos">
             <p style="text-align: justify;" class="mt-4">
                 <b>(1)</b> Se refiere a la fecha de suscripción del contrato, de la emisión de la orden de servicios
@@ -253,6 +259,7 @@
     <mat-dialog-actions align="end" *ngIf="!flagTerminos">
         <button mat-raised-button color="primary" *ngIf="booleanAdd" (click)="guardar()">Guardar</button>
         <button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button>
+        <button mat-raised-button color="primary" *ngIf="booleanEditFile" (click)="modificar()">Actualizar</button>
         <!--GUARDAR EVALUACION-->
         <button mat-raised-button color="primary" *ngIf="booleanEvaluar== true && booleanViewEval == false"
             (click)="evaluar()">Guardar</button>

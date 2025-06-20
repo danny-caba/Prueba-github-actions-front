@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { Requisito } from 'src/app/interface/seccion.model';
 import { RequisitoService } from 'src/app/service/requisito.service';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
@@ -8,11 +10,15 @@ import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
 
 @Component({
   selector: 'vex-requisito',
-  templateUrl: './requisito.component.html'
+  templateUrl: './requisito.component.html',
+  animations: [
+    fadeInUp400ms,
+    stagger80ms
+  ]
 })
 export class RequisitoComponent extends BasePageComponent<Requisito> implements OnInit {
 
-  displayedColumns: string[] = ['orden', 'tipoDato', 'descripcion', 'entradaDato', 'estado', 'actions'];
+  displayedColumns: string[] = ['orden', 'seccion', 'tipoDato', 'descripcion', 'entradaDato', 'estado', 'flagConformaConsorcio', 'flagRemype', 'flagVisibleFielCumplimiento', 'actions'];
 
   constructor(
     private dialog: MatDialog,

@@ -34,6 +34,8 @@ export class SolicitudPjEditComponent extends BaseComponent implements OnInit, O
 
   @Input() SOLICITUD: any;
   @Input() editable: boolean = false;
+  @Input() editModified = false;
+  @Input() actualizable = false;
   @Input() isSubsanar: boolean = false;
   @Input() viewEvaluacion: boolean;
   @Input() itemSeccion: number = 0;
@@ -58,9 +60,12 @@ export class SolicitudPjEditComponent extends BaseComponent implements OnInit, O
 
   ngOnInit(): void {
     this.subscriptionUsuario = this.usuario$.subscribe(usu => {
-      if(usu && this.editable == true){
+      if(usu && this.editable){
         this.layoutDatosPersJur.validarSNE(usu);
         this.layoutDatosPersJur.formGroup.controls['correo'].disable({ emitEvent: false })
+      }
+      if (usu && !this.editable && this.actualizable) {
+        this.layoutDatosPersJur.validarSNE(usu);
       }
     })
   }
@@ -73,7 +78,8 @@ export class SolicitudPjEditComponent extends BaseComponent implements OnInit, O
     let formValues: any = {
       solicitudUuid: this.SOLICITUD.solicitudUuid,
       persona: this.layoutDatosPersJur.getFormValues(),
-      representante: this.layoutRepresentanteLeg.getFormValues()
+      representante: this.layoutRepresentanteLeg.getFormValues(),
+      historialRepresentante: this.SOLICITUD?.historialRepresentante || []
     }
     formValues.otrosRequisitos = this.layoutOtrosRequisitos.getValues();
 
@@ -88,6 +94,23 @@ export class SolicitudPjEditComponent extends BaseComponent implements OnInit, O
           functionsAlert.success('Datos Actualizados').then((result) => {
             //this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, 'editar', obj.solicitudUuid]);
             this.layoutOtrosRequisitos?.buscarOtrosDocumentos();
+            if (this.editModified) {
+              this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST]);
+            }
+          });
+        });
+      }
+    });
+  }
+
+  actualizar() {
+    functionsAlert.questionSiNo('¿Seguro que desea actualizar la solicitud?').then((result) => {
+      if (result.isConfirmed) {
+        let formValues = this.obtenerDatos();
+        this.solicitudService.actualizarSolicitudConcluido(formValues).subscribe(obj => {
+          functionsAlert.success('Datos Actualizados').then((result) => {
+            this.layoutOtrosRequisitos?.buscarOtrosDocumentos();
+            this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST]);
           });
         });
       }
@@ -115,6 +138,7 @@ export class SolicitudPjEditComponent extends BaseComponent implements OnInit, O
     functionsAlert.questionSiNo('¿Seguro que desea enviar la solicitud?').then((result) => {
       if (result.isConfirmed) {
         let formValues = this.obtenerDatos();
+        formValues.origenRegistro = this.SOLICITUD.origenRegistro;
 
         this.solicitudService.enviarSolicitudPN(formValues).subscribe(obj => {
           let nroExpDes = `Su solicitud de inscripción  en el Registro de Precalificación de Empresas Supervisoras ha sido recibido mediante expediente <b>Nro. ${obj.numeroExpediente}</b>. 

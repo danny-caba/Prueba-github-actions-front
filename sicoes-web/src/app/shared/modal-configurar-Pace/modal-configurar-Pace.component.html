@@ -1,0 +1,57 @@
+<form>
+    
+    <vex-modal-title [titulo]="'Configuración'"></vex-modal-title>    
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+
+    <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
+
+     
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Aprobador G2 Gerente de División</mat-label>
+            <mat-form-field class="flex-auto">
+                <!-- <mat-label>Aprobador G2</mat-label> -->
+                <input [formControl]="formGroup.controls.aprobadorG2" [matAutocomplete]="autoTecnicoG2" matInput
+                    (blur)="blurEvaluadorTecnicoG2()">
+                <mat-autocomplete #autoTecnicoG2="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let state of filteredStatesTecnico$ | async" [value]="state">
+                        {{ state.nombreUsuario }}
+                    </mat-option>
+                </mat-autocomplete>
+                <button (click)="formGroup.controls.aprobadorG2.reset()" *ngIf="formGroup.controls.aprobadorG2.value"
+                    mat-icon-button matSuffix type="button">
+                    <mat-icon svgIcon="mat:close"></mat-icon>
+                </button>
+                <button *ngIf="!formGroup.controls.aprobadorG2.value" mat-icon-button matSuffix type="button">
+                    <mat-icon svgIcon="mat:search"></mat-icon>
+                </button>
+                <mat-error *ngIf="formGroup.get('aprobadorG2').hasError('required')">Seleccione Aprobador</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+            <mat-label class="text-primary text-sm font-medium">Aprobador G3 Gerente</mat-label>
+            <mat-form-field class="flex-auto">
+                <!-- <mat-label>Aprobador</mat-label> -->
+                <input [formControl]="formGroup.controls.aprobadorG3" [matAutocomplete]="autoTecnicoG3" matInput
+                    (blur)="blurEvaluadorTecnicoG3()">
+                <mat-autocomplete #autoTecnicoG3="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let state of filteredStatesTecnicoG3$ | async" [value]="state">
+                        {{ state.nombreUsuario }}
+                    </mat-option>
+                </mat-autocomplete>
+                <button (click)="formGroup.controls.aprobadorG3.reset()" *ngIf="formGroup.controls.aprobadorG3.value"
+                    mat-icon-button matSuffix type="button">
+                    <mat-icon svgIcon="mat:close"></mat-icon>
+                </button>
+                <button *ngIf="!formGroup.controls.aprobadorG3.value" mat-icon-button matSuffix type="button">
+                    <mat-icon svgIcon="mat:search"></mat-icon>
+                </button>
+                <mat-error *ngIf="formGroup.get('aprobadorG3').hasError('required')">Seleccione Aprobador</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+        <button mat-raised-button color="primary" *ngIf="data.evento=='E'" (click)="guardar()">Actualizar</button>
+    </mat-dialog-actions>
+</form>

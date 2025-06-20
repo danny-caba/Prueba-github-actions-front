@@ -132,6 +132,10 @@
             <mat-icon svgIcon="mat:edit"></mat-icon>
             <span>Editar</span>
         </button>
+        <button (click)="editModified(row)" *ngIf="mostrarOpcion(ACC_EDITAR_MOD, row)" mat-menu-item>
+            <mat-icon svgIcon="mat:edit"></mat-icon>
+            <span>Editar</span>
+        </button>
         <button (click)="anular(row)" *ngIf="mostrarOpcion(ACC_ANULAR, row)" mat-menu-item>
             <mat-icon svgIcon="mat:delete"></mat-icon>
             <span>Anular</span>
@@ -149,6 +153,14 @@
         <button (click)="subsanar(row)" *ngIf="mostrarOpcion(ACC_SUBSANAR, row)" mat-menu-item>
             <mat-icon svgIcon="mat:update"></mat-icon>
             <span>Subsanar</span>
+        </button>
+        <button (click)="actualizar(row)" *ngIf="mostrarOpcion(ACC_ACTUALIZAR, row)" mat-menu-item>
+            <mat-icon svgIcon="mat:edit"></mat-icon>
+            <span>Actualización</span>
+        </button>
+        <button (click)="modificar(row)" *ngIf="mostrarOpcion(ACC_MODIFICAR, row)" mat-menu-item>
+            <mat-icon svgIcon="mat:note_add"></mat-icon>
+            <span>Modificación</span>
         </button>
     </ng-template>
 </mat-menu>

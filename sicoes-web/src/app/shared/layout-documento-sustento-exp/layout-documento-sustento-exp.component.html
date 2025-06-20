@@ -39,6 +39,10 @@
                 </div>
             </td>
         </ng-container>
+        <ng-container matColumnDef="estado" *ngIf="editModified">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+            <td mat-cell *matCellDef="let element"> {{element?.estado?.nombre || ''}}</td>
+        </ng-container>
         <!-- <ng-container matColumnDef="estado">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Resultado</th>
             <td mat-cell *matCellDef="let element"> {{element?.evaluacion?.nombre}} </td>
@@ -121,6 +125,12 @@
             <button (click)="eliminarDocumento(obj)" mat-menu-item *vexOptionRole="opcion.MEN_DOC_EXP_ELIMINAR">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
                 <span>Eliminar</span>
+            </button>
+        </div>
+        <div *ngIf="editModified">
+            <button (click)="actualizarVer(obj, 'ACC_EDITAR_ARCHIVO')" mat-menu-item *vexOptionRole="opcion.BTN_DOC_EXP_EDITAR_ARCH">
+                <mat-icon svgIcon="mat:edit"></mat-icon>
+                <span>Editar</span>
             </button>
         </div>
     </ng-template>

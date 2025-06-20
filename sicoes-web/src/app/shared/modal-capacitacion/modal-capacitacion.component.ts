@@ -36,6 +36,7 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
   editableEvaluacion: boolean = true;
   flagOtroCapacitacion: boolean = false;
   cmpTipoRevisionEdit: boolean = false;
+  booleanEditFile = false;
 
   formGroup = this.fb.group({
     tipo: ['', Validators.required],
@@ -110,7 +111,7 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
     let tipo: any = this.formGroup.controls['tipo'].value
     if (tipo.nombre == "Otro") {
 
-      if (!this.booleanView && !this.booleanViewEval && !this.booleanEvaluar) {
+      if (!this.booleanView && !this.booleanViewEval && !this.booleanEvaluar && !this.booleanEditFile) {
         this.formGroup.controls['detalleTipo'].enable({ emitEvent: false })
       }
       this.formGroup.controls['detalleTipo'].setValidators(Validators.required)
@@ -131,16 +132,23 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
     this.booleanView = data.accion == 'view';
     this.booleanEvaluar = data.accion == 'editEval';
     this.booleanViewEval = data.accion == 'viewEval';
+    this.booleanEditFile = data.accion == 'editFile';
 
     if (this.booleanView) {
       this.formGroup.disable();
     }
+
     if (this.booleanViewEval) {
       this.formGroup.disable();
       this.booleanEvaluar = true;
       this.editableEvaluacion = false;
     }
+
     if (this.booleanEvaluar) {
+      this.formGroup.disable();
+    }
+
+    if (this.booleanEditFile) {
       this.formGroup.disable();
     }
   }
@@ -232,4 +240,22 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
     });
   }
 
+  actualizarArchivo() {
+    let obj: any = {
+      solicitud: {
+        solicitudUuid: this.solicitud.solicitudUuid
+      }
+    }
+    obj.archivos = [];
+    let archivoTA09 = this.formAdjuntoBtnTA09?.obtenerAdjuntos();
+    if (archivoTA09) {
+      obj.archivos.push(archivoTA09);
+    }
+
+    this.capacitacionService.actualizarFile(obj, this.capacitacion.idEstudio).subscribe(res => {
+      functionsAlert.success('Registro Actualizado').then((result) => {
+        this.closeModal()
+      });
+    });
+  }
 }

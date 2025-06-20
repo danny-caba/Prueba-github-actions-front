@@ -37,6 +37,11 @@ export class GestionUsuarioService {
     return this.http.get<any>(urlEndpoint);
   }
 
+  obtenerUsuarioSIGED(request: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/usuarios/obtener-usuario-siged`;
+    return this.http.post<any>(urlEndpoint, request);
+  }
+
   buscarProcesosEtapa(filtro) {
     let urlEndpoint = `${this._path_serve}/api/etapas/listar`
     let params = functions.obtenerParams(filtro);
@@ -188,6 +193,11 @@ export class GestionUsuarioService {
 
   listarPerfilesPorDivisionDetalle(idDivision: number): Observable<any> {
     let urlEndpoint = `${this._path_serve}/api/listado-publico/perfiles/division/${idDivision}/detalle`;
+    return this.http.get<any>(urlEndpoint);
+  }
+
+  listarUsuarios(): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/usuarios/listar-usuarios-sicoes`;
     return this.http.get<any>(urlEndpoint);
   }
   

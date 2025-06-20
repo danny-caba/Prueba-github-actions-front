@@ -107,11 +107,19 @@
                 {{ element?.fechaPublicacion }}
               </td>
             </ng-container>
+            <ng-container matColumnDef="numeroProceso">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Numero del Proceso
+              </th>
+              <td mat-cell *matCellDef="let element" class="truncate-text-num">
+                {{ element?.numeroProceso }}
+              </td>
+            </ng-container>
             <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>
                 Descripción del Objeto
               </th>
-              <td mat-cell *matCellDef="let element">
+              <td mat-cell *matCellDef="let element" class="truncate-text">
                 {{ element?.nombreProceso }}
               </td>
             </ng-container>

@@ -45,7 +45,7 @@
     </ng-template>
     
     <ng-template #templateSimple let-requisito="requisito">
-        <div class="flex justify-between mb-4" (change)="setValueChecked(requisito, $event)" *ngIf="requisito.archivo === undefined">
+        <div class="flex justify-between mb-4" *ngIf="requisito.archivo === undefined">
             <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
                 <mat-checkbox color="primary" [disabled]="true" [checked]="requisito.archivo !== undefined && requisito.archivo !== null">
                 </mat-checkbox>
@@ -61,7 +61,7 @@
             
         </div>
     
-        <div class="flex justify-between mb-4" (change)="setValueChecked(requisito, $event)" *ngIf="requisito.archivo !== undefined">
+        <div class="flex justify-between mb-4" *ngIf="requisito.archivo !== undefined">
             <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
                 <mat-checkbox color="primary" [disabled]="true" [checked]="requisito.archivo !== undefined && requisito.archivo !== null">
                 </mat-checkbox>

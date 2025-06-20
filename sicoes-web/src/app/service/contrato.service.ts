@@ -27,7 +27,6 @@ export class ContratoService {
   }
 
   obtenerSolicitudesExterno(filtro): Observable<any> {
-    // const estado = '1';
     const urlEndpoint = `${this._path_serve}/api/solicitudes/presentacion`
     let params = functions.obtenerParams(filtro);
     return this.http.get<Pageable<any>>(urlEndpoint, { params: params });

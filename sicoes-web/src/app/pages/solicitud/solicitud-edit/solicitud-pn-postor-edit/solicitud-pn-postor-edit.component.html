@@ -4,13 +4,19 @@
                     <mat-expansion-panel-header>
                         <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- DATOS DE LA EMPRESA</mat-panel-title>
                     </mat-expansion-panel-header>
-                    <vex-layout-datos-pers-nat-postor #layoutDatosPersJur [SOLICITUD]="SOLICITUD" [editable]="editable"></vex-layout-datos-pers-nat-postor>
+                    <vex-layout-datos-pers-nat-postor #layoutDatosPersJur  
+                        [SOLICITUD]="SOLICITUD" 
+                        [editable]="editable" 
+                        [actualizable]="actualizable"></vex-layout-datos-pers-nat-postor>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
                     <mat-expansion-panel-header>
                         <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- REPRESENTANTE LEGAL</mat-panel-title>
                     </mat-expansion-panel-header>
-                    <vex-layout-datos-representante-legal #layoutRepresentanteLeg [SOLICITUD]="SOLICITUD" [editable]="editable"></vex-layout-datos-representante-legal>
+                    <vex-layout-datos-representante-legal #layoutRepresentanteLeg 
+                    [SOLICITUD]="SOLICITUD" 
+                    [editable]="editable"
+                    [actualizable]="actualizable"></vex-layout-datos-representante-legal>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
                     <mat-expansion-panel-header>

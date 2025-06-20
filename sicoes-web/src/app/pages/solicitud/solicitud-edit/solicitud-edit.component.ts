@@ -37,6 +37,8 @@ export class SolicitudEditComponent extends BaseComponent implements OnInit, OnD
   usuario$ = this.authFacade.user$;
   SOLICITUD: any;
   editable: boolean = false;
+  editModified = false;
+  actualizable = false;
   isSubsanar: boolean = false;
   isRegistro: boolean = false;
   isVer: boolean = false;
@@ -61,6 +63,12 @@ export class SolicitudEditComponent extends BaseComponent implements OnInit, OnD
     this.activeRoute.data.subscribe(data => {
       if(data.editable){
         this.editable = data.editable;
+      }
+      if(data.editModified){
+        this.editModified = data.editModified;
+      }
+      if(data.actualizable){
+        this.actualizable = data.actualizable;
       }
       if(data.isSubsanar){
         this.isSubsanar = data.isSubsanar;
@@ -167,6 +175,21 @@ export class SolicitudEditComponent extends BaseComponent implements OnInit, OnD
     }
     if(this.SOLICITUD?.persona?.tipoPersona?.codigo == TipoPersonaEnum.PN_POSTOR){
       this.solicitudPnPostorEditComponent.borrador();
+    }
+  }
+
+  actualizar(){
+    if(this.SOLICITUD?.persona?.tipoPersona?.codigo == TipoPersonaEnum.JURIDICO){
+      this.solicitudPjEditComponent.actualizar();
+    }
+    if(this.SOLICITUD?.persona?.tipoPersona?.codigo == TipoPersonaEnum.PJ_EXTRANJERO){
+      this.solicitudPjExtranjeroEditComponent.actualizar();
+    }
+    if(this.SOLICITUD?.persona?.tipoPersona?.codigo == TipoPersonaEnum.PN_PERS_PROPUESTO){
+      this.solicitudPnEditComponent.actualizar();
+    }
+    if(this.SOLICITUD?.persona?.tipoPersona?.codigo == TipoPersonaEnum.PN_POSTOR){
+      this.solicitudPnPostorEditComponent.actualizar();
     }
   }
 

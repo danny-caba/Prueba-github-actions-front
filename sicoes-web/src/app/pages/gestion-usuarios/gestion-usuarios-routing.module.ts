@@ -14,15 +14,15 @@ const routes: VexRoutes = [{
   children:[
    {
       path:'',
-      canActivate: [AuthGuardService],
+      canActivate: [AuthGuardService, RoleGuardService],
       component: UsuarioListComponent
     },{
       path: Link.GESTION_USUARIO_ADD,
-      canActivate: [AuthGuardService],
+      canActivate: [AuthGuardService, RoleGuardService],
       component: UsuarioAddComponent
     },{
       path: Link.GESTION_USUARIO_CONF_PERFIL,
-      canActivate: [AuthGuardService],
+      canActivate: [AuthGuardService, RoleGuardService],
       component: LayoutConfPerfilComponent
     }]
   }];

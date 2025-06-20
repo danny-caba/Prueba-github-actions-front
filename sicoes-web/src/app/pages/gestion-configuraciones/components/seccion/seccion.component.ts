@@ -5,10 +5,16 @@ import { ModalSeccionComponent } from 'src/app/shared/modal-seccion/modal-seccio
 import { SeccionService } from '../../../../service/seccion.service';
 import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
 import { Seccion } from 'src/app/interface/seccion.model';
+import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 
 @Component({
   selector: 'vex-seccion',
-  templateUrl: './seccion.component.html'
+  templateUrl: './seccion.component.html',
+  animations: [
+    fadeInUp400ms,
+    stagger80ms
+  ]
 })
 export class SeccionComponent extends BasePageComponent<Seccion> implements OnInit {
   

@@ -16,6 +16,11 @@
               <td class="text-primary font-medium" mat-cell *matCellDef="let element; index as nroRegistro">{{ getRowIndex(nroRegistro) }}</td>
           </ng-container>
 
+          <ng-container matColumnDef="seccion">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Sección</th>
+              <td class="text-primary font-medium break-words whitespace-normal min-w-[150px] py-2" mat-cell *matCellDef="let element">{{ element?.seccion?.deSeccion }}</td>
+          </ng-container>
+
           <ng-container matColumnDef="tipoDato">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Dato</th>
               <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoDato?.nombre }}</td>
@@ -23,7 +28,7 @@
 
           <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
-              <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.deSeccionRequisito }}</td>
+              <td class="text-primary font-medium break-words whitespace-normal min-w-[400px] py-2" mat-cell *matCellDef="let element">{{ element?.deSeccionRequisito }}</td>
           </ng-container>
 
           <ng-container matColumnDef="entradaDato">
@@ -34,6 +39,21 @@
           <ng-container matColumnDef="estado">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
               <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.esSeccionRequisito == '1' ? 'Activo' : 'Inactivo' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="flagConformaConsorcio">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Solo para consorcio</th>
+              <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.flagConformaConsorcio == '1' ? 'Sí' : 'No' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="flagRemype">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Solo para remype</th>
+              <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.flagRemype == '1' ? 'Sí' : 'No' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="flagVisibleFielCumplimiento">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Mostrar cumple fiel cumplimiento</th>
+              <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.flagVisibleFielCumplimiento == '1' ? 'Sí' : 'No' }}</td>
           </ng-container>
 
           <ng-container matColumnDef="actions">

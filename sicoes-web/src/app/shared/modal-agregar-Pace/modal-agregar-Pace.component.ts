@@ -43,8 +43,8 @@ export class ModalAgregarPaceComponent extends BaseComponent implements OnInit {
   // public mes: any
   // public area: any
   public data: any
-  public evento: any  
-
+  public evento: any
+  public titulo = "";
 
   formGroup = this.fb.group({
     areaUsuaria: [null],
@@ -75,10 +75,11 @@ export class ModalAgregarPaceComponent extends BaseComponent implements OnInit {
     console.log(this.data.mes)
     console.log(this.data.pace)
     if (this.data.evento == 'E') {
-     
+      this.titulo = "Editar PACE"
+      this.formGroup.controls.areaUsuaria.disable();
     }
     else if (this.data.evento == 'M') {
-
+      this.titulo = "Detalle PACE"
       if (this.data.evento === 'M') {
         this.formGroup.controls.areaUsuaria.disable();
         this.formGroup.controls.antecedentes.disable();
@@ -156,7 +157,7 @@ export class ModalAgregarPaceComponent extends BaseComponent implements OnInit {
             });
           })
 
-        });   
+        });
       }
     });
   }

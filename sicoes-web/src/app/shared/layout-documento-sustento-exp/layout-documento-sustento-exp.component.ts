@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
@@ -26,6 +26,7 @@ export class LayoutDocumentoSustentoExpComponent extends BasePageComponent<Docum
   suscriptionSolicitud: Subscription;
   solicitud: Partial<Solicitud>
   bolEvaluar: boolean = false
+  @Input() editModified: boolean = false;
 
   usuario$ = this.authFacade.user$;
   esExterno: boolean = false;
@@ -87,6 +88,17 @@ export class LayoutDocumentoSustentoExpComponent extends BasePageComponent<Docum
         //'estado',
         'acciones'
       ];
+    }else if(this.esExterno && this.editModified){
+      this.displayedColumns = [
+        'nombreEntidad',
+        'descripcionContrato',
+        'fechaInicio',
+        'fechaFin',
+        'duracion',
+        'archivo',
+        'estado',
+        'acciones'
+      ];
     }else if(this.esExterno){
       this.displayedColumns = [
         'nombreEntidad',
@@ -145,6 +157,12 @@ export class LayoutDocumentoSustentoExpComponent extends BasePageComponent<Docum
       action = 'viewEval'
       obj.idDocumento = obj.idDocumentoPadre;
     }
+    if (action == 'ACC_EDITAR_ARCHIVO' && this.isOriginal(obj)) {
+      action = 'editFile'
+    }
+    if (action == 'ACC_EDITAR_ARCHIVO' && !this.isOriginal(obj)) {
+      action = 'edit'
+    }
     this.dialog.open(ModalDocumentosSustentanComponent, {
       width: '1200px',
       maxHeight: '100%',
@@ -174,5 +192,10 @@ export class LayoutDocumentoSustentoExpComponent extends BasePageComponent<Docum
   descargarArchivo(adj) {
     let nombreAdjunto = adj.nombre != null ? adj.nombre : adj.nombreReal
     this.adjuntoService.descargarWindowsJWT(adj.codigo, nombreAdjunto);
+  }  
+
+  isOriginal(obj) {
+    return obj?.estado?.nombre.toUpperCase() == 'ORIGINAL';
   }
+
 }

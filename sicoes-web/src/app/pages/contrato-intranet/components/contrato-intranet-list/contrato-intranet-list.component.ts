@@ -1,20 +1,19 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { Contrato } from 'src/app/interface/contrato.model';
 import { ContratoService } from 'src/app/service/contrato.service';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
-import { solicitudContrato } from 'src/helpers/constantes.components';
+import { estadosPerfCont, solicitudContrato } from 'src/helpers/constantes.components';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
 
 @Component({
   selector: 'vex-contrato-intranet-list',
   templateUrl: './contrato-intranet-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./contrato-intranet-list.component.scss'],
   animations: [
     fadeInUp400ms,
     stagger80ms
@@ -23,9 +22,6 @@ import { Link } from 'src/helpers/internal-urls.components';
 
 
 export class ContratoIntranetListComponent extends BasePageComponent<Contrato> implements OnInit {
-
-  // dataSource: MatTableDataSource<any>;
-  // dataSource: any;
   displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'tipo', 'actions'];
   ACCION_VER: string = solicitudContrato.ACCION_VER;
   ACCION_EDITAR: string = solicitudContrato.ACCION_EDITAR;
@@ -34,7 +30,7 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
     nroConcurso: [null],
     item: [null],
     convocatoria: [''],
-    estadoProcesoSolicitud: [''],
+    estadoProcesoSolicitud: ['2'],
     tipoSolicitud: [''],
   });
   
@@ -62,7 +58,7 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
     let filtro: any = {
       nroConcurso: this.formGroup.get('nroConcurso').value,
       item: this.formGroup.get('item').value,
-      convocatoria: this.formGroup.get('convocatoria').value,
+      convocatoria: this.formGroup.get('convocatoria').value ? `%${this.formGroup.get('convocatoria').value.trim()}%` : null,
       estado: this.formGroup.get('estadoProcesoSolicitud').value,
       tipoSolicitud: this.formGroup.get('tipoSolicitud').value
     };
@@ -88,22 +84,15 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
     this.buscar();
   }
 
-  estadoSolicitud(solicitud: any) {
-    switch (solicitud.estadoProcesoSolicitud) {
-      case "1":
-        return "Preliminar";
-      case "2":
-        return "En Proceso";
-      case "3":
-        return "Observado";
-      case "4":
-        return "Concluido";
-      case "5":
-        return "Archivado";
-    
-      default:
-        return "otro";
-    }
+  estadoSolicitud(contrato: Contrato): string {
+    const estados: { [key: string]: string } = {
+      "1": estadosPerfCont.PRELIMINAR,
+      "2": estadosPerfCont.EN_PROCESO,
+      "3": estadosPerfCont.OBSERVADO,
+      "4": estadosPerfCont.CONCLUIDO,
+      "5": estadosPerfCont.ARCHIVADO
+    };
+    return estados[contrato?.estadoProcesoSolicitud] || "Otro";
   }
 
   buscar() {

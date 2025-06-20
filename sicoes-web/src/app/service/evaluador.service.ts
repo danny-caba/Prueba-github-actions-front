@@ -74,6 +74,25 @@ export class EvaluadorService {
     return this.http.put<Asignacion>(urlEndpoint,request);
   }
 
+  // Método específico para rechazo por perfil
+  rechazarPerfil(idAsignacion: number, idPerfil: number, observacion: string): Observable<{success: boolean, message: string}> {
+    const url = `${this._path_serve}/api/asignaciones/${idAsignacion}/rechazar-perfil`;
+    return this.http.put<{ success: boolean, message: string }>(url, { 
+      idOtroRequisito: idPerfil,
+      observacion: observacion
+    });
+  }
+
+  crearHistorialAsignacionBackend(idAsignacion: number, accion: string, observacion: string): Observable<any> {
+    const url = `${this._path_serve}/api/asignaciones/historial`; // Define la URL correcta para crear el historial
+    return this.http.post(url, { idAsignacion, accion, observacion });
+  }
+
+  obtenerIdsPerfiles(idUsuario: string): Observable<number[]> {
+    return this.http.get<number[]>(`${this._path_serve}/api/asignaciones/aprobador/${idUsuario}/perfiles-asignados`);
+} 
+
+
   obtenerIdArchivo(numeroExpediente) {
     let urlEndpoint = `${this._path_serve}/api/asignaciones/obtenerIdArchivo/${numeroExpediente}`
     return this.http.get<any>(urlEndpoint);

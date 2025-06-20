@@ -29,14 +29,14 @@ export class MontoDiferencialComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.formGroup = this.fb.group({});
-    this.obtenerRequisitos();
+    // this.obtenerRequisitos();
   }
 
-    ngOnChanges(changes: SimpleChanges): void {
-      if (changes['tipoContratoSeleccionado'] && changes['tipoContratoSeleccionado'].currentValue) {
-        this.obtenerRequisitos();
-      }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['tipoContratoSeleccionado'] && changes['tipoContratoSeleccionado'].currentValue) {
+      this.obtenerRequisitos();
     }
+  }
 
   esArchivo(requisito: any) {
     return requisito.requisito.tipoDatoEntrada.nombre == 'Adjuntar Archivo';
@@ -49,7 +49,12 @@ export class MontoDiferencialComponent implements OnInit, OnChanges {
   }
 
   obtenerRequisitos() {
-    this.requisitoService.obtenerRequisitosPorSeccion(this.SECCION.idSolPerConSec, this.tipoContratoSeleccionado).subscribe(
+    this.requisitoService.obtenerRequisitosPorSeccion(
+      this.SECCION.idSolPerConSec, 
+      this.tipoContratoSeleccionado, 
+      this.evaluar, 
+      this.CONTRATO.propuesta.idPropuesta
+    ).subscribe(
       (response: any) => {
         this.requisitos = response.content;
 
@@ -73,7 +78,7 @@ export class MontoDiferencialComponent implements OnInit, OnChanges {
 
     this.requisitos.forEach(requisito => {
     
-      if (MONTO_PROPUESTA_ECONOMICA < MONTO_90_PORCIENTO) {
+      // if (MONTO_PROPUESTA_ECONOMICA < MONTO_90_PORCIENTO) {
         if (requisito.requisito.deSeccionRequisito === 'Valor estimado') {
           this.formGroup.get(requisito.idSolicitudSeccion.toString()).setValue(MONTO_PROCESO_ITEM);
           this.formGroup.get(requisito.idSolicitudSeccion.toString()).disable();
@@ -88,11 +93,16 @@ export class MontoDiferencialComponent implements OnInit, OnChanges {
           this.formGroup.get(requisito.idSolicitudSeccion.toString()).setValue(MONTO_DIFERENCIAL);
           this.formGroup.get(requisito.idSolicitudSeccion.toString()).disable();
         }
-      } else {
-        this.disableForm = true;
-      }
+      // } else {
+      //   this.disableForm = true;
+      // }
 
     });
+
+    if (MONTO_PROPUESTA_ECONOMICA > MONTO_90_PORCIENTO) {
+      this.requisitos = this.requisitos.filter(requisito => requisito.requisito.flagVisibleSuperaPropuesta === '1');
+      this.crearFormulario(this.requisitos);
+    }
   }
 
   getValues() {
@@ -172,11 +182,11 @@ export class MontoDiferencialComponent implements OnInit, OnChanges {
   }
 
   getFormValues(): any {
-    if (this.disableForm) {
-      return {};
-    } else {
+    // if (this.disableForm) {
+    //   return {};
+    // } else {
       return { ...this.formGroup.getRawValue() };
-    }
+    // }
   }
 
   setValueChecked(obj, even) {

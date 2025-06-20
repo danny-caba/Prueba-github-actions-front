@@ -51,4 +51,9 @@ export class EstudioService {
     let urlEndpoint = `${this._path_serve}/api/estudios/academicos/${id}`
     return this.http.delete<PerfilInscripcion>(urlEndpoint);
   }
+
+  actualizarFile(request: any, idRequisito: any){
+    let urlEndpoint = `${this._path_serve}/api/estudios/academicos/${idRequisito}/modificar`
+    return this.http.put<PerfilInscripcion>(urlEndpoint,request);
+  }
 }

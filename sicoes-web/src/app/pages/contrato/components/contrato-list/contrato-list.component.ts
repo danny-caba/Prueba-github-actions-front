@@ -1,38 +1,41 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Contrato } from 'src/app/interface/contrato.model';
 import { ContratoService } from 'src/app/service/contrato.service';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
-import { Constantes } from 'src/helpers/constantes.components';
+import { estadosIndexPerfCont, estadosPerfCont, tipoSolicitudPerfCont } from 'src/helpers/constantes.components';
 import { functionsAlert } from 'src/helpers/functionsAlert';
-import { Link } from 'src/helpers/internal-urls.components';
+import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
 import { solicitudContrato } from '../../../../../helpers/constantes.components';
 import { ProcesoService } from 'src/app/service/proceso.service';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { Subject, Subscription, takeUntil } from 'rxjs';
+import { AuthFacade } from '../../../../auth/store/auth.facade';
+import * as CryptoJS from 'crypto-js';
+
+const URL_ENCRIPT = '3ncr1pt10nK3yuR1';
 
 @Component({
   selector: 'vex-contrato-list',
   templateUrl: './contrato-list.component.html',
-  styleUrls: ['./contrato-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./contrato-list.component.scss'],
   animations: [
     fadeInUp400ms,
     stagger80ms
   ]
 })
 
+export class ContratoListComponent extends BasePageComponent<Contrato> implements OnInit, OnDestroy {
 
-export class ContratoListComponent extends BasePageComponent<Contrato> implements OnInit {
+  intenalUrls: InternalUrls;
+  user$ = this.authFacade.user$;
 
-  // dataSource: MatTableDataSource<any>;
-  // dataSource: any;
   displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'tipo', 'actions'];
-
   ACCION_VER: string = solicitudContrato.ACCION_VER;
   ACCION_EDITAR: string = solicitudContrato.ACCION_EDITAR;
+  private destroy$ = new Subject<void>();
 
   formGroup = this.fb.group({
     nroConcurso: [null],
@@ -43,20 +46,21 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   });
   
   constructor(
+    private authFacade: AuthFacade,
     private router: Router,
     private contratoService: ContratoService,
-    private fb: FormBuilder,
-    private procesoService: ProcesoService
+    private fb: FormBuilder
   ) {
     super();
   }
 
   ngOnInit(): void {
-    this.obtenerDetalleSolicitud();
+    this.cargarTabla();
   }
 
-  obtenerDetalleSolicitud() {
-    this.cargarTabla();
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   serviceTable(filtro: any) {
@@ -67,7 +71,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
     let filtro: any = {
       nroConcurso: this.formGroup.get('nroConcurso').value,
       item: this.formGroup.get('item').value,
-      convocatoria: this.formGroup.get('convocatoria').value,
+      convocatoria: this.formGroup.get('convocatoria').value ? `%${this.formGroup.get('convocatoria').value.trim()}%` : null,
       estado: this.formGroup.get('estadoProcesoSolicitud').value,
       tipoSolicitud: this.formGroup.get('tipoSolicitud').value
     };
@@ -79,16 +83,24 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   }
 
   goToFormContrato(contrato: any, accion: string) {
-    this.contratoService.validarSancionVigenteV2(contrato.supervisora.numeroDocumento).subscribe(res =>{
+    this.contratoService.validarSancionVigenteV2(contrato.supervisora.numeroDocumento)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res =>{
       if(res.resultado === '1'){
-        this.contratoService.enviarCorreoSancion(contrato.idSolicitud, res).subscribe((response) => {
+        this.contratoService.enviarCorreoSancion(contrato.idSolicitud, res)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((response) => {
           functionsAlert.vigente('No es posible realizar su registro.', 'Mantiene una sancion por parte del OSCE.').then((result) => {
           });
         });
       }else{
-        this.contratoService.validarFechaPresentacion(contrato.idSolicitud).subscribe((response) => {
+
+        let encodedId = this.encrypt(contrato.idSolicitud.toString());
+        this.contratoService.validarFechaPresentacion(contrato.idSolicitud)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((response) => {
           if (response) {
-            this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, accion === this.ACCION_VER ? Link.CONTRATO_SOLICITUD_VIEW : Link.CONTRATO_SOLICITUD_ADD, contrato.idSolicitud]);
+            this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, accion === this.ACCION_VER ? Link.CONTRATO_SOLICITUD_VIEW : Link.CONTRATO_SOLICITUD_ADD, encodedId]);
           } else {
             functionsAlert.error('La fecha límite de presentación ha expirado.');
           }
@@ -107,30 +119,30 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
     this.cargarTabla();
   }
 
-  estadoSolicitud(solicitud: any) {
-    switch (solicitud.estadoProcesoSolicitud) {
-      case "1":
-        return "Preliminar";
-      case "2":
-        return "En Proceso";
-      case "3":
-        return "Observado";
-      case "4":
-        return "Concluido";
-      case "5":
-        return "Archivado";
-    
-      default:
-        return "otro";
-    }
+  estadoSolicitud(contrato: Contrato): string {
+    const estados: { [key: string]: string } = {
+      "1": estadosPerfCont.PRELIMINAR,
+      "2": estadosPerfCont.EN_PROCESO,
+      "3": estadosPerfCont.OBSERVADO,
+      "4": estadosPerfCont.CONCLUIDO,
+      "5": estadosPerfCont.ARCHIVADO
+    };
+    return estados[contrato?.estadoProcesoSolicitud] || "Otro";
   }
 
-  formRequisitos(solicitud: any){
-    return solicitud.estadoProcesoSolicitud === '1'
+  formRequisitos(contrato: Contrato): boolean {
+    return contrato.estadoProcesoSolicitud === estadosIndexPerfCont.PRELIMINAR;
   }
 
-  textoRequisito(solicitud: any){
-    return solicitud.tipoSolicitud === '1' ? 'requisitos' : 'subsanar';
+  textoRequisito(contrato: Contrato): string {
+    return contrato.tipoSolicitud === tipoSolicitudPerfCont.INSCRIPCION 
+      ? 'requisitos' : 'subsanar';
   }
+
+  encrypt(data: string): string {
+    const encrypted = CryptoJS.AES.encrypt(data, URL_ENCRIPT).toString();
+    return encrypted;
+  }
+  
 
 }

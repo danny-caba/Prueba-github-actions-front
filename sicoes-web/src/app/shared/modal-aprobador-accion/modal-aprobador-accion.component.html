@@ -5,6 +5,20 @@
     
     <mat-divider class="-mx-6 text-border"></mat-divider>
     <mat-dialog-content class="flex flex-col">
+        
+        <!-- Lista de perfiles con checkboxes (solo se muestra si mostrarPerfiles es true) -->
+        <div class="perfiles-list" *ngIf="mostrarPerfiles && booleanAdd">
+        <h2>Eliga el perfil o los perfil, motivo por el cual rechaza la aprobacion:</h2>
+            <ng-container *ngFor="let perf of listPerfiles">
+                <div class="ml-6 mb-2 flex flex-col sm:flex-row sm:gap-4">
+                    <mat-checkbox
+                        [checked]="perf.seleccionado"
+                        (change)="togglePerfil(perf)">
+                        {{ perf.perfil?.nombre || 'Perfil sin nombre' }} - {{ perf.usuario?.nombreUsuario || 'Evaluador' }}  
+                    </mat-checkbox>
+                </div>
+            </ng-container>
+        </div>
         <mat-form-field  class="mt-6 flex-auto">
             <mat-label>Observaciones</mat-label>
             <textarea matInput #obsAdministrativa [formControl]="formGroup.controls.observacion" maxlength="256"></textarea>

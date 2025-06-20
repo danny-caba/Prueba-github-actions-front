@@ -471,16 +471,14 @@ export class LayoutResultadoComponent
   
     for (let i = 0; i < this.listPerfiles.length; i++) {
       let perfilTmp = this.listPerfiles[i];
-      // Asegúrate que perfilTmp.evaluacion y perfilTmp.evaluacion.codigo existan antes de comparar
       if (perfilTmp.evaluacion && perfilTmp.evaluacion.codigo === "REA_03") {
         
         obser = true;
-        break;  // Puedes agregar un break aquí para dejar de iterar una vez que encuentres RE_03
+        break;  
       }
     }
-    console.log(obser)
-    if (obser) {  // Usar directamente la variable booleana obser
-      return "Observado";  // Si se encuentra 'RE_03', retorna "Observados"
+    if (obser) {  
+      return "Observado"; 
     } else if (this.listDictamenEval[0].montoFacturado > 100000) {
       return "Califica";
     } else if (this.listDictamenEval[0].montoFacturado > 0) {

@@ -41,5 +41,41 @@
                 </mat-form-field>
             </div>
         </div>
+        <div class="flex gap-4" *ngIf="actualizable">
+            <div class="example-button-container">
+                <button mat-fab class="bg-primary" aria-label="Agregar" (click)="agregarRepresentante()">
+                    <mat-icon class="bg-primary" svgIcon="mat:add"></mat-icon>
+                </button>
+            </div>
+            <table @stagger mat-table [dataSource]="dataSource" class="w-full" matSort>
+                <ng-container matColumnDef="tipoDocumento">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Documento</th>
+                    <td mat-cell *matCellDef="let element"> {{element?.tipoDocumento?.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="numeroDocumento">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>N° de Documento</th>
+                    <td mat-cell *matCellDef="let element"> {{element?.numeroDocumento}} </td>
+                </ng-container>
+                <ng-container matColumnDef="nombres">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombres</th>
+                    <td mat-cell *matCellDef="let element"> {{element?.nombres}} </td>
+                </ng-container>
+                <ng-container matColumnDef="apellidoPaterno">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Apellido Paterno</th>
+                    <td mat-cell *matCellDef="let element"> {{element?.apellidoPaterno}} </td>
+                </ng-container>
+                <ng-container matColumnDef="apellidoMaterno">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Apellido Materno</th>
+                    <td mat-cell *matCellDef="let element"> {{element?.apellidoMaterno}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" [attr.colspan]="displayedColumns.length">
+                        No existen representantes históricos
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>

@@ -15,6 +15,10 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Institución</th>
             <td mat-cell *matCellDef="let element"> {{element?.institucion }}</td>
         </ng-container>
+        <ng-container matColumnDef="nombreCapacitacion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre de Capacitación</th>
+            <td mat-cell *matCellDef="let element"> {{element?.especialidad }}</td>
+        </ng-container>
         <ng-container matColumnDef="nroHoras">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>N° de Horas</th>
             <td mat-cell *matCellDef="let element"> {{element?.hora}} </td>
@@ -35,10 +39,10 @@
                 </div>
             </td>
         </ng-container>
-        <!-- <ng-container matColumnDef="estado">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Resultado</th>
-            <td mat-cell *matCellDef="let element"> {{element?.evaluacion?.nombre}} </td>
-        </ng-container> -->
+        <ng-container matColumnDef="estado" *ngIf="editModified">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+            <td mat-cell *matCellDef="let element">{{ element?.estado?.nombre || '' }}</td>
+        </ng-container>
 
         <!-- Action Column -->
         <ng-container matColumnDef="acciones">
@@ -117,6 +121,12 @@
             <button (click)="eliminarPerfil(obj)" mat-menu-item *vexOptionRole="opcion.MEN_CAPAC_ELIMINAR">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
                 <span>Eliminar</span> <!--RESPONDIDO-->
+            </button>
+        </div>
+        <div *ngIf="editModified">
+            <button (click)="actualizarVer(obj, 'ACC_EDITAR_ARCHIVO')" mat-menu-item *vexOptionRole="opcion.BTN_DOC_EXP_EDITAR_ARCH">
+                <mat-icon svgIcon="mat:edit"></mat-icon>
+                <span>Editar</span>
             </button>
         </div>
     </ng-template>

@@ -356,7 +356,7 @@ opciones: string[] = ["SI", "NO"];
   }
 
   cancelar(){
-    this.router.navigate([Link.EXTRANET, Link.GESTION_USUARIO]);
+    this.router.navigate([Link.INTRANET, Link.GESTION_USUARIO]);
   }
 
   protected validarSeleccion(): boolean {

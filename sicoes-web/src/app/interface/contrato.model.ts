@@ -7,6 +7,7 @@ export class Contrato {
   descripcionSolicitud: string
   tipoSolicitud: string
   estadoProcesoSolicitud: string
+  fechaPlazoInscripcion: string
   fechaPlazoSubsanacion: string
   estado: string
   archivo: any

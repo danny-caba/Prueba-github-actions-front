@@ -30,6 +30,7 @@ export class LayoutDatosPersNatPostorComponent extends BaseComponent implements 
   @ViewChild('formUbigeo', { static: true }) formUbigeo: UbigeoUpdComponent;
   @Input() SOLICITUD: any;
   @Input() editable: boolean = false;
+  @Input() actualizable = false;
 
   listPais: any[]
   listTipoDocumento: any[]
@@ -76,8 +77,10 @@ export class LayoutDatosPersNatPostorComponent extends BaseComponent implements 
     this.cargarCombo();
     this.formGroup.get('correo').valueChanges.subscribe(() => this.isDisabledBtnCorreo = false)
 
-    if (!this.editable) {
+    if (!this.editable && !this.actualizable) {
       this.disableAllForm(this.formGroup);
+    }else if (!this.editable && this.actualizable) {
+      this.disableControls(true, ['tipoDocumento', 'numeroDocumento', 'nombreRazonSocial', 'codigoPartidaRegistral', 'direccion'], this.formGroup);
     }else{
       this.disableControls(true, ['tipoDocumento', 'numeroDocumento', 'nombreRazonSocial', 'direccion'], this.formGroup);
     }

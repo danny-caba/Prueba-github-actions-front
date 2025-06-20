@@ -50,11 +50,12 @@ export class Proceso {
 }
 
 export class Usuario {
-    idUsuario:number
+    idUsuario: number
     nombreUsuario:string
     usuario:string
     estadoUsuario:string
     correo:string
+    codigoUsuarioInterno?:string 
 }
 
 export class ResponseUsuario {

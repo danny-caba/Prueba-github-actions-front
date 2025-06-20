@@ -14,7 +14,8 @@ export abstract class BasePageComponent<T> extends BaseComponent{
   itemsTable: T[];
   isLoading: boolean = false;
 
-  TOTAL_FACTURADO = 0
+  TOTAL_FACTURADO = 0;
+  TOTAL_FACTURADO_EVALUADO = 0;
 
   ANIO = 0;
   DIA = 0;
@@ -58,6 +59,7 @@ export abstract class BasePageComponent<T> extends BaseComponent{
       //this.dataSource.sortingDataAccessor = this.dataAceessor
 
       this.TOTAL_FACTURADO = res.totalMonto
+      this.TOTAL_FACTURADO_EVALUADO = res.totalMontoEvaluado
       this.ANIO = res.anio
       this.DIA = res.dia
       this.MES = res.mes

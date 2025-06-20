@@ -16,6 +16,7 @@ export class Documento{
     montoContrato: number
     montoTipoCambio: number
     montoContratoSol: number
+    duracion?: string
 
     archivo: {
         idArchivo: number

@@ -85,12 +85,12 @@
                     <mat-hint class="color-red" align="start"
                         *ngIf="errorMsgSNE"><strong>{{errorMsgSNE}}</strong></mat-hint>
                 </mat-form-field>
-                <div style="padding-top: 12px;" *ngIf="editable == true && flagSne == true">
+                <div style="padding-top: 12px;" *ngIf="mostrarBtnValidarEmail()">
                     <button color="primary" mat-raised-button type="button" [disabled]="isDisabledBtnCorreo"
                         (click)="validarEmail(formGroup.controls.correo.value)">Validar</button>
                 </div>
             </div>
-            <div class="flex flex-col sm:flex-row sm:gap-4" *ngIf="editable">
+            <div class="flex flex-col sm:flex-row sm:gap-4" *ngIf="editable || actualizable">
                 <mat-form-field class="flex-auto" *ngIf="flagValidacion">
                     <mat-label fxFlex="10">Codigo de Validación</mat-label>
                     <input [formControl]="formGroup.controls.codigo" matInput maxlength="150">

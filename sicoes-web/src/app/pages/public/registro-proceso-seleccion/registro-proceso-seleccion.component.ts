@@ -51,6 +51,7 @@ export class RegistroProcesoSeleccionComponent
     "numero",
     "division",
     "fecHrPubli",
+    "numeroProceso",
     "descripcion",
     "accion",
   ];

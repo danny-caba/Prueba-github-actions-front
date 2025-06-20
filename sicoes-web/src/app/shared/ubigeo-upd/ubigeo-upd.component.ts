@@ -138,6 +138,7 @@ export class UbigeoUpdComponent implements OnInit {
       this.parentForm.enable();
     }
     if(this.editable == false){
+      this.habilitarEventos()
       this.parentForm.disable();
     }
   }

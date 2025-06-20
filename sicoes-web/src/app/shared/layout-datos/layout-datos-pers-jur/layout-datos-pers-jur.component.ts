@@ -30,6 +30,7 @@ export class LayoutDatosPersJurComponent extends BaseComponent implements OnInit
   @ViewChild('formUbigeo', { static: true }) formUbigeo: UbigeoUpdComponent;
   @Input() SOLICITUD: any;
   @Input() editable: boolean = false;
+  @Input() actualizable = false;
 
   listPais: any[]
   listTipoDocumento: any[]
@@ -75,11 +76,15 @@ export class LayoutDatosPersJurComponent extends BaseComponent implements OnInit
 
   ngOnInit(): void {
     this.cargarCombo();
-    this.formGroup.get('correo').valueChanges.subscribe(() => this.isDisabledBtnCorreo = false)
+    this.formGroup.get('correo').valueChanges.subscribe(() => this.isDisabledBtnCorreo = false);
 
-    if (!this.editable) {
+    if (!this.editable && !this.actualizable) {
       this.disableAllForm(this.formGroup);
-    }else{
+    } else if (!this.editable && this.actualizable) {
+      this.disableControls(true, ['tipoDocumento', 'numeroDocumento', 'nombreRazonSocial', 
+      'codigoPartidaRegistral',
+      'direccion'], this.formGroup);
+    } else {
       this.disableControls(true, ['tipoDocumento', 'numeroDocumento', 'nombreRazonSocial', 'direccion'], this.formGroup);
     }
   }
@@ -210,4 +215,9 @@ export class LayoutDatosPersJurComponent extends BaseComponent implements OnInit
     this.formGroup.patchValue(this.SOLICITUD.persona)
     this.formUbigeo.setValue(this.SOLICITUD.persona)
   }
+
+  mostrarBtnValidarEmail() {
+    return (this.editable || this.actualizable) && this.flagSne;
+  }
+
 }

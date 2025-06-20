@@ -33,9 +33,11 @@ export class LayoutOtrosRequisitosComponent extends BaseComponent implements OnI
   cmpTipoRevisionEdit: boolean = false;
 
   @Input() editable: boolean = false;
+  @Input() editModified = false;
   @Input() version: boolean = false;
   @Input() isSubsanar: boolean = false;
   @Input() viewEvaluacion: boolean;
+  @Input() actualizable: boolean = false;
 
   listOpcion: ListadoDetalle[] = []
   listOtrosDocumento: OtroRequisito[]
@@ -59,6 +61,7 @@ export class LayoutOtrosRequisitosComponent extends BaseComponent implements OnI
     this.activeRoute.data.subscribe(data => {
       this.editable = data.editable;
       this.isSubsanar = data.isSubsanar;
+      this.editModified = data.editModified;
     })
   }
 
@@ -113,6 +116,13 @@ export class LayoutOtrosRequisitosComponent extends BaseComponent implements OnI
   buscarOtrosDocumentos() {
     this.otroRequisitoService.buscarOtroRequisitos(this.obtenerFiltro()).subscribe(resp => {
       this.listOtrosDocumento = resp.content;
+      if (this.actualizable || this.editModified) {
+        this.listOtrosDocumento.forEach(otro => {
+          if (otro.tipoRequisito.codigo == 'OPJ04' || otro.tipoRequisito.codigo == 'OPN03') {
+            otro.archivo = null;
+          }
+        });
+      }
     });
   }
 
@@ -121,11 +131,23 @@ export class LayoutOtrosRequisitosComponent extends BaseComponent implements OnI
   }
 
   descargarFormato03() {
-    this.adjuntoService.downloadFormato(FormatoLocal.FORMATO_03, "FORMATO_03.docx");
+    let nombre = 'FORMATO_03.docx';
+    if(this.actualizable){
+      nombre = 'FORMATO_03_ACT.docx';
+    } else if(this.editModified){
+      nombre = 'FORMATO_03_MOD.docx';
+    }
+    this.adjuntoService.downloadFormato(FormatoLocal.FORMATO_03, nombre);
   }
 
   descargarFormato01() {
-    this.adjuntoService.downloadFormato(FormatoLocal.FORMATO_01, "FORMATO_01.docx");
+    let nombre = 'FORMATO_01.docx';
+    if(this.actualizable){
+      nombre = 'FORMATO_01_ACT.docx';
+    } else if(this.editModified){
+      nombre = 'FORMATO_01_MOD.docx';
+    }
+    this.adjuntoService.downloadFormato(FormatoLocal.FORMATO_01, nombre);
   }
   
   setValueCheckedFirma(obj, even) {
@@ -232,7 +254,7 @@ export class LayoutOtrosRequisitosComponent extends BaseComponent implements OnI
       return true;
     }
 
-    if (otroReq.evaluacion?.codigo == 'RE_01' && this.editable == true) {
+    if ((otroReq.evaluacion?.codigo == 'RE_01' && this.editable == true) || this.editModified == true) {
       return false;
     }
 
@@ -298,7 +320,33 @@ export class LayoutOtrosRequisitosComponent extends BaseComponent implements OnI
         this.buscarOtrosDocumentos();
       }
     }
-    
   }
 
+  validarEdicionPorActMod(otroReq) {
+    let val = otroReq?.tipoRequisito?.codigo;
+
+    if(!val){
+      return false;
+    }
+
+    if(['OPJ04', 'OPN03'].includes(val) && (this.actualizable || this.editModified)){
+      return true;
+    }
+
+    return false;
+  }
+
+  strValidarEdicionPorActMod(otroReq) {
+    if (this.actualizable) {
+      return '(Actualización)';
+    }
+    if (this.editModified) {
+      return '(Modificación)';
+    }
+    return '';
+  }
+
+  formatearNombreRequisito(nombre: string): string {
+    return nombre.replace(/\(Actualizada \d{2}\/\d{2}\/\d{4}\)/g, '<strong>$&</strong>');
+  }
 }

@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
-import { ListadoEnum } from 'src/helpers/constantes.components';
+import { ListadoEnum, origenRegistroEnum, SolicitudTipoEnum } from 'src/helpers/constantes.components';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
 import { SolicitudService } from 'src/app/service/solicitud.service';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
@@ -36,6 +36,9 @@ export class SolicitudListComponent extends BasePageComponent<Solicitud> impleme
   ACC_SUBSANAR = 'ACC_SUBSANAR';
   ACC_VER = 'ACC_VER';
   ACC_ANULAR = 'ACC_ANULAR';
+  ACC_ACTUALIZAR = 'ACC_ACTUALIZAR';
+  ACC_MODIFICAR = 'ACC_MODIFICAR';
+  ACC_EDITAR_MOD = 'ACC_EDITAR_MOD';
 
   formGroup = this.fb.group({
     fechaDesde: [''],
@@ -138,12 +141,15 @@ export class SolicitudListComponent extends BasePageComponent<Solicitud> impleme
   }
 
   mostrarOpcion(opt, objSol) {
-    if(opt == this.ACC_EDITAR && objSol.estado?.codigo == SolicitudEstadoEnum.BORRADOR) return true;
+    if(opt == this.ACC_EDITAR && objSol.estado?.codigo == SolicitudEstadoEnum.BORRADOR && !this.isModifiable(objSol)) return true;
+    if(opt == this.ACC_EDITAR_MOD && this.isModifiable(objSol)) return true;
     if(opt == this.ACC_DESCARGAR && objSol.estado?.codigo == SolicitudEstadoEnum.EN_PROCESO) return true;
     //if(opt == this.ACC_SUBSANAR && objSol.estado?.codigo == SolicitudEstadoEnum.OBSERVADO && objSol.tipoSolicitud.codigo == SolicitudTipoEnum.SUBSANACION) return true;
     if(opt == this.ACC_SUBSANAR && objSol.estado?.codigo == SolicitudEstadoEnum.OBSERVADO && functions.noEsVacio(objSol.solicitudUuidPadre) && functions.noEsVacio(objSol.fechaPlazoSub)) return true;
     if(opt == this.ACC_DESCARGAR && objSol.estado?.codigo == SolicitudEstadoEnum.CONCLUIDO) return true;
     if(opt == this.ACC_ANULAR && !(objSol.estado?.codigo == SolicitudEstadoEnum.EN_PROCESO) && !(objSol.estado?.codigo == SolicitudEstadoEnum.OBSERVADO) && !(objSol.estado?.codigo == SolicitudEstadoEnum.CONCLUIDO)) return true;
+    if(opt == this.ACC_ACTUALIZAR && this.isUpdatable(objSol)) return true;
+    if(opt == this.ACC_MODIFICAR && this.isUpdatable(objSol)) return true;
     return false;
   }
 
@@ -163,6 +169,24 @@ export class SolicitudListComponent extends BasePageComponent<Solicitud> impleme
     this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_SUBSANAR, sol.solicitudUuid]);
   }
 
+  actualizar(sol) {
+    this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_ACTUALIZAR, sol.solicitudUuid]);
+  }
+
+  editModified(sol) {
+    this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_EDIT_MOD, sol.solicitudUuid]);
+  }
+
+  modificar(sol) {
+    const uuid = sol.solicitudUuid;
+    this.solicitudService.modificarSolicitud(uuid).subscribe(sol => {
+      functionsAlert.successHtml('Solicitud Modificada').then((result) => {
+        this.paginator.pageIndex = 0;
+        this.cargarTabla();
+      });
+    });
+  }
+
   obtenerNombre(item){
     if(item.tipoArchivo?.codigo == 'TA11') return 'Solicitud';
     if(item.tipoArchivo?.codigo == 'TA13') return 'Resultado Solicitud';
@@ -171,4 +195,11 @@ export class SolicitudListComponent extends BasePageComponent<Solicitud> impleme
     return ""
   }
 
+  isUpdatable(sol: any) {
+    return sol.estado?.codigo == SolicitudEstadoEnum.CONCLUIDO && (sol.tipoSolicitud?.codigo == SolicitudTipoEnum.INSCRIPCION || sol.tipoSolicitud?.codigo == SolicitudTipoEnum.SUBSANACION);
+  }
+
+  isModifiable(sol: any) {
+    return sol.estado?.codigo == SolicitudEstadoEnum.BORRADOR && sol.origenRegistro?.codigo == origenRegistroEnum.MODIFICACION;
+  }
 }

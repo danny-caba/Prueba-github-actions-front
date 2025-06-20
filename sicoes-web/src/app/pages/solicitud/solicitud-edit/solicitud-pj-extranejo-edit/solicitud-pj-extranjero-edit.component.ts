@@ -34,6 +34,8 @@ export class SolicitudPjExtranjeroEditComponent extends BaseComponent implements
 
   @Input() SOLICITUD: any;
   @Input() editable: boolean = false;
+  @Input() editModified = false;
+  @Input() actualizable = false;
   @Input() isSubsanar: boolean = false;
   @Input() viewEvaluacion: boolean;
   @Input() itemSeccion: number = 0;
@@ -62,6 +64,9 @@ export class SolicitudPjExtranjeroEditComponent extends BaseComponent implements
         //this.layoutDatosPersJur.validarSNE(usu);
         this.layoutDatosPersJur.formGroup.controls['correo'].disable({ emitEvent: false })
       }
+      if (usu && !this.editable && this.actualizable) {
+        this.layoutDatosPersJur.validarSNE(usu);
+      }
     })
   }
 
@@ -73,7 +78,8 @@ export class SolicitudPjExtranjeroEditComponent extends BaseComponent implements
     let formValues: any = {
       solicitudUuid: this.SOLICITUD.solicitudUuid,
       persona: this.layoutDatosPersJur.getFormValues(),
-      representante: this.layoutRepresentanteLeg.getFormValues()
+      representante: this.layoutRepresentanteLeg.getFormValues(),
+      historialRepresentante: this.SOLICITUD?.historialRepresentante || []
     }
     formValues.otrosRequisitos = this.layoutOtrosRequisitos.getValues();
 
@@ -87,6 +93,19 @@ export class SolicitudPjExtranjeroEditComponent extends BaseComponent implements
         this.solicitudService.actualizarBorradorPN(formValues).subscribe(obj => {
           functionsAlert.success('Datos Actualizados').then((result) => {
             //this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, 'editar', obj.solicitudUuid]);
+            this.layoutOtrosRequisitos?.buscarOtrosDocumentos();
+          });
+        });
+      }
+    });
+  }
+
+  actualizar() {
+    functionsAlert.questionSiNo('¿Seguro que desea actualizar la solicitud?').then((result) => {
+      if (result.isConfirmed) {
+        let formValues = this.obtenerDatos();
+        this.solicitudService.actualizarSolicitudConcluido(formValues).subscribe(obj => {
+          functionsAlert.success('Datos Actualizados').then((result) => {
             this.layoutOtrosRequisitos?.buscarOtrosDocumentos();
           });
         });

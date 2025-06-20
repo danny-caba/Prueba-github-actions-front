@@ -1,20 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { BaseComponent } from '../components/base.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Seccion } from 'src/app/interface/seccion.model';
 import { SeccionService } from 'src/app/service/seccion.service';
 import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
+import { ParametriaService } from 'src/app/service/parametria.service';
+import { ListadoEnum } from 'src/helpers/constantes.components';
 
 @Component({
   selector: 'vex-modal-seccion',
-  templateUrl: './modal-seccion.component.html',
-  animations: [
-    fadeInUp400ms,
-    stagger80ms
-  ]
+  templateUrl: './modal-seccion.component.html'
 })
 export class ModalSeccionComponent extends BaseComponent implements OnInit {
 
@@ -24,18 +20,22 @@ export class ModalSeccionComponent extends BaseComponent implements OnInit {
   ACC_ACTUALIZAR = 'Actualizar';
   btnValue: string;
   seccionRef: any;
+  MONTO_FIJO: any = 0;
+  visibleCheckFielCumplimiento: boolean = false;
 
   formGroup = this.fb.group({
     descripcion: ['', Validators.required],
     personal: [false],
-    activo: [false]
+    activo: [false],
+    flVisibleSeccion: [true]
   });
 
   constructor(
     private dialogRef: MatDialogRef<ModalSeccionComponent>,
     @Inject(MAT_DIALOG_DATA) data,
     private fb: FormBuilder,
-    private seccionService: SeccionService
+    private seccionService: SeccionService,
+    private parametriaService: ParametriaService
   ) {
     super();
 
@@ -47,12 +47,22 @@ export class ModalSeccionComponent extends BaseComponent implements OnInit {
       this.formGroup.patchValue({
         descripcion: data.seccion.deSeccion,
         personal: data.seccion.flReqPersonal === '1' ? true : false,
-        activo: data.seccion.esSeccion === '1' ? true : false
+        activo: data.seccion.esSeccion === '1' ? true : false,
+        flVisibleSeccion: data.seccion.flVisibleSeccion === '1' ? true : false
       });
     }
   }
 
   ngOnInit(): void {
+    this.cargarAdjudicacionSimplificada();
+  }
+
+  cargarAdjudicacionSimplificada() {
+    this.parametriaService.obtenerMultipleListadoDetalle([
+      ListadoEnum.ADJUDICACION_SIMPLIFICADA
+    ]).subscribe(listRes => {
+      this.MONTO_FIJO = listRes[0].filter((element) => element.orden === 1);
+    });
   }
 
   closeModal() {
@@ -87,6 +97,7 @@ export class ModalSeccionComponent extends BaseComponent implements OnInit {
       deSeccion: seccion.descripcion,
       esSeccion: seccion.activo ? '1' : '0',
       flReqPersonal: seccion.personal ? '1' : '0',
+      flVisibleSeccion: seccion.flVisibleSeccion ? '1' : '0',
       coSeccion: time.toString().substring(0, 6)
     };
     
@@ -102,12 +113,12 @@ export class ModalSeccionComponent extends BaseComponent implements OnInit {
   }
 
   actualizarConsulta(seccion: any) {
-
     const updSeccion: Seccion = {
       idSeccion: this.seccionRef.idSeccion,
       deSeccion: seccion.descripcion,
       esSeccion: seccion.activo ? '1' : '0',
-      flReqPersonal: seccion.personal ? '1' : '0'
+      flReqPersonal: seccion.personal ? '1' : '0',
+      flVisibleSeccion: seccion.flVisibleSeccion ? '1' : '0'
     };
     
     this.seccionService.actualizar(updSeccion).subscribe(res => {

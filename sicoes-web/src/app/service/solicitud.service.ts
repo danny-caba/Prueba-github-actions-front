@@ -136,4 +136,14 @@ export class SolicitudService {
     return this.http.put<Solicitud>(urlEndpoint, null);
   }
 
+  actualizarSolicitudConcluido(request: any){
+    let urlEndpoint = `${this._path_serve}/api/solicitudes/actualizar/${request.solicitudUuid}`
+    return this.http.put<Solicitud>(urlEndpoint,request);
+  }
+
+  modificarSolicitud(solicitudUuid: String){
+    let urlEndpoint = `${this._path_serve}/api/solicitudes/modificar/${solicitudUuid}`
+    return this.http.put<Solicitud>(urlEndpoint, null);
+  }
+
 }

@@ -81,6 +81,37 @@ const routes: VexRoutes = [{
         ]
       }
     },{
+      path: Link.SOLICITUDES_ACTUALIZAR + '/:solicitudUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: SolicitudEditComponent,
+      data: {
+        editable: false,
+        actualizable: true,
+        isSubsanar: false,
+        opcionPagina: [
+        ]
+      }
+    },{
+      path: Link.SOLICITUDES_EDIT_MOD + '/:solicitudUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: SolicitudEditComponent,
+      data: {
+        editable: false,
+        editModified: true,
+        actualizable: false,
+        isSubsanar: false,
+        opcionPagina: [
+          Opcion.BTN_DOC_EXP_AGREGAR,
+          Opcion.BTN_DOC_EXP_EDITAR_ARCH,
+          Opcion.BTN_GRA_ACA_AGREGAR,
+          Opcion.BTN_CAPAC_AGREGAR,
+
+          Opcion.MEN_DOC_EXP_ELIMINAR,
+          Opcion.MEN_CAPAC_ELIMINAR,
+          Opcion.MEN_GRA_ACA_ELIMINAR,
+        ]
+      }
+    },{
       path: 'ver/:solicitudUuid',
       canActivate: [AuthGuardService, RoleGuardService],
       component: SolicitudEditComponent,

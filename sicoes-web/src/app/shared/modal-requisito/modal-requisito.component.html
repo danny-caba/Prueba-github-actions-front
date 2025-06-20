@@ -44,7 +44,26 @@
         </mat-select>
     </mat-form-field>
     <div class="flex justify-between mt-4">
-    <mat-checkbox color="primary" class="flex-auto" [formControl]="formGroup.controls.esSeccionRequisito">Activo</mat-checkbox>
+        <mat-checkbox color="primary" class="flex-auto" [formControl]="formGroup.controls.esSeccionRequisito">Activo</mat-checkbox>
+        <mat-checkbox color="primary" class="flex-auto" [formControl]="formGroup.controls.flagConformaConsorcio">Solo Consorcios</mat-checkbox>
+    </div>
+    <div class="flex justify-between mt-4">
+        <mat-checkbox color="primary" class="flex-auto" [formControl]="formGroup.controls.flagRemype">Solo Remype</mat-checkbox>
+    </div>
+    <div>
+        <div class="flex justify-between mt-4">
+            <mat-checkbox color="primary" class="flex-auto" [formControl]="formGroup.controls.flagVisibleFielCumplimiento"><span class="text-gray-500 italic text-xs break-words whitespace-normal min-w-[150px]">Desmarcar en caso se necesite Inhabilitar cuando corresponda una Carta Fianza de Fiel Cumplimiento y el monto no supere {{ MONTO_FIJO[0].valor }}.00 soles (CARTA FIANZA DE FIEL CUMPLIMIENTO)</span></mat-checkbox>
+        </div>
+    </div>
+    <div>
+        <div class="flex justify-between mt-4">
+            <mat-checkbox color="primary" class="flex-auto" [formControl]="formGroup.controls.flagVisibleRetencion"><span class="text-gray-500 italic text-xs break-words whitespace-normal min-w-[150px]">Desmarcar en caso se necesite Inhabilitar cuando corresponda una Retención 10% (CARTA FIANZA DE FIEL CUMPLIMIENTO)</span></mat-checkbox>
+        </div>
+    </div>
+    <div>
+        <div class="flex justify-between mt-4">
+            <mat-checkbox color="primary" class="flex-auto" [formControl]="formGroup.controls.flagVisibleSuperaPropuesta"><span class="text-gray-500 italic text-xs break-words whitespace-normal min-w-[150px]">Desmarcar en caso se necesite Inhabilitar cuando la Propuesta Económica supere el 90% del valor estimado (CARTA FIANZA DEL MONTO DIFERENCIAL)</span></mat-checkbox>
+        </div>
     </div>
       
   </mat-dialog-content>

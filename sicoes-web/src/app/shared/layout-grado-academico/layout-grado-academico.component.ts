@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -27,6 +27,7 @@ export class LayoutGradoAcademicoComponent extends BasePageComponent<any> implem
   suscriptionSolicitud: Subscription;
   solicitud: Partial<Solicitud>
   bolEvaluar: boolean
+  @Input() editModified = false;
 
   usuario$ = this.authFacade.user$;
   esExterno: boolean = false;
@@ -81,6 +82,12 @@ export class LayoutGradoAcademicoComponent extends BasePageComponent<any> implem
   }
 
   mostrarColumnas(){
+    console.log(
+      this.esExterno,
+      this.editModified,
+      this.solicitud?.estado?.codigo
+    );
+    
     if(this.esExterno && [SolicitudEstadoEnum.ARCHIVADO.valueOf(), SolicitudEstadoEnum.CONCLUIDO.valueOf(), SolicitudEstadoEnum.OBSERVADO.valueOf()].includes(this.solicitud?.estado?.codigo)){
       this.displayedColumns = [
         'fuente',
@@ -91,6 +98,18 @@ export class LayoutGradoAcademicoComponent extends BasePageComponent<any> implem
         'institucion',
         'archivo',
         //'estado',
+        'acciones'
+      ];
+    }else if(this.esExterno && this.editModified){
+      this.displayedColumns = [
+        'fuente',
+        'grado',
+        'colegiado',
+        'especialidad',
+        'fechaDiploma',
+        'institucion',
+        'archivo',
+        'estado',
         'acciones'
       ];
     }else if(this.esExterno){
@@ -159,6 +178,12 @@ export class LayoutGradoAcademicoComponent extends BasePageComponent<any> implem
       action = 'viewEval'
       obj.idEstudio = obj.idEstudioPadre;
     }
+    if (action == 'ACC_EDITAR_ARCHIVO' && this.isOriginal(obj)) {
+      action = 'editFile'
+    }
+    if (action == 'ACC_EDITAR_ARCHIVO' && !this.isOriginal(obj)) {
+      action = 'edit'
+    }
     this.dialog.open(ModalGradosTitulosComponent, {
       width: '700px',
       height: 'auto',
@@ -211,4 +236,9 @@ export class LayoutGradoAcademicoComponent extends BasePageComponent<any> implem
     let nombreAdjunto = adj.nombre != null ? adj.nombre : adj.nombreReal
     this.adjuntoService.descargarWindowsJWT(adj.codigo, nombreAdjunto);
   }
+  
+  isOriginal(obj) {
+    return obj?.estado?.nombre.toUpperCase() == 'ORIGINAL';
+  }
+
 }

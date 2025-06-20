@@ -30,11 +30,11 @@ const routes: VexRoutes = [{
   component: CustomLayoutComponent,
   loadChildren: () => import('../../pages/invitacion/invitacion.module').then(m => m.InvitacionModule),
 },{
-  path: Link.GESTION_USUARIO,
-  canActivate: [AuthGuardService, RoleGuardService],
-  component: CustomLayoutComponent,
-  loadChildren: () => import('../../pages/gestion-usuarios/gestion-usuarios.module').then(m => m.GestionUsuariosModule),
-},{
+//   path: Link.GESTION_USUARIO,
+//   canActivate: [AuthGuardService, RoleGuardService],
+//   component: CustomLayoutComponent,
+//   loadChildren: () => import('../../pages/gestion-usuarios/gestion-usuarios.module').then(m => m.GestionUsuariosModule),
+// },{
   path: Link.GESTION_ASIGNACION,
   //canActivate: [AuthGuardService],
   component: CustomLayoutComponent,

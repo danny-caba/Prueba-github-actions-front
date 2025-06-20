@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
@@ -29,6 +29,7 @@ export class LayoutCapacitacionComponent extends BasePageComponent<any> implemen
 
   usuario$ = this.authFacade.user$;
   esExterno: boolean = false;
+  @Input() editModified = false;
 
   displayedColumns: string[] = [];
 
@@ -75,16 +76,29 @@ export class LayoutCapacitacionComponent extends BasePageComponent<any> implemen
       this.displayedColumns = [
         'tipoCapacitacion',
         'institucion',
+        'nombreCapacitacion',
         'nroHoras',
         'fechaVigencia',
         'archivo',
         //'estado',
         'acciones'
       ];
+    }else if(this.esExterno && this.editModified){
+      this.displayedColumns = [
+        'tipoCapacitacion',
+        'institucion',
+        'nombreCapacitacion',
+        'nroHoras',
+        'fechaVigencia',
+        'archivo',
+        'estado',
+        'acciones'
+      ];
     }else if(this.esExterno){
       this.displayedColumns = [
         'tipoCapacitacion',
         'institucion',
+        'nombreCapacitacion',
         'nroHoras',
         'fechaVigencia',
         'archivo',
@@ -95,6 +109,7 @@ export class LayoutCapacitacionComponent extends BasePageComponent<any> implemen
       this.displayedColumns = [
         'tipoCapacitacion',
         'institucion',
+        'nombreCapacitacion',
         'nroHoras',
         'fechaVigencia',
         'archivo',
@@ -136,6 +151,12 @@ export class LayoutCapacitacionComponent extends BasePageComponent<any> implemen
       action = 'viewEval'
       obj.idEstudio = obj.idEstudioPadre;
     }
+    if (action == 'ACC_EDITAR_ARCHIVO' && this.isOriginal(obj)) {
+      action = 'editFile'
+    }
+    if (action == 'ACC_EDITAR_ARCHIVO' && !this.isOriginal(obj)) {
+      action = 'edit'
+    }
     this.dialog.open(ModalCapacitacionComponent, {
       width: '1200px',
       maxHeight: '100%',
@@ -164,6 +185,10 @@ export class LayoutCapacitacionComponent extends BasePageComponent<any> implemen
   descargarArchivo(adj) {
     let nombreAdjunto = adj.nombre != null ? adj.nombre : adj.nombreReal
     this.adjuntoService.descargarWindowsJWT(adj.codigo, nombreAdjunto);
+  }
+  
+  isOriginal(obj) {
+    return obj?.estado?.nombre.toUpperCase() == 'ORIGINAL';
   }
 
 }

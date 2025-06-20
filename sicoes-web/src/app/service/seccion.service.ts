@@ -21,8 +21,11 @@ export class SeccionService {
   }
   
   obtenerSeccion(filtro){
+    let params = functions.obtenerParams(filtro);
     let urlEndpoint = `${this._path_serve}/api/secciones/listar`
-    return this.http.get<Pageable<Seccion>>(urlEndpoint);
+    return this.http.get<Pageable<Seccion>>(urlEndpoint, {
+      params
+    });
   }
 
   registrar(request: Seccion){
@@ -45,5 +48,8 @@ export class SeccionService {
     return this.http.get<Seccion>(urlEndpoint);
   }
   
-
+  obtenerSeccionMaestraPorId(idSeccion: number){
+    let urlEndpoint = `${this._path_serve}/api/secciones/${idSeccion}/maestra`
+    return this.http.get<Seccion>(urlEndpoint);
+  }
 }

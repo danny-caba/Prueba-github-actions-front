@@ -11,9 +11,13 @@ import { ContratoService } from '../../../../service/contrato.service';
 import { ParametriaService } from '../../../../service/parametria.service';
 import { ListadoEnum } from 'src/helpers/constantes.components';
 import { Link } from 'src/helpers/internal-urls.components';
-import { Observable } from 'rxjs';
-import { LoadingDialogService } from 'src/helpers/loading';
 import { BaseComponent } from 'src/app/shared/components/base.component';
+import * as CryptoJS from 'crypto-js';
+import { LoadingBarService } from '@ngx-loading-bar/core';
+import { LoadingDialogService } from 'src/helpers/loading';
+
+const URL_DECRYPT = '3ncr1pt10nK3yuR1';
+
 @Component({
   selector: 'vex-contrato-form',
   templateUrl: './contrato-form.component.html'
@@ -31,13 +35,17 @@ export class ContratoFormComponent extends BaseComponent implements OnInit {
   esSubsanacion: boolean = false;
   editable: boolean = false;
   tipoContratoSeleccionado: number;
+  idSolicitud: number;
+  btnRegister: string = 'Registrar';
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private seccionService: SeccionService,
     private contratoService: ContratoService,
     private parametriaService: ParametriaService,
-    private router: Router
+    private router: Router,
+    private loader: LoadingBarService,
+    private loadingDialogService: LoadingDialogService
   ) {
     super();
   }
@@ -52,40 +60,57 @@ export class ContratoFormComponent extends BaseComponent implements OnInit {
   }
 
   obtenerSolicitud() {
-    let idSolicitud = this.activatedRoute.snapshot.paramMap.get('idSolicitud');
+    let idSolicitudHashed = this.activatedRoute.snapshot.paramMap.get('idSolicitud');
+
+    this.idSolicitud = Number(this.decrypt(idSolicitudHashed));
     
-    if (idSolicitud) {
-      this.seccionService.obtenerSeccionPorSolicitud(Number(idSolicitud)).subscribe((response) => {
+    if (this.idSolicitud) {
+      this.seccionService.obtenerSeccionPorSolicitud(this.idSolicitud).subscribe((response) => {
         this.secciones = Array.isArray(response) ? response : [response];
-        this.contratoService.obtenerSolicitudPorId(Number(idSolicitud)).subscribe((response) => {
+        this.contratoService.obtenerSolicitudPorId(this.idSolicitud).subscribe((response) => {
           this.contrato = response;
           this.tipoContratoSeleccionado = this.contrato.tipoContratacion.idListadoDetalle;
           this.esSubsanacion = this.contrato?.tipoSolicitud === '2';
+          this.btnRegister = this.esSubsanacion ? 'Subsanar' : 'Registrar';
         });
       });
-
     }
   }
 
   registrar() {
     functionsAlert.questionSiNo('¿Está seguro de querer registrar los requisitos del formulario de Perfeccionamiento de Contrato?').then((result) => {
       if (result.isConfirmed) {
-        let formValues = this.obtenerDatos();
-        let listFormValues = [
-          ...formValues.documentoContrato,
-          ...formValues.fielCumplimiento,
-          ...formValues.montoDiferencial
-        ];
+        const loaderRef = this.loader.useRef();
+        loaderRef.start();
+        this.loadingDialogService.openDialog();
 
-        this.contratoService.registrarPerfeccionamiento(Number(this.activatedRoute.snapshot.paramMap.get('idSolicitud')),   this.tipoContratoSeleccionado, listFormValues).subscribe(expediente => {
-          let nroExpDes = `Se ha registrado la solicitud de perfeccionamiento de contrato y los archivos han sido subidos al expediente ${expediente}`;
-          functionsAlert.success(nroExpDes).then((result) => {
-            if (result.isConfirmed) {
-              this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST]);
+        this.obtenerDatos().then(formValues => {
+          let listFormValues = [
+            ...formValues.documentoContrato,
+            ...formValues.fielCumplimiento,
+            ...formValues.montoDiferencial
+          ];
+          
+          this.contratoService.registrarPerfeccionamiento(this.idSolicitud, this.tipoContratoSeleccionado, listFormValues).subscribe({
+            next: (expediente) => {
+              loaderRef.complete();
+              this.loadingDialogService.hideDialog();
+
+              let nroExpDes = `Se ha registrado la solicitud de perfeccionamiento de contrato y los archivos han sido subidos al expediente ${expediente}`;
+              functionsAlert.success(nroExpDes).then((result) => {
+                if (result.isConfirmed) {
+                  this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST]);
+                }
+              });
+            },
+            error: (err) => {
+              loaderRef.complete();
+              this.loadingDialogService.hideDialog();
+
+              functionsAlert.error('Ha ocurrido un error al registrar los requisitos del formulario de Perfeccionamiento de Contrato.');
             }
           });
         });
-
       }
     });
   }
@@ -98,34 +123,70 @@ export class ContratoFormComponent extends BaseComponent implements OnInit {
       });
   }
 
-  obtenerDatos() {
-    let formValues: any = {};
+  obtenerDatos(): Promise<any> {
+    return new Promise((resolve) => {
+      let formValues: any = {};
 
-    this.documentoContratoComponents.forEach((docContrato) => {
-      formValues.documentoContrato = docContrato.getValues();
-    });
+      this.documentoContratoComponents.forEach((docContrato) => {
+        formValues.documentoContrato = docContrato.getValues();
+      });
 
-    this.personalPropuestoComponents.forEach((personalPropuesto) => {
-      // formValues.personalPropuesto = personalPropuesto.getValues();
-      // console.log(personalPropuesto.getValues());
+      this.personalPropuestoComponents.forEach((personalPropuesto) => {
+        // formValues.personalPropuesto = personalPropuesto.getValues();
+        // console.log(personalPropuesto.getValues());
+      });
       
-    });
-    
-    this.fielCumplimientoComponents.forEach((fielCumplimiento) => {
-      formValues.fielCumplimiento = fielCumplimiento.getValues();
+      formValues.fielCumplimiento = [];
+      formValues.montoDiferencial = [];
       
+      const promesaFielCumplimiento = new Promise<void>((resolveFiel) => {
+        if (this.fielCumplimientoComponents.length > 0) {
+          const seccionParent = this.secciones.find(seccion => 
+            seccion.deSeccion.includes('CARTA FIANZA DE FIEL CUMPLIMIENTO'));
+            
+          if (seccionParent) {
+            this.seccionService.obtenerSeccionMaestraPorId(seccionParent.idSeccion).subscribe({
+              next: (seccionMaestra) => {
+                const adjudicacionStr = this.contrato.valorAdjSimplificada.toString().replace(',', '.');
+                const MONTO_FIJO = Number(adjudicacionStr);
+                let importeStr = this.contrato?.propuesta?.propuestaEconomica?.importe?.toString().replace(',', '.');
+                let importe = Number(importeStr);
+                
+                if (seccionMaestra.flVisibleSeccion === '0') {
+                  if (importe > MONTO_FIJO) {
+                    formValues.fielCumplimiento = this.fielCumplimientoComponents[0].getValues();
+                  }
+                } else {
+                  formValues.fielCumplimiento = this.fielCumplimientoComponents[0].getValues();
+                }
+                resolveFiel();
+              },
+              error: (err) => {
+                console.error('Error al obtener sección maestra:', err);
+                resolveFiel();
+              }
+            });
+          } else {
+            resolveFiel();
+          }
+        } else {
+          resolveFiel();
+        }
+      });
+      
+      this.montoDiferencialComponents.forEach((montoDiferencial) => {
+        formValues.montoDiferencial = montoDiferencial.getValues();
+      });
+      
+      Promise.all([promesaFielCumplimiento]).then(() => {
+        resolve(formValues);
+      });
     });
-
-    this.montoDiferencialComponents.forEach((montoDiferencial) => {
-      formValues.montoDiferencial = montoDiferencial.getValues();
-    });
-    
-    return formValues;
   }
 
   cargarTipoContrato() {
     this.parametriaService.obtenerMultipleListadoDetalle([
-      ListadoEnum.TIPO_CONTRATO,
+      ListadoEnum.TIPO_CONTRATO
     ]).subscribe(listRes => {
       this.listTipoContrato = listRes[0].filter((element) => element.orden !== 1);
       this.tipoContratoSeleccionado = this.listTipoContrato[0]?.idListadoDetalle;
@@ -151,6 +212,12 @@ export class ContratoFormComponent extends BaseComponent implements OnInit {
   
   onMontoDiferencialInitialized(component: MontoDiferencialComponent) {
     this.montoDiferencialComponents.push(component);
+  }
+
+  decrypt(encryptedData: string): string {
+    const bytes = CryptoJS.AES.decrypt(encryptedData, URL_DECRYPT);
+    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+    return decrypted;
   }
 
 }

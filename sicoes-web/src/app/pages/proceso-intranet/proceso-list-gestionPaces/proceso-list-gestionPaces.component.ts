@@ -18,6 +18,7 @@ import { GestionUsuarioService } from 'src/app/service/gestion-usuarios.service'
 import { Mes } from 'src/app/interface/mes.model';
 import { PacesService } from 'src/app/service/paces.service';
 import { functionsAlert } from 'src/helpers/functionsAlert';
+import { ModalConfigurarPaceComponent } from 'src/app/shared/modal-configurar-Pace/modal-configurar-Pace.component';
 
 @Component({
   selector: 'vex-proceso-gestion-Paces',
@@ -248,6 +249,25 @@ export class ProcesoIntranetGestionPacesComponent extends BasePageComponent<Soli
       //     this.ngOnInit();
       //   } else {
       //   }
+    });
+  }
+
+  configurarPace(row: any) {
+
+    this.dialog.open(ModalConfigurarPaceComponent, {
+      width: '1200px',
+      maxHeight: '100%',
+      data: {
+        pace: row,
+        mes: this.meses.find(x => x.idMes == row.deMes).nombre,
+        area: this.listaDivisiones.find(x => x.idDivision == row.division).deDivision,
+        evento: "E"
+      },
+    }).afterClosed().subscribe(result => {
+      if (result == 'OK') {
+        this.ngOnInit();
+      } else {
+      }
     });
   }
 

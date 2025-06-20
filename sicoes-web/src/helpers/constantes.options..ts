@@ -26,6 +26,9 @@ export enum Opcion {
     MEN_DOC_EXP_ELIMINAR = 'MEN_DOC_EXP_ELIMINAR',
     MEN_DOC_EXP_EVALUAR = 'MEN_DOC_EXP_EVALUAR',
 
+    //DOC_EXPERIENCIA_ARCHIVO
+    BTN_DOC_EXP_EDITAR_ARCH = 'BTN_DOC_EXP_EDITAR_ARCH',
+
     //RESP ADMIN
     BTN_INT_REGRESAR = 'BTN_INT_REGRESAR',
     CMP_EDIT_EVAL_TEC = 'CMP_EDIT_EVAL_TEC',
@@ -100,6 +103,9 @@ export const OpcionConfig = [
 { codigo: Opcion.MEN_DOC_EXP_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD},
 { codigo: Opcion.MEN_DOC_EXP_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD},
 
+//BTN DOC EXP EDITAR ARCHIVO
+{ codigo: Opcion.BTN_DOC_EXP_EDITAR_ARCH, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+
 //RESP ADMIN
 { codigo: Opcion.BTN_INT_REGRESAR, estadoSolicitud: SolicitudEstadoEnum.ALL},
 { codigo: Opcion.CMP_EDIT_EVAL_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
@@ -168,6 +174,8 @@ export const OpcionPorRol = [{
     Opcion.BTN_DOC_EXP_AGREGAR,
     Opcion.MEN_DOC_EXP_EDITAR,
     Opcion.MEN_DOC_EXP_ELIMINAR,
+
+    Opcion.BTN_DOC_EXP_EDITAR_ARCH,
 
     Opcion.VIEW_EVALUACION_EXT
   ]
@@ -333,7 +341,7 @@ const menu12 = {
   codigo: 'menu12',
   type: 'link',
   label: 'Gestión de Usuarios',
-  route: '/extranet/gestion-usuarios',
+  route: '/intranet/gestion-usuarios',
   icon: 'mat:arrow_circle_right',
   routerLinkActiveOptions: { exact: true }
 };
@@ -485,7 +493,8 @@ export const RolMenu = [
     'intranet/procesos/ver-postulante/'
   ]},
   { ROL: { CODIGO: RolEnum.ADM_BLOQU }, MENU: [menu11,menu12/*,menu13*/], path: [
-    'intranet/liberar-personal'
+    'intranet/liberar-personal',
+    'intranet/gestion-usuarios'
   ]},
   { ROL: { CODIGO: RolEnum.ADM_CONFIG }, MENU: [menu15], path: [
     'intranet/gestion-configuraciones'

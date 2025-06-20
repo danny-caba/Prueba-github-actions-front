@@ -31,8 +31,11 @@
         [editable]="editable"
         [view]="view"
         [listTipoContrato]="listTipoContrato"
-        *ngIf="seccionFielCumplimiento() && tipoContratoSeleccionado"
+        *ngIf="seccionFielCumplimiento() && tipoContratoSeleccionado && !noSuperaMontoAdjudicacion()"
         ></vex-fiel-cumplimiento>
+        <div *ngIf="seccionFielCumplimiento() && tipoContratoSeleccionado && noSuperaMontoAdjudicacion()" class="mt-2 text-center">
+          <p class="text-gray-500 italic">No se requiere carta fianza para montos menores o iguales al monto de adjudicación simplificada.</p>
+        </div>
         <vex-monto-diferencial #montoDiferencial
         [SECCION]="SECCION"
         [CONTRATO]="CONTRATO"

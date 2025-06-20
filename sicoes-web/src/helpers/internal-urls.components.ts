@@ -58,6 +58,8 @@ export enum Link {
     SOLICITUDES_VIEW = 'ver',
     SOLICITUDES_EDIT = 'editar',
     SOLICITUDES_SUBSANAR = 'subsanar',
+    SOLICITUDES_ACTUALIZAR = 'actualizar',
+    SOLICITUDES_EDIT_MOD = 'modificar',
 
     GESTION_USUARIO='gestion-usuarios',
     GESTION_USUARIO_ADD ='registrar-usuario',

@@ -86,10 +86,10 @@
             <mat-icon svgIcon="mat:preview"></mat-icon>
             <span>Ver</span>
         </button>
-        <button (click)="actualizarVer(obj, 'edit')" mat-menu-item *vexOptionRole="opcion.MEN_PER_INS_MODIFICAR">
+        <!--<button (click)="actualizarVer(obj, 'edit')" mat-menu-item *vexOptionRole="opcion.MEN_PER_INS_MODIFICAR">
             <mat-icon svgIcon="mat:edit"></mat-icon>
             <span>Modificar</span>
-        </button>
+        </button>-->
         <button (click)="actualizarEvaluador(obj, 'modify')" [disabled]="!obj.usuario?.idUsuario" mat-menu-item *vexOptionRole="opcion.CMP_EDIT_EVAL_TEC">
             <mat-icon svgIcon="mat:edit"></mat-icon>
             <span>Modificar Evaluador</span>

@@ -49,6 +49,11 @@ export class CapacitacionService {
 
   evaluarCapacitacion(request: any, idRequisito: any){
     let urlEndpoint = `${this._path_serve}/api/estudios/capacitaciones/${idRequisito}/evaluar`
-    return this.http.put<Capacitacion>(urlEndpoint,request);
+  return this.http.put<Capacitacion>(urlEndpoint,request);
+  }
+
+  actualizarFile(request: any, idRequisito: any){
+    let urlEndpoint = `${this._path_serve}/api/estudios/capacitaciones/${idRequisito}/modificar`
+  return this.http.put<Capacitacion>(urlEndpoint,request);
   }
 }

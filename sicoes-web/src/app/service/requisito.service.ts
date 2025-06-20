@@ -43,10 +43,10 @@ export class RequisitoService {
     return this.http.delete<Seccion>(urlEndpoint, { body: request });
   }
 
-  obtenerRequisitosPorSeccion(idSeccion: number, tipoContratoSeleccionado: number){
+  obtenerRequisitosPorSeccion(idSeccion: number, tipoContratoSeleccionado: number, evaluador: boolean, propuestaId: number){
     const filtro = this.obtenerFiltro();
     filtro.size = 999;
-    let urlEndpoint = `${this._path_serve}/sicoes/solicitud/secciones/requisitos/${idSeccion}/${tipoContratoSeleccionado}`;
+    let urlEndpoint = `${this._path_serve}/sicoes/solicitud/secciones/requisitos/${idSeccion}/${tipoContratoSeleccionado}/${evaluador}/${propuestaId}`;
     let params = functions.obtenerParams(filtro);
     return this.http.get<Pageable<any>>(urlEndpoint, {
       params

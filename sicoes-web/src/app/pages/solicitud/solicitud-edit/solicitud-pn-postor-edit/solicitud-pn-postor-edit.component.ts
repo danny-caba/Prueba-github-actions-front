@@ -35,6 +35,7 @@ export class SolicitudPnPostorEditComponent extends BaseComponent implements OnI
 
   @Input() SOLICITUD: any;
   @Input() editable: boolean = false;
+  @Input() actualizable = false;
   @Input() isSubsanar: boolean = false;
   @Input() viewEvaluacion: boolean;
   @Input() itemSeccion: number = 0;
@@ -63,6 +64,10 @@ export class SolicitudPnPostorEditComponent extends BaseComponent implements OnI
         this.layoutDatosPersJur.validarSNE(usu);
         this.layoutDatosPersJur.formGroup.controls['correo'].disable({ emitEvent: false })
       }
+      if (usu && this.actualizable == true) {
+        this.layoutDatosPersJur.validarSNE(usu);
+        // this.layoutDatosPersNat.formGroup.controls['correo'].disable({ emitEvent: false })
+      }
     })
   }
 
@@ -89,6 +94,19 @@ export class SolicitudPnPostorEditComponent extends BaseComponent implements OnI
           functionsAlert.success('Datos Actualizados').then((result) => {
             //this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST, 'editar', obj.solicitudUuid]);
             this.layoutOtrosRequisitos?.buscarOtrosDocumentos();
+          });
+        });
+      }
+    });
+  }
+
+  actualizar() {
+    functionsAlert.questionSiNo('¿Seguro que desea actualizar la solicitud?').then((result) => {
+      if (result.isConfirmed) {
+        let formValues = this.obtenerDatos();
+        this.solicitudService.actualizarSolicitudConcluido(formValues).subscribe(obj => {
+          functionsAlert.success('Datos Actualizados').then((result) => {
+            this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST]);
           });
         });
       }

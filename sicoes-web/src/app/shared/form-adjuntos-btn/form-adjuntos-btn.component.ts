@@ -34,6 +34,7 @@ export class FormAdjuntosBtnComponent implements OnInit {
   @Input() archivo: any;
   @Input() proceso: any;
   @Input() contrato: any;
+  @Input() isOriginalEval: boolean;
 
   validarRequerido: boolean = false;
   modoBorrador = true;
@@ -42,8 +43,7 @@ export class FormAdjuntosBtnComponent implements OnInit {
 
   constructor(private adjuntoService: AdjuntosService,private _evidenciaServices:EvidenciaService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   clickFile(adj) {
     this.adjuntoInput = adj;
@@ -59,7 +59,7 @@ export class FormAdjuntosBtnComponent implements OnInit {
       return;
     }
     let attach = file.target.files[0];
-    let exts = "jpeg,jpg,png,pdf".split(",");
+    let exts = "pdf".split(",");
 
     let docva = false;
     for (let s of exts) {

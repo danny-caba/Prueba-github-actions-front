@@ -31,3 +31,14 @@ export class ListadoEvaluador {
     apellidoMaterno: string
     nombreCompleto: string
 }
+
+export class ListadoPersonalPropuesto {
+    idPersonal?: any
+    tipoDocumento: string
+    numeroDocumento: string
+    nombreCompleto: string
+    perfil: string
+    fechaRegistro: string
+    fechaBaja: string
+    fechaDesvinculacion: string
+}

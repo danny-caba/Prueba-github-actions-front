@@ -35,6 +35,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'estadoDocInicioServicio', 'tipo', 'actions'];
   ACCION_VER: string = solicitudContrato.ACCION_VER;
   ACCION_EDITAR: string = solicitudContrato.ACCION_EDITAR;
+  ACCION_REEMPLAZAR: string = solicitudContrato.ACCION_EDITAR;
   private destroy$ = new Subject<void>();
 
   formGroup = this.fb.group({
@@ -44,7 +45,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
     estadoProcesoSolicitud: [''],
     tipoSolicitud: [''],
   });
-  
+
   constructor(
     private authFacade: AuthFacade,
     private router: Router,
@@ -100,11 +101,17 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
           .pipe(takeUntil(this.destroy$))
           .subscribe((response) => {
           if (response) {
-            this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, accion === this.ACCION_VER ? Link.CONTRATO_SOLICITUD_VIEW : Link.CONTRATO_SOLICITUD_ADD, encodedId]);
+            const linkAccion = {
+              [this.ACCION_VER]:        Link.CONTRATO_SOLICITUD_VIEW,
+              [this.ACCION_EDITAR]:        Link.CONTRATO_SOLICITUD_ADD,
+              [this.ACCION_REEMPLAZAR]: Link.CONTRATO_SOLICITUD_REPLACE
+            }[accion];
+
+            this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, linkAccion, encodedId]);
           } else {
             functionsAlert.error('La fecha límite de presentación ha expirado.');
           }
-        }); 
+        });
       }
     });
   }
@@ -135,8 +142,14 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   }
 
   textoRequisito(contrato: Contrato): string {
-    return contrato.tipoSolicitud === tipoSolicitudPerfCont.INSCRIPCION 
+    return contrato.tipoSolicitud === tipoSolicitudPerfCont.INSCRIPCION
       ? 'requisitos' : 'subsanar';
+  }
+
+  reemplazoRequisitos(contrato: Contrato): boolean {
+    return contrato.estadoProcesoSolicitud === estadosIndexPerfCont.CONCLUIDO &&
+           (contrato.tipoSolicitud === tipoSolicitudPerfCont.INSCRIPCION ||
+            contrato.tipoSolicitud === tipoSolicitudPerfCont.SUBSANACION);
   }
 
   encrypt(data: string): string {

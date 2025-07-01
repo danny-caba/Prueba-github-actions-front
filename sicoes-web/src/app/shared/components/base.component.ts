@@ -22,6 +22,11 @@ export abstract class BaseComponent {
     return a?.idSeccion === b?.idSeccion;
   }
 
+  compareSelecIdPersonal(a, b){
+    //if (functions.esVacio(a) || functions.esVacio(b)) return false;
+    return a?.idPersona === b?.idPersona;
+  }
+
   numberOnly(event): boolean {
     return functions.numberOnly(event);;
   }

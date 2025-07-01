@@ -96,6 +96,7 @@ import { ModalAgregarRepresentanteComponent } from './modal-agregar-representant
 import { ModalAprobadorContratoComponent } from './modal-aprobador-contrato/modal-aprobador-contrato.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalAprobadorHistorialContratoComponent } from './modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
+import { LayoutBajaPersonalPropuestoComponent } from './layout-baja-personal-propuesto/layout-baja-personal-propuesto.component';
 
 const sharedComponents = [
 

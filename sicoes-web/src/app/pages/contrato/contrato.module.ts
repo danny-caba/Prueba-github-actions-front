@@ -36,6 +36,9 @@ import { FielCumplimientoComponent } from './components/fiel-cumplimiento/fiel-c
 import { MontoDiferencialComponent } from './components/monto-diferencial/monto-diferencial.component';
 import { CmpEvaluacionContratoComponent } from './components/cmp-evaluacion-contrato/cmp-evaluacion-contrato.component';
 import { ContratoDocumentosComponent } from './components/contrato-documentos/contrato-documentos.component';
+import { ReemplazoPersonalComponent } from './components/reemplazo-personal/reemplazo-personal.component';
+import { ReemplazoPersFormComponent } from './components/reemplazo-pers-form/reemplazo-pers-form.component';
+import { ReemplazoPersFormEditComponent } from './components/reemplazo-pers-form/reemplazo-pers-form-edit/reemplazo-pers-form-edit.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { ContratoDocumentosComponent } from './components/contrato-documentos/co
     FielCumplimientoComponent,
     MontoDiferencialComponent,
     CmpEvaluacionContratoComponent,
-    ContratoDocumentosComponent
+    ContratoDocumentosComponent,
+    ReemplazoPersonalComponent,
+    ReemplazoPersFormComponent,
+    ReemplazoPersFormEditComponent
   ],
   imports: [
     CommonModule,

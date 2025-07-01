@@ -37,7 +37,7 @@ export enum Link {
     CONTRATOS_LIST = 'contratos',
     BANDEJA_CONTRATOS_LIST = 'bandeja-contratos',
     CONTRATO_SOLICITUD_EVALUAR = 'evaluar',
-    
+
     INVITACIONES_LIST = 'invitaciones',
 
     FORMULACION_CONSULTAS = 'formulacion-consultas',
@@ -74,6 +74,9 @@ export enum Link {
 
     CONTRATO_SOLICITUD_ADD = 'registro',
     CONTRATO_SOLICITUD_VIEW = 'ver',
+    CONTRATO_SOLICITUD_REPLACE = 'reemp-personal',
+
+    REEMPLAZO_PERSONAL_FORM = 'reemplazo-pers-form',
 }
 
 export enum Apis {

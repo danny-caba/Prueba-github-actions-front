@@ -32,7 +32,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
 
-  displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'tipo', 'actions'];
+  displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'estadoDocInicioServicio', 'tipo', 'actions'];
   ACCION_VER: string = solicitudContrato.ACCION_VER;
   ACCION_EDITAR: string = solicitudContrato.ACCION_EDITAR;
   private destroy$ = new Subject<void>();
@@ -143,6 +143,19 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
     const encrypted = CryptoJS.AES.encrypt(data, URL_ENCRIPT).toString();
     return encrypted;
   }
-  
+  getEstadoDocInicioServicio(contrato: Contrato): string {
+    const estados: { [key: string]: string } = {
+      "1": "Pendiente",
+      "2": "Enviado",
+      "3": "Observado",
+      "4": "Aprobado"
+    };
+    // idDocInicio podría ser null, undefined o un número. Si lo quieres mostrar según el ID:
+    return contrato.idDocInicio ? estados[contrato.idDocInicio.toString()] || "" : "";
+  }
+  irACargaDocInicio(contrato: Contrato): void {
+    // Aquí mandamos el id de la solicitud, no el idDocInicio, para cargar el doc
+  this.router.navigate(['/', Link.EXTRANET, Link.CONTRATOS_LIST, 'cargar-documentacion-inicio', contrato.idSolicitud]);
+  }
 
 }

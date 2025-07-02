@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -20,6 +20,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -29,11 +30,15 @@ import { ScrollbarModule } from 'src/@vex/components/scrollbar/scrollbar.module'
 import { ContratoModule } from '../contrato/contrato.module';
 import { BandejaContratosIntranetRoutingModule } from './bandeja-contratos-intranet-routing.module';
 import { BandejaContratosListComponent } from './components/bandeja-contratos-list/bandeja-contratos-list.component';
+import { BandejaContratosProcesarComponent } from './components/bandeja-contratos-procesar/bandeja-contratos-procesar.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 
 @NgModule({
   declarations: [
     BandejaContratosListComponent,
+    BandejaContratosProcesarComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +70,9 @@ import { BandejaContratosListComponent } from './components/bandeja-contratos-li
     MatSidenavModule,
     ScrollingModule,
     ScrollbarModule,
-    ContratoModule
+    ContratoModule,
+    MatNativeDateModule,
+    MatProgressSpinnerModule
   ]
 })
 export class BandejaContratosIntranetModule { }

@@ -10,3 +10,11 @@ export class Asignacion {
     }
     tipo: ListadoDetalle
 }
+
+export interface Historial {
+  id: number;
+  idAsignacion: number;
+  accion: string;
+  observacion: string;
+  fecha: string;
+}

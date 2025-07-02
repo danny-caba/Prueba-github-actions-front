@@ -30,12 +30,14 @@ import { ScrollbarModule } from 'src/@vex/components/scrollbar/scrollbar.module'
 import { ContratoIntranetListComponent } from './components/contrato-intranet-list/contrato-intranet-list.component';
 import { ContratoFormEvaluarComponent } from './components/contrato-form-evaluar/contrato-form-evaluar.component';
 import { ContratoModule } from '../contrato/contrato.module';
+import { ContratoEvaluarDocumentosComponent } from './components/contrato-evaluar-documentos/contrato-evaluar-documentos.component';
 
 
 @NgModule({
   declarations: [
     ContratoIntranetListComponent,
-    ContratoFormEvaluarComponent
+    ContratoFormEvaluarComponent,
+    ContratoEvaluarDocumentosComponent
   ],
   imports: [
     CommonModule,

@@ -1,185 +1,332 @@
 <vex-page-layout mode="card">
-    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
-    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
-        <div class="card px-6 py-4">
-            <div class="flex flex-col sm:flex-row gap-4">
-                <div @fadeInUp class="flex-auto">
-                    <!-- TITULO -->
-                    <div class="flex items-center pb-4">
-                        <h2 class="title m-0">Bandeja de Solicitudes de Aprobaciones</h2>
-                    </div>
-                    <mat-divider class="-mr-6 -ml-6"></mat-divider>
-                    <!-- FILTRO -->
-                    <div class="py-4 flex flex-col">
-                        <div class="flex flex-col sm:flex-row sm:gap-4">
-                            <mat-form-field  class="flex-auto">
-                                <mat-label>N° de Expediente</mat-label>
-                                <input [formControl]="formGroup.controls.nroExpediente" matInput maxlength="15" />
-                            </mat-form-field>
-                            <mat-form-field  class="flex-auto">
-                                <mat-label>Solicitante</mat-label>
-                                <input [formControl]="formGroup.controls.solicitante" matInput maxlength="100" />
-                            </mat-form-field>
-                            <mat-form-field  class="flex-auto">
-                                <mat-label>Tipo de Solicitud</mat-label>
-                                <mat-select [formControl]="formGroup.controls.tipoSolicitud"
-                                    [compareWith]="compareSelecIdListadoDetalle">
-                                    <mat-option *ngFor="let obj of listTipoSolicitud" [value]="obj">
-                                        {{ obj.nombre }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex flex-col sm:flex-row sm:gap-4">
-                            <mat-form-field  class="flex-auto">
-                                <mat-label>Estado de Revisión</mat-label>
-                                <mat-select [formControl]="formGroup.controls.estadoRevision"
-                                    [compareWith]="compareSelecIdListadoDetalle">
-                                    <mat-option *ngFor="let obj of listEstadoRevision" [value]="obj">
-                                        {{ obj.nombre }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field  class="flex-auto">
-                                <mat-label>Estado de Evaluación Técnica</mat-label>
-                                <mat-select [formControl]="formGroup.controls.estadoEvalTecnica"
-                                    [compareWith]="compareSelecIdListadoDetalle">
-                                    <mat-option *ngFor="let obj of listEstadoEvaluacionTecnica" [value]="obj">
-                                        {{ obj.nombre }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field  class="flex-auto">
-                                <mat-label>Estado de Evaluación Administrativa</mat-label>
-                                <mat-select [formControl]="formGroup.controls.estadoEvalAdministrativa"
-                                    [compareWith]="compareSelecIdListadoDetalle">
-                                    <mat-option *ngFor="let obj of listEstadoEvaluacionAdminis" [value]="obj">
-                                        {{ obj.nombre }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <!--BOTONES-->
-                        <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
-                            <button color="primary" style="margin-left: 0px;margin-right: auto;" mat-raised-button type="button" (click)="redireccionAProbarPaces()">
-                                Aprobar Paces
-                            </button>
-                            <button color="primary" mat-raised-button type="button" (click)="aprobacion_FirmaMasiva('add')">
-                                Aprobación y firma masiva
-                            </button>
-                            <button color="primary" mat-raised-button type="button" (click)="buscar()">
-                                Buscar
-                            </button>
-                            <button color="primary" mat-raised-button type="button" (click)="limpiar()">
-                                Limpiar
-                            </button>
-                        </div>
-                    </div>
+  <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+  <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+    <div class="card px-6 py-4">
+      <mat-tab-group>
+        <mat-tab label="Bandeja de Solicitudes de Aprobaciones">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div @fadeInUp class="flex-auto">
+              <mat-divider class="-mr-6 -ml-6"></mat-divider>
+              <div class="py-4 flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                  <mat-form-field class="flex-auto">
+                    <mat-label>N° de Expediente</mat-label>
+                    <input [formControl]="formGroup.controls.nroExpediente" matInput maxlength="15" />
+                  </mat-form-field>
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Solicitante</mat-label>
+                    <input [formControl]="formGroup.controls.solicitante" matInput maxlength="100" />
+                  </mat-form-field>
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Tipo de Solicitud</mat-label>
+                    <mat-select [formControl]="formGroup.controls.tipoSolicitud" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listTipoSolicitud" [value]="obj">
+                        {{ obj.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Estado de Revisión</mat-label>
+                    <mat-select [formControl]="formGroup.controls.estadoRevision" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listEstadoRevision" [value]="obj">
+                        {{ obj.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Estado de Evaluación Técnica</mat-label>
+                    <mat-select [formControl]="formGroup.controls.estadoEvalTecnica" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listEstadoEvaluacionTecnica" [value]="obj">
+                        {{ obj.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Estado de Evaluación Administrativa</mat-label>
+                    <mat-select [formControl]="formGroup.controls.estadoEvalAdministrativa" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listEstadoEvaluacionAdminis" [value]="obj">
+                        {{ obj.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
+                  <button color="primary" style="margin-left: 0px;margin-right: auto;" mat-raised-button type="button" (click)="redireccionAProbarPaces()">
+                    Aprobar Paces
+                  </button>
+                  <button color="primary" mat-raised-button type="button" (click)="aprobacion_FirmaMasiva('add')">
+                    Aprobación y firma masiva
+                  </button>
+                  <button color="primary" mat-raised-button type="button" (click)="buscar()">
+                    Buscar
+                  </button>
+                  <button color="primary" mat-raised-button type="button" (click)="limpiar()">
+                    Limpiar
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="overflow-auto shadow-2xl rounded">
-                <table @stagger [dataSource]="dataSource" class="w-full border" mat-table matSort>
-                    <ng-container matColumnDef="nroExpediente">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Expediente</th>
-                        <td mat-cell *matCellDef="let element">
-                            <mat-checkbox color="primary" class="flex-auto" (change)="actualizarListaExpediente($event, element.numeroExpediente, element.solicitudUuid)">
-                                {{ element?.numeroExpediente }}
-                            </mat-checkbox>
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="solicitante">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Solicitante</th>
-                        <td mat-cell *matCellDef="let element">{{ element?.persona?.solicitante }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="tipoPersona">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo<br>Persona</th>
-                        <td mat-cell *matCellDef="let element">{{ element?.persona?.tipoPersona?.nombre }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="tipoSolicitud">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo<br>Solicitud</th>
-                        <td mat-cell *matCellDef="let element">{{ element.tipoSolicitud?.nombre }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="fechaRegistro">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de<br>Ingreso</th>
-                        <td mat-cell *matCellDef="let element">{{ element.fechaRegistro }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="fechaLimiteEvaluacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite<br>Evaluación Técnica
-                        </th>
-                        <td mat-cell *matCellDef="let element">{{ element.fechaPlazoTecnico }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="fechaLimiteRespuesta">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite<br>para dar<br>respuesta
-                        </th>
-                        <td mat-cell *matCellDef="let element">{{ element.fechaPlazoResp }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="estadoRevision">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Revisión</th>
-                        <td mat-cell *matCellDef="let element">{{ element?.estadoRevision?.nombre }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="estadoEvalTecnica">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluación<br>Técnica</th>
-                        <td mat-cell *matCellDef="let element">{{ element?.estadoEvaluacionTecnica?.nombre }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="estadoEvalAdministrativa">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluación<br>Administrativa
-                        </th>
-                        <td mat-cell *matCellDef="let element">{{ element?.estadoEvaluacionAdministrativa?.nombre }}</td>
-                    </ng-container>
-                    <!--ng-container matColumnDef="estadoAprobacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación
-                        </th>
-                        <td mat-cell *matCellDef="let element">{{ element?.asignados?.at(0)?.evaluacion?.nombre }}</td>
-                    </ng-container-->
-                    <!-- Action Column -->
-                    <ng-container matColumnDef="actions">
-                        <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
-                        <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-                            <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ customer: row }"
-                                [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
-                                <mat-icon svgIcon="mat:more_horiz"></mat-icon>
-                            </button>
-                        </td>
-                    </ng-container>
+          </div>
+          <div class="overflow-auto shadow-2xl rounded">
+            <table @stagger [dataSource]="dataSource" class="w-full border" mat-table matSort>
+              <ng-container matColumnDef="nroExpediente">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Expediente</th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-checkbox color="primary" class="flex-auto" (change)="actualizarListaExpediente($event, element.numeroExpediente, element.solicitudUuid)">
+                    {{ element?.numeroExpediente }}
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="solicitante">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Solicitante</th>
+                <td mat-cell *matCellDef="let element">{{ element?.persona?.solicitante }}</td>
+              </ng-container>
+              <ng-container matColumnDef="tipoPersona">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo<br>Persona</th>
+                <td mat-cell *matCellDef="let element">{{ element?.persona?.tipoPersona?.nombre }}</td>
+              </ng-container>
+              <ng-container matColumnDef="tipoSolicitud">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo<br>Solicitud</th>
+                <td mat-cell *matCellDef="let element">{{ element.tipoSolicitud?.nombre }}</td>
+              </ng-container>
+              <ng-container matColumnDef="fechaRegistro">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de<br>Ingreso</th>
+                <td mat-cell *matCellDef="let element">{{ element.fechaRegistro }}</td>
+              </ng-container>
+              <ng-container matColumnDef="fechaLimiteEvaluacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite<br>Evaluación Técnica
+                </th>
+                <td mat-cell *matCellDef="let element">{{ element.fechaPlazoTecnico }}</td>
+              </ng-container>
+              <ng-container matColumnDef="fechaLimiteRespuesta">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite<br>para dar<br>respuesta
+                </th>
+                <td mat-cell *matCellDef="let element">{{ element.fechaPlazoResp }}</td>
+              </ng-container>
+              <ng-container matColumnDef="estadoRevision">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Revisión</th>
+                <td mat-cell *matCellDef="let element">{{ element?.estadoRevision?.nombre }}</td>
+              </ng-container>
+              <ng-container matColumnDef="estadoEvalTecnica">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluación<br>Técnica</th>
+                <td mat-cell *matCellDef="let element">{{ element?.estadoEvaluacionTecnica?.nombre }}</td>
+              </ng-container>
+              <ng-container matColumnDef="estadoEvalAdministrativa">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluación<br>Administrativa
+                </th>
+                <td mat-cell *matCellDef="let element">{{ element?.estadoEvaluacionAdministrativa?.nombre }}</td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                  <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ customer: row }" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                    <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                  </button>
+                </td>
+              </ng-container>
 
-                    <ng-container matColumnDef="loading">
-                        <td mat-footer-cell *matFooterCellDef colspan="10" class="text-center">Cargando Datos...
-                        </td>
-                    </ng-container>
+              <ng-container matColumnDef="loading">
+                <td mat-footer-cell *matFooterCellDef colspan="10" class="text-center">Cargando Datos...
+                </td>
+              </ng-container>
 
-                    <ng-container matColumnDef="vacio">
-                        <td mat-footer-cell *matFooterCellDef colspan="10" class="text-center text-primary">No se
-                            encuentran resultados para los filtros seleccionados</td>
-                    </ng-container>
+              <ng-container matColumnDef="vacio">
+                <td mat-footer-cell *matFooterCellDef colspan="10" class="text-center text-primary">No se
+                  encuentran resultados para los filtros seleccionados</td>
+              </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                    <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
-                    <tr mat-footer-row *matFooterRowDef="['vacio']"
-                        [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
-                </table>
-                <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
-                    showFirstLastButtons></mat-paginator>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource.data.length === 0 ) }"></tr>
+            </table>
+            <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)" showFirstLastButtons></mat-paginator>
+          </div>
+        </mat-tab>
+        <mat-tab label="Perfeccionamiento de Contrato">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div @fadeInUp class="flex-auto">
+              <mat-divider class="-mr-6 -ml-6"></mat-divider>
+              <div class="py-4 flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                  <mat-form-field class="flex-auto">
+                    <mat-label>N° Expediente</mat-label>
+                    <input [formControl]="formGroupPerfeccionamiento.controls.nroExpedienteP" matInput />
+                  </mat-form-field>
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Contratista</mat-label>
+                    <input [formControl]="formGroupPerfeccionamiento.controls.contratistaP" matInput />
+                  </mat-form-field>
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Tipo de Contrato</mat-label>
+                    <mat-select [formControl]="formGroupPerfeccionamiento.controls.tipoContratoP" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listTipoContrato" [value]="obj">
+                        {{ obj.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                  <!--<mat-form-field class="flex-auto">
+                    <mat-label>Tipo Aprobación</mat-label>
+                    <mat-select [formControl]="formGroupPerfeccionamiento.controls.tipoAprobacionP" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listTipoAprobacionP" [value]="obj">
+                        {{ obj.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>-->
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Estado Aprobación</mat-label>
+                    <mat-select [formControl]="formGroupPerfeccionamiento.controls.estadoAprobacionP" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listEstadoAprobacionP" [value]="obj">
+                        {{ obj.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <div class="flex-auto"></div>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
+                  <button color="primary" style="margin-right: auto;" mat-raised-button type="button" (click)="aprobarVistoBuenoFirmarPerfeccionamiento('add')">
+                    Aprobar/Visto Bueno/Firmar
+                  </button>
+                  <button color="primary" mat-raised-button type="button" (click)="buscarPerfeccionamiento()">
+                    Buscar
+                  </button>
+                  <button color="primary" mat-raised-button type="button" (click)="limpiarPerfeccionamiento()">
+                    Limpiar
+                  </button>
+                </div>
+              </div>
             </div>
-        </div>
-    </vex-page-layout-content>
+          </div>
+          <div class="overflow-auto shadow-2xl rounded">
+            <table class="w-full border" mat-table matSort [dataSource]="dataSourcePerfeccionamiento">
+              <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-checkbox
+                    color="primary"
+                    (change)="actualizarListaExpedientePerfeccionamiento($event, element)">
+                  </mat-checkbox>                
+                </td>
+              </ng-container>
+
+              <!--<ng-container matColumnDef="tipoAprobacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Aprobación</th>
+                <td mat-cell *matCellDef="let element">{{ element.tipoAprobacion?.nombre }}</td>
+              </ng-container>-->
+
+              <ng-container matColumnDef="numeroExpediente">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Número Expediente</th>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.propuesta.procesoItem.proceso.numeroExpediente }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="documento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Documento</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.documento }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="tp">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Modalidad de Pago</th>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.tipoContratacion.nombre }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="contratista">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Contratista</th>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.propuesta.supervisora.nombreRazonSocial }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="tipoContrato">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Contrato</th>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.tipoContratacion.nombre }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="fechaIngreso">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ingreso</th>
+                <td mat-cell *matCellDef="let element">{{ element.fechaSuscripcionContrato }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoAprobacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación</th>
+                <td mat-cell *matCellDef="let element">{{ element.idEstadoEval.nombre }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoAprobacionLogistica">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación Logística</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoEvalLog?.nombre || ' ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoVbGAF">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado VB GAF</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoEvalGaf?.nombre || ' ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoVbJefeUnidad">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado VB Jefe Unidad</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoEvalUni?.nombre || ' ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoFirmaGerencia">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Firma Gerencia</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoEvalApr?.nombre || ' ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="actionsPerfeccionamiento">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                  <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ row: row }" [matMenuTriggerFor]="actionsMenuPerfeccionamiento" mat-icon-button type="button">
+                    <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsPerfeccionamiento"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsPerfeccionamiento"></tr>
+
+              <ng-container matColumnDef="loadingPerfeccionamiento">
+                <td mat-footer-cell *matFooterCellDef colspan="12" class="text-center">Cargando Datos...</td>
+              </ng-container>
+
+              <ng-container matColumnDef="vacioPerfeccionamiento">
+                <td mat-footer-cell *matFooterCellDef colspan="12" class="text-center text-primary">No se
+                  encuentran resultados para los filtros seleccionados</td>
+              </ng-container>
+
+              <tr mat-footer-row *matFooterRowDef="['vacioPerfeccionamiento']" [ngClass]="{ hide: !(dataSourcePerfeccionamiento.data.length === 0) }"></tr>
+            </table>
+            <mat-paginator #paginatorPerfeccionamiento class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChangePerfeccionamiento($event)" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-tab>
+        </mat-tab-group>
+    </div>
+  </vex-page-layout-content>
 </vex-page-layout>
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
-    <ng-template let-row="customer" matMenuContent>
-        <button (click)="ver(row)" mat-menu-item>
-            <mat-icon svgIcon="mat:preview"></mat-icon>
-            <span>Ver</span>
-        </button>
-        <!--div *ngFor="let item of row.archivos; index as arch;">
-            <button *ngIf="item.codigo" mat-menu-item (click)="descargarItem(item)">
-                <mat-icon svgIcon="mat:download_for_offline"></mat-icon>
-                <span>{{obtenerNombre(item)}}</span>
-            </button>
-        </div-->
-        <button (click)="aprobar_firmar(row)" mat-menu-item>
-            <mat-icon svgIcon="mat:update"></mat-icon>
-            <span>Aprobar y firmar</span>
-        </button>
-    </ng-template>
+  <ng-template let-row="customer" matMenuContent>
+    <button (click)="ver(row)" mat-menu-item>
+      <mat-icon svgIcon="mat:preview"></mat-icon>
+      <span>Ver</span>
+    </button>
+    <button (click)="aprobar_firmar(row)" mat-menu-item>
+      <mat-icon svgIcon="mat:update"></mat-icon>
+      <span>Aprobar y firmar</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+<mat-menu #actionsMenuPerfeccionamiento="matMenu" xPosition="before" yPosition="below">
+  <ng-template let-row="row" matMenuContent>
+    <button mat-menu-item (click)="verPerfeccionamiento(row)">
+      <mat-icon svgIcon="mat:preview"></mat-icon>
+      <span>Ver</span>
+    </button>
+    <button mat-menu-item (click)="historyApproveAndSignPerfeccionamiento(row)">
+      <mat-icon svgIcon="mat:history"></mat-icon>
+      <span>Historial Aprobar y firmar</span>
+    </button>
+  </ng-template>
 </mat-menu>

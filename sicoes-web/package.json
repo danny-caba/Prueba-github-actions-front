@@ -7,6 +7,7 @@
     "dev": "ng serve -o --host=0.0.0.0 --serve-path=/sicoes --disable-host-check",
     "build": "ng build",
     "build:cert": "ng build --configuration certificacion",
+    "build:cert02": "ng build --configuration certificacion02",
     "build:prod": "ng build --configuration production",
     "build:desa": "ng build --configuration desarrollo",
     "test": "ng test",

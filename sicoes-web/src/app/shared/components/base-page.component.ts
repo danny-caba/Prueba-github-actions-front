@@ -1,12 +1,14 @@
-import { Directive, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { Directive, ViewChild, OnDestroy } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { functions } from 'src/helpers/functions';
 import { BaseComponent } from './base.component';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Directive()
-export abstract class BasePageComponent<T> extends BaseComponent{
+export abstract class BasePageComponent<T> extends BaseComponent implements OnDestroy {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -20,150 +22,178 @@ export abstract class BasePageComponent<T> extends BaseComponent{
   ANIO = 0;
   DIA = 0;
   MES = 0;
-  TOTAL_FECHA: string
+  TOTAL_FECHA: string;
+  protected onDestroy$ = new Subject<void>();
 
   abstract serviceTable(filtro: any);
   abstract obtenerFiltro();
 
-  cargarTablaInit(){
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
+  }
+
+  cargarTablaInit() {
     let filtro = this.obtenerFiltro();
     filtro.page = 0;
     this.paginator._changePageSize(10);
     this.paginator.pageIndex = 0;
     filtro.size = this.paginator.pageSize ?? 10;
-    this.serviceTable(filtro).subscribe(res => {
-      this.itemsTable = res.content
-      this.itemsTable.length = res.totalElements;
-      this.dataSource = new MatTableDataSource<T>(this.itemsTable)
-      this.dataSource.sort = this.sort
-      this.dataSource.paginator = this.paginator;
-      //this.dataSource.sortingDataAccessor = this.dataAceessor
+    this.isLoading = true;
 
-      this.TOTAL_FACTURADO = res.totalMonto
-      this.ANIO = res.anio
-      this.DIA = res.dia
-      this.MES = res.mes
-      this.TOTAL_FECHA = this.totalFecha();
-    })
+    this.serviceTable(filtro)
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(res => {
+        this.itemsTable = res.content;
+        this.itemsTable.length = res.totalElements; // Keep total length for paginator
+        this.dataSource = new MatTableDataSource<T>(this.itemsTable);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+
+        this.TOTAL_FACTURADO = res.totalMonto;
+        this.ANIO = res.anio;
+        this.DIA = res.dia;
+        this.MES = res.mes;
+        this.TOTAL_FECHA = this.totalFecha();
+        this.isLoading = false;
+      }, (error) => {
+        console.error('Error al cargar tabla inicial:', error);
+        this.isLoading = false;
+      });
   }
 
-  cargarTabla(){
+  cargarTabla() {
     let filtro = this.obtenerFiltro();
     filtro.size = this.paginator.pageSize ?? 10;
-    this.serviceTable(filtro).subscribe(res => {
-      this.itemsTable = res.content;
-      this.itemsTable.length = res.totalElements;
-      this.dataSource = new MatTableDataSource<T>(this.itemsTable)
-      this.dataSource.sort = this.sort
-      this.dataSource.paginator = this.paginator;
-      //this.dataSource.sortingDataAccessor = this.dataAceessor
+    this.isLoading = true;
 
-      this.TOTAL_FACTURADO = res.totalMonto
-      this.TOTAL_FACTURADO_EVALUADO = res.totalMontoEvaluado
-      this.ANIO = res.anio
-      this.DIA = res.dia
-      this.MES = res.mes
-      this.TOTAL_FECHA = this.totalFecha();
+    this.serviceTable(filtro)
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(res => {
+        this.itemsTable = res.content;
+        this.itemsTable.length = res.totalElements;
+        this.dataSource = new MatTableDataSource<T>(this.itemsTable);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
 
-    })
+        this.TOTAL_FACTURADO = res.totalMonto;
+        this.TOTAL_FACTURADO_EVALUADO = res.totalMontoEvaluado;
+        this.ANIO = res.anio;
+        this.DIA = res.dia;
+        this.MES = res.mes;
+        this.TOTAL_FECHA = this.totalFecha();
+        this.isLoading = false;
+      }, (error) => {
+        console.error('Error al cargar tabla:', error);
+        this.isLoading = false;
+      });
   }
 
-  totalFecha(): string{
+  totalFecha(): string {
     let msjAnio = '';
-    if(this.ANIO == 1){
-      msjAnio = '1 año'
-    }else if(this.ANIO > 1){
+    if (this.ANIO === 1) {
+      msjAnio = '1 año';
+    } else if (this.ANIO > 1) {
       msjAnio = this.ANIO + ' años';
     }
 
     let msjMes = '';
-    if(this.MES == 1){
-      msjMes = '1 mes'
-    }else if(this.MES > 1){
+    if (this.MES === 1) {
+      msjMes = '1 mes';
+    } else if (this.MES > 1) {
       msjMes = this.MES + ' meses';
     }
 
     let msjDias = '';
-    if(this.DIA == 1){
-      msjDias = '1 día'
-    }else if(this.DIA > 1){
+    if (this.DIA === 1) {
+      msjDias = '1 día';
+    } else if (this.DIA > 1) {
       msjDias = this.DIA + ' días';
     }
 
-    let msjFinal = ''
+    let msjFinal = '';
 
-    if(functions.noEsVacio(msjAnio)){
+    if (functions.noEsVacio(msjAnio)) {
       msjFinal = msjAnio;
     }
 
-    if(functions.noEsVacio(msjMes)){
-      if(functions.noEsVacio(msjFinal)){
+    if (functions.noEsVacio(msjMes)) {
+      if (functions.noEsVacio(msjFinal)) {
         msjFinal = msjFinal + ', ' + msjMes;
-      }else{
+      } else {
         msjFinal = msjMes;
       }
     }
 
-    if(functions.noEsVacio(msjDias)){
-      if(functions.noEsVacio(msjFinal)){
+    if (functions.noEsVacio(msjDias)) {
+      if (functions.noEsVacio(msjFinal)) {
         msjFinal = msjFinal + ' y ' + msjDias;
-      }else{
+      } else {
         msjFinal = msjDias;
       }
     }
-
     return msjFinal;
   }
 
-  cargarTablaNoContent(){
+  cargarTablaNoContent() {
     let filtro = this.obtenerFiltro();
     filtro.size = this.paginator.pageSize ?? 10;
-    this.serviceTable(filtro).subscribe(resList => {
-      this.itemsTable = resList
-      this.itemsTable.length = resList?.length;
-      this.dataSource = new MatTableDataSource<T>(this.itemsTable)
-      this.dataSource.sort = this.sort
-      this.dataSource.paginator = this.paginator;
-      //this.dataSource.sortingDataAccessor = this.dataAceessor
-    })
+    this.isLoading = true;
+
+    this.serviceTable(filtro)
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(resList => {
+        this.itemsTable = resList;
+        this.itemsTable.length = resList?.length;
+        this.dataSource = new MatTableDataSource<T>(this.itemsTable);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.isLoading = false;
+      }, (error) => {
+        console.error('Error al cargar tabla sin contenido:', error);
+        this.isLoading = false;
+      });
   }
 
-  public iteneRegistros(){
-    if(this.itemsTable && this.itemsTable.length > 0) return true;
-    return false;
+  public iteneRegistros(): boolean {
+    return this.itemsTable && this.itemsTable.length > 0;
   }
 
-  public pageChange(event: any): void {
-    let pageIndex = event.pageIndex;
-    let pageSize = event.pageSize;
-    let previousIndex = event.previousPageIndex;
-    let previousSize = pageSize * pageIndex;
-    this.getNextData(previousSize, pageIndex.toString(), pageSize.toString())
+  public pageChange(event: PageEvent): void { 
+    const pageIndex = event.pageIndex;
+    const pageSize = event.pageSize;
+    this.getNextData(pageIndex, pageSize);
   }
 
-  private getNextData(currentSize, offset, limit): void {
+  private getNextData(pageIndex: number, pageSize: number): void { 
     let filtro = this.obtenerFiltro();
-    filtro.size = limit;
-    filtro.page = offset;
+    filtro.size = pageSize;
+    filtro.page = pageIndex;
 
-    this.serviceTable(filtro).subscribe(res => {
-      this.itemsTable.length = currentSize;
-      this.itemsTable = res.content;
-      this.dataSource = new MatTableDataSource<T>(this.itemsTable);
-      //this.dataSource.sortingDataAccessor = this.dataAceessor
-      this.dataSource.sort = this.sort;
-      this.dataSource._updateChangeSubscription();
+    this.isLoading = true;
+    this.serviceTable(filtro)
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(res => {
+        this.itemsTable = res.content;
+        this.dataSource = new MatTableDataSource<T>(this.itemsTable);
+        this.dataSource.sort = this.sort;
+        if (this.paginator) {
+            this.paginator.length = res.totalElements;
+        }
+        this.dataSource._updateChangeSubscription();
 
-      this.TOTAL_FACTURADO = res.totalMonto
-      this.ANIO = res.anio
-      this.DIA = res.dia
-      this.MES = res.mes
-    })
-
+        this.TOTAL_FACTURADO = res.totalMonto;
+        this.ANIO = res.anio;
+        this.DIA = res.dia;
+        this.MES = res.mes;
+        this.isLoading = false;
+      }, (error) => {
+        console.error('Error al obtener siguientes datos:', error);
+        this.isLoading = false;
+      });
   }
 
   public getRowIndex(indexOnPage: number): number {
     return 1 + indexOnPage + this.paginator.pageIndex * this.paginator.pageSize;
   }
-
 }

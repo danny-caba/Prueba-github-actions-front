@@ -1,0 +1,23 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="tabs">
+            <button
+                [class.active]="selectedTab === 'atencion'"
+                (click)="selectedTab = 'atencion'">
+                Bandeja de Solicitudes en Proceso de Atención
+            </button>
+            <button
+                [class.active]="selectedTab === 'requerimiento'"
+                (click)="selectedTab = 'requerimiento'">
+                Bandeja de Requerimiento
+            </button>
+        </div>
+
+        <div class="tab-content">
+            <app-solicitud-list-atencion *ngIf="selectedTab === 'atencion'"></app-solicitud-list-atencion>
+            <app-solicitud-list-requerimientos *ngIf="selectedTab === 'requerimiento'"></app-solicitud-list-requerimientos>
+        </div>
+
+    </vex-page-layout-content>
+</vex-page-layout>

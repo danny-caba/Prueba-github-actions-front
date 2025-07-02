@@ -105,6 +105,11 @@
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoSolicitud === '1' ? 'Inscripción' : 'Subsanación' }}</td>
                     </ng-container>
 
+                    <ng-container matColumnDef="estadoDocInicio">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Doc Inicio</th>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ mostrarEstadoDocInicio(element?.idDocInicio) }}</td>
+                    </ng-container>
+
                     <!-- Action Column -->
                     <ng-container matColumnDef="actions">
                         <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
@@ -153,6 +158,13 @@
         <button mat-menu-item (click)="goToFormContrato(row, ACCION_VER)" *ngIf="!formRequisitos(row)">
             <mat-icon svgIcon="mat:preview"></mat-icon>
             <span>Ver</span>
+        </button>
+        <!--NUEVO-->
+        <button mat-menu-item
+                (click)="evaluarDocsInicio(row)"
+                *ngIf="row.idDocInicio === 1">
+            <mat-icon svgIcon="mat:preview"></mat-icon>
+            <span>Evaluar Documentos</span>
         </button>
     </ng-template>
 </mat-menu>

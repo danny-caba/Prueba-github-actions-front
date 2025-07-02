@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TokenStorageService } from '../core/services';
-import { Adjunto, AdjuntoRequisto } from '../interface/adjuntos.model';
+import { Adjunto, AdjuntoRequisto, ArchivoAdjuntoBackendDTO } from '../interface/adjuntos.model';
 import { Pageable } from '../interface/pageable.model';
 import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
 import Swal from 'sweetalert2';
@@ -13,6 +13,9 @@ import Swal from 'sweetalert2';
 })
 
 export class AdjuntosService {
+  obtenerPersonalPropuestoPorContrato(docId: number) {
+    throw new Error('Method not implemented.');
+  }
 
   private _path_serve = environment.pathServe;
 
@@ -20,35 +23,78 @@ export class AdjuntosService {
     private http: HttpClient,
     private tokenStorageService: TokenStorageService) { }
 
+  public subirAdjuntoContratos(idContrato: number, formData: FormData): Observable<ArchivoAdjuntoBackendDTO> {
+    return this.http.post<ArchivoAdjuntoBackendDTO>(`${this._path_serve}/api/contratos/${idContrato}/archivos`, formData, {
+      reportProgress: true,
+      observe: 'body'
+    });
+  }
+
+  public obtenerAdjuntosPorContrato(idContrato: number): Observable<ArchivoAdjuntoBackendDTO[]> {
+    return this.http.get<ArchivoAdjuntoBackendDTO[]>(`${this._path_serve}/api/contratos/${idContrato}/archivos`);
+  }
+
+  public eliminarAdjuntoContrato(idContrato: number, idArchivo: number): Observable<string> {
+    const url = `${this._path_serve}/api/contratos/${idContrato}/archivos/${idArchivo}`;
+    return this.http.delete(url, { responseType: 'text' });
+  }
+
+
+  
+  public subirAdjuntoPerfContratos(idPerfContrato: number, formData: FormData): Observable<ArchivoAdjuntoBackendDTO> {
+    return this.http.post<ArchivoAdjuntoBackendDTO>(`${this._path_serve}/api/perfcontratos/${idPerfContrato}/archivos`, formData, {
+      reportProgress: true,
+      observe: 'body'
+    });
+  }
+
+  public obtenerAdjuntosPorPerfContrato(idPerfContrato: number): Observable<ArchivoAdjuntoBackendDTO[]> {
+    return this.http.get<ArchivoAdjuntoBackendDTO[]>(`${this._path_serve}/api/perfcontratos/${idPerfContrato}/archivos`);
+  }
+
+  public eliminarAdjuntoPerfContrato(idPerfContrato: number, idArchivo: number): Observable<string> {
+    const url = `${this._path_serve}/api/perfcontratos/${idPerfContrato}/archivos/${idArchivo}`;
+    return this.http.delete(url, { responseType: 'text' });
+  }
+
+
+
   buscarAdjuntosSolicitud(): Observable<Pageable<AdjuntoRequisto>> {
     let urlEndpoint = `${this._path_serve}/api/adjuntos-solicitud-acreditacion?size=1000`
     return this.http.get<Pageable<AdjuntoRequisto>>(urlEndpoint);
   }
 
-  findAll(requisitoAdjunto: number):Observable<any> {
+  findAll(requisitoAdjunto: number): Observable<any> {
     let urlEndpoint = `${this._path_serve}/api/${requisitoAdjunto}`
     return this.http.get<Adjunto>(urlEndpoint);
   }
 
   public upload(formData, adjuntoRequisito) {
-    return this.http.post<any>(`${this._path_serve}/api/archivos`, formData, {  
-      reportProgress: true,  
+    return this.http.post<any>(`${this._path_serve}/api/archivos`, formData, {
+      reportProgress: true,
       observe: 'events'
-    });  
+    });
   }
 
   public uploadActualizar(formData, idArchivo) {
-    return this.http.put<any>(`${this._path_serve}/api/archivos/${idArchivo}`, formData, {  
-      reportProgress: true,  
+    return this.http.put<any>(`${this._path_serve}/api/archivos/${idArchivo}`, formData, {
+      reportProgress: true,
       observe: 'events'
-    });  
+    });
   }
 
   public uploadActualizarProceso(formData) {
-    return this.http.post<any>(`${this._path_serve}/api/archivos`, formData, {  
-      reportProgress: true,  
+    return this.http.post<any>(`${this._path_serve}/api/archivos`, formData, {
+      reportProgress: true,
       observe: 'events'
-    });  
+    });
+  }
+
+  public subirAdjuntoContrato(formData) {
+    return this.http.post<any>(`${this._path_serve}/api/archivos`, formData, {
+      reportProgress: true,
+      observe: 'events'
+    });
   }
 
   /*public uploadActualizar(formData, codDocumento) {
@@ -58,16 +104,16 @@ export class AdjuntosService {
   }*/
 
   public downLoadFile(data: any, type: string) {
-    let blob = new Blob([data], { type: type});
+    let blob = new Blob([data], { type: type });
     let url = window.URL.createObjectURL(blob);
     let pwa = window.open(url);
     if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-        alert( 'Please disable your Pop-up blocker and try again.');
+      alert('Please disable your Pop-up blocker and try again.');
     }
   }
 
 
-  public descargarWindowsJWT(uuid, nombre){
+  public descargarWindowsJWT(uuid, nombre) {
     const accessToken = this.tokenStorageService.getAccessToken();
 
     let anchor = document.createElement("a");
@@ -78,19 +124,19 @@ export class AdjuntosService {
     headers.append('Authorization', `Bearer ${accessToken}`);
 
     fetch(file, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-            let objectUrl = window.URL.createObjectURL(blobby);
+      .then(response => response.blob())
+      .then(blobby => {
+        let objectUrl = window.URL.createObjectURL(blobby);
 
-            anchor.href = objectUrl;
-            anchor.download = nombre;
-            anchor.click();
+        anchor.href = objectUrl;
+        anchor.download = nombre;
+        anchor.click();
 
-            window.URL.revokeObjectURL(objectUrl);
-    });
+        window.URL.revokeObjectURL(objectUrl);
+      });
   }
 
-  public reporteEmpresaSupervisora(uuid, nombre){
+  public reporteEmpresaSupervisora(uuid, nombre) {
     const accessToken = this.tokenStorageService.getAccessToken();
 
     let anchor = document.createElement("a");
@@ -101,19 +147,19 @@ export class AdjuntosService {
     headers.append('Authorization', `Bearer ${accessToken}`);
 
     fetch(file, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-            let objectUrl = window.URL.createObjectURL(blobby);
+      .then(response => response.blob())
+      .then(blobby => {
+        let objectUrl = window.URL.createObjectURL(blobby);
 
-            anchor.href = objectUrl;
-            anchor.download = nombre;
-            anchor.click();
+        anchor.href = objectUrl;
+        anchor.download = nombre;
+        anchor.click();
 
-            window.URL.revokeObjectURL(objectUrl);
-    });
+        window.URL.revokeObjectURL(objectUrl);
+      });
   }
 
-  public reporteSuspCanc(uuid, nombre){
+  public reporteSuspCanc(uuid, nombre) {
     const accessToken = this.tokenStorageService.getAccessToken();
 
     let anchor = document.createElement("a");
@@ -123,19 +169,19 @@ export class AdjuntosService {
     headers.append('Authorization', `Bearer ${accessToken}`);
 
     fetch(file, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-            let objectUrl = window.URL.createObjectURL(blobby);
+      .then(response => response.blob())
+      .then(blobby => {
+        let objectUrl = window.URL.createObjectURL(blobby);
 
-            anchor.href = objectUrl;
-            anchor.download = nombre;
-            anchor.click();
+        anchor.href = objectUrl;
+        anchor.download = nombre;
+        anchor.click();
 
-            window.URL.revokeObjectURL(objectUrl);
-    });
+        window.URL.revokeObjectURL(objectUrl);
+      });
   }
 
-  public reporteVerProfesionales(procesItemUuid, nombre){
+  public reporteVerProfesionales(procesItemUuid, nombre) {
     const accessToken = this.tokenStorageService.getAccessToken();
 
     let anchor = document.createElement("a");
@@ -145,19 +191,19 @@ export class AdjuntosService {
     headers.append('Authorization', `Bearer ${accessToken}`);
 
     fetch(file, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-            let objectUrl = window.URL.createObjectURL(blobby);
+      .then(response => response.blob())
+      .then(blobby => {
+        let objectUrl = window.URL.createObjectURL(blobby);
 
-            anchor.href = objectUrl;
-            anchor.download = nombre;
-            anchor.click();
+        anchor.href = objectUrl;
+        anchor.download = nombre;
+        anchor.click();
 
-            window.URL.revokeObjectURL(objectUrl);
-    });
+        window.URL.revokeObjectURL(objectUrl);
+      });
   }
 
-  public downloadFormato(uuid, nombre){
+  public downloadFormato(uuid, nombre) {
     const accessToken = this.tokenStorageService.getAccessToken();
 
     let anchor = document.createElement("a");
@@ -168,19 +214,19 @@ export class AdjuntosService {
     headers.append('Authorization', `Bearer ${accessToken}`);
 
     fetch(file, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-            let objectUrl = window.URL.createObjectURL(blobby);
+      .then(response => response.blob())
+      .then(blobby => {
+        let objectUrl = window.URL.createObjectURL(blobby);
 
-            anchor.href = objectUrl;
-            anchor.download = nombre;
-            anchor.click();
+        anchor.href = objectUrl;
+        anchor.download = nombre;
+        anchor.click();
 
-            window.URL.revokeObjectURL(objectUrl);
-    });
+        window.URL.revokeObjectURL(objectUrl);
+      });
   }
 
-  public downloadFormatoPublico(uuid, nombre){
+  public downloadFormatoPublico(uuid, nombre) {
     const accessToken = this.tokenStorageService.getAccessToken();
 
     let anchor = document.createElement("a");
@@ -191,20 +237,20 @@ export class AdjuntosService {
     //headers.append('Authorization', `Bearer ${accessToken}`);
 
     fetch(file, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-            let objectUrl = window.URL.createObjectURL(blobby);
+      .then(response => response.blob())
+      .then(blobby => {
+        let objectUrl = window.URL.createObjectURL(blobby);
 
-            anchor.href = objectUrl;
-            anchor.download = nombre;
-            anchor.click();
+        anchor.href = objectUrl;
+        anchor.download = nombre;
+        anchor.click();
 
-            window.URL.revokeObjectURL(objectUrl);
-    });
+        window.URL.revokeObjectURL(objectUrl);
+      });
   }
 
 
-  public downloadPropuestaZip(propuestaUuid, nombre){
+  public downloadPropuestaZip(propuestaUuid, nombre) {
     const accessToken = this.tokenStorageService.getAccessToken();
 
     let anchor = document.createElement("a");
@@ -215,19 +261,19 @@ export class AdjuntosService {
     headers.append('Authorization', `Bearer ${accessToken}`);
 
     fetch(file, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-            let objectUrl = window.URL.createObjectURL(blobby);
+      .then(response => response.blob())
+      .then(blobby => {
+        let objectUrl = window.URL.createObjectURL(blobby);
 
-            anchor.href = objectUrl;
-            anchor.download = nombre;
-            anchor.click();
+        anchor.href = objectUrl;
+        anchor.download = nombre;
+        anchor.click();
 
-            window.URL.revokeObjectURL(objectUrl);
-    });
+        window.URL.revokeObjectURL(objectUrl);
+      });
   }
 
-  public downloadResumenProcesoItem(procesoItemUuid, nombre){
+  public downloadResumenProcesoItem(procesoItemUuid, nombre) {
     const accessToken = this.tokenStorageService.getAccessToken();
 
     let anchor = document.createElement("a");
@@ -238,19 +284,19 @@ export class AdjuntosService {
     headers.append('Authorization', `Bearer ${accessToken}`);
 
     fetch(file, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-            let objectUrl = window.URL.createObjectURL(blobby);
+      .then(response => response.blob())
+      .then(blobby => {
+        let objectUrl = window.URL.createObjectURL(blobby);
 
-            anchor.href = objectUrl;
-            anchor.download = nombre;
-            anchor.click();
+        anchor.href = objectUrl;
+        anchor.download = nombre;
+        anchor.click();
 
-            window.URL.revokeObjectURL(objectUrl);
-    });
+        window.URL.revokeObjectURL(objectUrl);
+      });
   }
 
-  public downloadProcesoItemZip(uuid, nombre){
+  public downloadProcesoItemZip(uuid, nombre) {
     const accessToken = this.tokenStorageService.getAccessToken();
 
     let anchor = document.createElement("a");
@@ -261,21 +307,22 @@ export class AdjuntosService {
 
     let headers = new Headers();
     headers.append('Authorization', `Bearer ${accessToken}`);
-    
-    fetch(file, { headers })
-        .then((response) => {
-          return response.blob()
-        })
-        .then(blobby => {
-            let objectUrl = window.URL.createObjectURL(blobby);
 
-            anchor.href = objectUrl;
-            anchor.download = nombre;
-            anchor.click();
-            Swal.close()
-            window.URL.revokeObjectURL(objectUrl);
-    });
+    fetch(file, { headers })
+      .then((response) => {
+        return response.blob()
+      })
+      .then(blobby => {
+        let objectUrl = window.URL.createObjectURL(blobby);
+
+        anchor.href = objectUrl;
+        anchor.download = nombre;
+        anchor.click();
+        Swal.close()
+        window.URL.revokeObjectURL(objectUrl);
+      });
   }
-  
+
+
 }
 

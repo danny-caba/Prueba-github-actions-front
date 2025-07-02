@@ -6,6 +6,7 @@ import { functions } from 'src/helpers/functions';
 import { Pageable } from '../interface/pageable.model';
 import { tap, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { ContratoDetalle } from '../interface/contrato.model';
 
 @Injectable({
   providedIn: 'root'
@@ -72,7 +73,7 @@ export class ContratoService {
 
   validarSancionVigenteV2(ruc): Observable<any> {
     let params = functions.obtenerParams(ruc);
-    return this.http.get<any>(`${this._path_serve}/api/solicitudes/sancion-vigente/V2`,{params:params});
+    return this.http.get<any>(`${this._path_serve}/api/solicitudes/sancion-vigente/V2`, { params: params });
   }
 
   validarRemype(numeroDocumento: number) {
@@ -80,5 +81,19 @@ export class ContratoService {
     return this.http.get<any>(urlEndpoint);
   }
 
+  obtenerContratoDetallePorId(idContrato: number): Observable<ContratoDetalle> {
+    const urlEndpoint = `${this._path_serve}/api/contratos/${idContrato}`;
+    return this.http.get<ContratoDetalle>(urlEndpoint);
+  }
+
+  actualizarContratoDetalle(contrato: ContratoDetalle): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/contratos/${contrato.idContrato}`;
+    return this.http.put<any>(urlEndpoint, contrato);
+  }
+
+  aprobarPerfeccionamientosMasivo(request: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/contratos/acciones-masivas`;
+    return this.http.post<any>(urlEndpoint, request);
+  }
 
 }

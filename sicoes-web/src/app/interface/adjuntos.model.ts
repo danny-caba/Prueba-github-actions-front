@@ -15,3 +15,18 @@ export class AdjuntoRequisto{
     esRequerido?: boolean
     inProgress?: boolean
 }
+
+export class ArchivoAdjuntoBackendDTO {
+    idPerfContrato: number;
+    idArchivo: number;
+    idContrato: number;
+    nombre: string;
+    nombreReal: string;
+    codigo: string;
+    tipo: string;
+    peso: number;
+    feCreacion?: string;
+    ipCreacion?: string;
+    idEstadoLd?: number;
+    idPersonal: any
+}

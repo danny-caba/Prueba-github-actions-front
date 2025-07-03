@@ -1,15 +1,17 @@
 <div class="flex flex-col sm:flex-row sm:gap-4 mt-4">
   <mat-form-field class="flex-auto">
-    <mat-label>Nombres y Apellidos</mat-label>
-      <mat-select [formControl]="formGroup.controls.nombreCompleto"
-        [compareWith]="compareSelecIdPersonal">
-          <mat-option *ngFor="let obj of listPersonalPropuesto" [value]="obj">
-            {{ obj.nombreCompleto }}
-          </mat-option>
-      </mat-select>
-      <mat-error *ngIf="formGroup.get('tipoDocumento').hasError('required')">Seleccione personal
-      </mat-error>
-  </mat-form-field>
+  <mat-label>Nombres y Apellidos</mat-label>
+  <mat-select [formControl]="formGroup.controls.nombreCompleto">
+    <mat-option [value]="null" disabled>Seleccione personal</mat-option>
+    <mat-option *ngFor="let obj of listPersonalPropuesto" [value]="obj">
+      {{ obj.nombreCompleto }}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="formGroup.get('nombreCompleto')?.hasError('required')">
+    Seleccione personal
+  </mat-error>
+</mat-form-field>
+  <button color="primary" mat-raised-button type="button" (click)="doNothing()">Agregar</button>
 </div>
 
 <div class="mx-0 py-4 border-b overflow-auto">
@@ -18,11 +20,10 @@
     <input [formControl]="formGroup.controls.fechaDesvinculacion" type="date" min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
     <mat-error *ngIf="formGroup.get('fechaDesvinculacion').hasError('required')">Ingrese Fecha de Desvinculacion</mat-error>
   </mat-form-field>
-  <button color="primary" mat-raised-button type="button" (click)="doNothing()">Agregar</button>
 </div>
 
-<div class="mx-0 py-4 border-b overflow-auto">
-    <table @stagger [dataSource]="listPersonalPropuesto" class="w-full table-auto" mat-table matSort>
+<div class="w-full overflow-x-auto shadow-2xl rounded">
+    <table @stagger [dataSource]="listPersonalAgregado" class="w-full table-auto" mat-table matSort>
       <ng-container matColumnDef="tipoDocumento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>Documento</th>
         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoDocumento }}</td>
@@ -35,7 +36,7 @@
 
       <ng-container matColumnDef="nombreCompleto">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombres y apellidos</th>
-        <td class="text-primary font-medium break-words whitespace-normal min-w-[300px] py-2" mat-cell *matCellDef="let element">{{ element?.nombreCompleto }}</td>
+        <td class="text-primary font-medium break-words whitespace-normal min-w-[100px] py-2" mat-cell *matCellDef="let element">{{ element?.nombreCompleto }}</td>
       </ng-container>
 
       <ng-container matColumnDef="perfil">
@@ -48,31 +49,41 @@
         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaRegistro }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="fechaInicioContractual">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha inicio<br>contractual</th>
+      <ng-container matColumnDef="fechaBaja">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Baja</th>
         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaInicioContractual }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="estadoReemplazo">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Reemplazar<br>Personal Propuesto</th>
+      <ng-container matColumnDef="fechaDesvinculacion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha<br>Desvinculación</th>
         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoReemplazo }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="estadoDocumento">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Documento<br>inicio servicio</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoDocumento }}</td>
       </ng-container>
 
       <!-- Action Column -->
 
+      <ng-container matColumnDef="actions">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+        <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+          <button (click)="doNothing2()"
+            mat-icon-button
+            type="button">
+            <mat-icon svgIcon="mat:delete"></mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="vacio">
-        <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">No se encuentran datos para mostrar</td>
+        <td mat-footer-cell *matFooterCellDef colspan="9"
+        class="text-center text-primary">
+        No se encuentran datos para mostrar
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      <ng-container *ngIf="listPersonalPropuesto?.length === 0">
-        <tr mat-footer-row *matFooterRowDef="['vacio']"></tr>
-      </ng-container>
+
+      <tr mat-footer-row *matFooterRowDef="['vacio']"
+        [class.hidden]="listPersonalAgregado?.length > 0">
+      </tr>
     </table>
 </div>

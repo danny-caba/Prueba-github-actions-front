@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
 
@@ -7,11 +9,12 @@ import { Link } from 'src/helpers/internal-urls.components';
   selector: 'vex-reemplazo-personal',
   templateUrl: './reemplazo-personal.component.html'
 })
-export class ReemplazoPersonalComponent implements OnInit {
+export class ReemplazoPersonalComponent extends BaseComponent implements OnInit {
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaInicioContractual', 'estadoReemplazo', 'estadoDocumento', 'actions'];
   allowedToReplace: boolean = true;
   btnReplace: string = 'Reemplazar';
+  private destroy$ = new Subject<void>();
   dummyDataSource = [
     {
       tipoDocumento: "DNI",
@@ -28,9 +31,16 @@ export class ReemplazoPersonalComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   doNothing(): void {

@@ -97,6 +97,8 @@ import { ModalAprobadorContratoComponent } from './modal-aprobador-contrato/moda
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalAprobadorHistorialContratoComponent } from './modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
 import { LayoutBajaPersonalPropuestoComponent } from './layout-baja-personal-propuesto/layout-baja-personal-propuesto.component';
+import { LayoutPersonalPropuestoComponent } from './layout-personal-propuesto/layout-personal-propuesto.component';
+import { LayoutSolicitudReemplazoSupervisorComponent } from './layout-solicitud-reemplazo-supervisor/layout-solicitud-reemplazo-supervisor.component';
 
 const sharedComponents = [
 
@@ -106,7 +108,7 @@ const sharedComponents = [
     CmpAprobadorComponent,
     CmpPerfilComponent,
     CmpItemPerfilComponent,
-    
+
     CmpFechaEtapaComponent,
     CmpMiembroComponent,
 
@@ -150,9 +152,14 @@ const sharedComponents = [
     LayoutInfoProcesoComponent,
     LayoutItemPerfilComponent,
     LayoutPublicarComponent,
-	LayoutDatosUsuarioComponent,
+	  LayoutDatosUsuarioComponent,
     LayoutRolUsuarioComponent,
     LayoutConfPerfilComponent,
+
+    LayoutBajaPersonalPropuestoComponent,
+    LayoutPersonalPropuestoComponent,
+    LayoutSolicitudReemplazoSupervisorComponent,
+
     ModalTileComponent,
     ModalTileComponent2,
     ModalPerfilComponent,
@@ -196,7 +203,7 @@ const sharedComponents = [
     ModalConfigurarPaceComponent,
     ModalAgregarRepresentanteComponent,
     ModalAprobadorContratoComponent,
-    ModalAprobadorHistorialContratoComponent
+    ModalAprobadorHistorialContratoComponent,
   ];
 
 @NgModule({

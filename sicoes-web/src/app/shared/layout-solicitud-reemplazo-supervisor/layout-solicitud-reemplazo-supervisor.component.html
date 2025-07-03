@@ -1,0 +1,15 @@
+<div>
+    <ng-container [ngTemplateOutlet]="templateNepotismo"></ng-container>
+</div>
+
+<ng-template #templateNepotismo>
+    <div class="flex">
+        <div class="flex flex-col">
+            <mat-checkbox color="primary" (change)="setValueCheckedCartaReemplazo($event)">
+                <span>Oficio/Carta solicitando reemplazo del supervisor</span>
+            </mat-checkbox>
+        </div>
+        <span class="flex-1"></span>
+        <vex-form-adjuntos-btn class="ml-6" [editable]="editable"></vex-form-adjuntos-btn>
+    </div>
+</ng-template>

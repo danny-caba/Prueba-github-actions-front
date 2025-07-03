@@ -1,1 +1,28 @@
-<p>reemplazo-pers-form-edit works!</p>
+            <!--CONTENIDO-->
+            <mat-accordion multi="true">
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- Baja Personal Propuesto</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-panel-description></mat-panel-description>
+                    <vex-layout-baja-personal-propuesto #layoutBajaPersPropuesto></vex-layout-baja-personal-propuesto>
+                </mat-expansion-panel>
+            </mat-accordion>
+            <mat-accordion multi="true">
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- Personal propuesto</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-panel-description></mat-panel-description>
+                    <vex-layout-personal-propuesto #layoutPersPropuesto></vex-layout-personal-propuesto>
+                </mat-expansion-panel>
+            </mat-accordion>
+            <mat-accordion multi="true">
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 3}}.- Solicitud reemplazo de supervisor</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-panel-description></mat-panel-description>
+                    <vex-layout-solicitud-reemplazo-supervisor #layoutSolReempSuperv></vex-layout-solicitud-reemplazo-supervisor>
+                </mat-expansion-panel>
+            </mat-accordion>

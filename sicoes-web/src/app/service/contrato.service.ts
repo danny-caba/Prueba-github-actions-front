@@ -80,5 +80,9 @@ export class ContratoService {
     return this.http.get<any>(urlEndpoint);
   }
 
+   aprobarPerfeccionamientosMasivo(request: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/contratos/acciones-masivas`;
+    return this.http.post<any>(urlEndpoint, request);
+  }
 
 }

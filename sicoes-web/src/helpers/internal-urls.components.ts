@@ -9,6 +9,8 @@ export enum Link {
     REGISTRO_EMP_EXTRANJERA = 'registro-emp-extranjera',
     RECUPERAR_CONTRASENIA = 'recuperar-contrasenia',
     INTRANET = 'intranet',
+    PERFECCIONAMIENTO_LIST = 'PERFECCIONAMIENTO_LIST',
+    PERFECCIONAMIENTO_VIEW = 'PERFECCIONAMIENTO_VIEW',
     LOGIN_INTRANET = 'login-intranet',
     PUBLIC = 'public',
     REGISTRO_EMP = 'registro-emp',

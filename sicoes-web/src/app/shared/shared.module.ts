@@ -93,6 +93,8 @@ import { ModalObservarPaceDivisionComponent } from './modal-Observar-Pace-Divisi
 import { ModalBuscarPaceComponent } from './modal-buscar-Pace/modal-buscar-Pace.component';
 import { ModalConfigurarPaceComponent } from './modal-configurar-Pace/modal-configurar-Pace.component';
 import { ModalAgregarRepresentanteComponent } from './modal-agregar-representante/modal-agregar-representante.component';
+import { ModalAprobadorHistorialContratoComponent } from './modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
+import { ModalAprobadorContratoComponent } from './modal-aprobador-contrato/modal-aprobador-contrato.component';
 
 const sharedComponents = [
 
@@ -190,7 +192,9 @@ const sharedComponents = [
     ModalBuscarPaceComponent,
     ModalObservarPaceDivisionComponent,
     ModalConfigurarPaceComponent,
-    ModalAgregarRepresentanteComponent
+    ModalAgregarRepresentanteComponent,
+    ModalAprobadorHistorialContratoComponent,
+    ModalAprobadorContratoComponent
   ];
 
 @NgModule({

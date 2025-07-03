@@ -22,3 +22,8 @@ export class SicoesSolicitudSeccion {
   procSubsanacion: string
   requisito: any
 }
+
+export interface SelectedPerfeccionamientoItem {
+  numeroExpediente: string;
+  idContrato: number;
+}

@@ -161,8 +161,118 @@
                 <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
                     showFirstLastButtons></mat-paginator>
             </div>
+<<<<<<< Updated upstream
         </div>
     </vex-page-layout-content>
+=======
+          </div>
+          <div class="overflow-auto shadow-2xl rounded">
+            <table class="w-full border" mat-table matSort [dataSource]="dataSourcePerfeccionamiento">
+              <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-checkbox
+                    color="primary"
+                    (change)="actualizarListaExpedientePerfeccionamiento($event, element)">
+                  </mat-checkbox>                
+                </td>
+              </ng-container>
+
+              <!--<ng-container matColumnDef="tipoAprobacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Aprobación</th>
+                <td mat-cell *matCellDef="let element">{{ element.tipoAprobacion?.nombre }}</td>
+              </ng-container>-->
+
+              <ng-container matColumnDef="numeroExpediente">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Número Expediente</th>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.propuesta.procesoItem.proceso.numeroExpediente }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="documento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Documento</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.documento }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="tp">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Modalidad de Pago</th>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.tipoContratacion.nombre }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="contratista">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Contratista</th>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.propuesta.supervisora.nombreRazonSocial }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="tipoContrato">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Contrato</th>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.tipoContratacion.nombre }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="fechaIngreso">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ingreso</th>
+                <td mat-cell *matCellDef="let element">{{ element.fechaSuscripcionContrato }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoAprobacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación</th>
+                <td mat-cell *matCellDef="let element">{{ element.idEstadoEval.nombre }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoAprobacionLogistica">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación Logística</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoEvalLog?.nombre || ' ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoVbGAF">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado VB GAF</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoEvalGaf?.nombre || ' ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoVbJefeUnidad">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado VB Jefe Unidad</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoEvalUni?.nombre || ' ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoFirmaGerencia">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Firma Gerencia</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoEvalApr?.nombre || ' ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="actionsPerfeccionamiento">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                  <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ row: row }" [matMenuTriggerFor]="actionsMenuPerfeccionamiento" mat-icon-button type="button">
+                    <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsPerfeccionamiento"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsPerfeccionamiento"></tr>
+
+              <ng-container matColumnDef="loadingPerfeccionamiento">
+                <td mat-footer-cell *matFooterCellDef colspan="12" class="text-center">Cargando Datos...</td>
+              </ng-container>
+
+              <ng-container matColumnDef="vacioPerfeccionamiento">
+                <td mat-footer-cell *matFooterCellDef colspan="12" class="text-center text-primary">No se
+                  encuentran resultados para los filtros seleccionados</td>
+              </ng-container>
+
+              <tr mat-footer-row *matFooterRowDef="['vacioPerfeccionamiento']" [ngClass]="{ hide: !(dataSourcePerfeccionamiento.data.length === 0) }"></tr>
+            </table>
+            <mat-paginator #paginatorPerfeccionamiento class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChangePerfeccionamiento($event)" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-tab>
+        <mat-tab label="Reemplazar personal propuesto">
+            <reemplazar-personal-propuesto></reemplazar-personal-propuesto>
+        </mat-tab>
+        </mat-tab-group>
+    </div>
+  </vex-page-layout-content>
+>>>>>>> Stashed changes
 </vex-page-layout>
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">

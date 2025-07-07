@@ -11,6 +11,8 @@ import { Link } from 'src/helpers/internal-urls.components';
 export class ReemplazoPersFormComponent extends BaseComponent implements OnInit {
 
   btnRegister: string = 'Registrar';
+  idSolicitud: string = '';
+  uuidSolicitud: string= '';
 
   constructor(
     private route: ActivatedRoute,
@@ -20,15 +22,22 @@ export class ReemplazoPersFormComponent extends BaseComponent implements OnInit 
   }
 
   ngOnInit(): void {
+    this.getIdSolicitud();
   }
 
   toGoBandejaContratos() {
         functionsAlert.questionSiNo('¿Desea regresar a la sección de reemplazo de personal propuesto?').then((result) => {
             if (result.isConfirmed) {
-              const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
-              this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.CONTRATO_SOLICITUD_REPLACE, encryptedId]);
+              this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.CONTRATO_SOLICITUD_REPLACE, this.idSolicitud]);
             }
           });
+  }
+
+  getIdSolicitud(): void {
+    this.idSolicitud = this.route.snapshot.paramMap.get('idSolicitud');
+    this.uuidSolicitud = this.route.snapshot.paramMap.get('solicitudUuid');
+    console.log("idSolicitud -> ", this.idSolicitud);
+    console.log("uuidSolicitud -> ", this.uuidSolicitud);
   }
 
   doNothing(): void {

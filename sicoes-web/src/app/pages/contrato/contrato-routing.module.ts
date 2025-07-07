@@ -37,7 +37,9 @@ const routes: VexRoutes = [{
       path: Link.CONTRATO_SOLICITUD_REPLACE + '/:idSolicitud',
       component: ReemplazoPersonalComponent,
       canActivate: [AuthGuardService, RoleGuardService],
-      data: { replaceable: true }
+      data: { 
+        replaceable: true 
+      }
     }, {
       path: Link.REEMPLAZO_PERSONAL_FORM + '/:idSolicitud',
       component: ReemplazoPersFormComponent,

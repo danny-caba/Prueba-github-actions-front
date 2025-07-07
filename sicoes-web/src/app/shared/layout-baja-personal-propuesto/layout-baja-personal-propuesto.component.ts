@@ -1,19 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ListadoPersonalPropuesto } from 'src/app/interface/listado.model';
 import { BaseComponent } from '../components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
+import { PersonalPropuesto } from 'src/app/interface/reemplazo-personal.model';
+import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 
 @Component({
   selector: 'vex-layout-baja-personal-propuesto',
-  templateUrl: './layout-baja-personal-propuesto.component.html'
+  templateUrl: './layout-baja-personal-propuesto.component.html',
+  animations: [
+    fadeInUp400ms,
+    stagger80ms
+  ]
 })
 export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implements OnInit {
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
 
-  listPersonalPropuesto: ListadoPersonalPropuesto[] = null;
-  listPersonalAgregado: ListadoPersonalPropuesto[] = [];
+  listPersonalPropuesto: PersonalPropuesto[] = null;
+  listPersonalAgregado: PersonalPropuesto[] = [];
 
   constructor(
     private fb: FormBuilder
@@ -45,7 +51,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
 
   doNothing(): void {
     if (this.formGroup.valid) {
-      const personalSeleccionado = this.formGroup.get('nombreCompleto')!.value as unknown as ListadoPersonalPropuesto;
+      const personalSeleccionado = this.formGroup.get('nombreCompleto')!.value as unknown as PersonalPropuesto;
       console.log('Personal seleccionado:', personalSeleccionado);
       const fechaDesvinculacion = this.formGroup.get('fechaDesvinculacion')?.value;
       console.log('Fecha de desvinculación:', fechaDesvinculacion);

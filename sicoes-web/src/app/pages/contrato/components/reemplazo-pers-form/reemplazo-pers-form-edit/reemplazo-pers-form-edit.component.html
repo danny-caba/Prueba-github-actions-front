@@ -14,7 +14,10 @@
                         <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- Personal propuesto</mat-panel-title>
                     </mat-expansion-panel-header>
                     <mat-panel-description></mat-panel-description>
-                    <vex-layout-personal-propuesto #layoutPersPropuesto></vex-layout-personal-propuesto>
+                    <vex-layout-personal-propuesto 
+                     [idSolicitud] = "idSolicitud"
+                     [uuidSolicitud] = "uuidSolicitud"
+                    #layoutPersPropuesto></vex-layout-personal-propuesto>
                 </mat-expansion-panel>
             </mat-accordion>
             <mat-accordion multi="true">

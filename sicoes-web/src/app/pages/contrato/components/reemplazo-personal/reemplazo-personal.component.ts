@@ -1,13 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
 
 @Component({
   selector: 'vex-reemplazo-personal',
-  templateUrl: './reemplazo-personal.component.html'
+  templateUrl: './reemplazo-personal.component.html',
+  animations: [
+    fadeInUp400ms,
+    stagger80ms
+  ]
 })
 export class ReemplazoPersonalComponent extends BaseComponent implements OnInit {
 

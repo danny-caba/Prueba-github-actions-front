@@ -1,4 +1,4 @@
-<div class="flex flex-col sm:flex-row sm:gap-4 mt-4">
+<div class="flex flex-col sm:flex-row sm:gap-4 mt-4 items-center">
   <mat-form-field class="flex-auto">
     <mat-label>Nombres y Apellidos</mat-label>
     <mat-select [formControl]="formGroup.controls.nombreCompleto">
@@ -53,7 +53,7 @@
       </ng-container>
 
       <ng-container matColumnDef="otrosDocumentos">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha<br>Otros<br>documentos</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Otros<br>documentos</th>
         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoReemplazo }}</td>
       </ng-container>
 
@@ -94,7 +94,10 @@
             </mat-checkbox>
         </div>
         <span class="flex-1"></span>
-        <vex-form-adjuntos-btn class="ml-6" [editable]="editable"></vex-form-adjuntos-btn>
+        <vex-form-adjuntos-btn class="ml-6"
+          [titulo]="'Archivo (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-btn>
     </div>
 </ng-template>
 
@@ -106,7 +109,10 @@
             </mat-checkbox>
         </div>
         <span class="flex-1"></span>
-        <vex-form-adjuntos-btn class="ml-6" [editable]="editable"></vex-form-adjuntos-btn>
+        <vex-form-adjuntos-btn class="ml-6"
+          [titulo]="'Archivo (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-btn>
     </div>
 </ng-template>
 
@@ -118,7 +124,10 @@
             </mat-checkbox>
         </div>
         <span class="flex-1"></span>
-        <vex-form-adjuntos-btn class="ml-6" [editable]="editable"></vex-form-adjuntos-btn>
+        <vex-form-adjuntos-btn class="ml-6"
+          [titulo]="'Archivo (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-btn>
     </div>
 </ng-template>
 
@@ -130,6 +139,9 @@
             </mat-checkbox>
         </div>
         <span class="flex-1"></span>
-        <vex-form-adjuntos-btn class="ml-6" [editable]="editable"></vex-form-adjuntos-btn>
+        <vex-form-adjuntos-btn class="ml-6"
+          [titulo]="'Archivo (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-btn>
     </div>
 </ng-template>

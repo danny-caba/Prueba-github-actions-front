@@ -11,6 +11,8 @@ export class Contrato {
   fechaPlazoSubsanacion: string
   estado: string
   archivo: any
+  estadoDocInicioServicio: any
+  idDocInicio: number
 }
 
 export class SicoesSolicitudSeccion {
@@ -21,4 +23,17 @@ export class SicoesSolicitudSeccion {
   procRevision: string
   procSubsanacion: string
   requisito: any
+}
+
+export interface ContratoDetalle {
+  idContrato: number;
+  numeroContratoSap: string;
+  fechaSuscripcionContrato: string;
+  fechaInicioContrato: string;
+  fechaFinalContrato: string;
+}
+
+export interface SelectedPerfeccionamientoItem {
+  numeroExpediente: string;
+  idContrato: number;
 }

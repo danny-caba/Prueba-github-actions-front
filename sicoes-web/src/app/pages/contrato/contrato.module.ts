@@ -35,6 +35,7 @@ import { PersonalPropuestoComponent } from './components/personal-propuesto/pers
 import { FielCumplimientoComponent } from './components/fiel-cumplimiento/fiel-cumplimiento.component';
 import { MontoDiferencialComponent } from './components/monto-diferencial/monto-diferencial.component';
 import { CmpEvaluacionContratoComponent } from './components/cmp-evaluacion-contrato/cmp-evaluacion-contrato.component';
+import { ContratoDocumentosComponent } from './components/contrato-documentos/contrato-documentos.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { CmpEvaluacionContratoComponent } from './components/cmp-evaluacion-cont
     PersonalPropuestoComponent,
     FielCumplimientoComponent,
     MontoDiferencialComponent,
-    CmpEvaluacionContratoComponent
+    CmpEvaluacionContratoComponent,
+    ContratoDocumentosComponent
   ],
   imports: [
     CommonModule,

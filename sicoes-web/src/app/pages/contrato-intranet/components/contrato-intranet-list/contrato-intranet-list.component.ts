@@ -22,7 +22,7 @@ import { Link } from 'src/helpers/internal-urls.components';
 
 
 export class ContratoIntranetListComponent extends BasePageComponent<Contrato> implements OnInit {
-  displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'tipo', 'actions'];
+  displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'tipo', 'estadoDocInicio', 'actions'];
   ACCION_VER: string = solicitudContrato.ACCION_VER;
   ACCION_EDITAR: string = solicitudContrato.ACCION_EDITAR;
 
@@ -102,5 +102,22 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
 
   formRequisitos(solicitud: any){
     return solicitud.estadoProcesoSolicitud === '2'
+  }
+
+  mostrarEstadoDocInicio(idDocInicio: number | null): string {
+    if (idDocInicio == null) {
+      return '--';
+    }
+    if (idDocInicio === 1) {
+      return 'EN PROCESO';
+    }
+    if (idDocInicio === 2) {
+      return 'COMPLETO';
+    }
+    return '';
+  }
+
+  evaluarDocsInicio(row: any) {
+    this.router.navigate(['/intranet/contratos/evaluar-documentos-inicio/' + row.idSolicitud]);
   }
 }

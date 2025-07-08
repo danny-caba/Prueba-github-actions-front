@@ -57,3 +57,17 @@ export class Solicitud {
     profesion: Profesion
 
 }
+
+export interface ReqInicioServicio {
+  id: number;
+  solicitudPerfilId: number;
+  supervisoraId: number;
+  tipoDocumento: string;
+  archivoId: number;
+  fechaInicio?: string;
+  fechaFin?: string;
+  estadoEvaluacion?: string;
+  usuarioId?: number;
+  fechaEvaluacion?: string;
+  observacion?: string;
+}

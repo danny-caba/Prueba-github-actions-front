@@ -6,6 +6,7 @@ import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
 import { Link } from 'src/helpers/internal-urls.components';
 import { ContratoListComponent } from './components/contrato-list/contrato-list.component';
 import { ContratoFormComponent } from './components/contrato-form/contrato-form.component';
+import { ContratoDocumentosComponent } from './components/contrato-documentos/contrato-documentos.component';
 
 
 
@@ -30,7 +31,11 @@ const routes: VexRoutes = [{
       data: {
         editable: false
       }
-    }
+    }, {
+      path: 'cargar-documentacion-inicio/:id',
+      component: ContratoDocumentosComponent
+    },
+    
   ]
   }];
 

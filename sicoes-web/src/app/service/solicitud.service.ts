@@ -55,6 +55,12 @@ export class SolicitudService {
     return this.http.get<Pageable<SolicitudListado>>(urlEndpoint,{params:params});
   }
 
+  buscarSolicitudesAprobadorPerfeccionamiento(filtroPerfeccionamiento): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/contratos/listar`
+    let params = functions.obtenerParams(filtroPerfeccionamiento);
+    return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
+  }
+
   buscarSolicitudesResponsable(filtro) {
     let urlEndpoint = `${this._path_serve}/api/solicitudes/responsable`
     let params = functions.obtenerParams(filtro);
@@ -145,5 +151,6 @@ export class SolicitudService {
     let urlEndpoint = `${this._path_serve}/api/solicitudes/modificar/${solicitudUuid}`
     return this.http.put<Solicitud>(urlEndpoint, null);
   }
+
 
 }

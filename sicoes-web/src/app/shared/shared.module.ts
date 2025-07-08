@@ -93,6 +93,9 @@ import { ModalObservarPaceDivisionComponent } from './modal-Observar-Pace-Divisi
 import { ModalBuscarPaceComponent } from './modal-buscar-Pace/modal-buscar-Pace.component';
 import { ModalConfigurarPaceComponent } from './modal-configurar-Pace/modal-configurar-Pace.component';
 import { ModalAgregarRepresentanteComponent } from './modal-agregar-representante/modal-agregar-representante.component';
+import { ModalAprobadorContratoComponent } from './modal-aprobador-contrato/modal-aprobador-contrato.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ModalAprobadorHistorialContratoComponent } from './modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
 
 const sharedComponents = [
 
@@ -190,11 +193,13 @@ const sharedComponents = [
     ModalBuscarPaceComponent,
     ModalObservarPaceDivisionComponent,
     ModalConfigurarPaceComponent,
-    ModalAgregarRepresentanteComponent
+    ModalAgregarRepresentanteComponent,
+    ModalAprobadorContratoComponent,
+    ModalAprobadorHistorialContratoComponent
   ];
 
 @NgModule({
-  imports:      [ CommonModule, MaterialModule,FormsModule, ReactiveFormsModule, InputMaskModule],
+  imports:      [ CommonModule, MaterialModule,FormsModule, ReactiveFormsModule, InputMaskModule, MatDialogModule],
   declarations: [ ...sharedComponents, OptionRoleDirective ],
   exports:      [ ...sharedComponents, CommonModule, FormsModule, ReactiveFormsModule, OptionRoleDirective ],
   providers:    [ LoadingDialogService, DatePipe, OptionRoleDirective ],

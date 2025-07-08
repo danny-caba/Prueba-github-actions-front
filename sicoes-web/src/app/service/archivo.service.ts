@@ -22,4 +22,27 @@ export class ArchivoService {
     return this.http.get<any>(urlEndpoint);
   }
 
+  getPersonalPropuesto(idSolicitud: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this._path_serve}/api/solicitud/${idSolicitud}/personal-propuesto`);
+  }
+
+  listarAdicionales(idContrato: number): Observable<any[]> {
+    return this.http.get<any[]>(`/api/contratos/${idContrato}/archivos`);
+  }
+
+  subirAdicional(idContrato: number, tipoRequisito: string, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('tipoRequisito', tipoRequisito);
+    return this.http.post<any>(`/api/contratos/${idContrato}/archivos`, formData);
+  }
+
+  descargarArchivo(idArchivo: number): Observable<Blob> {
+    return this.http.get(`/api/contratos/0/archivos/${idArchivo}/descargar`, { responseType: 'blob' });
+  }
+
+  eliminarArchivo(idArchivo: number): Observable<void> {
+    return this.http.delete<void>(`/api/contratos/0/archivos/${idArchivo}`);
+  }
+
 }

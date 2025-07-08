@@ -6,6 +6,7 @@ import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
 import { Link } from 'src/helpers/internal-urls.components';
 import { ContratoIntranetListComponent } from './components/contrato-intranet-list/contrato-intranet-list.component';
 import { ContratoFormEvaluarComponent } from './components/contrato-form-evaluar/contrato-form-evaluar.component';
+import { ContratoEvaluarDocumentosComponent } from './components/contrato-evaluar-documentos/contrato-evaluar-documentos.component';
 
 const routes: VexRoutes = [{ 
   path: '',
@@ -32,6 +33,11 @@ const routes: VexRoutes = [{
         evaluar: true,
         view: true
       }
+    }, {
+      path: 'evaluar-documentos-inicio/:idSolicitud',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: ContratoEvaluarDocumentosComponent,
+      data: { evaluarDocInicio: true }
     }
   ]
   }];

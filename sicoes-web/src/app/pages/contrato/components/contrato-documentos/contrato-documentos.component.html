@@ -1,0 +1,107 @@
+<div class="card px-8 py-6">
+  <h2 class="text-lg font-bold">Cargar Documentación Inicio de Servicio</h2>
+  <mat-divider></mat-divider>
+
+  <!-- PERSONAL PROPUESTO -->
+  <div class="mt-4 font-bold">PERSONAL PROPUESTO</div>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let prof of personalPropuesto">
+      <mat-expansion-panel-header>
+        <div class="flex w-full items-center justify-between">
+          <span>{{ prof.numeroDocumento }}</span>
+          <span class="flex-1 ml-4">{{ prof.nombreCompleto }}</span>
+          <span>{{ prof.perfil }}</span>
+          <span class="ml-4">TOTAL DOC: {{ prof.totalDocs }} DOCUMENTOS</span>
+        </div>
+      </mat-expansion-panel-header>
+      <div>
+        <table class="w-full mt-2">
+          <thead>
+            <tr>
+              <th>Documento</th>
+              <th>Archivo</th>
+              <th>Acciones</th>
+              <th>Fecha Inicio</th>
+              <th>Fecha Fin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let doc of prof.docs">
+              <td>{{ doc.nombre }}</td>
+              <td>
+                <span *ngIf="doc.archivo">{{ doc.nombreReal }}</span>
+                <button *ngIf="!doc.archivo" mat-stroked-button (click)="abrirInputArchivoPersonal(prof, doc)">
+                  + Adjuntar
+                </button>
+                <input type="file"
+                       [id]="'input-personal-' + prof.idPersonal + '-' + doc.slug"
+                       hidden
+                       (change)="onFileSelectedPersonal($event, prof, doc)">
+              </td>
+              <td>
+                <button *ngIf="doc.archivo" mat-icon-button (click)="descargar(doc)">
+                  <mat-icon>download</mat-icon>
+                </button>
+                <button *ngIf="doc.archivo" mat-icon-button color="warn" (click)="eliminarPersonalDoc(prof, doc)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <span *ngIf="!doc.archivo" class="text-xs text-gray-400">Sin archivo</span>
+              </td>
+              <td>
+                <input matInput type="date"
+                       [(ngModel)]="doc.fechaInicio"
+                       placeholder="Fecha inicio">
+              </td>
+              <td>
+                <input matInput type="date"
+                       [(ngModel)]="doc.fechaFin"
+                       placeholder="Fecha fin">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- DOCUMENTACIÓN ADICIONAL -->
+  <div class="mt-8 font-bold">DOCUMENTACIÓN ADICIONAL</div>
+  <table class="w-full">
+    <thead>
+      <tr>
+        <th>Documento</th>
+        <th>Archivo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doc of docsAdicionales">
+        <td>{{ doc.nombre }}</td>
+        <td>
+          <span *ngIf="doc.archivo">{{ doc.nombreReal }}</span>
+          <button *ngIf="!doc.archivo" mat-stroked-button (click)="abrirInputArchivoAdicional(doc)">
+            + Adjuntar
+          </button>
+          <input type="file"
+                 [id]="'input-adicional-' + doc.slug"
+                 hidden
+                 (change)="onFileSelectedAdicional($event, doc)">
+        </td>
+        <td>
+          <button *ngIf="doc.archivo" mat-icon-button (click)="descargar(doc)">
+            <mat-icon>download</mat-icon>
+          </button>
+          <button *ngIf="doc.archivo" mat-icon-button color="warn" (click)="eliminarAdicional(doc)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <span *ngIf="!doc.archivo" class="text-xs text-gray-400">Sin archivo</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="flex justify-end mt-8 gap-2">
+    <button mat-raised-button color="primary" (click)="registrar()">Registrar</button>
+    <button mat-stroked-button color="primary" (click)="regresar()">Regresar</button>
+  </div>
+</div>

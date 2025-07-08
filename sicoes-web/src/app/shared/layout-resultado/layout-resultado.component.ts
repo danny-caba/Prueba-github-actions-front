@@ -474,10 +474,11 @@ export class LayoutResultadoComponent
       if (perfilTmp.evaluacion && perfilTmp.evaluacion.codigo === "REA_03") {
         
         obser = true;
-        break;  
+        break; 
       }
     }
-    if (obser) {  
+    console.log(obser)
+    if (obser) { 
       return "Observado"; 
     } else if (this.listDictamenEval[0].montoFacturado > 100000) {
       return "Califica";

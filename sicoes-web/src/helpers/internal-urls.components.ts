@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 
 export enum Link {
     PRINCIPAL = 'principal',
-
+    PERFECCIONAMIENTO_LIST = 'PERFECCIONAMIENTO_LIST',
+    PERFECCIONAMIENTO_VIEW = 'PERFECCIONAMIENTO_VIEW',
     EXTRANET = 'extranet',
     LOGIN_SUNAT = 'login-sunat',
     LOGIN_EXTRANJERO = 'login-extranjero',

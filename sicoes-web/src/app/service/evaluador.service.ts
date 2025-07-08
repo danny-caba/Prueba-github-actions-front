@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { functions } from 'src/helpers/functions';
 import { ConfigService } from '../core/services';
-import { Asignacion } from '../interface/asignacion';
+import { Asignacion, Historial } from '../interface/asignacion';
 import { Pageable } from '../interface/pageable.model';
 import { Solicitud, SolicitudListado } from '../interface/solicitud.model';
 
@@ -102,5 +102,15 @@ export class EvaluadorService {
     let urlEndpoint = `${this._path_serve}/api/asignaciones/obtenerParametros/firmaDigital`
     let params = functions.obtenerParams(usuario);
     return this.http.get<any>(urlEndpoint, {params:params});
+  }
+
+  listarHistorialAprobaciones(filtro: { idContrato: number, tipo: string }) {
+    const url = `${this._path_serve}/api/asignaciones/aprobaciones`;
+    const params = functions.obtenerParams(filtro);
+    return this.http.get<Asignacion>(url, { params });
+  }
+
+  obtenerHistorialAsignacion(idContrato: number) {
+    return this.http.get<Asignacion[]>(`${this._path_serve}/api/asignaciones/historial/${idContrato}`);
   }
 }

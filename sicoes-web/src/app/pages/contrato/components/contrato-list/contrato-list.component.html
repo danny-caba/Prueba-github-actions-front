@@ -4,34 +4,28 @@
         <div class="card px-8 py-6">
             <div class="flex flex-col sm:flex-row gap-x8">
                 <div @fadeInUp class="flex-auto">
-                    <!-- Title -->
                     <h2 class="text-lg font-bold">Solicitudes de Perfeccionamiento de Contrato</h2>
                     <mat-divider></mat-divider>
 
-                    <!-- Filter -->
                     <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
-                        <!-- Concurso -->
                         <div class="flex flex-col">
                             <mat-label class="text-primary text-sm font-medium">N°. de concurso</mat-label>
                             <mat-form-field  class="flex-auto">
                                 <input matInput [formControl]="formGroup.controls.nroConcurso" maxlength="50" placeholder="N°. de concurso" />
                             </mat-form-field>
                         </div>
-                        <!-- Item -->
                         <div class="flex flex-col">
                             <mat-label class="text-primary text-sm font-medium">Item</mat-label>
                             <mat-form-field  class="flex-auto">
                                 <input matInput [formControl]="formGroup.controls.item" maxlength="200" placeholder="Item" type="number" />
                             </mat-form-field>
                         </div>
-                        <!-- Convocatoria -->
                         <div class="flex flex-col">
                             <mat-label class="text-primary text-sm font-medium">Convocatoria</mat-label>
                             <mat-form-field  class="flex-auto">
                                 <input matInput [formControl]="formGroup.controls.convocatoria" placeholder="Convocatoria" />
                             </mat-form-field>
                         </div>
-                        <!-- Estado -->
                         <div class="flex flex-col">
                             <mat-label class="text-primary text-sm font-medium">Tipo Solicitud</mat-label>
                             <mat-form-field  class="flex-auto">
@@ -41,7 +35,6 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <!-- Tipo Solicitud -->
                         <div class="flex flex-col">
                             <mat-label class="text-primary text-sm font-medium">Estado</mat-label>
                             <mat-form-field  class="flex-auto">
@@ -55,7 +48,6 @@
                             </mat-form-field>
                         </div>
 
-                        <!-- Botones -->
                         <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
                             <button color="primary" mat-stroked-button type="button" (click)="limpiar()">
                                 Limpiar
@@ -68,7 +60,6 @@
                 </div>
             </div>
             <div class="overflow-auto shadow-2xl rounded">
-                <!-- tabla -->
                  <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
                     <ng-container matColumnDef="concurso">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Concurso</th>
@@ -96,8 +87,13 @@
                     </ng-container>
 
                     <ng-container matColumnDef="estado">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ estadoSolicitud(element) }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="estadoDocInicioServicio">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Documento inicio servicio</th>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ getEstadoDocInicioServicio(element) }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="tipo">
@@ -105,7 +101,6 @@
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoSolicitud === '1' ? 'Inscripción' : 'Subsanación' }}</td>
                     </ng-container>
 
-                    <!-- Action Column -->
                     <ng-container matColumnDef="actions">
                         <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
                         <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
@@ -153,6 +148,10 @@
         <button mat-menu-item (click)="goToFormContrato(row, ACCION_VER)" *ngIf="!formRequisitos(row)">
             <mat-icon svgIcon="mat:preview"></mat-icon>
             <span>Ver</span>
+        </button>
+        <button *ngIf="row.idDocInicio" mat-menu-item (click)="irACargaDocInicio(row)">
+            <mat-icon svgIcon="mat:preview"></mat-icon>
+            <span>Inicio de Servicio</span>
         </button>
     </ng-template>
 </mat-menu>

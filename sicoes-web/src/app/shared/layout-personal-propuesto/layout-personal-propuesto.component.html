@@ -1,7 +1,7 @@
-<div class="w-full overflow-x-auto rounded mb-6" *ngIf="isReview">
+<div class="w-full overflow-x-auto rounded items-center mb-6 mt-4" *ngIf="isReview">
   <table @stagger [dataSource]="listPersonalAgregado" class="w-full table-auto" mat-table matSort>
     <ng-container matColumnDef="tipoDocumento">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>Documento</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-left">Tipo de<br>Documento</th>
       <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoDocumento }}</td>
     </ng-container>
 
@@ -12,7 +12,7 @@
 
     <ng-container matColumnDef="nombreCompleto">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombres y apellidos</th>
-      <td class="text-primary font-medium break-words whitespace-normal min-w-[100px] py-2" mat-cell *matCellDef="let element">{{ element?.nombreCompleto }}</td>
+      <td class="text-primary font-medium break-words whitespace-normal min-w-[80px] py-2" mat-cell *matCellDef="let element">{{ element?.nombreCompleto }}</td>
     </ng-container>
 
     <ng-container matColumnDef="vacio">
@@ -136,13 +136,13 @@
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
     </button>
-    <mat-button-toggle-group *ngIf="isReview"
-      [(ngModel)]="marcacion"
-      class="mat-elevation-z4  ml-12"
-      exclusive>
-      <mat-button-toggle value="si">Sí</mat-button-toggle>
-      <mat-button-toggle value="no">No</mat-button-toggle>
-    </mat-button-toggle-group>
+    <mat-radio-group
+      *ngIf="isReview"
+      [(ngModel)]="marcaDjNepotismo"
+      class="ml-12 flex items-center gap-4">
+      <mat-radio-button value="si">Sí</mat-radio-button>
+      <mat-radio-button value="no">No</mat-radio-button>
+    </mat-radio-group>
     <span *ngIf="isReview" class="text-secondary ml-12">Evaluado por:</span>
     <span *ngIf="isReview" class="text-secondary ml-12">Fecha y Hora:</span>
 
@@ -172,13 +172,13 @@
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
     </button>
-    <mat-button-toggle-group *ngIf="isReview"
-      [(ngModel)]="marcacion"
-      class="mat-elevation-z4  ml-12"
-      exclusive>
-      <mat-button-toggle value="si">Sí</mat-button-toggle>
-      <mat-button-toggle value="no">No</mat-button-toggle>
-    </mat-button-toggle-group>
+    <mat-radio-group
+      *ngIf="isReview"
+      [(ngModel)]="marcaDjImpedimento"
+      class="ml-12 flex items-center gap-4">
+      <mat-radio-button value="si">Sí</mat-radio-button>
+      <mat-radio-button value="no">No</mat-radio-button>
+    </mat-radio-group>
     <span *ngIf="isReview" class="text-secondary ml-12">Evaluado por:</span>
     <span *ngIf="isReview" class="text-secondary ml-12">Fecha y Hora:</span>
 
@@ -206,13 +206,13 @@
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
     </button>
-    <mat-button-toggle-group *ngIf="isReview"
-      [(ngModel)]="marcacion"
-      class="mat-elevation-z4  ml-12"
-      exclusive>
-      <mat-button-toggle value="si">Sí</mat-button-toggle>
-      <mat-button-toggle value="no">No</mat-button-toggle>
-    </mat-button-toggle-group>
+    <mat-radio-group
+      *ngIf="isReview"
+      [(ngModel)]="marcaDjNoVinculo"
+      class="ml-12 flex items-center gap-4">
+      <mat-radio-button value="si">Sí</mat-radio-button>
+      <mat-radio-button value="no">No</mat-radio-button>
+    </mat-radio-group>
     <span *ngIf="isReview" class="text-secondary ml-12">Evaluado por:</span>
     <span *ngIf="isReview" class="text-secondary ml-12">Fecha y Hora:</span>
     <vex-form-adjuntos-btn class="ml-6" *ngIf="!isReview"
@@ -239,13 +239,13 @@
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
     </button>
-    <mat-button-toggle-group *ngIf="isReview"
-      [(ngModel)]="marcacion"
-      class="mat-elevation-z4  ml-12"
-      exclusive>
-      <mat-button-toggle value="si">Sí</mat-button-toggle>
-      <mat-button-toggle value="no">No</mat-button-toggle>
-    </mat-button-toggle-group>
+    <mat-radio-group
+      *ngIf="isReview"
+      [(ngModel)]="marcaOtros"
+      class="ml-12 flex items-center gap-4">
+      <mat-radio-button value="si">Sí</mat-radio-button>
+      <mat-radio-button value="no">No</mat-radio-button>
+    </mat-radio-group>
     <span *ngIf="isReview" class="text-secondary ml-12">Evaluado por:</span>
     <span *ngIf="isReview" class="text-secondary ml-12">Fecha y Hora:</span>
     

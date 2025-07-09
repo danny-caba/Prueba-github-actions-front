@@ -9,6 +9,7 @@ import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 @Component({
   selector: 'vex-layout-baja-personal-propuesto',
   templateUrl: './layout-baja-personal-propuesto.component.html',
+  styleUrls: ['./layout-baja-personal-propuesto.component.scss'],
   animations: [
     fadeInUp400ms,
     stagger80ms

@@ -19,13 +19,13 @@
             class="text-primary hover:bg-hover">
             <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
         </button>
-        <mat-button-toggle-group *ngIf="isReview"
+        <mat-radio-group
+            *ngIf="isReview"
             [(ngModel)]="marcacion"
-            class="mat-elevation-z4  ml-12"
-            exclusive>
-            <mat-button-toggle value="si">Sí</mat-button-toggle>
-            <mat-button-toggle value="no">No</mat-button-toggle>
-        </mat-button-toggle-group>
+            class="ml-12 flex items-center gap-4">
+            <mat-radio-button value="si">Sí</mat-radio-button>
+            <mat-radio-button value="no">No</mat-radio-button>
+        </mat-radio-group>
         <span *ngIf="isReview" class="text-secondary ml-12">Evaluado por:</span>
         <span *ngIf="isReview" class="text-secondary ml-12">Fecha y Hora:</span>
         

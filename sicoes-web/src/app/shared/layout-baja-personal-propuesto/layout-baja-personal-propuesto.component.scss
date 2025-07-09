@@ -82,3 +82,9 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
 ::ng-deep  .mat-tooltip-text {
   font-weight: bold;
 }
+
+:host ::ng-deep .mat-sort-header-container,
+:host ::ng-deep .mat-sort-header-content {
+  justify-content: flex-start !important;
+  text-align: left !important;
+}

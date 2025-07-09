@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PersonalPropuesto } from 'src/app/interface/reemplazo-personal.model';
@@ -42,7 +42,10 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   evaluar: boolean;
   view: boolean;
   tipoContratoSeleccionado: number;
-  marcacion: 'si' | 'no' | null = null;
+  marcaDjNepotismo: 'si' | 'no' | null = null;
+  marcaDjImpedimento: 'si' | 'no' | null = null;
+  marcaDjNoVinculo: 'si' | 'no' | null = null;
+  marcaOtros: 'si' | 'no' | null = null;
 
 
   constructor(

@@ -1,16 +1,35 @@
 <div>
-    <ng-container [ngTemplateOutlet]="templateNepotismo"></ng-container>
+    <ng-container [ngTemplateOutlet]="templateOficio"></ng-container>
 </div>
 
-<ng-template #templateNepotismo>
-    <div class="flex">
-        <div class="flex flex-col">
-            <mat-checkbox color="primary" (change)="setValueCheckedCartaReemplazo($event)">
-                <span>Oficio/Carta solicitando reemplazo del supervisor</span>
-            </mat-checkbox>
-        </div>
+<ng-template #templateOficio>
+    <div class="flex items-center w-full">
+        <mat-checkbox color="primary" (change)="setValueCheckedCartaReemplazo($event)">
+            <span>Oficio/Carta solicitando reemplazo del supervisor</span>
+        </mat-checkbox>
         <span class="flex-1"></span>
-        <vex-form-adjuntos-btn class="ml-6"
+        <span class="text-secondary" *ngIf="isReview">Oficio/CartaMock.pdf</span>
+        <button *ngIf="isReview" matTooltip="Descargar"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+        </button>
+        <button *ngIf="isReview" matTooltip="Eliminar"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+        </button>
+        <mat-button-toggle-group *ngIf="isReview"
+            [(ngModel)]="marcacion"
+            class="mat-elevation-z4  ml-12"
+            exclusive>
+            <mat-button-toggle value="si">Sí</mat-button-toggle>
+            <mat-button-toggle value="no">No</mat-button-toggle>
+        </mat-button-toggle-group>
+        <span *ngIf="isReview" class="text-secondary ml-12">Evaluado por:</span>
+        <span *ngIf="isReview" class="text-secondary ml-12">Fecha y Hora:</span>
+        
+        <vex-form-adjuntos-btn class="ml-6" *ngIf="!isReview"
           [titulo]="'Archivo (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-btn>

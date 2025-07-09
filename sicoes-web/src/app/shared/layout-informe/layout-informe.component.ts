@@ -1,28 +1,28 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
-import { functionsAlert } from 'src/helpers/functionsAlert';
 import { PersonalPropuesto } from 'src/app/interface/reemplazo-personal.model';
+import { FormBuilder, Validators } from '@angular/forms';
+import { functionsAlert } from 'src/helpers/functionsAlert';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 
 @Component({
-  selector: 'vex-layout-baja-personal-propuesto',
-  templateUrl: './layout-baja-personal-propuesto.component.html',
+  selector: 'vex-layout-informe',
+  templateUrl: './layout-informe.component.html',
+  styleUrls: ['./layout-informe.component.scss'],
   animations: [
     fadeInUp400ms,
     stagger80ms
   ]
 })
-export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implements OnInit {
-
-  @Input() isReview: boolean;
+export class LayoutInformeComponent extends BaseComponent implements OnInit {
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
-  displayedColumnsReview: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaFinContrato'];
 
   listPersonalPropuesto: PersonalPropuesto[] = null;
   listPersonalAgregado: PersonalPropuesto[] = [];
+
+  editable: boolean = true;
 
   constructor(
     private fb: FormBuilder
@@ -31,7 +31,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   }
 
   formGroup = this.fb.group({
-    nombreCompleto: [null, Validators.required],
+    flagInforme: [null, Validators.required],
     fechaDesvinculacion: [null, Validators.required]
   });
 
@@ -81,5 +81,9 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   doNothing2(): void {
 
 
+  }
+
+  setValueCheckedInforme(obj, even) {
+    obj.flagInforme = even.value;
   }
 }

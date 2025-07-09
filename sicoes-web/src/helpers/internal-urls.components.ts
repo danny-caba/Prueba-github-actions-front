@@ -77,6 +77,7 @@ export enum Link {
     CONTRATO_SOLICITUD_REPLACE = 'reemp-personal',
 
     REEMPLAZO_PERSONAL_FORM = 'reemplazo-pers-form',
+    EVAL_REEMPLAZO_PERSONAL_FORM = 'eval-reemplazo-pers-form',
 }
 
 export enum Apis {

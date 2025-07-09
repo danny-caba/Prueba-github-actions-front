@@ -37,9 +37,9 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
 }
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-    color: #000090;  
+    color: #000090;
 }
-  /* Font color */
+
 ::ng-deep input.mat-input-element {
     color: #000090;
 }
@@ -56,29 +56,54 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
 
 ::ng-deep .mat-tooltip-default {
     display: none;
-  }
+}
 
-  ::ng-deep .mat-tooltip {
-    position: relative;
-    background-color: #5c74b8;
-    color: #fff;
-    font-size: 16px;
-    border-radius: 5px;
-    padding: 8px;
-  }
+::ng-deep .mat-tooltip {
+  position: relative;
+  background-color: #5c74b8;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+::ng-deep .mat-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border: 10px;
+  border-color: #5c74b8 transparent transparent transparent;
+}
+
+::ng-deep  .mat-tooltip-text {
+  font-weight: bold;
+}
+
+::ng-deep mat-expansion-panel-header mat-expansion-indicator {
+    color: #000090 !important;  
+    opacity: 1 !important;      
+}
   
-  ::ng-deep .mat-tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -8px;
-    border-width: 8px;
-    border-style: solid;
-    border: 10px;
-    border-color: #5c74b8 transparent transparent transparent;
-  }
+.mat-expansion-panel-header.mat-expanded,
+.mat-expansion-panel-header.mat-expanded:hover,
+.mat-expansion-panel-header.mat-expanded:focus {
+    background-color: rgba(12, 12, 12, 0.048);
+}
   
-  ::ng-deep  .mat-tooltip-text {
-    font-weight: bold;
-  }
+.mat-expansion-panel-header,
+.mat-expansion-panel-header:hover,
+.mat-expansion-panel-header:focus {
+    background-color: rgba(12, 12, 12, 0.048);
+}
+  
+::ng-deep .mat-expansion-indicator::after{
+    border-color: rgb(68, 68, 68, 0.86);
+}
+  
+::ng-deep .mat-tab-label{
+    background-color: rgba(12, 12, 12, 0.048);
+}

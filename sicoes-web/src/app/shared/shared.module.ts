@@ -99,6 +99,7 @@ import { ModalAprobadorHistorialContratoComponent } from './modal-aprobador-hist
 import { LayoutBajaPersonalPropuestoComponent } from './layout-baja-personal-propuesto/layout-baja-personal-propuesto.component';
 import { LayoutPersonalPropuestoComponent } from './layout-personal-propuesto/layout-personal-propuesto.component';
 import { LayoutSolicitudReemplazoSupervisorComponent } from './layout-solicitud-reemplazo-supervisor/layout-solicitud-reemplazo-supervisor.component';
+import { LayoutInformeComponent } from './layout-informe/layout-informe.component';
 
 const sharedComponents = [
 
@@ -159,6 +160,7 @@ const sharedComponents = [
     LayoutBajaPersonalPropuestoComponent,
     LayoutPersonalPropuestoComponent,
     LayoutSolicitudReemplazoSupervisorComponent,
+    LayoutInformeComponent,
 
     ModalTileComponent,
     ModalTileComponent2,

@@ -24,10 +24,12 @@ const URL_DECRYPT = '3ncr1pt10nK3yuR1';
 })
 export class LayoutPersonalPropuestoComponent extends BaseComponent implements OnInit {
 
+  @Input() isReview: boolean;
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'djNepotismo', 'djImpedimento', 'djNoVinculo', 'otrosDocumentos', 'actions'];
+  displayedColumnsReview: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto'];
 
   listPersonalPropuesto: PersonalPropuesto[] = null;
   listPersonalAgregado: PersonalPropuesto[] = [];
@@ -40,6 +42,8 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   evaluar: boolean;
   view: boolean;
   tipoContratoSeleccionado: number;
+  marcacion: 'si' | 'no' | null = null;
+
 
   constructor(
     private fb: FormBuilder,

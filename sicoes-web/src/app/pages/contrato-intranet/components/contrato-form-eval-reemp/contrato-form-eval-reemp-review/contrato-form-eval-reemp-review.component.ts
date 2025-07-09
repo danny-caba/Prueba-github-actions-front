@@ -1,24 +1,24 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 
 @Component({
-  selector: 'vex-reemplazo-pers-form-edit',
-  templateUrl: './reemplazo-pers-form-edit.component.html',
-  styleUrls: ['./reemplazo-pers-form-edit.component.scss'],
+  selector: 'vex-contrato-form-eval-reemp-review',
+  templateUrl: './contrato-form-eval-reemp-review.component.html',
+  styleUrls: ['./contrato-form-eval-reemp-review.component.scss'],
   animations: [
-    fadeInUp400ms,
+    fadeInRight400ms,
     stagger80ms
   ]
 })
-export class ReemplazoPersFormEditComponent extends BaseComponent implements OnInit {
+export class ContratoFormEvalReempReviewComponent extends BaseComponent implements OnInit {
 
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
 
   itemSeccion: number = 0;
-  isReview: boolean = false;
+  isReview: boolean = true;
 
   constructor() {
     super();

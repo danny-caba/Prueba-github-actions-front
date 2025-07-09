@@ -1,0 +1,19 @@
+<div class="mx-0 py-4 border-b overflow-auto">
+    <mat-form-field  class="flex-auto">
+      <mat-label>Fecha Desvinculación</mat-label>
+      <input [formControl]="formGroup.controls.fechaDesvinculacion" type="date" min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+      <mat-error *ngIf="formGroup.get('fechaDesvinculacion').hasError('required')">Ingrese Fecha de Desvinculacion</mat-error>
+    </mat-form-field>
+</div>
+
+<div class="flex items-center">
+    <mat-checkbox color="primary" (change)="setValueCheckedInforme(formGroup, $event)">
+        <span>Informe Reemplazo Personal Propuesto</span>
+    </mat-checkbox>
+    <span class="flex-1"></span>
+    <vex-form-adjuntos-btn class="ml-6"
+      [titulo]="'Archivo (*.pdf)'"
+      [editable]="editable">
+    </vex-form-adjuntos-btn>
+</div>
+  

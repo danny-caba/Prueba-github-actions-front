@@ -6,12 +6,12 @@
                 <div class="flex flex-col sm:flex-row gap-x-8">
                     <div class="flex-auto">
                         <!-- Title -->
-                        <h2 class="text-lg font-bold">Reemplazar personal propuesto</h2>
+                        <h2 class="text-lg font-bold">Evaluar Documentos de Personal de Reemplazo</h2>
                         <mat-divider></mat-divider>
                     </div>
                 </div>
 
-                <div class="w-full overflow-x-auto shadow-2xl rounded items-center">
+                <div class="w-full overflow-x-auto shadow-2xl rounded">
                   <!-- tabla -->
                   <table @stagger [dataSource]="dummyDataSource" class="w-full table-auto" mat-table matSort>
                       <ng-container matColumnDef="tipoDocumento">
@@ -39,48 +39,53 @@
                           <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaRegistro }}</td>
                       </ng-container>
 
-                      <ng-container matColumnDef="fechaInicioContractual">
-                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha inicio<br>contractual</th>
-                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaInicioContractual }}</td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="estadoReemplazo">
-                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Reemplazar<br>Personal Propuesto</th>
+                      <ng-container matColumnDef="estadoEvalDocReemp">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluar<br>Documentación<br>Personal<br>Reemplazo</th>
                           <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoReemplazo }}</td>
                       </ng-container>
 
-                      <ng-container matColumnDef="estadoDocumento">
-                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Documento<br>inicio servicio</th>
+                      <ng-container matColumnDef="estadoAprobInforme">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado<br>Aprobación<br>Informe</th>
                           <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoDocumento }}</td>
                       </ng-container>
 
-                      <!-- Action Column -->
-                      <ng-container matColumnDef="actions">
-                          <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
-                          <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-                            <button mat-menu-item (click)="doNothing()" *ngIf="allowedToReplace">
-                                <mat-icon svgIcon="mat:delete"></mat-icon>
+                      <ng-container matColumnDef="estadoAprobAdenda">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado<br>Aprobación<br>Adenda</th>
+                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoDocumento }}</td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="estadoEvalDocIniServ">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluar<br>Documentos<br>inicio servicio</th>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoDocumento }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                        <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                              <button (click)="$event.stopPropagation()"
+                                    [matMenuTriggerData]="{ customer: row }"
+                                    [matMenuTriggerFor]="actionsMenu"
+                                    mat-icon-button
+                                    type="button">
+                              <mat-icon svgIcon="mat:more_horiz"></mat-icon>
                             </button>
-                          </td>
-                      </ng-container>
+                        </td>
+                    </ng-container>
 
-                      <ng-container matColumnDef="vacio">
-                          <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">No se encuentran datos para mostrar</td>
-                      </ng-container>
+                    <ng-container matColumnDef="vacio">
+                        <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">No se encuentran datos para mostrar</td>
+                    </ng-container>
 
-                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                      <ng-container *ngIf="dummyDataSource?.length === 0">
-                        <tr mat-footer-row *matFooterRowDef="['vacio']"></tr>
-                      </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <ng-container *ngIf="dummyDataSource?.length === 0">
+                      <tr mat-footer-row *matFooterRowDef="['vacio']"></tr>
+                    </ng-container>
                   </table>
                 </div>
 
                 <div class="py-4 border-t flex flex-row justify-end gap-x-4">
-                    <button color="primary" mat-raised-button type="button" (click)="toGoReemplazoPersonalForm()" *ngIf="allowedToReplace">
-                        {{ btnReplace }}
-                    </button>
-                    <button color="primary" mat-raised-button type="button" (click)="toGoBandejaContratos()">
+                    <button color="primary" mat-raised-button type="button" (click)="goToBandejaSolicitudes()">
                         Regresar
                     </button>
                 </div>
@@ -88,3 +93,12 @@
         </form>
     </vex-page-layout-content>
 </vex-page-layout>
+
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+    <ng-template let-row="customer" matMenuContent>
+        <button mat-menu-item (click)="goToEvaluarReemplazoForm(row)">
+            <mat-icon svgIcon="mat:edit"></mat-icon>
+            <span>Evaluar Documentos</span>
+        </button>
+    </ng-template>
+</mat-menu>

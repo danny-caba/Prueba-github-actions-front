@@ -71,11 +71,11 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
 
   goToFormContrato(contrato: any, accion: string) {
     this.contratoService.validarFechaPresentacion(contrato.idSolicitud).subscribe((response) => {
-      if (response) {
+     // if (response) {
         this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST, accion === this.ACCION_VER ? Link.CONTRATO_SOLICITUD_VIEW : Link.CONTRATO_SOLICITUD_EVALUAR, contrato.idSolicitud]);
-      } else {
-        functionsAlert.error('La fecha límite de presentación ha expirado.');
-      }
+     // } else {
+     //   functionsAlert.error('La fecha límite de presentación ha expirado.');
+     // }
     });
   }
 
@@ -119,5 +119,9 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
 
   evaluarDocsInicio(row: any) {
     this.router.navigate(['/intranet/contratos/evaluar-documentos-inicio/' + row.idSolicitud]);
+  }
+
+  evaluarDocsReempPersonal(row: any){
+    this.router.navigate(['/intranet/contratos/' + Link.CONTRATO_SOLICITUD_REPLACE + '/' + row.idSolicitud]);
   }
 }

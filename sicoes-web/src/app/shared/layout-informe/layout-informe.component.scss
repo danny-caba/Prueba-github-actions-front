@@ -33,11 +33,11 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
     width: 133.33333%;
 }
 ::ng-deep .mat-form-field {
-    font-size: 12px;
+    font-size: 12px; // example
 }
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-    color: #000090;  
+    color: #000090;
 }
   /* Font color */
 ::ng-deep input.mat-input-element {
@@ -56,29 +56,34 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
 
 ::ng-deep .mat-tooltip-default {
     display: none;
-  }
+}
 
-  ::ng-deep .mat-tooltip {
-    position: relative;
-    background-color: #5c74b8;
-    color: #fff;
-    font-size: 16px;
-    border-radius: 5px;
-    padding: 8px;
-  }
-  
-  ::ng-deep .mat-tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -8px;
-    border-width: 8px;
-    border-style: solid;
-    border: 10px;
-    border-color: #5c74b8 transparent transparent transparent;
-  }
-  
-  ::ng-deep  .mat-tooltip-text {
-    font-weight: bold;
+::ng-deep .mat-tooltip {
+  position: relative;
+  background-color: #5c74b8; // Cambiar el color de fondo del tooltip
+  color: #fff; // Cambiar el color del texto del tooltip
+  font-size: 16px; // Cambiar el tamaño de la fuente del tooltip
+  border-radius: 5px;
+  padding: 8px;
+}
+
+::ng-deep .mat-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%; // Mostrar la flecha en la parte superior del tooltip
+  left: 50%;
+  margin-left: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border: 10px;
+  border-color: #5c74b8 transparent transparent transparent; // Cambiar el color de la flecha
+}
+
+::ng-deep  .mat-tooltip-text {
+  font-weight: bold;
+}
+
+::ng-deep .mat-checkbox-layout {
+    border-top: none !important;
+    margin-top: 0 !important;
   }

@@ -31,13 +31,19 @@ import { ContratoIntranetListComponent } from './components/contrato-intranet-li
 import { ContratoFormEvaluarComponent } from './components/contrato-form-evaluar/contrato-form-evaluar.component';
 import { ContratoModule } from '../contrato/contrato.module';
 import { ContratoEvaluarDocumentosComponent } from './components/contrato-evaluar-documentos/contrato-evaluar-documentos.component';
+import { ContratoEvaluarReemplazoComponent } from './components/contrato-evaluar-reemplazo/contrato-evaluar-reemplazo.component';
+import { ContratoFormEvalReempComponent } from './components/contrato-form-eval-reemp/contrato-form-eval-reemp.component';
+import { ContratoFormEvalReempReviewComponent } from './components/contrato-form-eval-reemp/contrato-form-eval-reemp-review/contrato-form-eval-reemp-review.component';
 
 
 @NgModule({
   declarations: [
     ContratoIntranetListComponent,
     ContratoFormEvaluarComponent,
-    ContratoEvaluarDocumentosComponent
+    ContratoEvaluarDocumentosComponent,
+    ContratoEvaluarReemplazoComponent,
+    ContratoFormEvalReempComponent,
+    ContratoFormEvalReempReviewComponent
   ],
   imports: [
     CommonModule,

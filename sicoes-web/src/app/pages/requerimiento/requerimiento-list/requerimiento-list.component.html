@@ -1,0 +1,142 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="flex flex-col sm:flex-row gap-4">
+            <div @fadeInUp class="card flex-auto">
+                <!-- TITULO -->
+                <div class="px-6 py-4 border-b flex items-center">
+                    <h2 class="title m-0">Bandeja de Requerimientos</h2>
+                </div>
+                <!-- FILTRO -->
+                <div class="px-6 py-4 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:gap-4">
+                        <mat-form-field  class="flex-auto">
+                            <mat-label>Gerencia/División</mat-label>
+                            <mat-select [formControl]="formGroup.controls.division" (selectionChange)="listarPerfilesPorDivision($event)">
+                                <mat-option *ngFor="let obj of listDivision" [value]="obj">
+                                    {{ obj.deDivision }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Perfil</mat-label>
+                            <input [formControl]="formGroup.controls.perfil" [matAutocomplete]="autoTecnico" matInput (blur)="blurEvaluadorTecnico()">
+                            <mat-autocomplete #autoTecnico="matAutocomplete" [displayWith]="displayFn">
+                                <mat-option *ngFor="let state of filteredStatesTecnico$ | async" [value]="state" class="custom-option">
+                                    <span class="body-1">{{ state.dePerfil }}</span>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <mat-form-field  class="flex-auto date-field">
+                            <mat-label>Fecha Inicio Requerimiento</mat-label>
+                            <input [formControl]="formGroup.controls.fechaInicio" type="date" min="1900-01-01" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput />
+                            <mat-error *ngIf="formGroup.get('fechaInicio').hasError('required')">Ingrese Fecha Inicio</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field  class="flex-auto date-field">
+                            <mat-label>Fecha Fin Requerimiento</mat-label>
+                            <input [formControl]="formGroup.controls.fechaFin" type="date" [min]="getFechaMinima()" matInput />
+                            <mat-error *ngIf="formGroup.get('fechaFin').hasError('required')">Ingrese Fecha Fin</mat-error>
+                            <mat-error *ngIf="formGroup.get('fechaFin').hasError('fechaInvalida')">La fecha fin no puede ser menor a la fecha inicio</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <!--BOTONES-->
+                    <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
+                        <button color="primary" mat-raised-button type="button" (click)="crearRequerimiento('Crear')">
+                            Nuevo
+                        </button>
+                        <button color="primary" mat-raised-button type="button" (click)="buscar()">
+                            Buscar
+                        </button>
+                        <button color="primary" mat-raised-button type="button" (click)="limpiar()">
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+                <!--TABLA-->
+                <div class="px-6 py-4 card overflow-auto">
+                    <table @stagger [dataSource]="dataSource" class="w-full border" mat-table matSort>
+                        <ng-container matColumnDef="expediente">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Número de Expediente</th>
+                            <td mat-cell *matCellDef="let element">{{ element?.nuExpediente }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="fechaRegistro">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha del Requerimiento</th>
+                            <td mat-cell *matCellDef="let element">{{ element?.feRegistro }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="division">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Gerencia/División</th>
+                            <td mat-cell *matCellDef="let element">{{ element?.division?.deDivision }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="perfil">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</th>
+                            <td mat-cell *matCellDef="let element">{{ element?.perfil?.nombre }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="nombresApellidos">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombres y Apellidos</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.reqInvitaciones && element.reqInvitaciones.length > 0 ? element.reqInvitaciones[0]?.supervisora?.nombreRazonSocial : 'Sin invitación' }}
+                              </td>
+                        </ng-container>
+                        <ng-container matColumnDef="estado">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                            <td mat-cell *matCellDef="let element">{{ element?.estado?.nombre }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="acciones">
+                            <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                            <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                              <button (click)="$event.stopPropagation()"
+                                      [matMenuTriggerData]="{ customer: row }"
+                                      [matMenuTriggerFor]="actionsMenu"
+                                      mat-icon-button
+                                      *ngIf="accionesEnabled(row)"
+                                      type="button">
+                                <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                              </button>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="loading">
+                            <td mat-footer-cell *matFooterCellDef colspan="6">
+                                <div style="display: flex; justify-content: center; align-items: center;">
+                                    <mat-spinner class="m-4" [diameter]="24" mode="indeterminate"></mat-spinner>
+                                    <span>Cargando...</span>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="vacio">
+                            <td mat-footer-cell *matFooterCellDef colspan="6" class="text-center text-primary">No se encuentran resultados para los filtros seleccionados</td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                        <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+                        <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+                    </table>
+                    <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)" showFirstLastButtons></mat-paginator>
+                    
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+    <ng-template let-row="customer" matMenuContent>
+        <button (click)="elaborarInforme(row)" *ngIf="mostrarOpcion(ACC_ELABORAR_INFORME, row)" mat-menu-item>
+            <mat-icon svgIcon="mat:edit"></mat-icon>
+            <span>Elaborar Informe</span>
+        </button>
+        <button (click)="enviarInvitacion(row)" *ngIf="mostrarOpcion(ACC_ENVIAR_INVITACION, row)" mat-menu-item>
+            <mat-icon svgIcon="mat:send"></mat-icon>
+            <span>Enviar Invitación</span>
+        </button>
+        <button (click)="archivarRequerimiento(row)" *ngIf="mostrarOpcion(ACC_ARCHIVAR_REQUERIMIENTO, row)" mat-menu-item>
+            <mat-icon svgIcon="mat:archive"></mat-icon>
+            <span>Archivar Requerimiento</span>
+        </button>
+    </ng-template>
+</mat-menu>

@@ -64,6 +64,9 @@ export enum Opcion {
 
     //CONTRATO
     CONTRATO_EVALUACION = 'CONTRATO_EVALUACION',
+
+    //REQUERIMIENTO
+    BANDEJA_REQUERIMIENTO = 'BANDEJA_REQUERIMIENTO',
 }
 
 export const OpcionConfig = [
@@ -251,6 +254,11 @@ export const OpcionPorRol = [{
     Opcion.VIEW_EVALUACION,
     Opcion.BTN_APROBADOR_ACC,
   ]
+},{
+  rol: RolEnum.COO_GESTION,
+  opciones: [
+    Opcion.BANDEJA_REQUERIMIENTO,
+  ]
 }];
 
 const menu01 = {
@@ -415,7 +423,14 @@ const menu20 = {
   icon: 'mat:arrow_circle_right',
   routerLinkActiveOptions: { exact: true }
 };
-
+const menu21 = {
+  codigo: 'menu21',
+  type: 'link',
+  label: 'Gestión de Requerimientos',
+  route: '/intranet/requerimientos',
+  icon: 'mat:arrow_circle_right',
+  routerLinkActiveOptions: { exact: true }
+};
 
 
 export const RolMenu = [
@@ -502,5 +517,9 @@ export const RolMenu = [
   { ROL: { CODIGO: RolEnum.EVA_CONTRA }, MENU: [menu16, menu17], path: [
     'intranet/contratos',
     'intranet/bandeja-contratos'
+  ]},
+  { ROL: { CODIGO: RolEnum.COO_GESTION }, MENU: [menu21], path: [
+    'intranet/requerimientos',
+    'intranet/requerimientos/informes/add'
   ]},
 ]

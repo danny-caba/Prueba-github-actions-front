@@ -1,0 +1,9 @@
+<mat-accordion>
+    <ng-container *ngFor="let seccion of secciones">
+        <vex-layout-informe-seccion-pn
+            [ordenSeccion]="seccion.orden"
+            [tituloSeccion]="seccion.descripcion"
+            [obligatorio]="seccion.obligatorio"
+        ></vex-layout-informe-seccion-pn>
+    </ng-container>
+</mat-accordion>

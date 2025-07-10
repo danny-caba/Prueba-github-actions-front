@@ -41,10 +41,11 @@ export class functions{
         return true;
     }
  
-    static paramsAdd(params: HttpParams, label:string, value:any){
+    static paramsAdd(params: HttpParams, label:string, value:any): HttpParams{
         if(value !== null){
-            params.append(label, value);
+            return params.append(label, value);
         }
+        return params;
     }
 
     static esVacio(variable): boolean{

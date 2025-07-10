@@ -74,6 +74,13 @@ export enum Link {
 
     CONTRATO_SOLICITUD_ADD = 'registro',
     CONTRATO_SOLICITUD_VIEW = 'ver',
+
+    //REQUERIMIENTOS
+    REQUERIMIENTOS_LIST = 'requerimientos',
+    REQUERIMIENTOS_INFORME = 'informes',
+    INFORME_ADD = 'add',
+    REQUERIMIENTOS_INVITACION = 'invitaciones',
+    INVITACION_SEND = 'send',
 }
 
 export enum Apis {

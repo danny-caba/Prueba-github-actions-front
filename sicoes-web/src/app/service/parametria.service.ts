@@ -120,5 +120,10 @@ export class ParametriaService {
     return this.http.get<any>(urlEndpoint);
   }
 
+  listarDivisionesPorCoordinador(): Observable<any> {
+    let urlEndpoint = `${this._path_serve}/api/divisiones/coordinador`;
+    return this.http.get<any>(urlEndpoint);
+  }
+
 }
 

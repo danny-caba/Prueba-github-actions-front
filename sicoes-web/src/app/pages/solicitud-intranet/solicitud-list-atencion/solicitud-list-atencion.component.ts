@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
@@ -12,6 +12,11 @@ import { ParametriaService } from 'src/app/service/parametria.service';
 import { Solicitud } from 'src/app/interface/solicitud.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalNotificacionComponent } from 'src/app/shared/modal-notificacion/modal-notificacion.component';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { BehaviorSubject } from 'rxjs';
+import { ViewChild } from '@angular/core';
+import { MatTabGroup } from '@angular/material/tabs';
+
 
 @Component({
   selector: 'vex-solicitud-list-atencion',
@@ -45,6 +50,7 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
   listTipoSolicitud: any[]
   listEstadoRevision: any[]
   listEstadoEvaluacion: any[]
+  tabRequerimientoActivo = false
 
   displayedColumns: string[] = [
     'nroExpediente',
@@ -62,9 +68,12 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
     'actions'
   ];
 
+  @ViewChild('tabgroup') tabGroup: MatTabGroup;
+
   constructor(
     private authFacade: AuthFacade,
     private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private intUrls: InternalUrls,
     private dialog: MatDialog,
@@ -78,6 +87,25 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
   ngOnInit(): void {
     this.cargarCombo();
     this.cargarTabla();
+
+    // Verificar si hay query parameter para abrir el tab de requerimientos
+    this.route.queryParams.subscribe(params => {
+      if (params['tab'] === 'requerimientos') {
+        setTimeout(() => {
+          if (this.tabGroup) {
+            this.tabGroup.selectedIndex = 1;
+            this.tabRequerimientoActivo = true;
+            this.activarTabRequerimiento();
+            // Limpiar el query parameter después de cambiar al tab
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: {},
+              replaceUrl: true
+            });
+          }
+        }, 100);
+      }
+    });
   }
 
   cargarCombo() {
@@ -162,6 +190,27 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
     }).afterClosed().subscribe(() => {
       this.cargarTabla();
     });
+  }
+  
+  onTabChange(event: MatTabChangeEvent) {
+    if (event.index === 1) {
+      this.tabRequerimientoActivo = true;
+      this.activarTabRequerimiento();
+    }
+  }
+
+  private activarTabRequerimiento() {
+    if (!this['_tabRequerimientoSubject']) {
+      this['_tabRequerimientoSubject'] = new BehaviorSubject<boolean>(false);
+    }
+    this['_tabRequerimientoSubject'].next(true);
+  }
+
+  get tabRequerimientoObservable() {
+    if (!this['_tabRequerimientoSubject']) {
+      this['_tabRequerimientoSubject'] = new BehaviorSubject<boolean>(false);
+    }
+    return this['_tabRequerimientoSubject'].asObservable();
   }
 
 }

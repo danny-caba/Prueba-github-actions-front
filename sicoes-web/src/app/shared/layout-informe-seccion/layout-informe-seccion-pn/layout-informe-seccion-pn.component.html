@@ -1,0 +1,13 @@
+
+
+<mat-expansion-panel class="mt-2" expanded="true">
+    <mat-expansion-panel-header>
+        <mat-panel-title class="font-bold">{{ordenSeccion}}.- {{tituloSeccion}}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+        <vex-layout-input matExpansionPanelContent
+            [label]="tituloSeccion"
+            [obligatorio]="obligatorio"
+        ></vex-layout-input>
+    </ng-template>
+</mat-expansion-panel>

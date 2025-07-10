@@ -1,0 +1,25 @@
+
+
+
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="card overflow-auto -mt-16">
+            <!--TITULO-->
+            <div class="px-6 py-4 border-b flex items-center">
+                <h2 class="title m-0">ELABORAR INFORME</h2>
+            </div>
+            <ng-container>
+                <vex-requerimiento-informe-pn-add></vex-requerimiento-informe-pn-add>
+            </ng-container>
+
+            <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="add">
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="regresar()">Regresar</button>
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="enviar()">Enviar Informe</button>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

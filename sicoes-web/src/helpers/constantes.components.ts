@@ -41,6 +41,7 @@ export enum RolEnum {
     ADM_BLOQU = '09',
     ADM_CONFIG = '11',
     EVA_CONTRA = '12',
+    COO_GESTION = '13',
 }
 
 export enum AprobadorAccion {
@@ -263,4 +264,12 @@ export enum origenRegistroEnum {
 export enum flagEnum {
     VIGENTE = '1',
     NO_VIGENTE = '0'
+}
+
+export enum EstadoRequerimientoEnum {
+    PRELIMINAR = 'PRELIMINAR',
+    EN_PROCESO = 'EN_PROCESO',
+    OBSERVADO = 'OBSERVADO',
+    CONCLUIDO = 'CONCLUIDO',
+    ARCHIVADO = 'ARCHIVADO'
 }

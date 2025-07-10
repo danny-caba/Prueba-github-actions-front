@@ -63,4 +63,8 @@ export class SupervisoraService {
     return this.http.get<Supervisora>(urlEndpoint);
   }
 
+  listarProfesionalesPerfil(idPerfil): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/supervisoras/profesionales/perfil?idPerfil=${idPerfil}`
+    return this.http.get<any>(urlEndpoint);
+  }
 }

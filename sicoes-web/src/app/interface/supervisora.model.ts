@@ -51,3 +51,9 @@ export class Supervisora {
     fechaIngreso: string
     estado: string
 }
+export class ProfesionalPerfil {
+    perfil: string
+    documento: string
+    nombre: string
+    correo: string
+}

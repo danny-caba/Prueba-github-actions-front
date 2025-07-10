@@ -96,6 +96,11 @@ import { ModalAgregarRepresentanteComponent } from './modal-agregar-representant
 import { ModalAprobadorContratoComponent } from './modal-aprobador-contrato/modal-aprobador-contrato.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalAprobadorHistorialContratoComponent } from './modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
+import { ModalCrearRequerimientoComponent } from './modal-crear-requerimiento/modal-crear-requerimiento.component';
+import { ModalArchivarRequerimientoComponent } from './modal-archivar-requerimiento/modal-archivar-requerimiento.component';
+import { LayoutInformeSeccionPNComponent } from './layout-informe-seccion/layout-informe-seccion-pn/layout-informe-seccion-pn.component';
+import { LayoutInputComponent } from './layout-input/layout-input.component';
+import { OptionRoleRequerimientoDirective } from '../auth/interceptors/option-role-requerimiento.directive';
 
 const sharedComponents = [
 
@@ -195,14 +200,19 @@ const sharedComponents = [
     ModalConfigurarPaceComponent,
     ModalAgregarRepresentanteComponent,
     ModalAprobadorContratoComponent,
-    ModalAprobadorHistorialContratoComponent
+    ModalAprobadorHistorialContratoComponent,
+    ModalAgregarRepresentanteComponent,
+    ModalCrearRequerimientoComponent,
+    ModalArchivarRequerimientoComponent,
+    LayoutInformeSeccionPNComponent,
+    LayoutInputComponent,
   ];
 
 @NgModule({
   imports:      [ CommonModule, MaterialModule,FormsModule, ReactiveFormsModule, InputMaskModule, MatDialogModule],
-  declarations: [ ...sharedComponents, OptionRoleDirective ],
-  exports:      [ ...sharedComponents, CommonModule, FormsModule, ReactiveFormsModule, OptionRoleDirective ],
-  providers:    [ LoadingDialogService, DatePipe, OptionRoleDirective ],
+  declarations: [ ...sharedComponents, OptionRoleDirective, OptionRoleRequerimientoDirective ],
+  exports:      [ ...sharedComponents, CommonModule, FormsModule, ReactiveFormsModule, OptionRoleDirective, OptionRoleRequerimientoDirective],
+  providers:    [ LoadingDialogService, DatePipe, OptionRoleDirective, OptionRoleRequerimientoDirective ],
   entryComponents: [...sharedComponents]
 })
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ProcesoConsulta } from '../interface/proceso.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ConfigService } from '../core/services';
 import { Pageable } from '../interface/pageable.model';
 import { functions } from 'src/helpers/functions';
@@ -53,6 +53,13 @@ export class PersonaService {
   validarTrabajadorOsi(codigoRuc: string){
     let urlEndpoint = `${this._path_serve}/api/personas/validar-trabajador`
     return this.http.post<any>(urlEndpoint, codigoRuc);
+  }
+
+  validarVinculoLaboral(numeroDocumento: string){
+    let urlEndpoint = `${this._path_serve}/api/vinculo-laboral`
+    let params = new HttpParams();
+    params = functions.paramsAdd(params, 'numeroDocumento', numeroDocumento);
+    return this.http.get<any>(urlEndpoint, { params });
   }
 
 }

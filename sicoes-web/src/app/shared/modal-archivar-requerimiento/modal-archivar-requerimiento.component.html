@@ -1,0 +1,17 @@
+<form [formGroup]="formGroup">
+    <div class="flex items-center" mat-dialog-title>
+        <p class="font-bold flex-auto text-center">{{ title }} Requerimiento</p>
+    </div>
+    <mat-dialog-content class="flex flex-col">
+        <mat-form-field  class="mt-6 flex-auto">
+            <mat-label>Observación</mat-label>
+            <textarea matInput formControlName="deObservacion" maxlength="5000"></textarea>
+            <mat-hint align="end">{{ formGroup.get('deObservacion')?.value?.length || 0 }} / 5000</mat-hint>
+            <mat-error *ngIf="formGroup.get('deObservacion')?.errors?.['required']">El campo es requerido</mat-error>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-raised-button color="primary" (click)="accion('CANCELAR')" >Cancelar</button>
+        <button mat-raised-button color="primary" (click)="accion('GRABAR')">Grabar</button>
+    </mat-dialog-actions>
+</form>

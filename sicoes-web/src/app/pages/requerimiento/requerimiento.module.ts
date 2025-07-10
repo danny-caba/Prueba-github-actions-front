@@ -23,26 +23,25 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 
 import { SharedModule } from 'src/app/shared/shared.module';
-import { SolicitudIntranetRoutingModule } from './solicitud-intranet-routing.module';
-import { SolicitudIntranetListIntranetComponent } from './solicitud-list-intranet/solicitud-list-intranet.component';
-import { SolicitudListPendientesComponent } from './solicitud-list-pendientes/solicitud-list-pendientes.component';
-import { SolicitudPnProcesarComponent } from './solicitud-pn-procesar/solicitud-pn-procesar.component';
-import { SolicitudModule } from '../solicitud/solicitud.module';
-import { SolicitudListAtencionComponent } from './solicitud-list-atencion/solicitud-list-atencion.component';
-import { SolicitudListAprobacionComponent } from './solicitud-list-aprobacion/solicitud-list-aprobacion.component';
-import { RequerimientoModule } from '../requerimiento/requerimiento.module';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RequerimientoListComponent } from './requerimiento-list/requerimiento-list.component';
+import { RequerimientoRoutingModule } from './requerimiento-routing.module';
+import { MaterialModule } from 'src/app/shared/material.module';
+import { InputMaskModule } from '@ngneat/input-mask';
+import { RequerimientoInformeAddComponent } from './requerimiento-informe-add/requerimiento-informe-add.component';
+import { RequerimientoInformePnAddComponent } from './requerimiento-informe-add/informe-pn-add/requerimiento-informe-pn-add.component';
+import { RequerimientoInvitacionListComponent } from './requerimiento-invitacion-list/requerimiento-invitacion-list.component';
 
 @NgModule({
   declarations: [
-    SolicitudIntranetListIntranetComponent,
-    SolicitudListPendientesComponent,
-    SolicitudPnProcesarComponent,
-    SolicitudListAtencionComponent,
-    SolicitudListAprobacionComponent
+    RequerimientoListComponent,
+    RequerimientoInformeAddComponent,
+    RequerimientoInformePnAddComponent,
+    RequerimientoInvitacionListComponent
   ],
   imports: [
     CommonModule,
-    SolicitudIntranetRoutingModule,
+    RequerimientoRoutingModule,
     PageLayoutModule,
     FormsModule,
     ReactiveFormsModule,
@@ -65,9 +64,15 @@ import { RequerimientoModule } from '../requerimiento/requerimiento.module';
     MatExpansionModule,
     MatMenuModule,
     MatDatepickerModule,
+    MatProgressSpinnerModule,
     SharedModule,
-    SolicitudModule,
-    RequerimientoModule
+    InputMaskModule,
+    MaterialModule
+  ],
+  exports:[
+    RequerimientoListComponent,
+    RequerimientoInformeAddComponent,
+    RequerimientoInformePnAddComponent
   ]
 })
-export class SolicitudIntranetModule { }
+export class RequerimientoModule { }

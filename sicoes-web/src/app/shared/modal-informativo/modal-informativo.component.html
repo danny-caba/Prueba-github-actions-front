@@ -1,0 +1,15 @@
+
+  <div>
+   <h1 mat-dialog-title class="w-full py-4 font-semibold cabecera pl-4">
+    {{title}}
+  </h1>
+
+    <mat-dialog-content class="flex flex-col mb-4 text-center">
+        <p>{{ description }}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end" class="px-6">
+        <button style="width: clamp(80px, 40%, 180px);" mat-raised-button color="primary" (click)="closeModalConfirm()">Aceptar</button>
+    </mat-dialog-actions>
+</div> 
+<br>
+  

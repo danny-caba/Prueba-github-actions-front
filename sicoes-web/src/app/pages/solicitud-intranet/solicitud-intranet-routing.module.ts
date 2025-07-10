@@ -10,6 +10,7 @@ import { SolicitudIntranetListIntranetComponent } from './solicitud-list-intrane
 import { SolicitudListPendientesComponent } from './solicitud-list-pendientes/solicitud-list-pendientes.component';
 import { SolicitudPnProcesarComponent } from './solicitud-pn-procesar/solicitud-pn-procesar.component';
 import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
+import { HistoriaAprobacionesComponent } from './solicitud-list-aprobacion/historial-aprobaciones/historial-aprobaciones.component';
 
 
 const routes: VexRoutes = [{
@@ -110,6 +111,11 @@ const routes: VexRoutes = [{
       path: Link.SOLICITUDES_LIST_APROBACION,
       canActivate: [AuthGuardService, RoleGuardService],
       component: SolicitudListAprobacionComponent
+    }
+  ,{
+      path: Link.SOLICITUDES_LIST_APROBACION+"/historial",
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: HistoriaAprobacionesComponent
     }]
   }];
 

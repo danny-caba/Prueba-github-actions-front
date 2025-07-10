@@ -96,6 +96,8 @@ import { ModalAgregarRepresentanteComponent } from './modal-agregar-representant
 import { ModalAprobadorContratoComponent } from './modal-aprobador-contrato/modal-aprobador-contrato.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalAprobadorHistorialContratoComponent } from './modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
+import { ModalAprobadorPersonalComponent } from './modal-aprobador-personal/modal-aprobador-personal.component';
+import { ModalInformativoComponent } from './modal-informativo/modal-informativo.component';
 
 const sharedComponents = [
 
@@ -195,7 +197,9 @@ const sharedComponents = [
     ModalConfigurarPaceComponent,
     ModalAgregarRepresentanteComponent,
     ModalAprobadorContratoComponent,
-    ModalAprobadorHistorialContratoComponent
+    ModalAprobadorHistorialContratoComponent,
+    ModalAprobadorPersonalComponent,
+    ModalInformativoComponent
   ];
 
 @NgModule({

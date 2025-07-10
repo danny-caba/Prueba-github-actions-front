@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Acción Aprobador</h2>
+
+<mat-dialog-content>
+  <div class="flex flex-col gap-4">
+    <mat-form-field class="w-full">
+      <mat-label>Observaciones</mat-label>
+      <textarea matInput [formControl]="observacion" rows="4" maxlength="4000"
+                placeholder="Ingrese una observación"></textarea>
+      <mat-hint align="end">{{ observacion.value?.length || 0 }}/4000</mat-hint>
+      <mat-error *ngIf="observacion.hasError('required')">La observación es requerida.</mat-error>
+      <mat-error *ngIf="observacion.hasError('maxlength')">La observación no puede exceder los 4000 caracteres.</mat-error>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="realizarAccion('APROBAR')">Aprobar</button>
+  <button mat-raised-button color="primary" (click)="realizarAccion('RECHAZAR')">Rechazar</button>
+  <button mat-raised-button color="primary" (click)="cancelar()">Cancelar</button>
+</mat-dialog-actions>

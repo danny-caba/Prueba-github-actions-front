@@ -30,6 +30,9 @@ import { SolicitudPnProcesarComponent } from './solicitud-pn-procesar/solicitud-
 import { SolicitudModule } from '../solicitud/solicitud.module';
 import { SolicitudListAtencionComponent } from './solicitud-list-atencion/solicitud-list-atencion.component';
 import { SolicitudListAprobacionComponent } from './solicitud-list-aprobacion/solicitud-list-aprobacion.component';
+import { ReemplazarPersonalComponent } from './solicitud-list-aprobacion/reemplazar-personal-propuesto/reemplazar-personal-propuesto.component';
+import { AdendaReemplazarPersonalComponent } from './solicitud-list-aprobacion/adenda-reemplazar-personal/adenda-reemplazar-personal.component';
+import { HistoriaAprobacionesComponent } from './solicitud-list-aprobacion/historial-aprobaciones/historial-aprobaciones.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,10 @@ import { SolicitudListAprobacionComponent } from './solicitud-list-aprobacion/so
     SolicitudListPendientesComponent,
     SolicitudPnProcesarComponent,
     SolicitudListAtencionComponent,
-    SolicitudListAprobacionComponent
+    SolicitudListAprobacionComponent,
+    ReemplazarPersonalComponent,
+    AdendaReemplazarPersonalComponent,
+    HistoriaAprobacionesComponent
   ],
   imports: [
     CommonModule,

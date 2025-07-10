@@ -81,6 +81,10 @@ export enum Link {
     INFORME_ADD = 'add',
     REQUERIMIENTOS_INVITACION = 'invitaciones',
     INVITACION_SEND = 'send',
+
+    //REQUERIMIENTOS APROBACIONES
+    APROBACION_LIST_HISTORIAL = 'historial',
+
 }
 
 export enum Apis {

@@ -139,7 +139,7 @@
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-              <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource.data.length === 0 ) }"></tr>
+              <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource?.data?.length === 0 ) }"></tr>
             </table>
             <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)" showFirstLastButtons></mat-paginator>
           </div>
@@ -300,9 +300,12 @@
             <mat-paginator #paginatorPerfeccionamiento class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChangePerfeccionamiento($event)" showFirstLastButtons></mat-paginator>
             </div>
         </mat-tab>
+         <mat-tab label="Supervisor Persona Natural">
+          <vex-requerimiento-aprobacion-supervisor-pn></vex-requerimiento-aprobacion-supervisor-pn>
+         </mat-tab>
         </mat-tab-group>
     </div>
-  </vex-page-layout-content>
+  </vex-page-layout-content>                             
 </vex-page-layout>
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">

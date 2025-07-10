@@ -1,0 +1,76 @@
+<div class="w-full h-full p-gutter container flex flex-col bg-principal">
+  <div class="overflow-hidden flex-auto" style="background-color: transparent">
+    <div class="chat-pattern relative pl-4">
+      <div class="w-full h-full overflow-hidden flex flex-col">
+        <div class="py-4 px-6 bg-white">
+          <div class="flex flex-row mb-4 items-center">
+            <div class="">
+              <div class="text-primary text-xl font-bold">
+                Evaluar invitación
+              </div>
+            </div>
+          </div>
+          <div class="">
+            <mat-divider></mat-divider>
+          </div>
+        </div>
+
+        <vex-scrollbar class="px-6 flex-auto bg-white">
+          <ng-container *ngTemplateOutlet="seccion"></ng-container>
+        </vex-scrollbar>
+        <div class="py-4 border-t flex flex-row">
+          <button
+            color="primary"
+            mat-stroked-button
+            type="button"
+            (click)="cancelar()"
+          >
+            Salir
+          </button>
+          <span class="flex-auto"></span>
+          <div class="flex flex-row gap-x-6">
+            <button color="primary" mat-raised-button type="button">
+              <span>Rechazar</span>
+            </button>
+            <button color="primary" mat-raised-button type="button">
+              <span>Aceptar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #seccion>
+  <div>
+    <div class="flex items-center text-primary gap-2">
+      <div
+        class="rounded-full border-2 border-primary w-5 h-5 flex items-center justify-center"
+      >
+        <mat-icon svgIcon="mat:arrow_forward"></mat-icon>
+      </div>
+      <p class="title text-primary font-bold text-sm">
+        Datos de la invitación:
+      </p>
+    </div>
+    <div class="text-primary px-4 py-4">
+      <div class="grid grid-cols-2 md:grid-cols-4">
+        <label class="md:col-span-1">Fecha de invitación:</label>
+        <label class="font-bold md:col-span-3"> 2025-06-01 14:00 </label>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4">
+        <label class="md:col-span-1">Fecha que se cancela la invitación:</label>
+        <label class="font-bold md:col-span-3"> 2025-12-14 15:30 </label>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4">
+        <label>Gerencia / División:</label>
+        <label class="font-bold"> Energía </label>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4">
+        <label>Perfil:</label>
+        <label class="font-bold"> Supervisor Técnico </label>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -4,7 +4,7 @@ import { ConfigService } from '../core/services';
 import { Requerimiento, RequerimientoInformeDetalle } from '../interface/requerimiento.model';
 import { Pageable } from '../interface/pageable.model';
 import { functions } from 'src/helpers/functions';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +59,19 @@ export class RequerimientoService {
     let urlEndpoint = `${this._path_serve}/api/invitaciones`
     let params = functions.obtenerParams(filtro)
     return this.http.get<Pageable<Requerimiento>>(urlEndpoint, { params });
+  }
+
+  listarRequerimientosAprobaciones(filtro) {
+    let urlEndpoint = `${this._path_serve}/api/requerimientos`;
+    let params = functions.obtenerParams(filtro);
+    return this.http.get<Pageable<any>>(urlEndpoint, {
+      params: params,
+    });
+  }
+
+  obtenerHistorialAprobacion(uuid: string): Observable<any> {
+    const url = `${this._path_serve}/api/aprobaciones/${uuid}/historial`;
+    return this.http.get<any>(url);
   }
 
 }

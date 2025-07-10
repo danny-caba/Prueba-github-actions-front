@@ -31,13 +31,18 @@ import { InputMaskModule } from '@ngneat/input-mask';
 import { RequerimientoInformeAddComponent } from './requerimiento-informe-add/requerimiento-informe-add.component';
 import { RequerimientoInformePnAddComponent } from './requerimiento-informe-add/informe-pn-add/requerimiento-informe-pn-add.component';
 import { RequerimientoInvitacionListComponent } from './requerimiento-invitacion-list/requerimiento-invitacion-list.component';
+import { RequerimientoAprobacionHistorialComponent } from './requerimiento-aprobacion-historial/requerimiento-aprobacion-historial.component';
+import { RequerimientoAprobacionSupervisorPnComponent } from './requerimiento-aprobacion-supervisor-pn/requerimiento-aprobacion-supervisor-pn.component';
+import { ScrollbarModule } from 'src/@vex/components/scrollbar/scrollbar.module';
 
 @NgModule({
   declarations: [
     RequerimientoListComponent,
     RequerimientoInformeAddComponent,
     RequerimientoInformePnAddComponent,
-    RequerimientoInvitacionListComponent
+    RequerimientoInvitacionListComponent,
+    RequerimientoAprobacionHistorialComponent,
+    RequerimientoAprobacionSupervisorPnComponent
   ],
   imports: [
     CommonModule,
@@ -67,12 +72,14 @@ import { RequerimientoInvitacionListComponent } from './requerimiento-invitacion
     MatProgressSpinnerModule,
     SharedModule,
     InputMaskModule,
-    MaterialModule
+    MaterialModule,
+    ScrollbarModule
   ],
   exports:[
     RequerimientoListComponent,
     RequerimientoInformeAddComponent,
-    RequerimientoInformePnAddComponent
+    RequerimientoInformePnAddComponent,
+    RequerimientoAprobacionSupervisorPnComponent
   ]
 })
 export class RequerimientoModule { }

@@ -29,12 +29,16 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ScrollbarModule } from 'src/@vex/components/scrollbar/scrollbar.module';
 import { InvitacionListComponent } from './invitacion-list/invitacion-list.component';
 import { InvitacionFormComponent } from './invitacion-form/invitacion-form.component';
+import { InvitacionDetalleComponent } from './invitacion-detalle/invitacion-detalle.component';
+import { InvitacionSupervisorPnComponent } from './invitacion-list/components/invitacion-supervisor-pn/invitacion-supervisor-pn.component';
 
 
 @NgModule({
   declarations: [
     InvitacionListComponent,
-    InvitacionFormComponent
+    InvitacionFormComponent,
+    InvitacionDetalleComponent,
+    InvitacionSupervisorPnComponent
   ],
   imports: [
     CommonModule,

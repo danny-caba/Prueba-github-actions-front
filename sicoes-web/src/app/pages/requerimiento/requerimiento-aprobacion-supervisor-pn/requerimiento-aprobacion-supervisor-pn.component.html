@@ -1,0 +1,203 @@
+<div class="flex flex-col sm:flex-row gap-4">
+  <div @fadeInUp class="flex-auto">
+    <mat-divider class="-mr-6 -ml-6"></mat-divider>
+    <div class="py-4 flex flex-col" [formGroup]="formGroup">
+      <div class="flex flex-col sm:flex-row sm:gap-3 flex-wrap">
+        <mat-form-field class="flex-auto">
+          <mat-label>N° de Expediente</mat-label>
+          <input formControlName="nroExpediente" matInput maxlength="15" />
+        </mat-form-field>
+
+        <mat-form-field class="flex-auto">
+          <mat-label>Gerencia / División</mat-label>
+          <mat-select formControlName="gerencia">
+            <mat-option
+              *ngFor="let division of listDivision"
+              [value]="division.idDivision"
+            >
+              {{ division.deDivision }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="flex-auto">
+          <mat-label>Perfil</mat-label>
+          <mat-select
+            formControlName="perfil"
+            (selectionChange)="onPerfilChange($event.value)"
+          >
+            <mat-option *ngFor="let perfil of perfiles" [value]="perfil">
+              {{ perfil.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col sm:flex-row sm:gap-3 flex-wrap">
+        <mat-form-field class="flex-auto">
+          <mat-label>Nombres y Apellidos</mat-label>
+          <mat-select formControlName="supervisor">
+            <mat-option *ngFor="let obj of listDivisionesUsuario" [value]="obj">
+              {{ obj.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="flex-auto">
+          <mat-label>Estado de Revisión</mat-label>
+          <mat-select
+            formControlName="estadoRevision"
+            [compareWith]="compareSelecIdListadoDetalle"
+          >
+            <mat-option *ngFor="let obj of listEstadoRevision" [value]="obj">
+              {{ obj.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
+        <button
+          color="primary"
+          style="margin-left: 0px; margin-right: auto"
+          mat-raised-button
+          type="button"
+        >
+          Aprobar Paces
+        </button>
+        <button
+          color="primary"
+          mat-raised-button
+          type="button"
+          (click)="buscar()"
+        >
+          Buscar
+        </button>
+        <button
+          color="primary"
+          mat-raised-button
+          type="button"
+          (click)="limpiar()"
+        >
+          Limpiar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="overflow-auto shadow-2xl rounded">
+  <table mat-table [dataSource]="dataSource" class="w-full" matSort>
+    <!-- Tipo Aprobación -->
+    <ng-container matColumnDef="tipoAprobacion">
+      <th mat-header-cell *matHeaderCellDef>Tipo Aprobación</th>
+      <td mat-cell *matCellDef="let e">
+        <mat-checkbox color="primary" class="flex-auto">
+          {{ e.tipoAprobacion }}
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- Número expediente -->
+    <ng-container matColumnDef="nroExpediente">
+      <th mat-header-cell *matHeaderCellDef>N° Expediente</th>
+      <td mat-cell *matCellDef="let e">{{ e.nroExpediente }}</td>
+    </ng-container>
+
+    <!-- Documento/Informe -->
+    <ng-container matColumnDef="documento">
+      <th mat-header-cell *matHeaderCellDef>Documento / Informe</th>
+      <td mat-cell *matCellDef="let e">
+        <a
+          href="{{ e.documentoUrl }}"
+          target="_blank"
+          class="text-primary underline"
+        >
+          {{ e.documentoNombre || "Docum.PDF" }}
+        </a>
+      </td>
+    </ng-container>
+
+    <!-- Nombres y Apellidos -->
+    <ng-container matColumnDef="nombres">
+      <th mat-header-cell *matHeaderCellDef>Nombres y Apellidos</th>
+      <td mat-cell *matCellDef="let e">{{ e.nombres }}</td>
+    </ng-container>
+
+    <!-- División/Gerencia -->
+    <ng-container matColumnDef="gerencia">
+      <th mat-header-cell *matHeaderCellDef>División / Gerencia</th>
+      <td mat-cell *matCellDef="let e">{{ e.gerencia }}</td>
+    </ng-container>
+
+    <!-- Fecha Ingreso -->
+    <ng-container matColumnDef="fechaIngreso">
+      <th mat-header-cell *matHeaderCellDef>Fecha Ingreso</th>
+      <td mat-cell *matCellDef="let e">
+        {{ e.fechaIngreso | date : "dd/MM/yyyy" }}
+      </td>
+    </ng-container>
+
+    <!-- Estado Aprobación -->
+    <ng-container matColumnDef="estadoAprobacion">
+      <th mat-header-cell *matHeaderCellDef>Estado Aprobación</th>
+      <td mat-cell *matCellDef="let e">{{ e.estadoAprobacion }}</td>
+    </ng-container>
+
+    <!-- Estado Firma Jefe Unidad -->
+    <ng-container matColumnDef="firmaJefeUnidad">
+      <th mat-header-cell *matHeaderCellDef>Firma Jefe Unidad</th>
+      <td mat-cell *matCellDef="let e">{{ e.firmaJefeUnidad }}</td>
+    </ng-container>
+
+    <!-- Estado Firma Gerente -->
+    <ng-container matColumnDef="firmaGerente">
+      <th mat-header-cell *matHeaderCellDef>Firma Gerente</th>
+      <td mat-cell *matCellDef="let e">{{ e.firmaGerente }}</td>
+    </ng-container>
+
+    <!-- Estado Aprobación GPPM -->
+    <ng-container matColumnDef="aprobacionGppm">
+      <th mat-header-cell *matHeaderCellDef>Aprobación GPPM</th>
+      <td mat-cell *matCellDef="let e">{{ e.aprobacionGppm }}</td>
+    </ng-container>
+
+    <!-- Estado Aprobación GSE -->
+    <ng-container matColumnDef="aprobacionGse">
+      <th mat-header-cell *matHeaderCellDef>Aprobación GSE</th>
+      <td mat-cell *matCellDef="let e">{{ e.aprobacionGse }}</td>
+    </ng-container>
+
+    <!-- Acciones -->
+    <ng-container matColumnDef="actions">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+      <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+        <button
+          (click)="$event.stopPropagation()"
+          [matMenuTriggerData]="{ customer: row }"
+          [matMenuTriggerFor]="actionsMenu"
+          mat-icon-button
+          type="button"
+        >
+          <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    class="sticky left-0"
+    [pageSizeOptions]="[10, 20, 30]"
+    (page)="pageChange($event)"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>
+
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+  <ng-template let-row="customer" matMenuContent>
+    <button mat-menu-item (click)="verHistorial(row)">
+      <mat-icon svgIcon="mat:history"></mat-icon>
+      <span>Historial</span>
+    </button>
+  </ng-template>
+</mat-menu>

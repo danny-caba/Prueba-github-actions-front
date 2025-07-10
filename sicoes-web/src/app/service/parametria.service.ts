@@ -125,5 +125,10 @@ export class ParametriaService {
     return this.http.get<any>(urlEndpoint);
   }
 
+  listarAprobadores(idPerfil: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/supervisoras/profesionales/perfil?idPerfil=${idPerfil}`;
+    return this.http.get<any>(urlEndpoint);
+  }
+
 }
 

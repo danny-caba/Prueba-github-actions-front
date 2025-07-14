@@ -101,6 +101,7 @@ import { ModalArchivarRequerimientoComponent } from './modal-archivar-requerimie
 import { LayoutInformeSeccionPNComponent } from './layout-informe-seccion/layout-informe-seccion-pn/layout-informe-seccion-pn.component';
 import { LayoutInputComponent } from './layout-input/layout-input.component';
 import { OptionRoleRequerimientoDirective } from '../auth/interceptors/option-role-requerimiento.directive';
+import { ModalAprobadorSupervisorPnComponent } from './modal-aprobador-supervisor-pn/modal-aprobador-supervisor-pn.component';
 
 const sharedComponents = [
 
@@ -206,6 +207,7 @@ const sharedComponents = [
     ModalArchivarRequerimientoComponent,
     LayoutInformeSeccionPNComponent,
     LayoutInputComponent,
+    ModalAprobadorSupervisorPnComponent
   ];
 
 @NgModule({

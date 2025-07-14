@@ -84,7 +84,7 @@ export class RequerimientoService {
   }
 
   listarRequerimientosAprobaciones(filtro) {
-    let urlEndpoint = `${this._path_serve}/api/aprobaciones`;
+    let urlEndpoint = `${this._path_serve}/api/requerimientos/aprobar`;
     let params = functions.obtenerParams(filtro);
     return this.http.get<Pageable<any>>(urlEndpoint, {
       params: params,

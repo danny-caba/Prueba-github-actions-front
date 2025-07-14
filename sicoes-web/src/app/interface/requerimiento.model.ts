@@ -1,5 +1,6 @@
 import { Division } from "./division.model"
 import { ListadoDetalle } from "./listado.model"
+import { Supervisora } from "./supervisora.model"
 
 
 export class Requerimiento {
@@ -13,6 +14,8 @@ export class Requerimiento {
   fePlazoCargaDoc?: Date
   deObservacion?: string
   nuSiaf?: string
+  supervisora?: Supervisora
+  nombresApellidos?: string
 }
 
 export class RequerimientoInforme {

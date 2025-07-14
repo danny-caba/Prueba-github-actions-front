@@ -156,7 +156,7 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
         maxHeight: "auto",
         data: {
           accion,
-          perfiles: this.listPerfilesFiltradosPorDivision
+          perfiles: this.listAllPerfilesDetalle
         },
       })
       .afterClosed()

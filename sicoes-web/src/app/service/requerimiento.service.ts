@@ -4,7 +4,8 @@ import { ConfigService } from '../core/services';
 import { Requerimiento, RequerimientoInformeDetalle } from '../interface/requerimiento.model';
 import { Pageable } from '../interface/pageable.model';
 import { functions } from 'src/helpers/functions';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
+import { RequerimientoInvitacion } from '../interface/requerimientoInvitacion.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,28 @@ export class RequerimientoService {
   listarRequerimientos(filtro: any) {
     let urlEndpoint = `${this._path_serve}/api/requerimientos`
     let params = functions.obtenerParams(filtro)
-    return this.http.get<Pageable<Requerimiento>>(urlEndpoint, { params });
+    return this.http.get<Pageable<Requerimiento>>(urlEndpoint, { params }).pipe(
+      map(respuesta => {
+        const requerimientos = respuesta.content;
+        requerimientos.map(req => {
+          if (req.supervisora?.tipoDocumento?.codigo === 'DNI') {
+            req.nombresApellidos = req.supervisora.nombres +
+             ' ' + req.supervisora.apellidoPaterno + 
+             ' ' + req.supervisora.apellidoMaterno;
+          } else if (req.supervisora?.tipoDocumento?.codigo === 'RUC') {
+            req.nombresApellidos = req.supervisora.nombreRazonSocial;
+          } else if (req.supervisora?.tipoDocumento?.codigo === 'CARNET_EXTRA') {
+            req.nombresApellidos = req.supervisora?.nombres +
+             ' ' + req.supervisora?.apellidoPaterno + 
+             ' ' + req.supervisora?.apellidoMaterno;
+          } else {
+            req.nombresApellidos = '';
+          }
+        });
+        respuesta.content = requerimientos;
+        return respuesta;
+      })
+    );
   }
 
   registrar(requerimiento: Requerimiento) {
@@ -62,7 +84,7 @@ export class RequerimientoService {
   }
 
   listarRequerimientosAprobaciones(filtro) {
-    let urlEndpoint = `${this._path_serve}/api/requerimientos`;
+    let urlEndpoint = `${this._path_serve}/api/aprobaciones`;
     let params = functions.obtenerParams(filtro);
     return this.http.get<Pageable<any>>(urlEndpoint, {
       params: params,
@@ -72,6 +94,11 @@ export class RequerimientoService {
   obtenerHistorialAprobacion(uuid: string): Observable<any> {
     const url = `${this._path_serve}/api/aprobaciones/${uuid}/historial`;
     return this.http.get<any>(url);
+  }
+
+  enviarInvitacion(requerimientoInvitacion: RequerimientoInvitacion): Observable<RequerimientoInvitacion> {
+    const url = `${this._path_serve}/api/invitaciones`;
+    return this.http.post<RequerimientoInvitacion>(url, requerimientoInvitacion);
   }
 
 }

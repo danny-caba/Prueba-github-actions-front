@@ -14,6 +14,8 @@ import { PersonaService } from 'src/app/service/persona.service';
 import { SaldoService } from 'src/app/service/saldo.service';
 import { Requerimiento } from 'src/app/interface/requerimiento.model';
 import { RequerimientoService } from 'src/app/service/requerimiento.service';
+import { RequerimientoInvitacion } from 'src/app/interface/requerimientoInvitacion.model';
+import { Supervisora } from 'src/app/interface/supervisora.model';
 
 @Component({
   selector: 'vex-requerimiento-invitacion-list',
@@ -206,12 +208,26 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
   }
 
   enviarInvitacion(accion: string) {
-    switch (accion) {
-      case this.ACC_ENVIAR_INVITACION:
-        
-        break;
-      default:
-        break;
+    if (accion == this.ACC_ENVIAR_INVITACION) {
+      const requerimientoInvitacion: RequerimientoInvitacion = {
+        supervisora: {
+          idSupervisora: this.formGroup.controls.supervisor.value.idSupervisora
+        },
+        requerimiento: this.requerimiento,
+        saldoContrato: this.formGroup.controls.saldoContrato.value
+      }
+
+      this.requerimientoService.enviarInvitacion(requerimientoInvitacion).subscribe(respuesta => {
+        if(respuesta) {
+          functionsAlert.vigente('Invitación enviada correctamente', 'La invitación se ha enviado correctamente').then((result) => {
+            this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST]);
+          });
+        } else {
+          functionsAlert.error('Ocurrió un error al enviar la invitación').then((result) => {
+            this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST]);
+          });
+        }
+      });
     }
   }
 

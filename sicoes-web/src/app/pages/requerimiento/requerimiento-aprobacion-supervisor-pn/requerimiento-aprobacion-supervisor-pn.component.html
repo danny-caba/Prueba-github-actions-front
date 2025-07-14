@@ -1,83 +1,68 @@
 <div class="flex flex-col sm:flex-row gap-4">
   <div @fadeInUp class="flex-auto">
     <mat-divider class="-mr-6 -ml-6"></mat-divider>
-    <div class="py-4 flex flex-col" [formGroup]="formGroup">
-      <div class="flex flex-col sm:flex-row sm:gap-3 flex-wrap">
-        <mat-form-field class="flex-auto">
-          <mat-label>N° de Expediente</mat-label>
-          <input formControlName="nroExpediente" matInput maxlength="15" />
-        </mat-form-field>
+    <form [formGroup]="formGroup">
+      <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
+        <div class="flex flex-col">
+          <mat-form-field class="flex-auto">
+            <mat-label>N° de Expediente</mat-label>
+            <input formControlName="nroExpediente" matInput maxlength="15" />
+          </mat-form-field>
+        </div>
 
-        <mat-form-field class="flex-auto">
-          <mat-label>Gerencia / División</mat-label>
-          <mat-select formControlName="gerencia">
-            <mat-option
-              *ngFor="let division of listDivision"
-              [value]="division.idDivision"
-            >
-              {{ division.deDivision }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div class="flex flex-col">
+          <mat-form-field class="flex-auto">
+            <mat-label>Gerencia / División</mat-label>
+            <mat-select formControlName="gerencia">
+              <mat-option *ngFor="let division of listDivision" [value]="division.idDivision">
+                {{ division.deDivision }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+          <mat-form-field class="flex-auto">
+            <mat-label>Perfil</mat-label>
+            <mat-select formControlName="perfil" (selectionChange)="onPerfilChange($event.value)">
+              <mat-option *ngFor="let perfil of perfiles" [value]="perfil">
+                {{ perfil.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+          <mat-form-field class="flex-auto">
+            <mat-label>Nombres y Apellidos</mat-label>
+            <mat-select formControlName="supervisor">
+              <mat-option *ngFor="let obj of listDivisionesUsuario" [value]="obj">
+                {{ obj.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field class="flex-auto">
-          <mat-label>Perfil</mat-label>
-          <mat-select
-            formControlName="perfil"
-            (selectionChange)="onPerfilChange($event.value)"
-          >
-            <mat-option *ngFor="let perfil of perfiles" [value]="perfil">
-              {{ perfil.nombre }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        </div>
+        <div class="flex flex-col">
+          <mat-form-field class="flex-auto">
+            <mat-label>Estado de Revisión</mat-label>
+            <mat-select formControlName="estadoRevision" [compareWith]="compareSelecIdListadoDetalle">
+              <mat-option *ngFor="let obj of listEstadoRevision" [value]="obj">
+                {{ obj.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="flex flex-col sm:flex-row sm:gap-3 flex-wrap">
-        <mat-form-field class="flex-auto">
-          <mat-label>Nombres y Apellidos</mat-label>
-          <mat-select formControlName="supervisor">
-            <mat-option *ngFor="let obj of listDivisionesUsuario" [value]="obj">
-              {{ obj.nombre }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="flex-auto">
-          <mat-label>Estado de Revisión</mat-label>
-          <mat-select
-            formControlName="estadoRevision"
-            [compareWith]="compareSelecIdListadoDetalle"
-          >
-            <mat-option *ngFor="let obj of listEstadoRevision" [value]="obj">
-              {{ obj.nombre }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+    </form>
+    <div class="py-4 flex flex-col">
 
       <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
-        <button
-          color="primary"
-          style="margin-left: 0px; margin-right: auto"
-          mat-raised-button
-          type="button"
-        >
-          Aprobar Paces
+        <button color="primary" style="margin-left: 0px; margin-right: auto" mat-raised-button type="button">
+          Aprobar
         </button>
-        <button
-          color="primary"
-          mat-raised-button
-          type="button"
-          (click)="buscar()"
-        >
+        <button color="primary" mat-raised-button type="button" (click)="buscar()">
           Buscar
         </button>
-        <button
-          color="primary"
-          mat-raised-button
-          type="button"
-          (click)="limpiar()"
-        >
+        <button color="primary" mat-raised-button type="button" (click)="limpiar()">
           Limpiar
         </button>
       </div>
@@ -90,7 +75,8 @@
     <ng-container matColumnDef="tipoAprobacion">
       <th mat-header-cell *matHeaderCellDef>Tipo Aprobación</th>
       <td mat-cell *matCellDef="let e">
-        <mat-checkbox color="primary" class="flex-auto">
+        <mat-checkbox color="primary" class="flex-auto" [(ngModel)]="e.seleccionado"
+          (change)="actualizarSeleccionados()">
           {{ e.tipoAprobacion }}
         </mat-checkbox>
       </td>
@@ -106,11 +92,7 @@
     <ng-container matColumnDef="documento">
       <th mat-header-cell *matHeaderCellDef>Documento / Informe</th>
       <td mat-cell *matCellDef="let e">
-        <a
-          href="{{ e.documentoUrl }}"
-          target="_blank"
-          class="text-primary underline"
-        >
+        <a href="{{ e.documentoUrl }}" target="_blank" class="text-primary underline">
           {{ e.documentoNombre || "Docum.PDF" }}
         </a>
       </td>
@@ -170,13 +152,8 @@
     <ng-container matColumnDef="actions">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
       <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-        <button
-          (click)="$event.stopPropagation()"
-          [matMenuTriggerData]="{ customer: row }"
-          [matMenuTriggerFor]="actionsMenu"
-          mat-icon-button
-          type="button"
-        >
+        <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ customer: row }"
+          [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
           <mat-icon svgIcon="mat:more_horiz"></mat-icon>
         </button>
       </td>
@@ -185,12 +162,8 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <mat-paginator
-    class="sticky left-0"
-    [pageSizeOptions]="[10, 20, 30]"
-    (page)="pageChange($event)"
-    showFirstLastButtons
-  ></mat-paginator>
+  <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+    showFirstLastButtons></mat-paginator>
 </div>
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">

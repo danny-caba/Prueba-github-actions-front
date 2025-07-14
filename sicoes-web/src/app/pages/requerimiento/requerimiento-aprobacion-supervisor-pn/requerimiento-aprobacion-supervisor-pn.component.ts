@@ -9,6 +9,8 @@ import { ListadoEnum } from "src/helpers/constantes.components";
 import { Link } from "src/helpers/internal-urls.components";
 import { RequerimientoService } from "src/app/service/requerimiento.service";
 import { Division } from "src/app/interface/division.model";
+import { MatDialog } from "@angular/material/dialog";
+import { ModalAprobadorSupervisorPnComponent } from "src/app/shared/modal-aprobador-supervisor-pn/modal-aprobador-supervisor-pn.component";
 
 @Component({
   selector: "vex-requerimiento-aprobacion-supervisor-pn",
@@ -18,14 +20,14 @@ import { Division } from "src/app/interface/division.model";
 })
 export class RequerimientoAprobacionSupervisorPnComponent
   extends BasePageComponent<any>
-  implements OnInit
-{
+  implements OnInit {
   formGroup!: FormGroup;
   listEstadoRevision = [];
   listDivision: Division[];
   listAprobadoresALL: any[] = [];
   listDivisionesUsuario: any;
   perfiles: any[] = [];
+  listaSolicitudUuidSeleccionado: any[] = [];
 
   displayedColumns: string[] = [
     "tipoAprobacion",
@@ -46,7 +48,8 @@ export class RequerimientoAprobacionSupervisorPnComponent
     private requerimientoService: RequerimientoService,
     private fb: FormBuilder,
     private parametriaService: ParametriaService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
   ) {
     super();
   }
@@ -137,6 +140,25 @@ export class RequerimientoAprobacionSupervisorPnComponent
   limpiar(): void {
     this.formGroup.reset();
     this.buscar();
+  }
+
+  actualizarSeleccionados(): void {
+    this.listaSolicitudUuidSeleccionado = this.dataSource.data.filter(e => e.seleccionado);
+  }
+
+  aprobar(): void {
+    this.dialog.open(ModalAprobadorSupervisorPnComponent, {
+      width: '1200px',
+      maxHeight: '100%',
+      data: {
+        listaSolicitudUuidSeleccionado: this.listaSolicitudUuidSeleccionado,
+      },
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.buscar();
+        this.listaSolicitudUuidSeleccionado = [];
+      }
+    });
   }
 
   verHistorial(requerimiento): void {

@@ -25,6 +25,7 @@ const URL_DECRYPT = '3ncr1pt10nK3yuR1';
 export class LayoutPersonalPropuestoComponent extends BaseComponent implements OnInit {
 
   @Input() isReview: boolean;
+  @Input() isReviewExt: boolean;
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
   

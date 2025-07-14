@@ -9,6 +9,7 @@ import { BaseComponent } from '../components/base.component';
 export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent implements OnInit {
 
   @Input() isReview: boolean;
+  @Input() isReviewExt: boolean;
 
   editable: boolean = true;
   marcacion: 'si' | 'no' | null = null;

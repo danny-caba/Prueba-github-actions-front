@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Contrato } from 'src/app/interface/contrato.model';
 import { ContratoService } from 'src/app/service/contrato.service';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
-import { estadosIndexPerfCont, estadosPerfCont, tipoSolicitudPerfCont } from 'src/helpers/constantes.components';
+import { estadosIndexPerfCont, estadosPerfCont, reemplazoPersonalPropuesto, tipoSolicitudPerfCont } from 'src/helpers/constantes.components';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
 import { solicitudContrato } from '../../../../../helpers/constantes.components';
@@ -35,7 +35,8 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'estadoDocInicioServicio', 'tipo', 'actions'];
   ACCION_VER: string = solicitudContrato.ACCION_VER;
   ACCION_EDITAR: string = solicitudContrato.ACCION_EDITAR;
-  ACCION_REEMPLAZAR: string = solicitudContrato.ACCION_EDITAR;
+  ACCION_REEMPLAZAR: string = reemplazoPersonalPropuesto.ACCION_REEMPLAZAR;
+  ACCION_REVISAR: string = reemplazoPersonalPropuesto.ACCION_REVISAR;
   private destroy$ = new Subject<void>();
 
   formGroup = this.fb.group({
@@ -104,7 +105,8 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
             const linkAccion = {
               [this.ACCION_VER]:        Link.CONTRATO_SOLICITUD_VIEW,
               [this.ACCION_EDITAR]:        Link.CONTRATO_SOLICITUD_ADD,
-              [this.ACCION_REEMPLAZAR]: Link.CONTRATO_SOLICITUD_REPLACE
+              [this.ACCION_REEMPLAZAR]: Link.REEMPLAZO_PERSONAL_ADD,
+              [this.ACCION_REVISAR]: Link.REEMPLAZO_PERSONAL_REVIEW
             }[accion];
 
             this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, linkAccion, encodedId]);

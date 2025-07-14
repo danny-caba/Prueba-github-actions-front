@@ -225,6 +225,11 @@ export enum solicitudContrato {
     ACCION_EDITAR = 'ACCION_EDITAR'
 }
 
+export enum reemplazoPersonalPropuesto {
+    ACCION_REEMPLAZAR = 'ACCION_REEMPLAZAR',
+    ACCION_REVISAR = 'ACCION_REVISAR'
+}
+
 export enum estadosIndexPerfCont {
     PRELIMINAR = '1',
     EN_PROCESO = '2',

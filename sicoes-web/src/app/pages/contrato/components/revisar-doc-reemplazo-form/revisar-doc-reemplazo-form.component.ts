@@ -1,24 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
 
 @Component({
-  selector: 'vex-contrato-form-eval-reemp',
-  templateUrl: './contrato-form-eval-reemp.component.html',
-  styleUrls: ['./contrato-form-eval-reemp.component.scss'],
+  selector: 'vex-revisar-doc-reemplazo-form',
+  templateUrl: './revisar-doc-reemplazo-form.component.html',
+  styleUrls: ['./revisar-doc-reemplazo-form.component.scss'],
   animations: [
-    fadeInUp400ms,
+    fadeInRight400ms,
     stagger80ms
   ]
 })
-export class ContratoFormEvalReempComponent extends BaseComponent implements OnInit {
+export class RevisarDocReemplazoFormComponent extends BaseComponent implements OnInit {
 
-  btnApprove: string = 'Aprobar';
-  btnReject: string = 'Rechazar';
+  btnRegister: string = 'Registrar';
   idSolicitud: string = '';
   uuidSolicitud: string= '';
 
@@ -34,9 +33,9 @@ export class ContratoFormEvalReempComponent extends BaseComponent implements OnI
   }
 
   toGoBandejaContratos() {
-      functionsAlert.questionSiNo('¿Desea regresar a la sección de evaluación de reemplazo de personal propuesto?').then((result) => {
+        functionsAlert.questionSiNo('¿Desea regresar a la sección de Revisar documento de Personal de Reemplazo?').then((result) => {
             if (result.isConfirmed) {
-              this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_ADD + '/' + this.idSolicitud]);
+              this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_REVIEW, this.idSolicitud]);
             }
           });
   }
@@ -51,4 +50,6 @@ export class ContratoFormEvalReempComponent extends BaseComponent implements OnI
   doNothing(): void {
 
   }
+
 }
+

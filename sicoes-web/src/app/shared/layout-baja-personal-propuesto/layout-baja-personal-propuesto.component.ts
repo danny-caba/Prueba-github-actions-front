@@ -17,7 +17,8 @@ import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 })
 export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implements OnInit {
 
-  @Input() isReview: boolean;
+  @Input() isReview?: boolean;
+  @Input() isReviewExt?: boolean;
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
   displayedColumnsReview: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaFinContrato'];
@@ -39,6 +40,9 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
 
 
   ngOnInit(): void {
+    this.isReview = this.isReview ?? false;
+    this.isReviewExt = this.isReviewExt ?? false;
+
     this.listPersonalPropuesto = [
       {
         idPersonal: 1,

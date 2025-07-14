@@ -39,6 +39,9 @@ import { ContratoDocumentosComponent } from './components/contrato-documentos/co
 import { ReemplazoPersonalComponent } from './components/reemplazo-personal/reemplazo-personal.component';
 import { ReemplazoPersFormComponent } from './components/reemplazo-pers-form/reemplazo-pers-form.component';
 import { ReemplazoPersFormEditComponent } from './components/reemplazo-pers-form/reemplazo-pers-form-edit/reemplazo-pers-form-edit.component';
+import { RevisarDocReemplazoComponent } from './components/revisar-doc-reemplazo/revisar-doc-reemplazo.component';
+import { RevisarDocReemplazoFormComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form.component';
+import { RevisarDocReemplazoFormReviewComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form-review/revisar-doc-reemplazo-form-review.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +56,10 @@ import { ReemplazoPersFormEditComponent } from './components/reemplazo-pers-form
     ContratoDocumentosComponent,
     ReemplazoPersonalComponent,
     ReemplazoPersFormComponent,
-    ReemplazoPersFormEditComponent
+    ReemplazoPersFormEditComponent,
+    RevisarDocReemplazoComponent,
+    RevisarDocReemplazoFormComponent,
+    RevisarDocReemplazoFormReviewComponent
   ],
   imports: [
     CommonModule,

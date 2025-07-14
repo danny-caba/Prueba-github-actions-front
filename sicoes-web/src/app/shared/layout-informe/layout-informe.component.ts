@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
 import { PersonalPropuesto } from 'src/app/interface/reemplazo-personal.model';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -17,12 +17,16 @@ import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 })
 export class LayoutInformeComponent extends BaseComponent implements OnInit {
 
+  @Input() isReviewExt: boolean = false;
+  
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
 
   listPersonalPropuesto: PersonalPropuesto[] = null;
   listPersonalAgregado: PersonalPropuesto[] = [];
 
   editable: boolean = true;
+  marcaFechaDesvinculacion: 'si' | 'no' | null = null;
+  marcaInformeCarta: 'si' | 'no' | null = null;
 
   constructor(
     private fb: FormBuilder

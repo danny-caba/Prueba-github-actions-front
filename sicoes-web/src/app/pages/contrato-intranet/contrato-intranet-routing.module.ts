@@ -41,7 +41,7 @@ const routes: VexRoutes = [{
       component: ContratoEvaluarDocumentosComponent,
       data: { evaluarDocInicio: true }
     }, {
-      path: Link.CONTRATO_SOLICITUD_REPLACE + '/:idSolicitud',
+      path: Link.REEMPLAZO_PERSONAL_ADD + '/:idSolicitud',
       canActivate: [AuthGuardService, RoleGuardService],
       component: ContratoEvaluarReemplazoComponent
     }, {

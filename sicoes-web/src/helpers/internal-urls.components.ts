@@ -74,7 +74,10 @@ export enum Link {
 
     CONTRATO_SOLICITUD_ADD = 'registro',
     CONTRATO_SOLICITUD_VIEW = 'ver',
-    CONTRATO_SOLICITUD_REPLACE = 'reemp-personal',
+
+    REEMPLAZO_PERSONAL_ADD = 'reemp-personal-add',
+    REEMPLAZO_PERSONAL_REVIEW = 'reemp-personal-review',
+    REEMPLAZO_PERSONAL_REVIEW_FORM = 'reemp-personal-review-form',
 
     REEMPLAZO_PERSONAL_FORM = 'reemplazo-pers-form',
     EVAL_REEMPLAZO_PERSONAL_FORM = 'eval-reemplazo-pers-form',

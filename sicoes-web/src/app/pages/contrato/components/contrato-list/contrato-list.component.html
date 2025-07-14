@@ -157,5 +157,9 @@
             <mat-icon svgIcon="mat:group"></mat-icon>
             <span>Reemplazar personal<br>propuesto</span>
         </button>
+        <button mat-menu-item (click)="goToFormContrato(row, ACCION_REVISAR)" *ngIf="reemplazoRequisitos(row)">
+            <mat-icon svgIcon="mat:edit"></mat-icon>
+            <span>Revisar Documento de<br>Personal de Reemplazo</span>
+        </button>
     </ng-template>
 </mat-menu>

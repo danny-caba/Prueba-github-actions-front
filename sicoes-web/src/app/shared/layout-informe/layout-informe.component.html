@@ -1,9 +1,25 @@
-<div class="mx-0 py-4 border-b overflow-auto">
-    <mat-form-field  class="flex-auto">
-      <mat-label>Fecha Desvinculación</mat-label>
-      <input [formControl]="formGroup.controls.fechaDesvinculacion" type="date" min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
-      <mat-error *ngIf="formGroup.get('fechaDesvinculacion').hasError('required')">Ingrese Fecha de Desvinculacion</mat-error>
-    </mat-form-field>
+<div class="flex items-center">
+  <span class="text-secondary" *ngIf="isReviewExt">Fecha Desvinculación</span>
+  <mat-form-field class="!mb-0 mt-2 ml-2 flex-none">
+    <input [formControl]="formGroup.controls.fechaDesvinculacion"
+           type="date"
+           [min]="dateHoy | date:'yyyy-MM-dd'"
+           matInput>
+    <mat-error *ngIf="formGroup.get('fechaDesvinculacion').hasError('required')">
+      Ingrese Fecha de Desvinculacion
+    </mat-error>
+  </mat-form-field>
+  <span class="flex-1"></span>
+
+  <mat-radio-group
+      *ngIf="isReviewExt"
+      [(ngModel)]="marcaFechaDesvinculacion"
+      class="ml-12 flex gap-4">
+      <mat-radio-button value="si">Sí</mat-radio-button>
+      <mat-radio-button value="no">No</mat-radio-button>
+  </mat-radio-group>
+  <span *ngIf="isReviewExt" class="text-secondary ml-12">Evaluado por:</span>
+  <span *ngIf="isReviewExt" class="text-secondary ml-12">Fecha y Hora:</span>
 </div>
 
 <div class="flex items-center">
@@ -11,9 +27,42 @@
         <span>Informe Reemplazo Personal Propuesto</span>
     </mat-checkbox>
     <span class="flex-1"></span>
-    <vex-form-adjuntos-btn class="ml-6"
+
+    <span class="text-secondary" *ngIf="isReviewExt">InformeMock.pdf</span>
+    <button *ngIf="isReviewExt" matTooltip="Descargar"
+      mat-icon-button type="button"
+      class="text-primary hover:bg-hover">
+      <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+    </button>
+    <button *ngIf="isReviewExt" matTooltip="Eliminar"
+      mat-icon-button type="button"
+      class="text-primary hover:bg-hover">
+      <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+    </button>
+    <mat-radio-group
+      *ngIf="isReviewExt"
+      [(ngModel)]="marcaInformeCarta"
+      class="ml-12 flex items-center gap-4">
+      <mat-radio-button value="si">Sí</mat-radio-button>
+      <mat-radio-button value="no">No</mat-radio-button>
+    </mat-radio-group>
+    <span *ngIf="isReviewExt" class="text-secondary ml-12">Evaluado por:</span>
+    <span *ngIf="isReviewExt" class="text-secondary ml-12">Fecha y Hora:</span>
+
+    <vex-form-adjuntos-btn class="ml-6" *ngIf="!isReviewExt"
       [titulo]="'Archivo (*.pdf)'"
       [editable]="editable">
     </vex-form-adjuntos-btn>
+</div>
+
+<div> 
+  <mat-form-field class="w-full">
+    <textarea matInput
+           placeholder="Observación"
+           rows="2"
+           cdkTextareaAutosize
+           cdkAutosizeMinRows="2"
+           cdkAutosizeMaxRows="5"></textarea>
+  </mat-form-field>
 </div>
   

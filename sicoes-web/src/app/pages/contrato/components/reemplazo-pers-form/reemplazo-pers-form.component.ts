@@ -28,7 +28,7 @@ export class ReemplazoPersFormComponent extends BaseComponent implements OnInit 
   toGoBandejaContratos() {
         functionsAlert.questionSiNo('¿Desea regresar a la sección de reemplazo de personal propuesto?').then((result) => {
             if (result.isConfirmed) {
-              this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.CONTRATO_SOLICITUD_REPLACE, this.idSolicitud]);
+              this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_ADD, this.idSolicitud]);
             }
           });
   }

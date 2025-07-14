@@ -100,6 +100,7 @@ import { LayoutBajaPersonalPropuestoComponent } from './layout-baja-personal-pro
 import { LayoutPersonalPropuestoComponent } from './layout-personal-propuesto/layout-personal-propuesto.component';
 import { LayoutSolicitudReemplazoSupervisorComponent } from './layout-solicitud-reemplazo-supervisor/layout-solicitud-reemplazo-supervisor.component';
 import { LayoutInformeComponent } from './layout-informe/layout-informe.component';
+import { LayoutProyectoAdendaComponent } from './layout-proyecto-adenda/layout-proyecto-adenda.component';
 
 const sharedComponents = [
 
@@ -161,6 +162,7 @@ const sharedComponents = [
     LayoutPersonalPropuestoComponent,
     LayoutSolicitudReemplazoSupervisorComponent,
     LayoutInformeComponent,
+    LayoutProyectoAdendaComponent,
 
     ModalTileComponent,
     ModalTileComponent2,

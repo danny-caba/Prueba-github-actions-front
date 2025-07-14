@@ -36,48 +36,47 @@ export class EvaluadorService {
     return this.http.get<Pageable<SolicitudListado>>(urlEndpoint);
   }
 
-  registrarAsignacion(request: any){
+  registrarAsignacion(request: any) {
     let urlEndpoint = `${this._path_serve}/api/asignaciones`
-    return this.http.post<Pageable<Asignacion>>(urlEndpoint,request);
+    return this.http.post<Pageable<Asignacion>>(urlEndpoint, request);
   }
 
-  registrarAprobador(request: any){
+  registrarAprobador(request: any) {
     let urlEndpoint = `${this._path_serve}/api/asignaciones/aprobadores`
-    return this.http.post<Asignacion>(urlEndpoint,request);
+    return this.http.post<Asignacion>(urlEndpoint, request);
   }
 
-  modificarAprobador(request: any, idAsignacion: any){
+  modificarAprobador(request: any, idAsignacion: any) {
     let urlEndpoint = `${this._path_serve}/api/asignaciones/aprobadores/${idAsignacion}`
-    return this.http.put<Asignacion>(urlEndpoint,request);
+    return this.http.put<Asignacion>(urlEndpoint, request);
   }
 
-  eliminarAprobador(id: any){
+  eliminarAprobador(id: any) {
     let urlEndpoint = `${this._path_serve}/api/asignaciones/aprobadores/${id}`
     return this.http.delete<Asignacion>(urlEndpoint);
   }
 
-  listarAsignacionesAprobadores(filtro){
+  listarAsignacionesAprobadores(filtro) {
     let urlEndpoint = `${this._path_serve}/api/asignaciones/aprobaciones`
     let params = functions.obtenerParams(filtro);
-    return this.http.get<Pageable<Asignacion>>(urlEndpoint,{params:params});
+    return this.http.get<Pageable<Asignacion>>(urlEndpoint, { params: params });
   }
 
-
-  listarAsignaciones(filtro){
+  listarAsignaciones(filtro) {
     let urlEndpoint = `${this._path_serve}/api/asignaciones`
     let params = functions.obtenerParams(filtro);
-    return this.http.get<Pageable<Asignacion>>(urlEndpoint,{params:params});
+    return this.http.get<Pageable<Asignacion>>(urlEndpoint, { params: params });
   }
 
-  evaluarAccion(request: any){
+  evaluarAccion(request: any) {
     let urlEndpoint = `${this._path_serve}/api/asignaciones/${request.idAsignacion}`
-    return this.http.put<Asignacion>(urlEndpoint,request);
+    return this.http.put<Asignacion>(urlEndpoint, request);
   }
 
   // Método específico para rechazo por perfil
-  rechazarPerfil(idAsignacion: number, idPerfil: number, observacion: string): Observable<{success: boolean, message: string}> {
+  rechazarPerfil(idAsignacion: number, idPerfil: number, observacion: string): Observable<{ success: boolean, message: string }> {
     const url = `${this._path_serve}/api/asignaciones/${idAsignacion}/rechazar-perfil`;
-    return this.http.put<{ success: boolean, message: string }>(url, { 
+    return this.http.put<{ success: boolean, message: string }>(url, {
       idOtroRequisito: idPerfil,
       observacion: observacion
     });
@@ -90,7 +89,7 @@ export class EvaluadorService {
 
   obtenerIdsPerfiles(idUsuario: string): Observable<number[]> {
     return this.http.get<number[]>(`${this._path_serve}/api/asignaciones/aprobador/${idUsuario}/perfiles-asignados`);
-} 
+  }
 
 
   obtenerIdArchivo(numeroExpediente) {
@@ -101,7 +100,7 @@ export class EvaluadorService {
   obtenerParametrosfirmaDigital(usuario) {
     let urlEndpoint = `${this._path_serve}/api/asignaciones/obtenerParametros/firmaDigital`
     let params = functions.obtenerParams(usuario);
-    return this.http.get<any>(urlEndpoint, {params:params});
+    return this.http.get<any>(urlEndpoint, { params: params });
   }
 
   listarHistorialAprobaciones(filtro: { idContrato: number, tipo: string }) {
@@ -113,4 +112,10 @@ export class EvaluadorService {
   obtenerHistorialAsignacion(idContrato: number) {
     return this.http.get<Asignacion[]>(`${this._path_serve}/api/asignaciones/historial/${idContrato}`);
   }
+
+  requerimientosAprobar(uuid: string, payload: any): Observable<void> {
+    const url = `${this._path_serve}/api/requerimientos/${uuid}/aprobar`;
+    return this.http.patch<void>(url, payload);
+  } 
+
 }

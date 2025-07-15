@@ -1,4 +1,4 @@
-<div class="w-full overflow-x-auto rounded items-center mb-6 mt-4" *ngIf="isReview || isReviewExt">
+<div class="w-full overflow-x-auto rounded items-center mb-6 mt-4" *ngIf="isReview || isReviewExt || isCargaAdenda">
   <table @stagger [dataSource]="listPersonalAgregado" class="w-full table-auto" mat-table matSort>
     <ng-container matColumnDef="tipoDocumento">
       <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-left">Tipo de<br>Documento</th>
@@ -31,7 +31,7 @@
   </table>
 </div>
 
-<div class="flex flex-col sm:flex-row sm:gap-4 mt-4 items-start" *ngIf="!(isReview || isReviewExt)">
+<div class="flex flex-col sm:flex-row sm:gap-4 mt-4 items-start" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
   <mat-form-field class="flex-auto">
     <mat-label>Nombres y Apellidos</mat-label>
     <mat-select [formControl]="formGroup.controls.nombreCompleto">
@@ -53,7 +53,7 @@
     <ng-container [ngTemplateOutletContext]="{ otro: personal }" [ngTemplateOutlet]="templateOtros"></ng-container>
 </div>
 
-<div class="w-full overflow-x-auto shadow-2xl rounded" *ngIf="!(isReview || isReviewExt)">
+<div class="w-full overflow-x-auto shadow-2xl rounded" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
     <table @stagger [dataSource]="listPersonalAgregado" class="w-full table-auto" mat-table matSort>
       <ng-container matColumnDef="tipoDocumento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>Documento</th>
@@ -125,28 +125,29 @@
       <span>DJ del personal propuesto por la empresa (Nepotismo)</span>
     </mat-checkbox>
     <span class="flex-1"></span>
-    <span class="text-secondary" *ngIf="isReview || isReviewExt">DjMock.pdf</span>
-    <button *ngIf="isReview || isReviewExt" matTooltip="Descargar"
+    <span class="text-secondary" *ngIf="isReview || isReviewExt || isCargaAdenda">DjMock.pdf</span>
+    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Descargar"
       mat-icon-button type="button"
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
     </button>
-    <button *ngIf="isReview || isReviewExt" matTooltip="Eliminar"
+    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Eliminar"
       mat-icon-button type="button"
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
     </button>
     <mat-radio-group
-      *ngIf="isReview || isReviewExt"
+      *ngIf="isReview || isReviewExt || isCargaAdenda"
+      disabled = "isCargaAdenda"
       [(ngModel)]="marcaDjNepotismo"
       class="ml-12 flex items-center gap-4">
       <mat-radio-button value="si">Sí</mat-radio-button>
       <mat-radio-button value="no">No</mat-radio-button>
     </mat-radio-group>
-    <span *ngIf="isReview || isReviewExt" class="text-secondary ml-12">Evaluado por:</span>
-    <span *ngIf="isReview || isReviewExt" class="text-secondary ml-12">Fecha y Hora:</span>
+    <span *ngIf="isReview || isReviewExt || isCargaAdenda" class="text-secondary ml-12">Evaluado por:</span>
+    <span *ngIf="isReview || isReviewExt || isCargaAdenda" class="text-secondary ml-12">Fecha y Hora:</span>
 
-    <vex-form-adjuntos-btn *ngIf="!(isReview || isReviewExt)"
+    <vex-form-adjuntos-btn *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
       class="ml-auto"
       [titulo]="'Archivo (*.pdf)'"
       [editable]="editable">
@@ -156,6 +157,7 @@
     <mat-form-field class="w-full">
       <textarea matInput
              placeholder="Observación"
+             disabled = "isCargaAdenda"
              rows="2"
              cdkTextareaAutosize
              cdkAutosizeMinRows="2"
@@ -171,28 +173,29 @@
       <span>DJ impedimentos / incompatibilidad y prohibiciones</span>
     </mat-checkbox>
     <span class="flex-1"></span>
-    <span class="text-secondary" *ngIf="isReview || isReviewExt">DjMock.pdf</span>
-    <button *ngIf="isReview || isReviewExt" matTooltip="Descargar"
+    <span class="text-secondary" *ngIf="isReview || isReviewExt || isCargaAdenda">DjMock.pdf</span>
+    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Descargar"
       mat-icon-button type="button"
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
     </button>
-    <button *ngIf="isReview || isReviewExt" matTooltip="Eliminar"
+    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Eliminar"
       mat-icon-button type="button"
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
     </button>
     <mat-radio-group
-      *ngIf="isReview || isReviewExt"
+      *ngIf="isReview || isReviewExt || isCargaAdenda"
+      disabled = "isCargaAdenda"
       [(ngModel)]="marcaDjImpedimento"
       class="ml-12 flex items-center gap-4">
       <mat-radio-button value="si">Sí</mat-radio-button>
       <mat-radio-button value="no">No</mat-radio-button>
     </mat-radio-group>
-    <span *ngIf="isReview || isReviewExt" class="text-secondary ml-12">Evaluado por:</span>
-    <span *ngIf="isReview || isReviewExt" class="text-secondary ml-12">Fecha y Hora:</span>
+    <span *ngIf="isReview || isReviewExt || isCargaAdenda" class="text-secondary ml-12">Evaluado por:</span>
+    <span *ngIf="isReview || isReviewExt || isCargaAdenda" class="text-secondary ml-12">Fecha y Hora:</span>
 
-    <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt)"
+    <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
         [titulo]="'Archivo (*.pdf)'"
         [editable]="editable">
     </vex-form-adjuntos-btn>
@@ -201,6 +204,7 @@
     <mat-form-field class="w-full">
       <textarea matInput
              placeholder="Observación"
+             disabled = "isCargaAdenda"
              rows="2"
              cdkTextareaAutosize
              cdkAutosizeMinRows="2"
@@ -215,27 +219,28 @@
       <span>DJ no vínculo contractual con agente supervisado</span>
     </mat-checkbox>
     <span class="flex-1"></span>
-    <span class="text-secondary" *ngIf="isReview || isReviewExt">DjMock.pdf</span>
-    <button *ngIf="isReview || isReviewExt" matTooltip="Descargar"
+    <span class="text-secondary" *ngIf="isReview || isReviewExt || isCargaAdenda">DjMock.pdf</span>
+    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Descargar"
       mat-icon-button type="button"
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
     </button>
-    <button *ngIf="isReview || isReviewExt" matTooltip="Eliminar"
+    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Eliminar"
       mat-icon-button type="button"
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
     </button>
     <mat-radio-group
-      *ngIf="isReview || isReviewExt"
+      *ngIf="isReview || isReviewExt || isCargaAdenda"
+      disabled = "isCargaAdenda"
       [(ngModel)]="marcaDjNoVinculo"
       class="ml-12 flex items-center gap-4">
       <mat-radio-button value="si">Sí</mat-radio-button>
       <mat-radio-button value="no">No</mat-radio-button>
     </mat-radio-group>
-    <span *ngIf="isReview || isReviewExt" class="text-secondary ml-12">Evaluado por:</span>
-    <span *ngIf="isReview || isReviewExt" class="text-secondary ml-12">Fecha y Hora:</span>
-    <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt)"
+    <span *ngIf="isReview || isReviewExt || isCargaAdenda" class="text-secondary ml-12">Evaluado por:</span>
+    <span *ngIf="isReview || isReviewExt || isCargaAdenda" class="text-secondary ml-12">Fecha y Hora:</span>
+    <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
       [titulo]="'Archivo (*.pdf)'"
       [editable]="editable">
     </vex-form-adjuntos-btn>
@@ -244,6 +249,7 @@
     <mat-form-field class="w-full">
       <textarea matInput
              placeholder="Observación"
+             disabled = "isCargaAdenda"
              rows="2"
              cdkTextareaAutosize
              cdkAutosizeMinRows="2"
@@ -258,28 +264,29 @@
       <span>Otros documentos</span>
     </mat-checkbox>
     <span class="flex-1"></span>
-    <span class="text-secondary" *ngIf="isReview || isReviewExt">DjMock.pdf</span>
-    <button *ngIf="isReview || isReviewExt" matTooltip="Descargar"
+    <span class="text-secondary" *ngIf="isReview || isReviewExt || isCargaAdenda">DjMock.pdf</span>
+    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Descargar"
       mat-icon-button type="button"
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
     </button>
-    <button *ngIf="isReview || isReviewExt" matTooltip="Eliminar"
+    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Eliminar"
       mat-icon-button type="button"
       class="text-primary hover:bg-hover">
       <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
     </button>
     <mat-radio-group
-      *ngIf="isReview || isReviewExt"
+      *ngIf="isReview || isReviewExt || isCargaAdenda"
+      disabled = "isCargaAdenda"
       [(ngModel)]="marcaOtros"
       class="ml-12 flex items-center gap-4">
       <mat-radio-button value="si">Sí</mat-radio-button>
       <mat-radio-button value="no">No</mat-radio-button>
     </mat-radio-group>
-    <span *ngIf="isReview || isReviewExt" class="text-secondary ml-12">Evaluado por:</span>
-    <span *ngIf="isReview || isReviewExt" class="text-secondary ml-12">Fecha y Hora:</span>
+    <span *ngIf="isReview || isReviewExt || isCargaAdenda" class="text-secondary ml-12">Evaluado por:</span>
+    <span *ngIf="isReview || isReviewExt || isCargaAdenda" class="text-secondary ml-12">Fecha y Hora:</span>
     
-    <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt)"
+    <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
         [titulo]="'Archivo (*.pdf)'"
         [editable]="editable">
     </vex-form-adjuntos-btn>
@@ -288,6 +295,7 @@
     <mat-form-field class="w-full">
       <textarea matInput
              placeholder="Observación"
+             disabled = "isCargaAdenda"
              rows="2"
              cdkTextareaAutosize
              cdkAutosizeMinRows="2"

@@ -42,6 +42,7 @@ import { ReemplazoPersFormEditComponent } from './components/reemplazo-pers-form
 import { RevisarDocReemplazoComponent } from './components/revisar-doc-reemplazo/revisar-doc-reemplazo.component';
 import { RevisarDocReemplazoFormComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form.component';
 import { RevisarDocReemplazoFormReviewComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form-review/revisar-doc-reemplazo-form-review.component';
+import { AdendaFormUploadComponent } from './components/revisar-doc-reemplazo-form/adenda-form-upload/adenda-form-upload.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { RevisarDocReemplazoFormReviewComponent } from './components/revisar-doc
     ReemplazoPersFormEditComponent,
     RevisarDocReemplazoComponent,
     RevisarDocReemplazoFormComponent,
-    RevisarDocReemplazoFormReviewComponent
+    RevisarDocReemplazoFormReviewComponent,
+    AdendaFormUploadComponent
   ],
   imports: [
     CommonModule,

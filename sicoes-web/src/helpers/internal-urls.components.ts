@@ -78,6 +78,7 @@ export enum Link {
     REEMPLAZO_PERSONAL_ADD = 'reemp-personal-add',
     REEMPLAZO_PERSONAL_REVIEW = 'reemp-personal-review',
     REEMPLAZO_PERSONAL_REVIEW_FORM = 'reemp-personal-review-form',
+    CARGA_ADENDA_FORM = 'carga-adenda-form',
 
     REEMPLAZO_PERSONAL_FORM = 'reemplazo-pers-form',
     EVAL_REEMPLAZO_PERSONAL_FORM = 'eval-reemplazo-pers-form',

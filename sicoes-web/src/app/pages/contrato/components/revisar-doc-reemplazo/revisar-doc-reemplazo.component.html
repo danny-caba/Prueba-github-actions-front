@@ -54,7 +54,7 @@
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element    ">{{ element?.estadoReemplazo }}</td>
                       </ng-container>
 
-                      <ng-container matColumnDef="estadoEvaluar">
+                      <ng-container matColumnDef="estadoEvaluarDocsInicio">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluar<br>Documentos<br>inicio servicio</th>
                           <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoDocumento }}</td>
                       </ng-container>
@@ -101,7 +101,7 @@
             <mat-icon svgIcon="mat:edit"></mat-icon>
             <span>Revisar Documentos</span>
         </button>
-        <button mat-menu-item (click)="toGoRevisarReemplazoPersonalForm()">
+        <button mat-menu-item (click)="toGoCargarAdendaForm()">
             <mat-icon svgIcon="mat:upload_file"></mat-icon>
             <span>Cargar Adenda</span>
         </button>

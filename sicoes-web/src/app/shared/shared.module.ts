@@ -101,6 +101,7 @@ import { LayoutPersonalPropuestoComponent } from './layout-personal-propuesto/la
 import { LayoutSolicitudReemplazoSupervisorComponent } from './layout-solicitud-reemplazo-supervisor/layout-solicitud-reemplazo-supervisor.component';
 import { LayoutInformeComponent } from './layout-informe/layout-informe.component';
 import { LayoutProyectoAdendaComponent } from './layout-proyecto-adenda/layout-proyecto-adenda.component';
+import { LayoutCargarAdendaComponent } from './layout-cargar-adenda/layout-cargar-adenda.component';
 
 const sharedComponents = [
 
@@ -163,6 +164,7 @@ const sharedComponents = [
     LayoutSolicitudReemplazoSupervisorComponent,
     LayoutInformeComponent,
     LayoutProyectoAdendaComponent,
+    LayoutCargarAdendaComponent,
 
     ModalTileComponent,
     ModalTileComponent2,

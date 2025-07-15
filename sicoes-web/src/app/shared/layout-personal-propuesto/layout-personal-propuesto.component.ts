@@ -26,6 +26,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
 
   @Input() isReview: boolean;
   @Input() isReviewExt: boolean;
+  @Input() isCargaAdenda: boolean;
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
   
@@ -103,6 +104,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
       }
     ];
     this.obtenerSolicitud();
+    this.listPersonalAgregado = this.listPersonalPropuesto;
   }
 
   obtenerSolicitud() {

@@ -18,7 +18,7 @@ import { Link } from 'src/helpers/internal-urls.components';
 })
 export class RevisarDocReemplazoComponent extends BaseComponent implements OnInit {
 
-  displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'estadoRevision', 'estadoAprobInforme', 'estadoAprobAdenda', 'estadoAprobAdenda' ,'actions'];
+  displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'estadoRevision', 'estadoAprobInforme', 'estadoAprobAdenda', 'estadoEvaluarDocsInicio' ,'actions'];
   allowedToReplace: boolean = true;
   btnReplace: string = 'Reemplazar';
   private destroy$ = new Subject<void>();
@@ -57,6 +57,11 @@ export class RevisarDocReemplazoComponent extends BaseComponent implements OnIni
   toGoRevisarReemplazoPersonalForm() {
     const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
     this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_REVIEW_FORM, encryptedId]);
+  }
+
+  toGoCargarAdendaForm() {
+    const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
+    this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.CARGA_ADENDA_FORM, encryptedId]);
   }
 
   toGoBandejaContratos() {

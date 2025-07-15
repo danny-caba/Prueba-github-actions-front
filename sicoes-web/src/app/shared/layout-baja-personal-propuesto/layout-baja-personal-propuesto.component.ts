@@ -19,6 +19,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
 
   @Input() isReview?: boolean;
   @Input() isReviewExt?: boolean;
+  @Input() isCargaAdenda?: boolean;
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
   displayedColumnsReview: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaFinContrato'];
@@ -42,6 +43,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   ngOnInit(): void {
     this.isReview = this.isReview ?? false;
     this.isReviewExt = this.isReviewExt ?? false;
+    this.isCargaAdenda = this.isCargaAdenda ?? false;
 
     this.listPersonalPropuesto = [
       {
@@ -55,6 +57,8 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
         fechaDesvinculacion: ''
       }
     ];
+
+    this.listPersonalAgregado = this.listPersonalPropuesto;
   }
 
   doNothing(): void {

@@ -33,7 +33,7 @@ const routes: VexRoutes = [{
       canActivate: [AuthGuardService, RoleGuardService],
       component: ContratoFormComponent,
       data: {
-        editable: false
+        editable: 'false'
       }
     }, {
       path: Link.REEMPLAZO_PERSONAL_ADD + '/:idSolicitud',
@@ -57,6 +57,13 @@ const routes: VexRoutes = [{
       path: Link.REEMPLAZO_PERSONAL_REVIEW_FORM + '/:idSolicitud',
       component: RevisarDocReemplazoFormComponent,
       canActivate: [AuthGuardService, RoleGuardService]
+    },{
+      path: Link.CARGA_ADENDA_FORM + '/:idSolicitud',
+      component: RevisarDocReemplazoFormComponent,
+      canActivate: [AuthGuardService, RoleGuardService],
+      data: { 
+        isCargaAdenda: true
+      }
     },{
       path: 'cargar-documentacion-inicio/:id',
       component: ContratoDocumentosComponent

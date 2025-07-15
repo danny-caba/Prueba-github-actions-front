@@ -16,6 +16,7 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
 
   @Input() isReview: boolean;
   @Input() isReviewExt: boolean;
+  @Input() isCargaAdenda: boolean;
 
   editable: boolean = true;
   marcacion: 'si' | 'no' | null = null;

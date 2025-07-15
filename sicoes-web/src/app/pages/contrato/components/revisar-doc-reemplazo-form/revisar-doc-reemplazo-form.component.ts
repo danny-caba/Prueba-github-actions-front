@@ -18,8 +18,11 @@ import { Link } from 'src/helpers/internal-urls.components';
 export class RevisarDocReemplazoFormComponent extends BaseComponent implements OnInit {
 
   btnRegister: string = 'Registrar';
+  btnGuardarAdenda: string = 'Guardar Adenda';
   idSolicitud: string = '';
   uuidSolicitud: string= '';
+
+  isCargaAdenda: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +32,11 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
   }
 
   ngOnInit(): void {
+    this.route.data.subscribe(data => {
+      if(data.isCargaAdenda){
+        this.isCargaAdenda = data.isCargaAdenda;
+      }
+    });
     this.getIdSolicitud();
   }
 

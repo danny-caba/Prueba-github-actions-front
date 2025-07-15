@@ -1,4 +1,4 @@
-<div class="flex sm:gap-4 items-start mt-2" *ngIf="!(isReview || isReviewExt)">
+<div class="flex sm:gap-4 items-start mt-2" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
   <mat-form-field class="flex-auto">
     <mat-label>Nombres y Apellidos</mat-label>
     <mat-select [formControl]="formGroup.controls.nombreCompleto">
@@ -14,7 +14,7 @@
   <button class="mt-2" color="primary" mat-raised-button type="button">Guardar</button>
 </div>
 
-<div class="mx-0 py-2 border-b overflow-auto items-center" *ngIf="!(isReview || isReviewExt)">
+<div class="mx-0 py-2 border-b overflow-auto items-center" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
   <span class="text-secondary">Fecha Desvinculación</span>
   <mat-form-field class="ml-2 flex-none">
     <input [formControl]="formGroup.controls.fechaDesvinculacion" type="date" min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
@@ -22,7 +22,7 @@
   </mat-form-field>
 </div>
 
-<div class="w-full overflow-x-auto shadow-2xl rounded" *ngIf="!(isReview || isReviewExt)">
+<div class="w-full overflow-x-auto shadow-2xl rounded" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
     <table @stagger [dataSource]="listPersonalAgregado" class="w-full table-auto" mat-table matSort>
       <ng-container matColumnDef="tipoDocumento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>Documento</th>
@@ -88,7 +88,7 @@
     </table>
 </div>
 
-<div class="w-full overflow-x-auto shadow-2xl rounded" *ngIf="isReview || isReviewExt">
+<div class="w-full overflow-x-auto shadow-2xl rounded" *ngIf="isReview || isReviewExt || isCargaAdenda">
   <table @stagger [dataSource]="listPersonalAgregado" class="w-full table-auto" mat-table matSort>
     <ng-container matColumnDef="tipoDocumento">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>Documento</th>

@@ -8,28 +8,29 @@
             <span>Oficio/Carta solicitando reemplazo del supervisor</span>
         </mat-checkbox>
         <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview || isReviewExt">Oficio/CartaMock.pdf</span>
-        <button *ngIf="isReview || isReviewExt" matTooltip="Descargar"
+        <span class="text-secondary" *ngIf="isReview || isReviewExt || isCargaAdenda">Oficio/CartaMock.pdf</span>
+        <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Descargar"
             mat-icon-button type="button"
             class="text-primary hover:bg-hover">
             <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
         </button>
-        <button *ngIf="isReview || isReviewExt" matTooltip="Eliminar"
+        <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Eliminar"
             mat-icon-button type="button"
             class="text-primary hover:bg-hover">
             <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
         </button>
         <mat-radio-group
-            *ngIf="isReview || isReviewExt"
+            *ngIf="isReview || isReviewExt || isCargaAdenda"
+            disabled = "isCargaAdenda"
             [(ngModel)]="marcacion"
             class="ml-12 flex items-center gap-4">
             <mat-radio-button value="si">Sí</mat-radio-button>
             <mat-radio-button value="no">No</mat-radio-button>
         </mat-radio-group>
-        <span *ngIf="isReview || isReviewExt" class="text-secondary ml-12">Evaluado por:</span>
-        <span *ngIf="isReview || isReviewExt" class="text-secondary ml-12">Fecha y Hora:</span>
+        <span *ngIf="isReview || isReviewExt || isCargaAdenda" class="text-secondary ml-12">Evaluado por:</span>
+        <span *ngIf="isReview || isReviewExt || isCargaAdenda" class="text-secondary ml-12">Fecha y Hora:</span>
         
-        <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt)"
+        <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
           [titulo]="'Archivo (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-btn>
@@ -38,6 +39,7 @@
         <mat-form-field class="w-full">
           <textarea matInput
                  placeholder="Observación"
+                 disabled = "isCargaAdenda"
                  rows="2"
                  cdkTextareaAutosize
                  cdkAutosizeMinRows="2"

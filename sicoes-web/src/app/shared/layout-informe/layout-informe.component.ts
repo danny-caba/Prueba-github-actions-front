@@ -17,7 +17,8 @@ import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 })
 export class LayoutInformeComponent extends BaseComponent implements OnInit {
 
-  @Input() isReviewExt: boolean = false;
+  @Input() isReviewExt: boolean;
+  @Input() isCargaAdenda?: boolean;
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
 
@@ -35,13 +36,14 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
   }
 
   formGroup = this.fb.group({
-    flagInforme: [null, Validators.required],
-    fechaDesvinculacion: [null, Validators.required]
+    flagInforme: [null, [Validators.required]],
+    fechaDesvinculacion: [null]
   });
 
 
-
   ngOnInit(): void {
+    this.setFechaDesvinculacion();
+
     this.listPersonalPropuesto = [
       {
         idPersonal: 1,
@@ -54,6 +56,27 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
         fechaDesvinculacion: ''
       }
     ];
+  }
+
+  setFechaDesvinculacion(): void {
+    if (this.isCargaAdenda) {
+      const hoy = new Date();
+      const fechaInput = hoy.toISOString().split('T')[0];
+      
+      this.formGroup.patchValue({
+        fechaDesvinculacion: fechaInput
+      });
+      
+      this.formGroup.get('fechaDesvinculacion')?.disable();
+    }
+  }
+
+  private formatDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    
+    return `${day}/${month}/${year}`;
   }
 
   doNothing(): void {

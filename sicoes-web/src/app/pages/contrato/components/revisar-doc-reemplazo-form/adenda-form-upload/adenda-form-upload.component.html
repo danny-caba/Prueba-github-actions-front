@@ -1,0 +1,53 @@
+            <!--CONTENIDO-->
+            <mat-accordion multi="true">
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- Informe</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-informe 
+                        [isCargaAdenda] = "isCargaAdenda"
+                    #layoutInforme></vex-layout-informe>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- Baja Personal Propuesto</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-baja-personal-propuesto 
+                        [isCargaAdenda] = "isCargaAdenda"
+                    #layoutBajaPersPropuesto></vex-layout-baja-personal-propuesto>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 3}}.- Personal propuesto</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-personal-propuesto 
+                    [isCargaAdenda] = "isCargaAdenda"
+                    [idSolicitud] = "idSolicitud"
+                     [uuidSolicitud] = "uuidSolicitud"
+                    #layoutPersPropuesto></vex-layout-personal-propuesto>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 4}}.- Solicitud de reemplazo de supervisor</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-solicitud-reemplazo-supervisor 
+                        [isCargaAdenda] = "isCargaAdenda"
+                    #layoutSolReempSuperv></vex-layout-solicitud-reemplazo-supervisor>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 5}}.- Proyecto de Adenda</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-proyecto-adenda 
+                    [isCargaAdenda] = "isCargaAdenda" 
+                    #layoutProyAdenda></vex-layout-proyecto-adenda>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 6}}.- Cargar Adenda</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-cargar-adenda 
+                    [isCargaAdenda] = "isCargaAdenda" 
+                    #layoutCargarAdenda></vex-layout-cargar-adenda>
+                </mat-expansion-panel>
+            </mat-accordion>

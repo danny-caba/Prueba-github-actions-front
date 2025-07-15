@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
-import { ListadoEnum } from 'src/helpers/constantes.components';
+import { ListadoEnum, UsuariosRoles } from 'src/helpers/constantes.components';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
 import { SolicitudService } from 'src/app/service/solicitud.service'; 
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
@@ -32,11 +32,11 @@ import { ModalInformativoComponent } from 'src/app/shared/modal-informativo/moda
   ]
 })
 export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicitud> implements OnInit {
-
+  @Input() usuario:any;
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
   SOLICITUD: any;
-  tipousuario="GL"
+  tipousuario=UsuariosRoles;
 
   ACC_HISTORIAL = 'ACC_HISTORIAL';
   ACC_REGISTRAR = 'ACC_REGISTRAR';
@@ -69,7 +69,6 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
 
 
   displayedColumnsPersonal: string[] = [
-    'select',
     'tipoAprobacion',
     'numeroExpediente',
     'documento',
@@ -80,6 +79,8 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
     'estadoAprobacion',
     'estadoAprobacionLogistica',
     'estadoVbGAF',
+    'estadoFirma',
+    'estadoFirmaGe',
     'actionsPersonal'
   ];
 

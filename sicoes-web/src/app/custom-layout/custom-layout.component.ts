@@ -45,35 +45,37 @@ export class CustomLayoutComponent implements OnInit {
   @ViewChild('configpanel', { static: true }) configpanel: SidebarComponent;
 
   constructor(private layoutService: LayoutService,
-              private configService: ConfigService,
-              private breakpointObserver: BreakpointObserver,
-              private router: Router,
-              private authFacade: AuthFacade,
-              private parametriaService: ParametriaService,
-              private usuarioService: UsuarioService,
-              private navigationService: NavigationService) {
-  
+    private configService: ConfigService,
+    private breakpointObserver: BreakpointObserver,
+    private router: Router,
+    private authFacade: AuthFacade,
+    private parametriaService: ParametriaService,
+    private usuarioService: UsuarioService,
+    private navigationService: NavigationService) {
+
     this.navigationService.items = [];
 
     this.usuarioService.obtenerMenu().subscribe(res => {
       this.usuario = res;
 
       let itemsDupliados: NavigationItem[] = [];
-
+      console.log("this.usuario?.roles",this.usuario?.roles)
+      sessionStorage.setItem("rolesusuario", JSON.stringify(this.usuario?.roles));
       this.usuario?.roles?.forEach(element => {
+        sessionStorage.setItem("roles", this.usuario?.roles);
         let menu: any = RolMenu.find(item => item.ROL.CODIGO === element.codigo);
-        
+
         itemsDupliados.push(...menu?.MENU);
 
-        if(this.usuario?.tipoPersona?.codigo == TipoPersonaEnum.JURIDICO){
+        if (this.usuario?.tipoPersona?.codigo == TipoPersonaEnum.JURIDICO) {
           //remove menu 10 Bdj Invitados
-          itemsDupliados = itemsDupliados.filter(function(el) { return el.codigo != "menu10"; });
+          itemsDupliados = itemsDupliados.filter(function (el) { return el.codigo != "menu10"; });
         }
       });
       let unique: NavigationItem[] = [...new Set(itemsDupliados)];
       this.navigationService.items.push(...unique);
     })
-  
+
   }
 
   ngOnInit() {
@@ -83,7 +85,7 @@ export class CustomLayoutComponent implements OnInit {
 
     this.cargarCombos();
 
-    this.configService.setConfig('vex-layout-apollo' as VexConfigName);     
+    this.configService.setConfig('vex-layout-apollo' as VexConfigName);
     this.configService.updateConfig({
       layout: 'horizontal',
       toolbar: {
@@ -166,7 +168,7 @@ export class CustomLayoutComponent implements OnInit {
       ListadoEnum.TIPO_DATO,
       ListadoEnum.ENTRADA_DATO,
       ListadoEnum.ADJUDICACION_SIMPLIFICADA,
-      ListadoEnum.TIPO_CONTRATO,  
+      ListadoEnum.TIPO_CONTRATO,
     ]).subscribe(listRes => {
 
     })

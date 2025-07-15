@@ -56,7 +56,7 @@
       </div>
       <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
         <button color="primary" style="margin-right: auto;" mat-raised-button type="button"
-          (click)="aprobarPersonal('add')">Aprobar/Visto Bueno/Firmar</button>
+          (click)="aprobarPersonal(usuario)">Aprobar/Visto Bueno/Firmar</button>
         <button color="primary" mat-raised-button type="button" (click)="buscar()">
           Buscar
         </button>
@@ -69,28 +69,23 @@
 </div>
 <div class="overflow-auto shadow-2xl rounded">
   <table class="w-full border" mat-table matSort [dataSource]="dataSourceReemplazar">
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef></th>
+     <ng-container matColumnDef="tipoAprobacion">
+      <th mat-header-cell *matHeaderCellDef style="text-align: center;">Tipo de Aprobación</th>
       <td mat-cell *matCellDef="let element">
         <mat-checkbox color="primary" (change)="actualizarListaExpedientePersonal($event, element)">
-        </mat-checkbox>
+        </mat-checkbox>&nbsp;
+        {{ element.tipoAprobacion }}
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="tipoAprobacion">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Aprobación</th>
-      <td mat-cell *matCellDef="let element">{{ element.tipoAprobacion
-        }}</td>
-    </ng-container>
-
     <ng-container matColumnDef="numeroExpediente">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Número expediente</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-center">Número <br>expediente</th>
       <td mat-cell *matCellDef="let element">
         {{ element.numeroExpediente }}
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="documento" *ngIf="tipousuario!=='GL'">
+    <ng-container matColumnDef="documento" *ngIf="tipousuario.EVALUADOR">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Documento</th>
       <td mat-cell *matCellDef="let element">{{ element.documento }}
         <button mat-icon-button type="button">
@@ -99,12 +94,15 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="documento" *ngIf="tipousuario==='GL'">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Informe</th>
-      <td mat-cell *matCellDef="let element">{{ element.documento }}
-        <button mat-icon-button type="button">
-        <mat-icon>get_app</mat-icon>
-      </button>
+    <ng-container matColumnDef="documento" *ngIf="!tipousuario.EVALUADOR">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-center">Informe</th>
+       <td mat-cell *matCellDef="let element">
+        <div style="display: flex; align-items: center;">
+          <span>{{ element.documento }}</span>
+          <button mat-icon-button type="button">
+            <mat-icon>get_app</mat-icon>
+          </button>
+        </div>
       </td>
       
     </ng-container>
@@ -120,13 +118,13 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="tipoSolicitud">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Solicitud</th>
+    <ng-container matColumnDef="tipoSolicitud" *ngIf="!tipousuario.EVALUADOR">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Tipo de <br>Solicitud</th>
       <td mat-cell *matCellDef="let element">{{ element.tipoSolicitud }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="tipoContrato">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Contrato</th>
+    <ng-container matColumnDef="tipoSolicitud" *ngIf="tipousuario.EVALUADOR">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Tipo de <br>Contrato</th>
       <td mat-cell *matCellDef="let element">{{ element.tipoSolicitud }}</td>
     </ng-container>
 
@@ -136,17 +134,27 @@
     </ng-container>
 
     <ng-container matColumnDef="estadoAprobacion">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Estado <br>Aprobación</th>
       <td mat-cell *matCellDef="let element">{{ element.estadoAprobacion }}</td>
     </ng-container>
 
     <ng-container matColumnDef="estadoAprobacionLogistica">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación Gerente División</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Estado Aprobación <br>Logística</th>
       <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionLogistica }}</td>
     </ng-container>
 
     <ng-container matColumnDef="estadoVbGAF">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación Gerente Línea</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Estado BV <br>GAF</th>
+      <td mat-cell *matCellDef="let element">{{ element.estadoEvalGaf }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="estadoFirma">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Estado Firma <br>jefe Unidad</th>
+      <td mat-cell *matCellDef="let element">{{ element.estadoEvalGaf }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="estadoFirmaGe">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Estado Firma <br>Gerente</th>
       <td mat-cell *matCellDef="let element">{{ element.estadoEvalGaf }}</td>
     </ng-container>
 

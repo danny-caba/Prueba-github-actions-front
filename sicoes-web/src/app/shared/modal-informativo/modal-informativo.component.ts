@@ -7,8 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-modal-informativo',
   templateUrl: './modal-informativo.component.html',
-  styleUrls: ['./modal-informativo.component.scss'],
-  encapsulation:ViewEncapsulation.None
+  styleUrls: ['./modal-informativo.component.scss']
 })
 export class ModalInformativoComponent implements OnInit {
   

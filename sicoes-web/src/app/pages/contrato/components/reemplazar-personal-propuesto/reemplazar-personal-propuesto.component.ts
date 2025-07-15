@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -33,6 +33,7 @@ import { ModalInformativoComponent } from 'src/app/shared/modal-informativo/moda
 })
 export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> implements OnInit {
 
+  @Input() usuario:any;
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
   SOLICITUD: any;
@@ -69,7 +70,6 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
 
 
   displayedColumnsPersonal: string[] = [
-    'select',
     'tipoAprobacion',
     'numeroExpediente',
     'documento',
@@ -277,6 +277,7 @@ historyApproveAndSignPersonal(row: any) {
     this.dialog.open(ModalInformativoComponent, {
       width: '600px',
       maxHeight: '90%',
+      panelClass:'abarca-cabecera',
       data: {
         title: 'Mensaje Informativo',
         description: descripcion,

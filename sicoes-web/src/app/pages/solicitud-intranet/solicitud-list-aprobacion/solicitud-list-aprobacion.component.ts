@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
-import { ListadoEnum } from 'src/helpers/constantes.components';
+import { ListadoEnum, UsuariosRoles } from 'src/helpers/constantes.components';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
 import { SolicitudService } from 'src/app/service/solicitud.service'; 
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
@@ -104,6 +104,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     'actionsPerfeccionamiento'
   ];
 
+  usuario:any='05';
+  roles=UsuariosRoles;
   dataSourcePerfeccionamiento = new MatTableDataSource<any>();
 
   @ViewChild('paginatorPerfeccionamiento') paginatorPerfeccionamiento: MatPaginator;

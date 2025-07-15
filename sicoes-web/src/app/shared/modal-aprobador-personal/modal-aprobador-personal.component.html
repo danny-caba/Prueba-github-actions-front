@@ -14,7 +14,9 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="realizarAccion('APROBAR')">Aprobar</button>
+  <button mat-raised-button color="primary" (click)="realizarAccion('Firmar')" *ngIf="accion==roles.APROBADOR_G3 || accion==roles.APROBADOR_G4">Firmar</button>
+  <button mat-raised-button color="primary" (click)="realizarAccion('Visto Bueno')" *ngIf="accion==roles.APROBADOR_G2">Visto Bueno</button>
+  <button mat-raised-button color="primary" (click)="realizarAccion('APROBAR')" *ngIf="accion!=roles.APROBADOR_G2 && accion!=roles.APROBADOR_G3">Aprobar</button>
   <button mat-raised-button color="primary" (click)="realizarAccion('RECHAZAR')">Rechazar</button>
   <button mat-raised-button color="primary" (click)="cancelar()">Cancelar</button>
 </mat-dialog-actions>

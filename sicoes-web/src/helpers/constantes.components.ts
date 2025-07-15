@@ -264,3 +264,13 @@ export enum flagEnum {
     VIGENTE = '1',
     NO_VIGENTE = '0'
 }
+
+export class UsuariosRoles{
+   static GER_G2="01";
+   static GER_03="02";
+   static EVALUADOR="03";
+   static APROBADOR_G2="04";
+   static APROBADOR_G3="05";
+   static APROBADOR_G4="06";
+
+}

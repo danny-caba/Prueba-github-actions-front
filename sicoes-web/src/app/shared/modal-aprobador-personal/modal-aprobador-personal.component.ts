@@ -9,6 +9,7 @@ import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { AuthUser } from 'src/app/auth/store/auth.models';
 import { SelectedPerfeccionamientoItem } from 'src/app/interface/contrato.model';
 import { ContratoService } from 'src/app/service/contrato.service';
+import { UsuariosRoles } from 'src/helpers/constantes.components';
 
 @Component({
   selector: 'app-modal-aprobador-personal',
@@ -17,7 +18,7 @@ import { ContratoService } from 'src/app/service/contrato.service';
 })
 export class ModalAprobadorPersonalComponent extends BaseComponent implements OnInit {
 
-  observacion = new FormControl('', [Validators.required, Validators.maxLength(500)]);
+  observacion = new FormControl('', [Validators.maxLength(500)]);
 
   progreso: number = 0;
   loadingAccion: boolean = false;
@@ -25,10 +26,13 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
 
   usuario$: any;
   usuario: AuthUser;
+  accion:any;
+  roles=UsuariosRoles
 
   constructor(
     private dialogRef: MatDialogRef<ModalAprobadorPersonalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
+      accion:any;
       elementosSeleccionados: SelectedPerfeccionamientoItem[];
     },
     private contratoService: ContratoService,
@@ -39,6 +43,8 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
   }
 
   ngOnInit(): void {
+    console.log("dataaaaa",this.data);
+    this.accion=this.data.accion[0]
     this.usuario$ = this.authFacade.user$;
     this.usuario$.subscribe(usu => {
       this.usuario = usu;
@@ -64,7 +70,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
   async realizarAccion(tipoAccion: string): Promise<void> {
 
     this.errores = [];
-    let msj = `¿Está seguro de que desea ${tipoAccion.toLowerCase()} el informe?`;
+    let msj = `¿Está seguro de que desea ${tipoAccion.toLowerCase()} la evaluación?`;
 
     if (this.validarObservacion()) {
       return;

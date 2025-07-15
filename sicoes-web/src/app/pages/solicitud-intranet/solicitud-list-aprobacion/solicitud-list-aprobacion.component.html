@@ -300,11 +300,11 @@
             <mat-paginator #paginatorPerfeccionamiento class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChangePerfeccionamiento($event)" showFirstLastButtons></mat-paginator>
             </div>
         </mat-tab>
-         <mat-tab label="Reemplazar personal propuesto">
-            <reemplazar-personal-propuesto></reemplazar-personal-propuesto>
+         <mat-tab label="Reemplazar personal propuesto" *ngIf="usuario==roles.GER_G2 || usuario==roles.GER_03">
+            <reemplazar-personal-propuesto [usuario]="[usuario]"></reemplazar-personal-propuesto>
         </mat-tab>
-        <mat-tab label="Adenda Reemplazar personal propuesto">
-            <adenda-reemplazar-personal></adenda-reemplazar-personal>
+        <mat-tab label="Adenda Reemplazar Personal propuesto" *ngIf="usuario==roles.EVALUADOR || usuario==roles.APROBADOR_G2 || usuario==roles.APROBADOR_G3 || usuario==roles.APROBADOR_G4">
+            <adenda-reemplazar-personal [usuario]="[usuario]"></adenda-reemplazar-personal>
         </mat-tab>
         </mat-tab-group>
     </div>

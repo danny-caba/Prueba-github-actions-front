@@ -105,6 +105,7 @@ import { LayoutCargarAdendaComponent } from './layout-cargar-adenda/layout-carga
 import { LayoutPersPropuestoCargaComponent } from './layout-pers-propuesto-carga/layout-pers-propuesto-carga.component';
 import { LayoutDocsAdicionalesCargaComponent } from './layout-docs-adicionales-carga/layout-docs-adicionales-carga.component';
 import { FormAdjuntosNoTitleComponent } from './form-adjuntos-no-title/form-adjuntos-no-title.component';
+import { LayoutActaInicioComponent } from './layout-acta-inicio/layout-acta-inicio.component';
 
 const sharedComponents = [
 
@@ -171,6 +172,7 @@ const sharedComponents = [
     LayoutCargarAdendaComponent,
     LayoutPersPropuestoCargaComponent,
     LayoutDocsAdicionalesCargaComponent,
+    LayoutActaInicioComponent,
 
     ModalTileComponent,
     ModalTileComponent2,

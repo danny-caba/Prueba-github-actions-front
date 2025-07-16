@@ -34,6 +34,9 @@ import { ContratoEvaluarDocumentosComponent } from './components/contrato-evalua
 import { ContratoEvaluarReemplazoComponent } from './components/contrato-evaluar-reemplazo/contrato-evaluar-reemplazo.component';
 import { ContratoFormEvalReempComponent } from './components/contrato-form-eval-reemp/contrato-form-eval-reemp.component';
 import { ContratoFormEvalReempReviewComponent } from './components/contrato-form-eval-reemp/contrato-form-eval-reemp-review/contrato-form-eval-reemp-review.component';
+import { ContratoEvaluarDocsInicioComponent } from './components/contrato-evaluar-docs-inicio/contrato-evaluar-docs-inicio.component';
+import { ContratoEvaluarDocsInicioFormComponent } from './components/contrato-evaluar-docs-inicio-form/contrato-evaluar-docs-inicio-form.component';
+import { DocsInicioServicioReviewComponent } from './components/contrato-evaluar-docs-inicio-form/docs-inicio-servicio-review/docs-inicio-servicio-review.component';
 
 
 @NgModule({
@@ -43,7 +46,10 @@ import { ContratoFormEvalReempReviewComponent } from './components/contrato-form
     ContratoEvaluarDocumentosComponent,
     ContratoEvaluarReemplazoComponent,
     ContratoFormEvalReempComponent,
-    ContratoFormEvalReempReviewComponent
+    ContratoFormEvalReempReviewComponent,
+    ContratoEvaluarDocsInicioComponent,
+    ContratoEvaluarDocsInicioFormComponent,
+    DocsInicioServicioReviewComponent
   ],
   imports: [
     CommonModule,

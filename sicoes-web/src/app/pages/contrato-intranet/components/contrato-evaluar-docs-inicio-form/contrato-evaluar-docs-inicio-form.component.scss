@@ -79,29 +79,32 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
   font-weight: bold;
 }
   
-:host ::ng-deep .mat-expansion-panel-header,
-:host ::ng-deep .mat-expansion-panel-header:hover,
-:host ::ng-deep .mat-expansion-panel-header:focus,
-:host ::ng-deep .mat-expansion-panel-header.mat-expanded,
-:host ::ng-deep .mat-expansion-panel-header.mat-expanded:hover,
-:host ::ng-deep .mat-expansion-panel-header.mat-expanded:focus {
-  background-color: rgb(255, 255, 255);
+.mat-expansion-panel-header.mat-expanded,
+.mat-expansion-panel-header.mat-expanded:hover,
+.mat-expansion-panel-header.mat-expanded:focus {
+    background-color: rgb(255, 255, 255);
+}
+  
+.mat-expansion-panel-header,
+.mat-expansion-panel-header:hover,
+.mat-expansion-panel-header:focus {
+    background-color: rgb(255, 255, 255);
 }
 
-:host ::ng-deep .mat-expansion-panel {
+::ng-deep .mat-expansion-panel {
     box-shadow: none !important;
     border: none !important;
-}
+  }
   
-:host ::ng-deep .mat-expansion-panel-header {
+  ::ng-deep .mat-expansion-panel-header {
     box-shadow: none !important;
     border-bottom: none !important;
-}
+  }
   
-:host ::ng-deep .mat-expansion-panel-header::after {
+  ::ng-deep .mat-expansion-panel-header::after {
     content: none !important;
     display: none !important;
-}
+  }
   
 ::ng-deep .mat-expansion-indicator::after{
     border-color: rgb(68, 68, 68, 0.86);

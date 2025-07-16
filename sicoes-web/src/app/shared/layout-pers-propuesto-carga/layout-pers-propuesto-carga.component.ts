@@ -14,7 +14,7 @@ import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 })
 export class LayoutPersPropuestoCargaComponent extends BaseComponent implements OnInit {
 
-  @Input() isReview: boolean;
+  @Input() isReview?: boolean;
 
   editable: boolean = true;
   marcacion: 'si' | 'no' | null = null;
@@ -24,6 +24,8 @@ export class LayoutPersPropuestoCargaComponent extends BaseComponent implements 
   }
 
   ngOnInit(): void {
+    this.isReview =this.isReview ?? false;
+    console.log("isReview -> ", this.isReview);
   }
 
   setValueCheckedContratoLab(even) {

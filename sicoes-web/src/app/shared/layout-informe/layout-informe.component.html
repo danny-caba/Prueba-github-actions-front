@@ -16,13 +16,13 @@
   <mat-radio-group
       *ngIf="isReviewExt || isCargaAdenda"
       [(ngModel)]="marcaFechaDesvinculacion"
-      disabled = "isCargaAdenda"
+      [disabled] = "isCargaAdenda"
       class="ml-12 flex gap-4">
       <mat-radio-button value="si">Sí</mat-radio-button>
       <mat-radio-button value="no">No</mat-radio-button>
   </mat-radio-group>
-  <span *ngIf="isReviewExt || isCargaAdenda" class="text-secondary ml-12" disabled = "isCargaAdenda">Evaluado por:</span>
-  <span *ngIf="isReviewExt || isCargaAdenda" class="text-secondary ml-12" disabled = "isCargaAdenda">Fecha y Hora:</span>
+  <span *ngIf="isReviewExt || isCargaAdenda" class="text-secondary ml-12">Evaluado por:</span>
+  <span *ngIf="isReviewExt || isCargaAdenda" class="text-secondary ml-12">Fecha y Hora:</span>
 </div>
 
 <div class="flex items-center">
@@ -45,7 +45,7 @@
     <mat-radio-group
       *ngIf="isReviewExt || isCargaAdenda"
       [(ngModel)]="marcaInformeCarta"
-      disabled = "isCargaAdenda"
+      [disabled] = "isCargaAdenda"
       class="ml-12 flex items-center gap-4">
       <mat-radio-button value="si">Sí</mat-radio-button>
       <mat-radio-button value="no">No</mat-radio-button>
@@ -63,7 +63,7 @@
   <mat-form-field class="w-full">
     <textarea matInput
            placeholder="Observación"
-           disabled = "isCargaAdenda"
+           [disabled] = "isCargaAdenda"
            rows="2"
            cdkTextareaAutosize
            cdkAutosizeMinRows="2"

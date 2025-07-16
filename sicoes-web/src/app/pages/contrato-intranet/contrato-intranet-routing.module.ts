@@ -9,6 +9,8 @@ import { ContratoFormEvaluarComponent } from './components/contrato-form-evaluar
 import { ContratoEvaluarDocumentosComponent } from './components/contrato-evaluar-documentos/contrato-evaluar-documentos.component';
 import { ContratoEvaluarReemplazoComponent } from './components/contrato-evaluar-reemplazo/contrato-evaluar-reemplazo.component';
 import { ContratoFormEvalReempComponent } from './components/contrato-form-eval-reemp/contrato-form-eval-reemp.component';
+import { ContratoEvaluarDocsInicioComponent } from './components/contrato-evaluar-docs-inicio/contrato-evaluar-docs-inicio.component';
+import { ContratoEvaluarDocsInicioFormComponent } from './components/contrato-evaluar-docs-inicio-form/contrato-evaluar-docs-inicio-form.component';
 
 const routes: VexRoutes = [{ 
   path: '',
@@ -48,7 +50,15 @@ const routes: VexRoutes = [{
       path: Link.EVAL_REEMPLAZO_PERSONAL_FORM + '/:idSolicitud',
       component: ContratoFormEvalReempComponent,
       canActivate: [AuthGuardService, RoleGuardService]
-    }, 
+    }, {
+      path: Link.EVAL_DOCS_INICIO + '/:idSolicitud',
+      component: ContratoEvaluarDocsInicioComponent,
+      canActivate: [AuthGuardService, RoleGuardService]
+    }, {
+      path: Link.EVAL_DOCS_INICIO_FORM + '/:idSolicitud',
+      component: ContratoEvaluarDocsInicioFormComponent,
+      canActivate: [AuthGuardService, RoleGuardService]
+    },   
   ]
   }];
 

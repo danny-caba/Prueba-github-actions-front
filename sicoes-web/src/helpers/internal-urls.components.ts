@@ -82,6 +82,8 @@ export enum Link {
 
     REEMPLAZO_PERSONAL_FORM = 'reemplazo-pers-form',
     CARGA_DOCS_INICIO_FORM = 'carga-docs-inicio-form',
+    EVAL_DOCS_INICIO = 'eval-docs-inicio',
+    EVAL_DOCS_INICIO_FORM = 'eval-docs-inicio-form',
     EVAL_REEMPLAZO_PERSONAL_FORM = 'eval-reemplazo-pers-form',
 }
 

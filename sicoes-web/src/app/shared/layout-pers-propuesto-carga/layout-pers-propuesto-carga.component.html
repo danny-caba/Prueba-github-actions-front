@@ -13,7 +13,7 @@
         <span class="id-spacer"></span>
         <span class="doc-tab-label">Contrato Laboral</span>
         <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
+        <span class="text-secondary" *ngIf="isReview">ContrMock.pdf</span>
         <button matTooltip="Descargar" *ngIf="isReview"
             mat-icon-button type="button"
             class="text-primary hover:bg-hover">
@@ -24,7 +24,7 @@
             class="text-primary hover:bg-hover">
             <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
         </button>
-        <vex-form-adjuntos-no-title class="ml-6"
+        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
           [titulo]="'Archivo (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-no-title>
@@ -33,6 +33,7 @@
             <input type="date"
                    [min]="dateHoy | date:'yyyy-MM-dd'"
                    class="fecha-input"
+                   [disabled] = "isReview"
                    matInput>
           </mat-form-field>
         <span class="text-secondary ml-2 font-bold">FF:</span>
@@ -40,6 +41,7 @@
             <input type="date"
                    [min]="dateHoy | date:'yyyy-MM-dd'"
                    class="fecha-input"
+                   [disabled] = "isReview"
                    matInput>
           </mat-form-field>
     </div>
@@ -50,7 +52,7 @@
         <span class="id-spacer"></span>
         <span class="doc-tab-label">SCRT</span>
         <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
+        <span class="text-secondary" *ngIf="isReview">SCRT1Mock.pdf</span>
         <button matTooltip="Descargar" *ngIf="isReview"
             mat-icon-button type="button"
             class="text-primary hover:bg-hover">
@@ -61,11 +63,22 @@
             class="text-primary hover:bg-hover">
             <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
         </button>
-        <vex-form-adjuntos-no-title class="ml-6"
+        <span class="text-secondary ml-2" *ngIf="isReview">SCRT2Mock.pdf</span>
+        <button matTooltip="Descargar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+        </button>
+        <button matTooltip="Eliminar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+        </button>
+        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
           [titulo]="'File (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-no-title>
-        <vex-form-adjuntos-no-title class="ml-6"
+        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
           [titulo]="'Archivo (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-no-title>
@@ -74,6 +87,7 @@
             <input type="date"
                    [min]="dateHoy | date:'yyyy-MM-dd'"
                    class="fecha-input"
+                   [disabled] = "isReview"
                    matInput>
           </mat-form-field>
         <span class="text-secondary ml-2 font-bold">FF:</span>
@@ -81,6 +95,7 @@
             <input type="date"
                    [min]="dateHoy | date:'yyyy-MM-dd'"
                    class="fecha-input"
+                   [disabled] = "isReview"
                    matInput>
           </mat-form-field>
     </div>
@@ -91,7 +106,7 @@
         <span class="id-spacer"></span>
         <span class="doc-tab-label">Póliza</span>
         <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
+        <span class="text-secondary" *ngIf="isReview">Pol1Mock.pdf</span>
         <button matTooltip="Descargar" *ngIf="isReview"
             mat-icon-button type="button"
             class="text-primary hover:bg-hover">
@@ -102,11 +117,22 @@
             class="text-primary hover:bg-hover">
             <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
         </button>
-        <vex-form-adjuntos-no-title class="ml-6"
+        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
           [titulo]="'File (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-no-title>
-        <vex-form-adjuntos-no-title class="ml-6"
+        <span class="text-secondary ml-2" *ngIf="isReview">Pol2Mock.pdf</span>
+        <button matTooltip="Descargar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+        </button>
+        <button matTooltip="Eliminar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+        </button>
+        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
           [titulo]="'Archivo (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-no-title>
@@ -115,6 +141,7 @@
             <input type="date"
                    [min]="dateHoy | date:'yyyy-MM-dd'"
                    class="fecha-input"
+                   [disabled] = "isReview"
                    matInput>
           </mat-form-field>
         <span class="text-secondary ml-2 font-bold">FF:</span>
@@ -122,6 +149,7 @@
             <input type="date"
                    [min]="dateHoy | date:'yyyy-MM-dd'"
                    class="fecha-input"
+                   [disabled] = "isReview"
                    matInput>
           </mat-form-field>
     </div>
@@ -132,7 +160,7 @@
         <span class="id-spacer"></span>
         <span class="doc-tab-label">Examen Médico</span>
         <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
+        <span class="text-secondary" *ngIf="isReview">ExaMock.pdf</span>
         <button matTooltip="Descargar" *ngIf="isReview"
             mat-icon-button type="button"
             class="text-primary hover:bg-hover">
@@ -143,7 +171,7 @@
             class="text-primary hover:bg-hover">
             <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
         </button>
-        <vex-form-adjuntos-no-title class="ml-6"
+        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
           [titulo]="'Archivo (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-no-title>
@@ -152,6 +180,7 @@
             <input type="date"
                    [min]="dateHoy | date:'yyyy-MM-dd'"
                    class="fecha-input"
+                   [disabled] = "isReview"
                    matInput>
           </mat-form-field>
         <span class="text-secondary ml-2 font-bold">FF:</span>
@@ -159,6 +188,7 @@
             <input type="date"
                    [min]="dateHoy | date:'yyyy-MM-dd'"
                    class="fecha-input"
+                   [disabled] = "isReview"
                    matInput>
           </mat-form-field>
     </div>

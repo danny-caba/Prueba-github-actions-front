@@ -32,4 +32,23 @@
 vex-form-adjuntos-no-title.btn-adjunto {
     margin-left: auto;
   }
-  
+
+  ::ng-deep .mat-form-field {
+    .fecha-input {
+      font-size: 14px;
+      text-align: center;
+      line-height: 1;
+      padding: 0.2em 0;
+      display: flex;
+      align-items: center;
+      min-height: 14px;
+      width: 150px;
+    }
+}
+
+::ng-deep {
+    .fecha-field {
+      min-height: 14px;
+      width: 150px !important;
+    }
+}

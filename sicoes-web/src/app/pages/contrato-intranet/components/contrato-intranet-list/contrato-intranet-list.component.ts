@@ -124,4 +124,8 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
   evaluarDocsReempPersonal(row: any){
     this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_ADD + '/' + row.idSolicitud]);
   }
+
+  evaluarDocsInicioServicio(row: any){
+    this.router.navigate(['/intranet/contratos/' + Link.EVAL_DOCS_INICIO + '/' + row.idSolicitud]);
+  }
 }

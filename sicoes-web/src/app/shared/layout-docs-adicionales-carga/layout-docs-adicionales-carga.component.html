@@ -19,7 +19,7 @@
             class="text-primary hover:bg-hover">
             <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
         </button>
-        <vex-form-adjuntos-no-title
+        <vex-form-adjuntos-no-title *ngIf="!isReview"
           [titulo]="'Archivo (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-no-title>
@@ -41,7 +41,7 @@
             class="text-primary hover:bg-hover">
             <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
         </button>
-        <vex-form-adjuntos-no-title
+        <vex-form-adjuntos-no-title *ngIf="!isReview"
           [titulo]="'Archivo (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-no-title>

@@ -21,7 +21,7 @@
         </button>
         <mat-radio-group
             *ngIf="isReview || isReviewExt || isCargaAdenda"
-            disabled = "isCargaAdenda"
+            [disabled] = "isCargaAdenda"
             [(ngModel)]="marcacion"
             class="ml-12 flex items-center gap-4">
             <mat-radio-button value="si">Sí</mat-radio-button>
@@ -39,7 +39,7 @@
         <mat-form-field class="w-full">
           <textarea matInput
                  placeholder="Observación"
-                 disabled = "isCargaAdenda"
+                 [disabled] = "isCargaAdenda"
                  rows="2"
                  cdkTextareaAutosize
                  cdkAutosizeMinRows="2"

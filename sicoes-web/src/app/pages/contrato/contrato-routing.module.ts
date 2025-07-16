@@ -47,6 +47,13 @@ const routes: VexRoutes = [{
       component: ReemplazoPersFormComponent,
       canActivate: [AuthGuardService, RoleGuardService]
     }, {
+      path: Link.CARGA_DOCS_INICIO_FORM + '/:idSolicitud',
+      component: ReemplazoPersFormComponent,
+      canActivate: [AuthGuardService, RoleGuardService],
+      data: { 
+        isCargaDocsInicio: true 
+      }
+    }, {
       path: Link.REEMPLAZO_PERSONAL_REVIEW + '/:idSolicitud',
       component: RevisarDocReemplazoComponent,
       canActivate: [AuthGuardService, RoleGuardService],

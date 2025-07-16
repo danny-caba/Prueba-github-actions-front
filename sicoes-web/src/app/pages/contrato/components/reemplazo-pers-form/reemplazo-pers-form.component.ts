@@ -13,6 +13,7 @@ export class ReemplazoPersFormComponent extends BaseComponent implements OnInit 
   btnRegister: string = 'Registrar';
   idSolicitud: string = '';
   uuidSolicitud: string= '';
+  isCargaDocsInicio: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,6 +23,11 @@ export class ReemplazoPersFormComponent extends BaseComponent implements OnInit 
   }
 
   ngOnInit(): void {
+    this.route.data.subscribe(data => {
+      if(data.isCargaDocsInicio){
+        this.isCargaDocsInicio = data.isCargaDocsInicio;
+      }
+    });
     this.getIdSolicitud();
   }
 

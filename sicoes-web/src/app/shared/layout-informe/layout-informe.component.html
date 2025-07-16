@@ -1,6 +1,6 @@
 <div class="flex items-center">
   <span class="text-secondary" *ngIf="isReviewExt || isCargaAdenda">Fecha Desvinculación</span>
-  <mat-form-field class="!mb-0 mt-2 ml-2 flex-none">
+  <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
     <input [formControl]="formGroup.controls.fechaDesvinculacion"
            type="date"
            [min]="dateHoy | date:'yyyy-MM-dd'"

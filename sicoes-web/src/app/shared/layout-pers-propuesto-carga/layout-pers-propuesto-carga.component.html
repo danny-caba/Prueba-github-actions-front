@@ -1,0 +1,165 @@
+<div>
+    <ng-container [ngTemplateOutlet]="templateContratoLaboral"></ng-container>
+    <mat-divider></mat-divider>
+    <ng-container [ngTemplateOutlet]="templateScrt"></ng-container>
+    <mat-divider></mat-divider>
+    <ng-container [ngTemplateOutlet]="templatePoliza"></ng-container>
+    <mat-divider></mat-divider>
+    <ng-container [ngTemplateOutlet]="templateExamenMedico"></ng-container>
+</div>
+
+<ng-template #templateContratoLaboral>
+    <div class="panel-content-container">
+        <span class="id-spacer"></span>
+        <span class="doc-tab-label">Contrato Laboral</span>
+        <span class="flex-1"></span>
+        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
+        <button matTooltip="Descargar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+        </button>
+        <button matTooltip="Eliminar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+        </button>
+        <vex-form-adjuntos-no-title class="ml-6"
+          [titulo]="'Archivo (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-no-title>
+        <span class="text-secondary ml-2 font-bold">FI</span>
+        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
+            <input type="date"
+                   [min]="dateHoy | date:'yyyy-MM-dd'"
+                   class="fecha-input"
+                   matInput>
+          </mat-form-field>
+        <span class="text-secondary ml-2 font-bold">FF:</span>
+        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
+            <input type="date"
+                   [min]="dateHoy | date:'yyyy-MM-dd'"
+                   class="fecha-input"
+                   matInput>
+          </mat-form-field>
+    </div>
+</ng-template>
+
+<ng-template #templateScrt>
+    <div class="panel-content-container">
+        <span class="id-spacer"></span>
+        <span class="doc-tab-label">SCRT</span>
+        <span class="flex-1"></span>
+        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
+        <button matTooltip="Descargar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+        </button>
+        <button matTooltip="Eliminar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+        </button>
+        <vex-form-adjuntos-no-title class="ml-6"
+          [titulo]="'File (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-no-title>
+        <vex-form-adjuntos-no-title class="ml-6"
+          [titulo]="'Archivo (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-no-title>
+        <span class="text-secondary ml-2 font-bold">FI</span>
+        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
+            <input type="date"
+                   [min]="dateHoy | date:'yyyy-MM-dd'"
+                   class="fecha-input"
+                   matInput>
+          </mat-form-field>
+        <span class="text-secondary ml-2 font-bold">FF:</span>
+        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
+            <input type="date"
+                   [min]="dateHoy | date:'yyyy-MM-dd'"
+                   class="fecha-input"
+                   matInput>
+          </mat-form-field>
+    </div>
+</ng-template>
+
+<ng-template #templatePoliza>
+    <div class="panel-content-container">
+        <span class="id-spacer"></span>
+        <span class="doc-tab-label">Póliza</span>
+        <span class="flex-1"></span>
+        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
+        <button matTooltip="Descargar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+        </button>
+        <button matTooltip="Eliminar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+        </button>
+        <vex-form-adjuntos-no-title class="ml-6"
+          [titulo]="'File (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-no-title>
+        <vex-form-adjuntos-no-title class="ml-6"
+          [titulo]="'Archivo (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-no-title>
+        <span class="text-secondary ml-2 font-bold">FI</span>
+        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
+            <input type="date"
+                   [min]="dateHoy | date:'yyyy-MM-dd'"
+                   class="fecha-input"
+                   matInput>
+          </mat-form-field>
+        <span class="text-secondary ml-2 font-bold">FF:</span>
+        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
+            <input type="date"
+                   [min]="dateHoy | date:'yyyy-MM-dd'"
+                   class="fecha-input"
+                   matInput>
+          </mat-form-field>
+    </div>
+</ng-template>
+
+<ng-template #templateExamenMedico>
+    <div class="panel-content-container">
+        <span class="id-spacer"></span>
+        <span class="doc-tab-label">Examen Médico</span>
+        <span class="flex-1"></span>
+        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
+        <button matTooltip="Descargar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+        </button>
+        <button matTooltip="Eliminar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+        </button>
+        <vex-form-adjuntos-no-title class="ml-6"
+          [titulo]="'Archivo (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-no-title>
+        <span class="text-secondary ml-2 font-bold">FI</span>
+        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
+            <input type="date"
+                   [min]="dateHoy | date:'yyyy-MM-dd'"
+                   class="fecha-input"
+                   matInput>
+          </mat-form-field>
+        <span class="text-secondary ml-2 font-bold">FF:</span>
+        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
+            <input type="date"
+                   [min]="dateHoy | date:'yyyy-MM-dd'"
+                   class="fecha-input"
+                   matInput>
+          </mat-form-field>
+    </div>
+</ng-template>

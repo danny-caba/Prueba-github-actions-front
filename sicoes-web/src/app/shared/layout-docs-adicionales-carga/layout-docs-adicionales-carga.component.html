@@ -1,0 +1,49 @@
+<div class="panel-group">
+    <ng-container [ngTemplateOutlet]="templateContratoAlquiler"></ng-container>
+    <mat-divider></mat-divider>
+    <ng-container [ngTemplateOutlet]="templateSeguroSoat"></ng-container>
+  </div>
+
+<ng-template #templateContratoAlquiler>
+    <div class="panel-grid">
+        <span class="doc-tab-label">CONTRATO POR ALQUILER CAMIONETA</span>
+        <span class="flex-1"></span>
+        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
+        <button matTooltip="Descargar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+        </button>
+        <button matTooltip="Eliminar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+        </button>
+        <vex-form-adjuntos-no-title
+          [titulo]="'Archivo (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-no-title>
+    </div>
+</ng-template>
+
+<ng-template #templateSeguroSoat>
+    <div class="panel-grid">
+        <span class="doc-tab-label">SEGURO SOAT</span>
+        <span class="flex-1"></span>
+        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
+        <button matTooltip="Descargar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+        </button>
+        <button matTooltip="Eliminar" *ngIf="isReview"
+            mat-icon-button type="button"
+            class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+        </button>
+        <vex-form-adjuntos-no-title
+          [titulo]="'Archivo (*.pdf)'"
+          [editable]="editable">
+        </vex-form-adjuntos-no-title>
+      </div>
+</ng-template>

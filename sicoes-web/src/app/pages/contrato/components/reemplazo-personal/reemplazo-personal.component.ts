@@ -58,6 +58,11 @@ export class ReemplazoPersonalComponent extends BaseComponent implements OnInit 
     this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_FORM, encryptedId]);
   }
 
+  toGoDocumentosInicioServicioForm() {
+    const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
+    this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.CARGA_DOCS_INICIO_FORM, encryptedId]);
+  }
+
   toGoBandejaContratos() {
       functionsAlert.questionSiNo('¿Desea ir a la bandeja de contratos?').then((result) => {
           if (result.isConfirmed) {

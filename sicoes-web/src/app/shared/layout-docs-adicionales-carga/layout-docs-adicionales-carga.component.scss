@@ -1,0 +1,32 @@
+.panel-grid {
+    display: grid;
+    grid-template-columns:
+      32% 
+      20%  
+      auto;
+  
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .doc-tab-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .btn-adjunto {
+    min-width: 140px;
+  }
+
+
+::ng-deep .mat-divider {
+    border-top-color: rgba(68, 67, 67, 0.38) !important;
+}
+
+vex-form-adjuntos-no-title.btn-adjunto {
+    margin-left: auto;
+  }
+  

@@ -1,0 +1,42 @@
+.panel-content-container {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    width: 100%;
+    padding: 0;
+
+    .id-spacer {
+        min-width: 90px; 
+        flex-shrink: 0;
+    }
+
+    .doc-tab-label {
+        min-width: 150px;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+}
+
+::ng-deep .mat-form-field {
+    .fecha-input {
+      font-size: 14px;
+      text-align: center;
+      line-height: 1;
+      padding: 0.2em 0;
+      display: flex;
+      align-items: center;
+      min-height: 14px;
+      width: 150px;
+    }
+}
+
+::ng-deep {
+    .fecha-field {
+      min-height: 14px;
+      width: 150px !important;
+    }
+}
+
+::ng-deep .mat-divider {
+    border-top-color: rgba(68, 67, 67, 0.38) !important;
+}

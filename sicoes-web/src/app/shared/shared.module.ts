@@ -102,6 +102,9 @@ import { LayoutSolicitudReemplazoSupervisorComponent } from './layout-solicitud-
 import { LayoutInformeComponent } from './layout-informe/layout-informe.component';
 import { LayoutProyectoAdendaComponent } from './layout-proyecto-adenda/layout-proyecto-adenda.component';
 import { LayoutCargarAdendaComponent } from './layout-cargar-adenda/layout-cargar-adenda.component';
+import { LayoutPersPropuestoCargaComponent } from './layout-pers-propuesto-carga/layout-pers-propuesto-carga.component';
+import { LayoutDocsAdicionalesCargaComponent } from './layout-docs-adicionales-carga/layout-docs-adicionales-carga.component';
+import { FormAdjuntosNoTitleComponent } from './form-adjuntos-no-title/form-adjuntos-no-title.component';
 
 const sharedComponents = [
 
@@ -120,6 +123,7 @@ const sharedComponents = [
 
     FormAdjuntosBtnComponent,
     FormAdjuntosMemoryComponent,
+    FormAdjuntosNoTitleComponent,
 
     UbigeoUpdComponent,
 
@@ -165,6 +169,8 @@ const sharedComponents = [
     LayoutInformeComponent,
     LayoutProyectoAdendaComponent,
     LayoutCargarAdendaComponent,
+    LayoutPersPropuestoCargaComponent,
+    LayoutDocsAdicionalesCargaComponent,
 
     ModalTileComponent,
     ModalTileComponent2,

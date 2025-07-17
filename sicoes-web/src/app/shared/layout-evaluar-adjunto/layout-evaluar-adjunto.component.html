@@ -1,0 +1,50 @@
+<div class="flex flex-row justify-between p-4 pb-12 gap-x-4">
+  <div class="w-7/12 relative bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+    <!-- Skeleton Loader -->
+    <div *ngIf="isLoading" class="absolute inset-0 w-full h-full animate-pulse z-10 flex items-center justify-center">
+      <div class="bg-gray-200 rounded-lg w-full h-full flex items-center justify-center">
+        <div class="text-center">
+          <!-- <div class="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-4 animate-pulse"></div> -->
+          <div class="h-4 bg-gray-300 rounded w-32 mx-auto mb-2 animate-pulse"></div>
+          <div class="h-3 bg-gray-300 rounded w-24 mx-auto animate-pulse"></div>
+        </div>
+      </div>
+    </div>
+    <!-- PDF Viewer -->
+    <ngx-doc-viewer 
+      *ngIf="!isLoading && archivo?.url" 
+      [url]="archivo.url" 
+      [viewer]="(archivo.tipo == 'PDF')?'pdf':'office'"
+      class="w-full h-full">
+    </ngx-doc-viewer>
+  </div>
+  <div class="w-5/12 p-3 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <form [formGroup]="formGroup" class="flex flex-col gap-y-2">
+      <mat-form-field class="flex-auto">
+        <mat-label>Estado Documento</mat-label>
+        <mat-select [formControl]="formGroup.controls.estado">
+          <mat-option value="APROBADO">Aprobado</mat-option>
+          <mat-option value="RECHAZADO">Rechazado</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="mt-6 flex-auto">
+        <mat-label>Observación</mat-label>
+        <textarea matInput formControlName="observacion" maxlength="5000" rows="5"></textarea>
+        <mat-hint align="end">{{ formGroup.get('observacion')?.value?.length || 0 }} / 5000</mat-hint>
+        <mat-error *ngIf="formGroup.get('observacion')?.errors?.['required']">El campo es requerido</mat-error>
+      </mat-form-field>
+      <mat-form-field class="mt-6 flex-auto" [ngClass]="{'opacity-0': formGroup.get('usuarioEvaluador')?.value == null}">
+        <mat-label>Evaluado por</mat-label>
+        <input matInput formControlName="usuarioEvaluador" />
+      </mat-form-field>
+      <mat-form-field class="mt-6 flex-auto" [ngClass]="{'opacity-0': formGroup.get('fechaEvaluacion')?.value == null}">
+        <mat-label>Fecha y Hora de Evaluación</mat-label>
+        <input matInput formControlName="fechaEvaluacion" />
+      </mat-form-field>
+      <div class="flex justify-end gap-x-2">
+        <button mat-raised-button color="primary" (click)="accion()">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="accion()">Registrar</button>
+      </div>
+    </form>
+  </div>
+</div> 

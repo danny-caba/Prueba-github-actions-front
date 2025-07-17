@@ -44,6 +44,11 @@ const routes: VexRoutes = [{
   //canActivate: [AuthGuardService],
   component: CustomLayoutComponent,
   loadChildren: () => import('../../pages/contrato/contrato.module').then(m => m.ContratoModule),
+},{
+  path: Link.REQUERIMIENTOS_LIST,
+  //canActivate: [AuthGuardService],
+  component: CustomLayoutComponent,
+  loadChildren: () => import('../../pages/requerimiento/requerimiento.module').then(m => m.RequerimientoModule),
 }]
 
 @NgModule({

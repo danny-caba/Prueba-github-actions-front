@@ -1,0 +1,60 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { VexRoutes } from 'src/@vex/interfaces/vex-route.interface';
+import { AuthGuardService } from 'src/app/auth/guards';
+import { Link } from 'src/helpers/internal-urls.components';
+import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
+import { RequerimientoInformeAddComponent } from './requerimiento-informe-add/requerimiento-informe-add.component';
+import { RequerimientoInvitacionListComponent } from './requerimiento-invitacion-list/requerimiento-invitacion-list.component';
+import { RequerimientoAprobacionHistorialComponent } from './requerimiento-aprobacion-historial/requerimiento-aprobacion-historial.component';
+import { RequerimientoDocumentoEvaluarComponent } from './requerimiento-documento-evaluar/requerimiento-documento-evaluar.component';
+import { RequerimientoDocumentoEvaluarDetalleComponent } from './requerimiento-documento-evaluar-detalle/requerimiento-documento-evaluar-detalle.component';
+
+const routes: VexRoutes = [{
+  path: '',
+  children: [
+    {
+      path: Link.REQUERIMIENTOS_INFORME + '/' + Link.INFORME_ADD + '/:requerimientoUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoInformeAddComponent,
+      data: {
+        add: true
+      }
+    },
+    {
+      path: Link.REQUERIMIENTOS_INVITACION + '/' + Link.INVITACION_SEND + '/:requerimientoUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoInvitacionListComponent,
+      data: {
+        send: true
+      }
+    },
+    {
+      path: Link.APROBACION_LIST_HISTORIAL + '/:requerimientoUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoAprobacionHistorialComponent,
+    },
+    {
+      path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_EVALUAR + '/:requerimientoDocumentoUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoDocumentoEvaluarComponent,
+      data: {
+        evaluate: true
+      }
+    },
+    {
+      path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_EVALUAR + '/' + Link.EVALUAR_DETALLE + '/:requerimientoDocumentoDetalleUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoDocumentoEvaluarDetalleComponent,
+      data: {
+        evaluateDetail: true
+      }
+    }
+  ]
+}];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class RequerimientoIntranetRoutingModule { }

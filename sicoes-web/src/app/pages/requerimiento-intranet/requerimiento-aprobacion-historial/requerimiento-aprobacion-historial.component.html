@@ -1,21 +1,21 @@
 <div class="w-full h-full p-gutter container flex flex-col bg-principal">
-    <div class="flex-auto" style="background-color: transparent;">
-        <div class="chat-pattern relative pl-4">
-            <div class="w-full h-full overflow-hidden flex flex-col">
-                <div class="my-2 text-primary">
-                    <h2 class="tittle font-bold text-lg pb-2">Historial de Aprobaciones</h2>
-                </div>
-                <vex-scrollbar class="flex-auto">
-                    <ng-container *ngTemplateOutlet="seccion"></ng-container>
-                </vex-scrollbar>
-                <div class="py-4 border-t flex flex-row">
-                    <button color="primary" mat-stroked-button type="button" >
-                        Regresar
-                    </button>
-                </div>
-              </div>
+  <div class="flex-auto" style="background-color: transparent;">
+    <div class="chat-pattern relative pl-4">
+      <div class="w-full h-full overflow-hidden flex flex-col">
+        <div class="my-2 text-primary">
+          <h2 class="tittle font-bold text-lg pb-2">Historial de Aprobaciones</h2>
         </div>
+        <vex-scrollbar class="flex-auto">
+          <ng-container *ngTemplateOutlet="seccion"></ng-container>
+        </vex-scrollbar>
+        <div class="py-4 border-t flex flex-row">
+          <button color="primary" mat-stroked-button type="button" (click)="volver()">
+            Regresar
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <ng-template #seccion>
@@ -27,7 +27,7 @@
         <ng-container matColumnDef="tipo">
           <th class="text-center" mat-header-cell *matHeaderCellDef>Tipo</th>
           <td mat-cell *matCellDef="let element" class="text-primary font-medium">
-            {{ element?.aprobador?.tipo }}
+            {{ element?.tipo?.nombre }}
           </td>
         </ng-container>
 
@@ -35,13 +35,13 @@
         <ng-container matColumnDef="grupo">
           <th class="text-center" mat-header-cell *matHeaderCellDef>Grupo</th>
           <td mat-cell *matCellDef="let element" class="text-primary font-medium">
-            {{ element?.aprobador?.grupo }}
+            {{ element?.grupo?.nombre }}
           </td>
         </ng-container>
 
-        <!-- Fecha y hora designación -->
+        <!-- Fecha Designación -->
         <ng-container matColumnDef="fechaDesignacion">
-          <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha y hora designación</th>
+          <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha Designación</th>
           <td mat-cell *matCellDef="let element" class="text-primary font-medium">
             {{ element?.fechaDesignacion | date: 'dd/MM/yyyy HH:mm' }}
           </td>
@@ -51,13 +51,13 @@
         <ng-container matColumnDef="aprobador">
           <th class="text-center" mat-header-cell *matHeaderCellDef>Aprobador</th>
           <td mat-cell *matCellDef="let element" class="text-primary font-medium">
-            {{ element?.aprobador?.nombre }}
+            {{ element?.nombreRolAprobador }}
           </td>
         </ng-container>
 
-        <!-- Fecha / Hora Aprobación -->
+        <!-- Fecha Aprobación -->
         <ng-container matColumnDef="fechaAprobacion">
-          <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha / Hora Aprobación</th>
+          <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha Aprobación</th>
           <td mat-cell *matCellDef="let element" class="text-primary font-medium">
             {{ element?.fechaAprobacion | date: 'dd/MM/yyyy HH:mm' }}
           </td>
@@ -67,7 +67,7 @@
         <ng-container matColumnDef="resultado">
           <th class="text-center" mat-header-cell *matHeaderCellDef>Resultado</th>
           <td mat-cell *matCellDef="let element" class="text-primary font-medium">
-            {{ element?.resultado }}
+            {{ element?.estado?.nombre }}
           </td>
         </ng-container>
 
@@ -79,11 +79,7 @@
           </td>
         </ng-container>
 
-        <!-- Mensajes de estado -->
-        <ng-container matColumnDef="loading">
-          <td mat-footer-cell *matFooterCellDef colspan="7" class="text-center">Cargando Datos...</td>
-        </ng-container>
-
+        <!-- Sin resultados -->
         <ng-container matColumnDef="vacio">
           <td mat-footer-cell *matFooterCellDef colspan="7" class="text-center text-primary">
             No se encuentran resultados para historial de aprobaciones
@@ -93,10 +89,11 @@
         <!-- Filas -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ 'hide': dataSource?.length > 0 }"></tr>
+        <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ 'hide': dataSource?.data?.length > 0 }"></tr>
       </table>
 
-      <mat-paginator #paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]"
+        showFirstLastButtons></mat-paginator>
     </vex-scrollbar>
   </div>
 </ng-template>

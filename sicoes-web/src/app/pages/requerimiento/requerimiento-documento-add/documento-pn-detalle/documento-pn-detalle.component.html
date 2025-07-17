@@ -1,0 +1,31 @@
+
+
+<div class="flex justify-between mb-4 items-center pb-2 px-6">
+  <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
+    <mat-checkbox 
+      color="primary" 
+      [disabled]="true"
+      (change)="onChangeCheckbox($event, requisito)"
+      [checked]="requisito.archivo != null"
+    ></mat-checkbox>
+    <span class="break-words text-sm font-sans">
+      {{ requisito.descripcionRequisito! }}
+    </span>
+  </div>
+  <div class="flex flex-col gap-y-2 items-end">
+    <vex-form-adjuntos-btn 
+      *ngIf="!evaluate"
+      [titulo]="'Archivo (*.pdf)'" 
+      [editable]="add"
+      [codigo]="'ADJUNTAR ARCHIVO'"
+      [reqDocDetalle]="requisito"
+      [archivo]="requisito.archivo"
+    ></vex-form-adjuntos-btn>
+    <vex-layout-adjuntos
+      *ngIf="evaluate"
+      [reqDocDetalle]="requisito"
+      [rutaEvaluarDetalle]="rutaEvaluarDetalle"
+      [archivo]="requisito.archivo"
+    ></vex-layout-adjuntos>
+  </div>
+</div> 

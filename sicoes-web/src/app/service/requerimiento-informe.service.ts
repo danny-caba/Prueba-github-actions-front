@@ -118,8 +118,6 @@ export class RequerimientoInformeService {
    * @returns Error procesado
    */
   private handleServiceError(error: any): any {
-    // Aquí puedes agregar lógica adicional para el manejo de errores
-    // Por ejemplo, logging, notificaciones, etc.
     return error;
   }
 }

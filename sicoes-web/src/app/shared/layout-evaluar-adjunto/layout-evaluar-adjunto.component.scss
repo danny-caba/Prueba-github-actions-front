@@ -1,0 +1,340 @@
+.pdf-viewer-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f5f5f5;
+  font-family: 'Roboto', sans-serif;
+}
+
+.pdf-header {
+  background-color: white;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.pdf-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: white;
+}
+
+.loading-spinner {
+  text-align: center;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: white;
+  
+  .error-icon {
+    font-size: 48px;
+    color: #f44336;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 16px;
+    font-size: 16px;
+  }
+}
+
+.pdf-content {
+  flex: 1;
+  overflow: hidden;
+  background-color: white;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pdf-document-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+  overflow: auto;
+}
+
+// Estilos para el componente ngx-extended-pdf-viewer
+::ng-deep ngx-extended-pdf-viewer {
+  display: block;
+  width: 100%;
+  height: 100%;
+  
+  .zoom-toolbar {
+    display: none !important;
+  }
+  
+  .toolbar {
+    display: none !important;
+  }
+  
+  .sidebar {
+    display: none !important;
+  }
+  
+  .main-container {
+    height: 100% !important;
+  }
+  
+  .viewerContainer {
+    height: 100% !important;
+  }
+}
+
+.pdf-control-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  background-color: #424242;
+  border-radius: 25px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  gap: 16px;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page-indicator {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 60px;
+  text-align: center;
+  margin: 0 8px;
+}
+
+.nav-btn, .zoom-btn, .search-btn {
+  color: white !important;
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  &:disabled {
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+  
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .pdf-control-bar {
+    bottom: 10px;
+    padding: 6px 12px;
+    gap: 12px;
+  }
+  
+  .page-indicator {
+    font-size: 12px;
+    min-width: 50px;
+  }
+  
+  .nav-btn, .zoom-btn, .search-btn {
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
+    }
+  }
+}
+
+// Animaciones
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.pdf-viewer-container {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+// Scrollbar personalizado
+.pdf-document-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.pdf-document-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.pdf-document-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.pdf-document-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+// Debug info (temporal)
+.debug-info {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  max-height: 300px;
+  overflow: auto;
+  z-index: 1001;
+  
+  p {
+    margin: 0 0 8px 0;
+    font-weight: bold;
+  }
+  
+  pre {
+    font-size: 12px;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}
+
+// Panel de búsqueda
+.search-panel {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 350px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  max-height: 500px;
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.search-input-container {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.search-input {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.search-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.search-counter {
+  font-size: 12px;
+  color: #666;
+  margin: 0 8px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.search-results {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  
+  &.active {
+    background-color: #e3f2fd;
+    border-left: 3px solid #2196f3;
+  }
+  
+  mat-icon {
+    margin-right: 8px;
+    color: #666;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  span {
+    font-size: 14px;
+    color: #333;
+  }
+}
+
+// Estilo para el botón de búsqueda activo
+.search-btn.active {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: #4caf50 !important;
+} 

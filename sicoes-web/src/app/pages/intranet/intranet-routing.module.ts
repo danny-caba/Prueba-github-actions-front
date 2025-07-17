@@ -48,7 +48,7 @@ const routes: VexRoutes = [{
 }, {
   path: Link.REQUERIMIENTOS_LIST,
   component: CustomLayoutComponent,
-  loadChildren: () => import('../../pages/requerimiento/requerimiento.module').then(m => m.RequerimientoModule),
+  loadChildren: () => import('../../pages/requerimiento-intranet/requerimiento-intranet.module').then(m => m.RequerimientoIntranetModule),
 }];
 
 @NgModule({

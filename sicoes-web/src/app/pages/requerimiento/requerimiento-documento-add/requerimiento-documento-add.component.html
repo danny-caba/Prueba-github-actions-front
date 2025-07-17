@@ -1,0 +1,30 @@
+
+
+
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <div class="card overflow-auto -mt-16">
+            <!--TITULO-->
+            <div class="px-6 py-4 flex items-center">
+                <h2 class="title m-0 font-bold">Cargar Documentos</h2>
+            </div>
+            <ng-container *ngFor="let requisito of requisitos">
+                  <vex-documento-pn-detalle
+                    [add]="add"
+                    [requisito]="requisito"
+                ></vex-documento-pn-detalle>
+            </ng-container>
+
+            <vex-skeleton-loader *ngIf="isLoading" [count]="4" type="list"></vex-skeleton-loader>
+
+            <div class="px-6 py-4 flex flex-col sm:flex-row sm:gap-2 items-center justify-end" *ngIf="add">
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="registrar()">Registrar</button>
+                <button color="primary" mat-raised-button type="button" class="hover-class"
+                    (click)="regresar()">Regresar</button>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

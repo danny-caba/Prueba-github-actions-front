@@ -64,7 +64,7 @@ export abstract class BasePageComponent<T> extends BaseComponent implements OnDe
 
   cargarTabla() {
     let filtro = this.obtenerFiltro();
-    filtro.size = this.paginator.pageSize ?? 10;
+    filtro.size = this.paginator?.pageSize ?? 10;
     this.isLoading = true;
 
     this.serviceTable(filtro)

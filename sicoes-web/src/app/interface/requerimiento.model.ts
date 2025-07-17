@@ -38,3 +38,24 @@ export class RequerimientoInformeDetalle {
   disponibilidadPresupuestal: string
   declaracionJurada: string
 }
+
+export class RequerimientoDocumento {
+  idRequerimientoDocumento: number
+  requerimientoDocumentoUuid: string
+  requerimiento: Requerimiento
+  estado: ListadoDetalle
+  flagActivo: string
+  fechaIngreso: string
+  tipo: ListadoDetalle
+  fechaplazoEntrega: string
+  revision: ListadoDetalle
+  nombresApellidos?: string
+}
+
+export class RequerimientoDocumentoDetalle {
+  idRequerimientoDocumentoDetalle: number
+  requerimientoDocumentoDetalleUuid: string
+  requerimientoDocumento: Partial<RequerimientoDocumento>
+  descripcionRequisito: string
+  archivo: any
+}

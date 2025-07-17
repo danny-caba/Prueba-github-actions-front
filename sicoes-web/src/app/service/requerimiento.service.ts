@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from '../core/services';
-import { Requerimiento, RequerimientoInformeDetalle } from '../interface/requerimiento.model';
+import { Requerimiento, RequerimientoDocumento, RequerimientoDocumentoDetalle, RequerimientoInformeDetalle } from '../interface/requerimiento.model';
 import { Pageable } from '../interface/pageable.model';
 import { functions } from 'src/helpers/functions';
 import { BehaviorSubject, map, Observable } from 'rxjs';
@@ -84,7 +84,7 @@ export class RequerimientoService {
   }
 
   listarRequerimientosAprobaciones(filtro) {
-    let urlEndpoint = `${this._path_serve}/api/requerimientos/aprobar`;
+    let urlEndpoint = `${this._path_serve}/api/aprobaciones`;
     let params = functions.obtenerParams(filtro);
     return this.http.get<Pageable<any>>(urlEndpoint, {
       params: params,
@@ -99,6 +99,82 @@ export class RequerimientoService {
   enviarInvitacion(requerimientoInvitacion: RequerimientoInvitacion): Observable<RequerimientoInvitacion> {
     const url = `${this._path_serve}/api/invitaciones`;
     return this.http.post<RequerimientoInvitacion>(url, requerimientoInvitacion);
+  }
+
+  listarDocumentos(filtro: any) {
+    let urlEndpoint = `${this._path_serve}/api/requerimientos/documentos`
+    let params = functions.obtenerParams(filtro)
+    return this.http.get<Pageable<RequerimientoDocumento>>(urlEndpoint, { params }).pipe(
+      map(respuesta => {
+        const requerimientos = respuesta.content;
+        requerimientos.map(req => {
+          if (req.requerimiento?.supervisora?.tipoDocumento?.codigo === 'DNI') {
+            req.nombresApellidos = req.requerimiento.supervisora.nombres +
+             ' ' + req.requerimiento.supervisora.apellidoPaterno + 
+             ' ' + req.requerimiento.supervisora.apellidoMaterno;
+          } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'RUC') {
+            req.nombresApellidos = req.requerimiento.supervisora.nombreRazonSocial;
+          } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'CARNET_EXTRA') {
+            req.nombresApellidos = req.requerimiento.supervisora?.nombres +
+             ' ' + req.requerimiento.supervisora?.apellidoPaterno + 
+             ' ' + req.requerimiento.supervisora?.apellidoMaterno;
+          } else {
+            req.nombresApellidos = '';
+          }
+        });
+        respuesta.content = requerimientos;
+        return respuesta;
+      })
+    );
+  }
+
+  obtenerDocumentoDetalle(requerimientoUuid: string) {
+    const url = `${this._path_serve}/api/requerimientos/documentos/${requerimientoUuid}/detalle`;
+    return this.http.get<RequerimientoDocumentoDetalle[]>(url)
+      .pipe(
+        map(respuesta => {
+          return respuesta.map(res => {
+            return {
+              ...res,
+              requerimientoDocumento: {
+                requerimientoDocumentoUuid: requerimientoUuid
+              }
+            }
+          });
+        })
+      );
+  }
+
+  registrarDocumento(requisitos: RequerimientoDocumentoDetalle[]) {
+    const url = `${this._path_serve}/api/requerimientos/documentos/detalle`;
+    return this.http.post<RequerimientoDocumentoDetalle[]>(url, requisitos);
+  }
+
+  listarDocumentosCoordinador(filtro: any) {
+    let urlEndpoint = `${this._path_serve}/api/requerimientos/documentos/coordinador`
+    let params = functions.obtenerParams(filtro)
+    return this.http.get<Pageable<RequerimientoDocumento>>(urlEndpoint, { params }).pipe(
+      map(respuesta => {
+        const requerimientos = respuesta.content;
+        requerimientos.map(req => {
+          if (req.requerimiento?.supervisora?.tipoDocumento?.codigo === 'DNI') {
+            req.nombresApellidos = req.requerimiento.supervisora.nombres +
+            ' ' + req.requerimiento.supervisora.apellidoPaterno + 
+            ' ' + req.requerimiento.supervisora.apellidoMaterno;
+          } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'RUC') {
+            req.nombresApellidos = req.requerimiento.supervisora.nombreRazonSocial;
+          } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'CARNET_EXTRA') {
+            req.nombresApellidos = req.requerimiento.supervisora?.nombres +
+            ' ' + req.requerimiento.supervisora?.apellidoPaterno + 
+            ' ' + req.requerimiento.supervisora?.apellidoMaterno;
+          } else {
+            req.nombresApellidos = '';
+          }
+        });
+        respuesta.content = requerimientos;
+        return respuesta;
+      })
+  );
   }
 
 }

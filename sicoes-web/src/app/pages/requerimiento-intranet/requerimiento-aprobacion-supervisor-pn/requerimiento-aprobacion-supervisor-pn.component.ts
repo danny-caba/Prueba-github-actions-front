@@ -11,6 +11,7 @@ import { RequerimientoService } from "src/app/service/requerimiento.service";
 import { Division } from "src/app/interface/division.model";
 import { MatDialog } from "@angular/material/dialog";
 import { ModalAprobadorSupervisorPnComponent } from "src/app/shared/modal-aprobador-supervisor-pn/modal-aprobador-supervisor-pn.component";
+import { AdjuntosService } from "src/app/service/adjuntos.service";
 
 @Component({
   selector: "vex-requerimiento-aprobacion-supervisor-pn",
@@ -50,6 +51,7 @@ export class RequerimientoAprobacionSupervisorPnComponent
     private parametriaService: ParametriaService,
     private router: Router,
     private dialog: MatDialog,
+    private adjuntoService: AdjuntosService,
   ) {
     super();
   }
@@ -161,12 +163,18 @@ export class RequerimientoAprobacionSupervisorPnComponent
     });
   }
 
-  verHistorial(requerimiento): void {
-    console.log("requerimiento", requerimiento);
+  descargarArchivo({ archivoInforme }: any) {
+    if (archivoInforme.codigo && archivoInforme.nombre) {
+      this.adjuntoService.descargarWindowsJWT(archivoInforme.codigo, archivoInforme.nombre);
+    }
+  }
+
+  verHistorial({ requerimiento }): void {
     this.router.navigate([
       Link.INTRANET,
       Link.SOLICITUDES_LIST,
       Link.APROBACION_LIST_HISTORIAL,
+      requerimiento.requerimientoUuid
     ]);
   }
 }

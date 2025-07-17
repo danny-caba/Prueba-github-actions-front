@@ -31,6 +31,7 @@ import { ContratoIntranetListComponent } from './components/contrato-intranet-li
 import { ContratoFormEvaluarComponent } from './components/contrato-form-evaluar/contrato-form-evaluar.component';
 import { ContratoModule } from '../contrato/contrato.module';
 import { ContratoEvaluarDocumentosComponent } from './components/contrato-evaluar-documentos/contrato-evaluar-documentos.component';
+import { RequerimientoIntranetModule } from '../requerimiento-intranet/requerimiento-intranet.module';
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import { ContratoEvaluarDocumentosComponent } from './components/contrato-evalua
     MatSidenavModule,
     ScrollingModule,
     ScrollbarModule,
-    ContratoModule
+    ContratoModule,
+    RequerimientoIntranetModule
   ]
 })
 export class ContratoIntranetModule { }

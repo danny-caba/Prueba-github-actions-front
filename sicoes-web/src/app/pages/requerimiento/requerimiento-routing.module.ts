@@ -4,34 +4,33 @@ import { VexRoutes } from 'src/@vex/interfaces/vex-route.interface';
 import { AuthGuardService } from 'src/app/auth/guards';
 import { Link } from 'src/helpers/internal-urls.components';
 import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
-import { RequerimientoInformeAddComponent } from './requerimiento-informe-add/requerimiento-informe-add.component';
-import { RequerimientoInvitacionListComponent } from './requerimiento-invitacion-list/requerimiento-invitacion-list.component';
-import { RequerimientoAprobacionHistorialComponent } from './requerimiento-aprobacion-historial/requerimiento-aprobacion-historial.component';
+import { RequerimientoDocumentoAddComponent } from './requerimiento-documento-add/requerimiento-documento-add.component';
 
 const routes: VexRoutes = [{ 
   path: '',
   children:[
     {
-      path: Link.REQUERIMIENTOS_INFORME + '/' + Link.INFORME_ADD + '/:requerimientoUuid',
+      path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_ADD + '/:documentoUuid',
       canActivate: [AuthGuardService, RoleGuardService],
-      component: RequerimientoInformeAddComponent,
+      component: RequerimientoDocumentoAddComponent,
       data: {
         add: true
       }
-    },
-    {
-      path: Link.REQUERIMIENTOS_INVITACION + '/' + Link.INVITACION_SEND + '/:requerimientoUuid',
-      canActivate: [AuthGuardService, RoleGuardService],
-      component: RequerimientoInvitacionListComponent,
-      data: {
-        send: true
-      }
-    },
-    {
-      path: Link.APROBACION_LIST_HISTORIAL,
-      canActivate: [AuthGuardService, RoleGuardService],
-      component: RequerimientoAprobacionHistorialComponent,
-    },
+    }
+    // },
+    // {
+    //   path: Link.REQUERIMIENTOS_INVITACION + '/' + Link.INVITACION_SEND + '/:requerimientoUuid',
+    //   canActivate: [AuthGuardService, RoleGuardService],
+    //   component: RequerimientoInvitacionListComponent,
+    //   data: {
+    //     send: true
+    //   }
+    // },
+    // {
+    //   path: Link.APROBACION_LIST_HISTORIAL,
+    //   canActivate: [AuthGuardService, RoleGuardService],
+    //   component: RequerimientoAprobacionHistorialComponent,
+    // },
   ]
   }];
 

@@ -7,6 +7,7 @@ import { Adjunto, AdjuntoRequisto, ArchivoAdjuntoBackendDTO } from '../interface
 import { Pageable } from '../interface/pageable.model';
 import { functionsAlertMod2 } from 'src/helpers/funtionsAlertMod2';
 import Swal from 'sweetalert2';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -323,6 +324,16 @@ export class AdjuntosService {
       });
   }
 
+  public obtenerUrlVisualizacion(uuid: string): Observable<string> {
+    const urlEndpoint = `${this._path_serve}/api/archivos/${uuid}/visualizar`;
+    return this.http.get(urlEndpoint, { responseType: 'blob' })
+      .pipe(
+        map(blob => {
+          const url = window.URL.createObjectURL(blob);
+          return url;
+        })
+      );
+  }
 
 }
 

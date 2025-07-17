@@ -34,7 +34,9 @@ export class FormAdjuntosBtnComponent implements OnInit {
   @Input() archivo: any;
   @Input() proceso: any;
   @Input() contrato: any;
+  @Input() reqDocDetalle: any;
   @Input() isOriginalEval: boolean;
+  
 
   validarRequerido: boolean = false;
   modoBorrador = true;
@@ -94,7 +96,10 @@ export class FormAdjuntosBtnComponent implements OnInit {
     if(this.contrato){
       formData.append("idSolicitudSeccion", this.contrato?.idSolicitudSeccion + '');
     }
-    
+
+    if(this.reqDocDetalle){
+      formData.append("idReqDocumentoDetalle", this.reqDocDetalle?.idRequerimientoDocumentoDetalle + '');
+    }
 
     if (this.nuevo) {
       itemAdjunto.inProgress = true;
@@ -135,6 +140,9 @@ export class FormAdjuntosBtnComponent implements OnInit {
           }
           if (this.contrato) {
             this.contrato.archivo = event.body;
+          }
+          if (this.reqDocDetalle) {
+            this.reqDocDetalle.archivo = event.body;
           }
         }
       });
@@ -199,6 +207,9 @@ export class FormAdjuntosBtnComponent implements OnInit {
         if (this.contrato) {
           this.contrato.archivo = null;
         }
+        if (this.reqDocDetalle) {
+          this.reqDocDetalle.archivo = null;
+        }
       }
     });
   }
@@ -211,6 +222,9 @@ export class FormAdjuntosBtnComponent implements OnInit {
     if (this.contrato) {
       this.contrato.archivo = null;
     }
+    if (this.reqDocDetalle) {
+      this.reqDocDetalle.archivo = null;
+    } 
   }
 
   ngOnChanges(changes: SimpleChanges) {

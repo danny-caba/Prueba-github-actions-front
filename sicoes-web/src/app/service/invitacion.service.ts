@@ -17,11 +17,11 @@ export class InvitacionService {
     this._path_serve = this.configService.getAPIUrl();
   }
 
-  suscribeInvitacion(): Observable<Partial<Solicitud>> {
+  suscribeInvitacion(): Observable<Partial<any>> {
     return this.invitacionSubject.asObservable();
   }
 
-  setInvitacion(solicitud: Solicitud) {
+  setInvitacion(solicitud: any) {
     this.invitacionSubject.next(solicitud);
   }
 

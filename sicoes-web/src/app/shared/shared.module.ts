@@ -102,6 +102,10 @@ import { LayoutInformeSeccionPNComponent } from './layout-informe-seccion/layout
 import { LayoutInputComponent } from './layout-input/layout-input.component';
 import { OptionRoleRequerimientoDirective } from '../auth/interceptors/option-role-requerimiento.directive';
 import { ModalAprobadorSupervisorPnComponent } from './modal-aprobador-supervisor-pn/modal-aprobador-supervisor-pn.component';
+import { LayoutAdjuntosComponent } from './layout-adjuntos/layout-adjuntos.component';
+import { LayoutEvaluarAdjuntoComponent } from './layout-evaluar-adjunto/layout-evaluar-adjunto.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { SkeletonLoaderComponent } from './skeleton-loader/skeleton-loader.component';
 
 const sharedComponents = [
 
@@ -207,13 +211,16 @@ const sharedComponents = [
     ModalArchivarRequerimientoComponent,
     LayoutInformeSeccionPNComponent,
     LayoutInputComponent,
-    ModalAprobadorSupervisorPnComponent
+    ModalAprobadorSupervisorPnComponent,
+    LayoutAdjuntosComponent,
+    LayoutEvaluarAdjuntoComponent,
+    SkeletonLoaderComponent
   ];
 
 @NgModule({
-  imports:      [ CommonModule, MaterialModule,FormsModule, ReactiveFormsModule, InputMaskModule, MatDialogModule],
+  imports:      [ CommonModule, MaterialModule,FormsModule, ReactiveFormsModule, InputMaskModule, MatDialogModule, NgxDocViewerModule ],
   declarations: [ ...sharedComponents, OptionRoleDirective, OptionRoleRequerimientoDirective ],
-  exports:      [ ...sharedComponents, CommonModule, FormsModule, ReactiveFormsModule, OptionRoleDirective, OptionRoleRequerimientoDirective],
+  exports:      [ ...sharedComponents, CommonModule, FormsModule, ReactiveFormsModule, OptionRoleDirective, OptionRoleRequerimientoDirective, NgxDocViewerModule ],
   providers:    [ LoadingDialogService, DatePipe, OptionRoleDirective, OptionRoleRequerimientoDirective ],
   entryComponents: [...sharedComponents]
 })

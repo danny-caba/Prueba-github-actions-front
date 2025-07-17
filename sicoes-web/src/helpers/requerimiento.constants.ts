@@ -49,6 +49,10 @@ export const REQUERIMIENTO_INFORME_CONSTANTS = {
 
 export const REQUERIMIENTO_CONSTANTS = {
 
+  MESSAGES: {
+    DOCUMENTO_CONFIRMATION: '¿Seguro de Registrar la carga de documentos. Cualquier notificación sobre la solicitud se realizará a través del sistema de notificaciones electrónica?',
+  },
+
   // Validaciones de estado de requerimiento
   ESTADO_VALIDACIONES: {
     [EstadoRequerimientoEnum.PRELIMINAR]: (req: Requerimiento) => req.estado?.codigo === EstadoRequerimientoEnum.PRELIMINAR,
@@ -68,5 +72,36 @@ export const REQUERIMIENTO_CONSTANTS = {
     'nombresApellidos',
     'estado',
     'acciones'
-  ]
+  ],
+
+  // Columnas de lista de requerimientos documentos
+  COLUMNAS_LISTA_REQUERIMIENTOS_DOCUMENTOS: [
+    'expediente',
+    'fechaRegistro',
+    'fechaPlazo',
+    'division',
+    'perfil',
+    'nombresApellidos',
+    'tipo',
+    'estado',
+    'acciones'
+  ],
+
+    // Columnas de lista de requerimientos documentos
+    COLUMNAS_LISTA_REQUERIMIENTOS_DOCUMENTOS_INTRANET: [
+      'expediente',
+      'fechaRegistro',
+      'numeroContrato',
+      'division',
+      'perfil',
+      'nombresApellidos',
+      'tipo',
+      'estado',
+      'acciones'
+    ],
+
+  ROUTES: {
+    // CANCEL: ['intranet', 'solicitudes'],
+    SUCCESS: ['extranet', 'contratos']
+  },
 } as const; 

@@ -75,16 +75,25 @@ export enum Link {
     CONTRATO_SOLICITUD_ADD = 'registro',
     CONTRATO_SOLICITUD_VIEW = 'ver',
 
-    //REQUERIMIENTOS
+    // REQUERIMIENTOS
     REQUERIMIENTOS_LIST = 'requerimientos',
+
+    // REQUERIMIENTOS INFORME
     REQUERIMIENTOS_INFORME = 'informes',
     INFORME_ADD = 'add',
+
+    // REQUERIMIENTOS INVITACION
     REQUERIMIENTOS_INVITACION = 'invitaciones',
     INVITACION_SEND = 'send',
 
-    //REQUERIMIENTOS APROBACIONES
+    // REQUERIMIENTOS APROBACIONES
     APROBACION_LIST_HISTORIAL = 'historial',
 
+    // REQUERIMIENTOS DOCUMENTO
+    REQUERIMIENTOS_DOCUMENTO = 'documentos',
+    DOCUMENTO_ADD = 'add',
+    DOCUMENTO_EVALUAR = 'evaluar',
+    EVALUAR_DETALLE = 'evaluar-detalle',
 }
 
 export enum Apis {

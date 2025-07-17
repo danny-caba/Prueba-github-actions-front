@@ -1,151 +1,160 @@
 <vex-page-layout mode="card">
     <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
     <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
-        <div class="card px-8 py-6">
-            <div class="flex flex-col sm:flex-row gap-x8">
-                <div @fadeInUp class="flex-auto">
-                    <!-- Title -->
-                    <h2 class="text-lg font-bold">Solicitudes de Perfeccionamiento de Contrato</h2>
-                    <mat-divider></mat-divider>
+        <mat-tab-group selectedIndex="0" #tabgroup class="bg-white">
+            <mat-tab label="Solicitudes de Perfeccionamiento de Contrato" class="estilo-tab-activo">
+                <div class="card px-8 py-6">
+                    <div class="flex flex-col sm:flex-row gap-x8">
+                        <div @fadeInUp class="flex-auto">
+                            <!-- Title -->
+                            <!-- <h2 class="text-lg font-bold">Solicitudes de Perfeccionamiento de Contrato</h2>
+                            <mat-divider></mat-divider> -->
 
-                    <!-- Filter -->
-                    <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
-                        <!-- Concurso -->
-                        <div class="flex flex-col">
-                            <mat-label class="text-primary text-sm font-medium">N°. de concurso</mat-label>
-                            <mat-form-field  class="flex-auto">
-                                <input matInput [formControl]="formGroup.controls.nroConcurso" maxlength="50" placeholder="N°. de concurso" />
-                            </mat-form-field>
-                        </div>
-                        <!-- Item -->
-                        <div class="flex flex-col">
-                            <mat-label class="text-primary text-sm font-medium">Item</mat-label>
-                            <mat-form-field  class="flex-auto">
-                                <input matInput [formControl]="formGroup.controls.item" maxlength="200" placeholder="Item" type="number" />
-                            </mat-form-field>
-                        </div>
-                        <!-- Convocatoria -->
-                        <div class="flex flex-col">
-                            <mat-label class="text-primary text-sm font-medium">Convocatoria</mat-label>
-                            <mat-form-field  class="flex-auto">
-                                <input matInput [formControl]="formGroup.controls.convocatoria" placeholder="Convocatoria" />
-                            </mat-form-field>
-                        </div>
-                        <!-- Estado -->
-                        <div class="flex flex-col">
-                            <mat-label class="text-primary text-sm font-medium">Tipo Solicitud</mat-label>
-                            <mat-form-field  class="flex-auto">
-                                <mat-select placeholder="Seleccionar" [formControl]="formGroup.controls.tipoSolicitud">
-                                    <mat-option value="1">Inscripción</mat-option>
-                                    <mat-option value="2">Subsanación</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <!-- Tipo Solicitud -->
-                        <div class="flex flex-col">
-                            <mat-label class="text-primary text-sm font-medium">Estado</mat-label>
-                            <mat-form-field  class="flex-auto">
-                                <mat-select placeholder="Seleccionar" [formControl]="formGroup.controls.estadoProcesoSolicitud">
-                                    <mat-option value="1">Preliminar</mat-option>
-                                    <mat-option value="2">En proceso</mat-option>
-                                    <mat-option value="3">Observado</mat-option>
-                                    <mat-option value="4">Concluido</mat-option>
-                                    <mat-option value="5">Archivado</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
+                            <!-- Filter -->
+                            <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
+                                <!-- Concurso -->
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">N°. de concurso</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <input matInput [formControl]="formGroup.controls.nroConcurso" maxlength="50" placeholder="N°. de concurso" />
+                                    </mat-form-field>
+                                </div>
+                                <!-- Item -->
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">Item</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <input matInput [formControl]="formGroup.controls.item" maxlength="200" placeholder="Item" type="number" />
+                                    </mat-form-field>
+                                </div>
+                                <!-- Convocatoria -->
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">Convocatoria</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <input matInput [formControl]="formGroup.controls.convocatoria" placeholder="Convocatoria" />
+                                    </mat-form-field>
+                                </div>
+                                <!-- Estado -->
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">Tipo Solicitud</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <mat-select placeholder="Seleccionar" [formControl]="formGroup.controls.tipoSolicitud">
+                                            <mat-option value="1">Inscripción</mat-option>
+                                            <mat-option value="2">Subsanación</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <!-- Tipo Solicitud -->
+                                <div class="flex flex-col">
+                                    <mat-label class="text-primary text-sm font-medium">Estado</mat-label>
+                                    <mat-form-field  class="flex-auto">
+                                        <mat-select placeholder="Seleccionar" [formControl]="formGroup.controls.estadoProcesoSolicitud">
+                                            <mat-option value="1">Preliminar</mat-option>
+                                            <mat-option value="2">En proceso</mat-option>
+                                            <mat-option value="3">Observado</mat-option>
+                                            <mat-option value="4">Concluido</mat-option>
+                                            <mat-option value="5">Archivado</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
 
-                        <!-- Botones -->
-                        <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
-                            <button color="primary" mat-stroked-button type="button" (click)="limpiar()">
-                                Limpiar
-                            </button>
-                            <button color="primary" mat-raised-button type="button" (click)="buscar()">
-                                Buscar
-                            </button>
+                                <!-- Botones -->
+                                <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
+                                    <button color="primary" mat-stroked-button type="button" (click)="limpiar()">
+                                        Limpiar
+                                    </button>
+                                    <button color="primary" mat-raised-button type="button" (click)="buscar()">
+                                        Buscar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <div class="overflow-auto shadow-2xl rounded">
+                        <!-- tabla -->
+                        <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
+                            <ng-container matColumnDef="concurso">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Concurso</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.propuesta?.procesoItem?.proceso?.numeroProceso }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="convocatoria">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Convocatoria</th>
+                                <td class="text-primary font-medium break-words whitespace-normal min-w-[400px] py-2" mat-cell *matCellDef="let element">{{ element?.propuesta?.procesoItem?.proceso?.nombreProceso }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="item">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Item</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.propuesta?.procesoItem?.descripcionItem }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="fechaPresentacion">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite de Inscripción</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaPlazoInscripcion }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="fechaSubsanacion">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite de Subsanación</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaPlazoSubsanacion }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="estado">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ estadoSolicitud(element) }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tipo">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Solicitud</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoSolicitud === '1' ? 'Inscripción' : 'Subsanación' }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="estadoDocInicio">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Doc Inicio</th>
+                                <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ mostrarEstadoDocInicio(element?.idDocInicio) }}</td>
+                            </ng-container>
+
+                            <!-- Action Column -->
+                            <ng-container matColumnDef="actions">
+                                <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                                <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                                    <button (click)="$event.stopPropagation()"
+                                            [matMenuTriggerData]="{ customer: row }"
+                                            [matMenuTriggerFor]="actionsMenu"
+                                            mat-icon-button
+                                            type="button">
+                                    <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="loading">
+                                <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center">Cargando Datos...</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="vacio">
+                                <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">No se encuentran resultados para los filtros seleccionados</td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+                            <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+                        </table>
+                        <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                        showFirstLastButtons></mat-paginator>
+                    </div>
+                    <div class="py-4 border-t flex flex-row justify-end">
+                        <button color="primary" mat-raised-button type="button" (click)="goToBandejaSolicitudes()">
+                            Regresar
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div class="overflow-auto shadow-2xl rounded">
-                <!-- tabla -->
-                 <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
-                    <ng-container matColumnDef="concurso">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Concurso</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.propuesta?.procesoItem?.proceso?.numeroProceso }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="convocatoria">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Convocatoria</th>
-                        <td class="text-primary font-medium break-words whitespace-normal min-w-[400px] py-2" mat-cell *matCellDef="let element">{{ element?.propuesta?.procesoItem?.proceso?.nombreProceso }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="item">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Item</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.propuesta?.procesoItem?.descripcionItem }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="fechaPresentacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite de Inscripción</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaPlazoInscripcion }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="fechaSubsanacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite de Subsanación</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaPlazoSubsanacion }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="estado">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ estadoSolicitud(element) }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="tipo">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Solicitud</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoSolicitud === '1' ? 'Inscripción' : 'Subsanación' }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="estadoDocInicio">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Doc Inicio</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ mostrarEstadoDocInicio(element?.idDocInicio) }}</td>
-                    </ng-container>
-
-                    <!-- Action Column -->
-                    <ng-container matColumnDef="actions">
-                        <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
-                        <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-                            <button (click)="$event.stopPropagation()"
-                                    [matMenuTriggerData]="{ customer: row }"
-                                    [matMenuTriggerFor]="actionsMenu"
-                                    mat-icon-button
-                                    type="button">
-                            <mat-icon svgIcon="mat:more_horiz"></mat-icon>
-                            </button>
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="loading">
-                        <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center">Cargando Datos...</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="vacio">
-                        <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">No se encuentran resultados para los filtros seleccionados</td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                    <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
-                    <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
-                 </table>
-                 <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
-                 showFirstLastButtons></mat-paginator>
-            </div>
-            <div class="py-4 border-t flex flex-row justify-end">
-                <button color="primary" mat-raised-button type="button" (click)="goToBandejaSolicitudes()">
-                    Regresar
-                </button>
-            </div>
-        </div>
+            </mat-tab>
+            <mat-tab label="Supervisor Persona Natural">
+                <div>
+                    <vex-requerimiento-documento-list></vex-requerimiento-documento-list>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
     </vex-page-layout-content>
 </vex-page-layout>
 

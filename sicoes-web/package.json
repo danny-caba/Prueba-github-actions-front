@@ -43,6 +43,7 @@
     "inputmask": "5.0.5",
     "luxon": "~2.3.0",
     "ng-recaptcha": "^10.0.0",
+    "ngx-doc-viewer": "^14.0.0",
     "ngx-quicklink": "~0.2.7",
     "ngx-quill": "~17.0.0",
     "ngx-showdown": "^6.0.0",

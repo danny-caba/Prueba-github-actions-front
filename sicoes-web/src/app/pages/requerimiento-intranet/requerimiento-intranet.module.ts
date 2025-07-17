@@ -24,23 +24,36 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RequerimientoListComponent } from './requerimiento-list/requerimiento-list.component';
 import { MaterialModule } from 'src/app/shared/material.module';
 import { InputMaskModule } from '@ngneat/input-mask';
+import { RequerimientoInformeAddComponent } from './requerimiento-informe-add/requerimiento-informe-add.component';
+import { RequerimientoInformePnAddComponent } from './requerimiento-informe-add/informe-pn-add/requerimiento-informe-pn-add.component';
+import { RequerimientoInvitacionListComponent } from './requerimiento-invitacion-list/requerimiento-invitacion-list.component';
+import { RequerimientoAprobacionHistorialComponent } from './requerimiento-aprobacion-historial/requerimiento-aprobacion-historial.component';
+import { RequerimientoAprobacionSupervisorPnComponent } from './requerimiento-aprobacion-supervisor-pn/requerimiento-aprobacion-supervisor-pn.component';
 import { ScrollbarModule } from 'src/@vex/components/scrollbar/scrollbar.module';
-import { RequerimientoRoutingModule } from './requerimiento-routing.module';
+import { RequerimientoIntranetRoutingModule } from './requerimiento-intranet-routing.module';
 import { RequerimientoDocumentoListComponent } from './requerimiento-documento-list/requerimiento-documento-list.component';
-import { RequerimientoDocumentoAddComponent } from './requerimiento-documento-add/requerimiento-documento-add.component';
-import { DocumentoPnDetalleComponent } from './requerimiento-documento-add/documento-pn-detalle/documento-pn-detalle.component';
+import { RequerimientoDocumentoEvaluarComponent } from './requerimiento-documento-evaluar/requerimiento-documento-evaluar.component';
+import { RequerimientoModule } from '../requerimiento/requerimiento.module';
+import { RequerimientoDocumentoEvaluarDetalleComponent } from './requerimiento-documento-evaluar-detalle/requerimiento-documento-evaluar-detalle.component';
 
 @NgModule({
   declarations: [
+    RequerimientoListComponent,
+    RequerimientoInformeAddComponent,
+    RequerimientoInformePnAddComponent,
+    RequerimientoInvitacionListComponent,
+    RequerimientoAprobacionHistorialComponent,
+    RequerimientoAprobacionSupervisorPnComponent,
     RequerimientoDocumentoListComponent,
-    RequerimientoDocumentoAddComponent,
-    DocumentoPnDetalleComponent
+    RequerimientoDocumentoEvaluarComponent,
+    RequerimientoDocumentoEvaluarDetalleComponent
   ],
   imports: [
     CommonModule,
-    RequerimientoRoutingModule,
+    RequerimientoIntranetRoutingModule,
     PageLayoutModule,
     FormsModule,
     ReactiveFormsModule,
@@ -67,11 +80,16 @@ import { DocumentoPnDetalleComponent } from './requerimiento-documento-add/docum
     SharedModule,
     InputMaskModule,
     MaterialModule,
-    ScrollbarModule
+    ScrollbarModule,
+    RequerimientoModule
   ],
   exports:[
+    RequerimientoListComponent,
+    RequerimientoInformeAddComponent,
+    RequerimientoInformePnAddComponent,
+    RequerimientoAprobacionSupervisorPnComponent,
     RequerimientoDocumentoListComponent,
-    DocumentoPnDetalleComponent
+    RequerimientoDocumentoEvaluarComponent
   ]
 })
-export class RequerimientoModule { }
+export class RequerimientoIntranetModule { }

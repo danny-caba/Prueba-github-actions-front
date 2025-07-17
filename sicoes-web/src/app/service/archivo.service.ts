@@ -45,4 +45,8 @@ export class ArchivoService {
     return this.http.delete<void>(`/api/contratos/0/archivos/${idArchivo}`);
   }
 
+  obtenerArchivoPorReqDocumentoDetalle(requerimientoDocumentoDetalleUuid: string): Observable<any> {
+    return this.http.get<any>(`${this._path_serve}/api/archivos/documento-detalle/${requerimientoDocumentoDetalleUuid}`);
+  }
+
 }

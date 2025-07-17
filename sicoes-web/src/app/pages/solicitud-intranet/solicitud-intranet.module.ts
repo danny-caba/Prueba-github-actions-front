@@ -30,7 +30,7 @@ import { SolicitudPnProcesarComponent } from './solicitud-pn-procesar/solicitud-
 import { SolicitudModule } from '../solicitud/solicitud.module';
 import { SolicitudListAtencionComponent } from './solicitud-list-atencion/solicitud-list-atencion.component';
 import { SolicitudListAprobacionComponent } from './solicitud-list-aprobacion/solicitud-list-aprobacion.component';
-import { RequerimientoModule } from '../requerimiento/requerimiento.module';
+import { RequerimientoIntranetModule } from '../requerimiento-intranet/requerimiento-intranet.module';
 
 @NgModule({
   declarations: [
@@ -67,7 +67,7 @@ import { RequerimientoModule } from '../requerimiento/requerimiento.module';
     MatDatepickerModule,
     SharedModule,
     SolicitudModule,
-    RequerimientoModule
+    RequerimientoIntranetModule
   ]
 })
 export class SolicitudIntranetModule { }

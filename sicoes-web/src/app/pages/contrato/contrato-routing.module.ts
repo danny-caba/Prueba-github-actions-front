@@ -11,6 +11,8 @@ import { ReemplazoPersonalComponent } from './components/reemplazo-personal/reem
 import { ReemplazoPersFormComponent } from './components/reemplazo-pers-form/reemplazo-pers-form.component';
 import { RevisarDocReemplazoComponent } from './components/revisar-doc-reemplazo/revisar-doc-reemplazo.component';
 import { RevisarDocReemplazoFormComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form.component';
+import { CargaDocsInicioComponent } from './components/carga-docs-inicio/carga-docs-inicio.component';
+import { CargaDocsInicioFormComponent } from './components/carga-docs-inicio-form/carga-docs-inicio-form.component'; 
 
 
 
@@ -46,13 +48,14 @@ const routes: VexRoutes = [{
       path: Link.REEMPLAZO_PERSONAL_FORM + '/:idSolicitud',
       component: ReemplazoPersFormComponent,
       canActivate: [AuthGuardService, RoleGuardService]
+    },  {
+      path: Link.CARGA_DOCS_INICIO + '/:idSolicitud',
+      component: CargaDocsInicioComponent,
+      canActivate: [AuthGuardService, RoleGuardService]
     }, {
       path: Link.CARGA_DOCS_INICIO_FORM + '/:idSolicitud',
-      component: ReemplazoPersFormComponent,
-      canActivate: [AuthGuardService, RoleGuardService],
-      data: { 
-        isCargaDocsInicio: true 
-      }
+      component: CargaDocsInicioFormComponent,
+      canActivate: [AuthGuardService, RoleGuardService]
     }, {
       path: Link.REEMPLAZO_PERSONAL_REVIEW + '/:idSolicitud',
       component: RevisarDocReemplazoComponent,

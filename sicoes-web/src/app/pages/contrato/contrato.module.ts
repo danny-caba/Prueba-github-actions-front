@@ -43,7 +43,9 @@ import { RevisarDocReemplazoComponent } from './components/revisar-doc-reemplazo
 import { RevisarDocReemplazoFormComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form.component';
 import { RevisarDocReemplazoFormReviewComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form-review/revisar-doc-reemplazo-form-review.component';
 import { AdendaFormUploadComponent } from './components/revisar-doc-reemplazo-form/adenda-form-upload/adenda-form-upload.component';
-import { CargaDocsInicioFormComponent } from './components/reemplazo-pers-form/carga-docs-inicio-form/carga-docs-inicio-form.component';
+import { CargaDocsInicioFormComponent } from './components/carga-docs-inicio-form/carga-docs-inicio-form.component';
+import { CargaDocsInicioComponent } from './components/carga-docs-inicio/carga-docs-inicio.component';
+import { CargaDocsInicioAddComponent } from './components/carga-docs-inicio-form/carga-docs-inicio-add/carga-docs-inicio-add.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { CargaDocsInicioFormComponent } from './components/reemplazo-pers-form/c
     RevisarDocReemplazoFormComponent,
     RevisarDocReemplazoFormReviewComponent,
     AdendaFormUploadComponent,
-    CargaDocsInicioFormComponent
+    CargaDocsInicioFormComponent,
+    CargaDocsInicioComponent,
+    CargaDocsInicioAddComponent
   ],
   imports: [
     CommonModule,

@@ -2,11 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 
 @Component({
-  selector: 'vex-carga-docs-inicio-form',
-  templateUrl: './carga-docs-inicio-form.component.html',
-  styleUrls: ['./carga-docs-inicio-form.component.scss']
+  selector: 'vex-carga-docs-inicio-add',
+  templateUrl: './carga-docs-inicio-add.component.html',
+  styleUrls: ['./carga-docs-inicio-add.component.scss']
 })
-export class CargaDocsInicioFormComponent extends BaseComponent implements OnInit {
+export class CargaDocsInicioAddComponent extends BaseComponent implements OnInit {
 
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;

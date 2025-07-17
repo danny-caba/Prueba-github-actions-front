@@ -173,4 +173,9 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   this.router.navigate(['/', Link.EXTRANET, Link.CONTRATOS_LIST, 'cargar-documentacion-inicio', contrato.idSolicitud]);
   }
 
+  goToCargaDocsInicio(contrato: any): void {
+    // Aquí mandamos el id de la solicitud, no el idDocInicio, para cargar el doc
+  this.router.navigate(['/', Link.EXTRANET, Link.CONTRATOS_LIST, Link.CARGA_DOCS_INICIO, contrato.idSolicitud]);
+  }
+
 }

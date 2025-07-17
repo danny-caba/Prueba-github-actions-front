@@ -11,7 +11,8 @@ export class LayoutDocsAdicionalesCargaComponent extends BaseComponent implement
   @Input() isReview: boolean;
 
   editable: boolean = true;
-  marcacion: 'si' | 'no' | null = null;
+  contratoAlquilerRadio: 'si' | 'no' = 'si';
+  seguroSoatRadio: 'si' | 'no' = 'no';
 
   constructor() {
     super();

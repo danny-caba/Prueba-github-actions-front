@@ -161,5 +161,9 @@
             <mat-icon svgIcon="mat:edit"></mat-icon>
             <span>Revisar Documento de<br>Personal de Reemplazo</span>
         </button>
+        <button mat-menu-item (click)="goToCargaDocsInicio(row)" *ngIf="reemplazoRequisitos(row)">
+            <mat-icon svgIcon="mat:edit"></mat-icon>
+            <span>Documentación inicio<br>servicio</span>
+        </button>
     </ng-template>
 </mat-menu>

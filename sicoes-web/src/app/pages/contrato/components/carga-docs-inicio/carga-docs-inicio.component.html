@@ -50,7 +50,7 @@
                       </ng-container>
 
                       <ng-container matColumnDef="estadoDocumento">
-                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Documento<br>inicio servicio</th>
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado<br>Documento<br>inicio servicio</th>
                           <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoDocumento }}</td>
                       </ng-container>
 
@@ -58,9 +58,12 @@
                       <ng-container matColumnDef="actions">
                         <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
                         <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-                            <button mat-menu-item>
-                                <mat-icon svgIcon="mat:delete"></mat-icon>
-                                <span>Eliminar</span>
+                              <button (click)="$event.stopPropagation()"
+                                    [matMenuTriggerData]="{ customer: row }"
+                                    [matMenuTriggerFor]="actionsMenu"
+                                    mat-icon-button
+                                    type="button">
+                              <mat-icon svgIcon="mat:more_horiz"></mat-icon>
                             </button>
                         </td>
                       </ng-container>
@@ -78,9 +81,6 @@
                 </div>
 
                 <div class="py-4 border-t flex flex-row justify-end gap-x-4">
-                    <button color="primary" mat-raised-button type="button" (click)="toGoReemplazoPersonalForm()" *ngIf="allowedToReplace">
-                        {{ btnReplace }}
-                    </button>
                     <button color="primary" mat-raised-button type="button" (click)="toGoBandejaContratos()">
                         Regresar
                     </button>
@@ -89,3 +89,12 @@
         </form>
     </vex-page-layout-content>
 </vex-page-layout>
+
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+    <ng-template let-row="customer" matMenuContent>
+        <button mat-menu-item  (click)="toGoDocumentosInicioServicioForm()">
+            <mat-icon svgIcon="mat:upload_file"></mat-icon>
+            <span>Documentación inicio<br>servicio</span>
+        </button>
+    </ng-template>
+</mat-menu>

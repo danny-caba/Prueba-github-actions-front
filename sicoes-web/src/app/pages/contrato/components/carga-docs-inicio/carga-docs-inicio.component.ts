@@ -1,25 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
 
 @Component({
-  selector: 'vex-reemplazo-personal',
-  templateUrl: './reemplazo-personal.component.html',
-  animations: [
-    fadeInUp400ms,
-    stagger80ms
-  ]
+  selector: 'vex-carga-docs-inicio',
+  templateUrl: './carga-docs-inicio.component.html',
+  styleUrls: ['./carga-docs-inicio.component.scss']
 })
-export class ReemplazoPersonalComponent extends BaseComponent implements OnInit {
+export class CargaDocsInicioComponent extends BaseComponent implements OnInit {
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaInicioContractual', 'estadoReemplazo', 'estadoDocumento', 'actions'];
   allowedToReplace: boolean = true;
-  btnReplace: string = 'Reemplazar';
   private destroy$ = new Subject<void>();
   dummyDataSource = [
     {
@@ -53,11 +47,11 @@ export class ReemplazoPersonalComponent extends BaseComponent implements OnInit 
 
   }
 
-  toGoReemplazoPersonalForm() {
+  toGoDocumentosInicioServicioForm() {
     const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
-    this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_FORM, encryptedId]);
+    this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.CARGA_DOCS_INICIO_FORM, encryptedId]);
   }
-  
+
   toGoBandejaContratos() {
       functionsAlert.questionSiNo('¿Desea ir a la bandeja de contratos?').then((result) => {
           if (result.isConfirmed) {

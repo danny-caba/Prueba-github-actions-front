@@ -6,15 +6,12 @@
                 <div class="flex flex-col sm:flex-row gap-x-8">
                     <div class="flex-auto">
                         <!-- Title -->
-                        <h2 class="text-lg font-bold">Reemplazar</h2>
-                        <mat-divider></mat-divider>
+                        <h2 class="text-lg font-bold">Cargar Documentación Inicio Servicio</h2>
                     </div>
                 </div>
-
-                <vex-reemplazo-pers-form-edit 
-                  [idSolicitud] = "idSolicitud"
-                  [uuidSolicitud] = "uuidSolicitud"
-                #reemplazoPersFormEdit></vex-reemplazo-pers-form-edit>
+                
+                <vex-carga-docs-inicio-add
+                #cargaDocsInicioAdd></vex-carga-docs-inicio-add>
 
                 <div class="py-4 border-t flex flex-row justify-end gap-x-4">
                     <button color="primary" mat-raised-button type="button" (click)="doNothing()">

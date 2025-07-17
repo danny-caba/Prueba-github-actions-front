@@ -1,195 +1,75 @@
-<div>
-    <ng-container [ngTemplateOutlet]="templateContratoLaboral"></ng-container>
-    <mat-divider></mat-divider>
-    <ng-container [ngTemplateOutlet]="templateScrt"></ng-container>
-    <mat-divider></mat-divider>
-    <ng-container [ngTemplateOutlet]="templatePoliza"></ng-container>
-    <mat-divider></mat-divider>
-    <ng-container [ngTemplateOutlet]="templateExamenMedico"></ng-container>
+<div *ngFor="let template of templates; let last = last" class="fila-documento">
+    <!-- Columna 1: Etiqueta del documento -->
+    <div class="col tipo-doc">
+      {{ template.label }}
+    </div>
+  
+    <!-- Columna 2: Archivos o input para subir archivos -->
+    <div class="col archivos">
+      <ng-container *ngIf="isReview; else uploadBlock">
+        <ng-container *ngFor="let file of template.files">
+          <span class="text-secondary mr-2">{{ file }}</span>
+          <button matTooltip="Descargar"
+                  mat-icon-button type="button"
+                  class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="12px"></mat-icon>
+          </button>
+        </ng-container>
+      </ng-container>
+      <ng-template #uploadBlock>
+        <ng-container *ngFor="let i of [].constructor(template.fileCount)">
+          <vex-form-adjuntos-no-title
+            [titulo]="'Archivo (*.pdf)'"
+            [editable]="editable"
+            class="ml-4">
+          </vex-form-adjuntos-no-title>
+        </ng-container>
+      </ng-template>
+    </div>
+  
+    <!-- Columna 3: Fecha Inicio -->
+    <div class="col fecha-inicio">
+      <span class="text-secondary font-bold">FI:</span>
+      <mat-form-field class="fecha-field ml-2 mt-3">
+        <input type="date"
+              [min]="dateHoy | date:'yyyy-MM-dd'"
+              class="fecha-input"
+              [disabled]="isReview"
+              matInput>
+      </mat-form-field>
+    </div>
+  
+    <!-- Columna 4: Fecha Fin -->
+    <div class="col fecha-fin">
+      <span class="text-secondary font-bold">FF:</span>
+      <mat-form-field class="fecha-field ml-2 mt-3">
+        <input type="date"
+              [min]="dateHoy | date:'yyyy-MM-dd'"
+              class="fecha-input"
+              [disabled]="isReview"
+              matInput>
+      </mat-form-field>
+    </div>
+  
+    <!-- Columna 5: Radios -->
+    <div class="col radios" *ngIf="isReview">
+      <mat-radio-group [(ngModel)]="template.radioValue"
+                       class="flex items-center gap-2">
+        <mat-radio-button value="si">Sí</mat-radio-button>
+        <mat-radio-button value="no">No</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  
+    <!-- Columna 6: Evaluado por -->
+    <div class="col evaluado-por text-secondary text-sm" *ngIf="isReview">
+      Evaluado<br>por:
+    </div>
+  
+    <!-- Columna 7: Fecha y Hora -->
+    <div class="col fecha-hora text-secondary text-sm" *ngIf="isReview">
+        Fecha y<br>Hora:
+    </div>
+    
+    <mat-divider *ngIf="!last" class="col-divider" style="grid-column: 1 / -1;"></mat-divider>
 </div>
-
-<ng-template #templateContratoLaboral>
-    <div class="panel-content-container">
-        <span class="id-spacer"></span>
-        <span class="doc-tab-label">Contrato Laboral</span>
-        <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">ContrMock.pdf</span>
-        <button matTooltip="Descargar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
-        <button matTooltip="Eliminar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
-        </button>
-        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
-          [titulo]="'Archivo (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-no-title>
-        <span class="text-secondary ml-2 font-bold">FI</span>
-        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
-            <input type="date"
-                   [min]="dateHoy | date:'yyyy-MM-dd'"
-                   class="fecha-input"
-                   [disabled] = "isReview"
-                   matInput>
-          </mat-form-field>
-        <span class="text-secondary ml-2 font-bold">FF:</span>
-        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
-            <input type="date"
-                   [min]="dateHoy | date:'yyyy-MM-dd'"
-                   class="fecha-input"
-                   [disabled] = "isReview"
-                   matInput>
-          </mat-form-field>
-    </div>
-</ng-template>
-
-<ng-template #templateScrt>
-    <div class="panel-content-container">
-        <span class="id-spacer"></span>
-        <span class="doc-tab-label">SCRT</span>
-        <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">SCRT1Mock.pdf</span>
-        <button matTooltip="Descargar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
-        <button matTooltip="Eliminar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
-        </button>
-        <span class="text-secondary ml-2" *ngIf="isReview">SCRT2Mock.pdf</span>
-        <button matTooltip="Descargar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
-        <button matTooltip="Eliminar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
-        </button>
-        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
-          [titulo]="'File (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-no-title>
-        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
-          [titulo]="'Archivo (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-no-title>
-        <span class="text-secondary ml-2 font-bold">FI</span>
-        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
-            <input type="date"
-                   [min]="dateHoy | date:'yyyy-MM-dd'"
-                   class="fecha-input"
-                   [disabled] = "isReview"
-                   matInput>
-          </mat-form-field>
-        <span class="text-secondary ml-2 font-bold">FF:</span>
-        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
-            <input type="date"
-                   [min]="dateHoy | date:'yyyy-MM-dd'"
-                   class="fecha-input"
-                   [disabled] = "isReview"
-                   matInput>
-          </mat-form-field>
-    </div>
-</ng-template>
-
-<ng-template #templatePoliza>
-    <div class="panel-content-container">
-        <span class="id-spacer"></span>
-        <span class="doc-tab-label">Póliza</span>
-        <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">Pol1Mock.pdf</span>
-        <button matTooltip="Descargar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
-        <button matTooltip="Eliminar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
-        </button>
-        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
-          [titulo]="'File (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-no-title>
-        <span class="text-secondary ml-2" *ngIf="isReview">Pol2Mock.pdf</span>
-        <button matTooltip="Descargar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
-        <button matTooltip="Eliminar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
-        </button>
-        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
-          [titulo]="'Archivo (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-no-title>
-        <span class="text-secondary ml-2 font-bold">FI</span>
-        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
-            <input type="date"
-                   [min]="dateHoy | date:'yyyy-MM-dd'"
-                   class="fecha-input"
-                   [disabled] = "isReview"
-                   matInput>
-          </mat-form-field>
-        <span class="text-secondary ml-2 font-bold">FF:</span>
-        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
-            <input type="date"
-                   [min]="dateHoy | date:'yyyy-MM-dd'"
-                   class="fecha-input"
-                   [disabled] = "isReview"
-                   matInput>
-          </mat-form-field>
-    </div>
-</ng-template>
-
-<ng-template #templateExamenMedico>
-    <div class="panel-content-container">
-        <span class="id-spacer"></span>
-        <span class="doc-tab-label">Examen Médico</span>
-        <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">ExaMock.pdf</span>
-        <button matTooltip="Descargar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
-        <button matTooltip="Eliminar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
-        </button>
-        <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isReview"
-          [titulo]="'Archivo (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-no-title>
-        <span class="text-secondary ml-2 font-bold">FI</span>
-        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
-            <input type="date"
-                   [min]="dateHoy | date:'yyyy-MM-dd'"
-                   class="fecha-input"
-                   [disabled] = "isReview"
-                   matInput>
-          </mat-form-field>
-        <span class="text-secondary ml-2 font-bold">FF:</span>
-        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
-            <input type="date"
-                   [min]="dateHoy | date:'yyyy-MM-dd'"
-                   class="fecha-input"
-                   [disabled] = "isReview"
-                   matInput>
-          </mat-form-field>
-    </div>
-</ng-template>
+  

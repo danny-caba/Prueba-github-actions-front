@@ -3,47 +3,101 @@
     <mat-divider></mat-divider>
     <ng-container [ngTemplateOutlet]="templateSeguroSoat"></ng-container>
   </div>
-
-<ng-template #templateContratoAlquiler>
-    <div class="panel-grid">
-        <span class="doc-tab-label">CONTRATO POR ALQUILER CAMIONETA</span>
-        <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
-        <button matTooltip="Descargar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
-        <button matTooltip="Eliminar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
-        </button>
-        <vex-form-adjuntos-no-title *ngIf="!isReview"
-          [titulo]="'Archivo (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-no-title>
-    </div>
-</ng-template>
-
-<ng-template #templateSeguroSoat>
-    <div class="panel-grid">
-        <span class="doc-tab-label">SEGURO SOAT</span>
-        <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
-        <button matTooltip="Descargar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
-        <button matTooltip="Eliminar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
-        </button>
-        <vex-form-adjuntos-no-title *ngIf="!isReview"
-          [titulo]="'Archivo (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-no-title>
+  
+  <ng-template #templateContratoAlquiler>
+    <div class="fila-documento">
+      <!-- Columna 1: Etiqueta del documento -->
+      <div class="col tipo-doc">
+        CONTRATO POR ALQUILER CAMIONETA
       </div>
-</ng-template>
+  
+      <!-- Columna 2: Archivos o input -->
+      <div class="col archivos">
+        <ng-container *ngIf="isReview; else uploadContrato">
+          <span class="text-secondary mr-2">DocumentoMock.pdf</span>
+          <button matTooltip="Descargar"
+                  mat-icon-button type="button"
+                  class="text-primary hover:bg-hover">
+            <mat-icon svgIcon="mat:download" size="12px"></mat-icon>
+          </button>
+        </ng-container>
+        <ng-template #uploadContrato>
+          <vex-form-adjuntos-no-title
+            [titulo]="'Archivo (*.pdf)'"
+            [editable]="editable"
+            class="ml-4">
+          </vex-form-adjuntos-no-title>
+        </ng-template>
+    </div>
+  
+      <!-- Columna 3: Radios -->
+      <div class="col radios" *ngIf="isReview">
+        <mat-radio-group [(ngModel)]="contratoAlquilerRadio"
+                         class="flex items-center gap-2">
+          <mat-radio-button value="si">Sí</mat-radio-button>
+          <mat-radio-button value="no">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+  
+      <!-- Columna 4: Evaluado por -->
+      <div class="col evaluado-por text-secondary text-sm" *ngIf="isReview">
+        Evaluado por:
+      </div>
+  
+      <!-- Columna 5: Fecha y Hora -->
+      <div class="col fecha-hora text-secondary text-sm" *ngIf="isReview">
+        Fecha y Hora:
+      </div>
+  
+    </div>
+  </ng-template>
+  
+  
+  <ng-template #templateSeguroSoat>
+    <div class="fila-documento">
+        <!-- Columna 1: Etiqueta del documento -->
+        <div class="col tipo-doc">
+          SEGURO SOAT
+        </div>
+    
+        <!-- Columna 2: Archivos o input -->
+        <div class="col archivos">
+          <ng-container *ngIf="isReview; else uploadContrato">
+            <span class="text-secondary mr-2">DocumentoMock.pdf</span>
+            <button matTooltip="Descargar"
+                    mat-icon-button type="button"
+                    class="text-primary hover:bg-hover">
+              <mat-icon svgIcon="mat:download" size="12px"></mat-icon>
+            </button>
+          </ng-container>
+          <ng-template #uploadContrato>
+            <vex-form-adjuntos-no-title
+              [titulo]="'Archivo (*.pdf)'"
+              [editable]="editable"
+              class="ml-4">
+            </vex-form-adjuntos-no-title>
+          </ng-template>
+      </div>
+    
+        <!-- Columna 3: Radios -->
+        <div class="col radios" *ngIf="isReview">
+          <mat-radio-group [(ngModel)]="seguroSoatRadio"
+                           class="flex items-center gap-2">
+            <mat-radio-button value="si">Sí</mat-radio-button>
+            <mat-radio-button value="no">No</mat-radio-button>
+          </mat-radio-group>
+        </div>
+    
+        <!-- Columna 4: Evaluado por -->
+        <div class="col evaluado-por text-secondary text-sm" *ngIf="isReview">
+          Evaluado por:
+        </div>
+    
+        <!-- Columna 5: Fecha y Hora -->
+        <div class="col fecha-hora text-secondary text-sm" *ngIf="isReview">
+          Fecha y Hora:
+        </div>
+    
+      </div>
+  </ng-template>
+  

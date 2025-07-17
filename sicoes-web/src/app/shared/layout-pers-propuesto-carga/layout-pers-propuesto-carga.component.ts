@@ -17,7 +17,38 @@ export class LayoutPersPropuestoCargaComponent extends BaseComponent implements 
   @Input() isReview?: boolean;
 
   editable: boolean = true;
-  marcacion: 'si' | 'no' | null = null;
+  marcacionContratoLab: 'si' | 'no' | null = null;
+  marcacionScrt: 'si' | 'no' | null = null;
+  marcacionPoliza: 'si' | 'no' | null = null;
+  marcacionExMed: 'si' | 'no' | null = null;
+
+  templates = [
+    {
+      label: 'Contrato Laboral',
+      files: ['ContrMock.pdf'],
+      fileCount: 1,
+      radioValue: this.marcacionContratoLab
+    },
+    {
+      label: 'SCTR',
+      files: ['SCRT1Mock.pdf', 'SCRT2Mock.pdf'],
+      fileCount: 2,
+      radioValue: this.marcacionScrt
+    },
+    {
+      label: 'Póliza',
+      files: ['Pol1Mock.pdf', 'Pol2Mock.pdf'],
+      fileCount: 2,
+      radioValue: this.marcacionPoliza
+    },
+    {
+      label: 'Examen Médico',
+      files: ['ExaMock.pdf'],
+      fileCount: 1,
+      radioValue: this.marcacionExMed
+    }
+  ];
+  
 
   constructor() {
     super();

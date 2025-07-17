@@ -11,7 +11,7 @@
     background-color: white;
 }
 
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix{
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix{
     padding: 0.5em 0 1em 0;
 }
 .small-input.mat-form-field-appearance-outline .mat-form-field-infix {
@@ -28,15 +28,15 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
     transform: translateY(-1.1em) scale(.75);
     width: 133.33333%;
 }
-::ng-deep .mat-form-field {
+:host ::ng-deep .mat-form-field {
     font-size: 12px;
 }
 
-::ng-deep .mat-divider {
+:host ::ng-deep .mat-divider {
     border-top-color: rgba(68, 67, 67, 0.38) !important;
 }
 
-::ng-deep input.mat-input-element {
+:host ::ng-deep input.mat-input-element {
     color: #000090;
 }
 
@@ -50,11 +50,11 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
     color: white;
 }
 
-::ng-deep .mat-tooltip-default {
+:host ::ng-deep .mat-tooltip-default {
     display: none;
 }
 
-::ng-deep .mat-tooltip {
+:host ::ng-deep .mat-tooltip {
   position: relative;
   background-color: #5c74b8;
   color: #fff;
@@ -63,7 +63,7 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
   padding: 8px;
 }
 
-::ng-deep .mat-tooltip::after {
+:host ::ng-deep .mat-tooltip::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -75,7 +75,7 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
   border-color: #5c74b8 transparent transparent transparent;
 }
 
-::ng-deep  .mat-tooltip-text {
+:host ::ng-deep  .mat-tooltip-text {
   font-weight: bold;
 }
   
@@ -91,26 +91,27 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
     background-color: rgb(255, 255, 255);
 }
 
-::ng-deep .mat-expansion-panel {
+:host ::ng-deep .mat-expansion-panel {
     box-shadow: none !important;
     border: none !important;
   }
   
-  ::ng-deep .mat-expansion-panel-header {
+:host ::ng-deep .mat-expansion-panel-header {
     box-shadow: none !important;
     border-bottom: none !important;
+    background: white !important;
   }
   
-  ::ng-deep .mat-expansion-panel-header::after {
+:host ::ng-deep .mat-expansion-panel-header::after {
     content: none !important;
     display: none !important;
   }
   
-::ng-deep .mat-expansion-indicator::after{
+:host ::ng-deep .mat-expansion-indicator::after{
     border-color: rgb(68, 68, 68, 0.86);
 }
   
-::ng-deep .mat-tab-label{
+:host ::ng-deep .mat-tab-label{
     background-color: rgba(12, 12, 12, 0.048);
 }
 

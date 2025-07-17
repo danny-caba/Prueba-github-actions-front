@@ -10,7 +10,7 @@
 
 <mat-form-field  class="mt-6 flex-auto" *ngIf="profesionalSeleccionado">
     <mat-label>Perfil</mat-label>
-    <input matInput disabled="true" [value]="profesionalSeleccionado?.dePerfilProfesional" maxlength="50">
+    <input matInput [disabled]="true" [value]="profesionalSeleccionado?.dePerfilProfesional" maxlength="50">
 </mat-form-field>
 
 <div *ngFor="let requisito of requisitos">

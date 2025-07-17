@@ -1,41 +1,56 @@
 <div class="panel-group">
-    <ng-container [ngTemplateOutlet]="templateFechaInicio"></ng-container>
+    <ng-container [ngTemplateOutlet]="templateFechaInicioContrato"></ng-container>
     <mat-divider></mat-divider>
     <ng-container [ngTemplateOutlet]="templateActaInicio"></ng-container>
     <mat-divider></mat-divider>
   </div>
-
-<ng-template #templateFechaInicio>
-    <div class="panel-grid">
-        <span class="doc-tab-label">Fecha de inicio de contrato (acta inicio):</span>
-        <span class="flex-1"></span>
-        <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field">
-            <input type="date"
-                   [min]="dateHoy | date:'yyyy-MM-dd'"
-                   class="fecha-input"
-                   [disabled] = "isReview"
-                   matInput>
-          </mat-form-field>
-    </div>
-</ng-template>
-
-<ng-template #templateActaInicio>
-    <div class="panel-grid">
-        <span class="doc-tab-label">Acta de inicio</span>
-        <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview">DocumentoMock.pdf</span>
-        <button matTooltip="Descargar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
-        <button matTooltip="Eliminar" *ngIf="isReview"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
-        </button>
-        <vex-form-adjuntos-no-title
-            [editable]="editable">
-        </vex-form-adjuntos-no-title>
+  
+  <ng-template #templateFechaInicioContrato>
+    <div class="fila-documento">
+      <!-- Columna 1: Etiqueta del documento -->
+      <div class="col tipo-doc">
+        Fecha de inicio de contrato (acta inicio):
       </div>
-</ng-template>
+  
+      <!-- Columna 2: Fecha input -->
+      <div class="col fecha-fin">
+        <mat-form-field class="fecha-field" style="margin-left: auto;">
+          <input type="date"
+                [min]="dateHoy | date:'yyyy-MM-dd'"
+                class="fecha-input"
+                [disabled]="isReview"
+                matInput>
+        </mat-form-field>
+      </div>
+    </div>
+  </ng-template>
+  
+  
+  <ng-template #templateActaInicio>
+    <div class="fila-documento">
+        <!-- Columna 1: Etiqueta del documento -->
+        <div class="col tipo-doc">
+          Acta de inicio:
+        </div>
+    
+        <!-- Columna 2: Archivos o input -->
+        <div class="col archivos">
+          <ng-container *ngIf="isReview; else uploadContrato">
+            <span class="text-secondary mr-2">DocumentoMock.pdf</span>
+            <button matTooltip="Descargar"
+                    mat-icon-button type="button"
+                    class="text-primary hover:bg-hover">
+              <mat-icon svgIcon="mat:download" size="12px"></mat-icon>
+            </button>
+          </ng-container>
+          <ng-template #uploadContrato>
+            <vex-form-adjuntos-no-title
+              [titulo]="'Archivo (*.pdf)'"
+              [editable]="editable"
+              class="ml-4">
+            </vex-form-adjuntos-no-title>
+          </ng-template>
+      </div>
+    </div>
+  </ng-template>
+  

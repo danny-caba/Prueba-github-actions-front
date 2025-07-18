@@ -14,6 +14,7 @@ import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AuthFacade } from '../../../../auth/store/auth.facade';
 import * as CryptoJS from 'crypto-js';
+import { AuthUser } from 'src/app/auth/store/auth.models';
 
 const URL_ENCRIPT = '3ncr1pt10nK3yuR1';
 
@@ -31,6 +32,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
 
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
+  usuario: AuthUser;
 
   displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'estadoDocInicioServicio', 'tipo', 'actions'];
   ACCION_VER: string = solicitudContrato.ACCION_VER;
@@ -58,6 +60,9 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
 
   ngOnInit(): void {
     this.cargarTabla();
+    this.user$.subscribe(usu => {
+      this.usuario = usu;
+    })
   }
 
   ngOnDestroy(): void {

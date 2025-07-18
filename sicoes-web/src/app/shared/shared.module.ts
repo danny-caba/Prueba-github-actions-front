@@ -106,6 +106,7 @@ import { LayoutPersPropuestoCargaComponent } from './layout-pers-propuesto-carga
 import { LayoutDocsAdicionalesCargaComponent } from './layout-docs-adicionales-carga/layout-docs-adicionales-carga.component';
 import { FormAdjuntosNoTitleComponent } from './form-adjuntos-no-title/form-adjuntos-no-title.component';
 import { LayoutActaInicioComponent } from './layout-acta-inicio/layout-acta-inicio.component';
+import { OptionRoleReemplazoDirective } from '../auth/interceptors/option-role-reemplazo.directive';
 
 const sharedComponents = [
 
@@ -222,9 +223,9 @@ const sharedComponents = [
 
 @NgModule({
   imports:      [ CommonModule, MaterialModule,FormsModule, ReactiveFormsModule, InputMaskModule, MatDialogModule],
-  declarations: [ ...sharedComponents, OptionRoleDirective ],
-  exports:      [ ...sharedComponents, CommonModule, FormsModule, ReactiveFormsModule, OptionRoleDirective ],
-  providers:    [ LoadingDialogService, DatePipe, OptionRoleDirective ],
+  declarations: [ ...sharedComponents, OptionRoleDirective, OptionRoleReemplazoDirective ],
+  exports:      [ ...sharedComponents, CommonModule, FormsModule, ReactiveFormsModule, OptionRoleDirective, OptionRoleReemplazoDirective ],
+  providers:    [ LoadingDialogService, DatePipe, OptionRoleDirective, OptionRoleReemplazoDirective ],
   entryComponents: [...sharedComponents]
 })
 

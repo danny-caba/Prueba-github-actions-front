@@ -64,6 +64,9 @@ export enum Opcion {
 
     //CONTRATO
     CONTRATO_EVALUACION = 'CONTRATO_EVALUACION',
+
+    //REEMPLAZO
+    BTN_REEMPLAZO = 'BTN_REEMPLAZO',
 }
 
 export const OpcionConfig = [
@@ -153,6 +156,9 @@ export const OpcionConfig = [
 { codigo: Opcion.BTN_APROBADOR_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD},
 { codigo: Opcion.BTN_APROBADOR_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD},
 { codigo: Opcion.BTN_APROBADOR_ACC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO},
+
+//EMPRESA SUPERVISORA
+{ codigo: Opcion.BTN_REEMPLAZO },
 
 ]
 
@@ -250,6 +256,11 @@ export const OpcionPorRol = [{
   opciones: [
     Opcion.VIEW_EVALUACION,
     Opcion.BTN_APROBADOR_ACC,
+  ]
+},{
+  rol: RolEnum.EMP_SUPERV,
+  opciones: [
+    Opcion.BTN_REEMPLAZO,
   ]
 }];
 
@@ -502,5 +513,17 @@ export const RolMenu = [
   { ROL: { CODIGO: RolEnum.EVA_CONTRA }, MENU: [menu16, menu17], path: [
     'intranet/contratos',
     'intranet/bandeja-contratos'
+  ]},{ ROL: { CODIGO: RolEnum.EMP_SUPERV }, MENU: [menu01, menu09, menu10, 
+    menu14
+  ], path: [
+    'extranet/solicitudes',
+    'extranet/solicitudes/opciones',
+    'extranet/solicitudes/registro',
+    'extranet/solicitudes/editar/',
+    'extranet/solicitudes/subsanar/',
+    'extranet/solicitudes/ver/',
+    'extranet/proceso',
+    'extranet/invitaciones',
+    'extranet/contrato',
   ]},
 ]

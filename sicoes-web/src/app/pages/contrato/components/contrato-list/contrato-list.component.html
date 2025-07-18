@@ -153,16 +153,16 @@
             <mat-icon svgIcon="mat:preview"></mat-icon>
             <span>Inicio de Servicio</span>
         </button>
-        <button mat-menu-item (click)="goToFormContrato(row, ACCION_REEMPLAZAR)" *ngIf="reemplazoRequisitos(row)">
+        <button mat-menu-item (click)="goToFormContrato(row, ACCION_REEMPLAZAR)"  *vexOptionRoleReemplazo="opcion.BTN_REEMPLAZO">
             <mat-icon svgIcon="mat:group"></mat-icon>
             <span>Reemplazar personal<br>propuesto</span>
         </button>
-        <button mat-menu-item (click)="goToFormContrato(row, ACCION_REVISAR)" *ngIf="reemplazoRequisitos(row)">
+        <button mat-menu-item (click)="goToFormContrato(row, ACCION_REVISAR)">
             <mat-icon svgIcon="mat:edit"></mat-icon>
             <span>Revisar Documento de<br>Personal de Reemplazo</span>
         </button>
-        <button mat-menu-item (click)="goToCargaDocsInicio(row)" *ngIf="reemplazoRequisitos(row)">
-            <mat-icon svgIcon="mat:edit"></mat-icon>
+        <button mat-menu-item (click)="goToCargaDocsInicio(row)" *vexOptionRoleReemplazo="opcion.BTN_REEMPLAZO">
+            <mat-icon svgIcon="mat:upload_file"></mat-icon>
             <span>Documentación inicio<br>servicio</span>
         </button>
     </ng-template>

@@ -177,4 +177,9 @@ export class RequerimientoService {
   );
   }
 
+  evaluarDocumentoDetalle(data: any) {
+    const url = `${this._path_serve}/api/requerimientos/documentos/detalle`;
+    return this.http.patch<any>(url, data);
+  }
+
 }

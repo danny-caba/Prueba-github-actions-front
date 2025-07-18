@@ -22,9 +22,10 @@
     <form [formGroup]="formGroup" class="flex flex-col gap-y-2">
       <mat-form-field class="flex-auto">
         <mat-label>Estado Documento</mat-label>
-        <mat-select [formControl]="formGroup.controls.estado">
-          <mat-option value="APROBADO">Aprobado</mat-option>
-          <mat-option value="RECHAZADO">Rechazado</mat-option>
+        <mat-select [formControl]="formGroup.controls.evaluacion" (selectionChange)="onChangeEstado($event)">
+          <mat-option *ngFor="let evaluacion of estadosReqDocumentoDetalle" [value]="evaluacion">
+            {{ evaluacion.nombre }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field class="mt-6 flex-auto">
@@ -35,15 +36,15 @@
       </mat-form-field>
       <mat-form-field class="mt-6 flex-auto" [ngClass]="{'opacity-0': formGroup.get('usuarioEvaluador')?.value == null}">
         <mat-label>Evaluado por</mat-label>
-        <input matInput formControlName="usuarioEvaluador" />
+        <input matInput formControlName="usuarioEvaluador"/>
       </mat-form-field>
       <mat-form-field class="mt-6 flex-auto" [ngClass]="{'opacity-0': formGroup.get('fechaEvaluacion')?.value == null}">
         <mat-label>Fecha y Hora de Evaluación</mat-label>
-        <input matInput formControlName="fechaEvaluacion" />
+        <input matInput formControlName="fechaEvaluacion"/>
       </mat-form-field>
       <div class="flex justify-end gap-x-2">
-        <button mat-raised-button color="primary" (click)="accion()">Cancelar</button>
-        <button mat-raised-button color="primary" (click)="accion()">Registrar</button>
+        <button mat-raised-button color="primary" (click)="accion(ACC_CANCELAR)">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="accion(ACC_REGISTRAR)">Registrar</button>
       </div>
     </form>
   </div>

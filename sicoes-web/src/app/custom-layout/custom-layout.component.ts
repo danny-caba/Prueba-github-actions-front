@@ -167,7 +167,8 @@ export class CustomLayoutComponent implements OnInit {
       ListadoEnum.ENTRADA_DATO,
       ListadoEnum.ADJUDICACION_SIMPLIFICADA,
       ListadoEnum.TIPO_CONTRATO,
-      ListadoEnum.ESTADO_REQ_DOCUMENTO
+      ListadoEnum.ESTADO_REQ_DOCUMENTO,
+      ListadoEnum.ESTADO_REQ_DOCUMENTO_DETALLE
     ]).subscribe(listRes => {
 
     })

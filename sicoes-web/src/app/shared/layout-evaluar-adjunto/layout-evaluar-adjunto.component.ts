@@ -161,12 +161,6 @@ export class LayoutEvaluarAdjuntoComponent extends BaseComponent implements OnIn
   }
 
   private bloquearFormularioSiCorresponde() {
-
-    // if (this.requisito.tipo?.codigo === TipoDocumentoEnum.SUBSANACION 
-    //   && this.requisito.evaluacion?.codigo === EstadoReqDocDetalleEvalEnum.OBSERVADO) {
-    //   this.formBloqueado = false;
-    //   this.formGroup.enable();
-    // } else {
       const v = this.formGroup.value;
       if (v.evaluacion && v.usuarioEvaluador && v.fechaEvaluacion) {
         this.formBloqueado = true;
@@ -175,6 +169,5 @@ export class LayoutEvaluarAdjuntoComponent extends BaseComponent implements OnIn
         this.formBloqueado = false;
         this.formGroup.enable();
       }
-    // }
   }
 }

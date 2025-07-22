@@ -62,4 +62,5 @@ export class RequerimientoDocumentoDetalle {
   evaluacion: Partial<ListadoDetalle>
   usuario: Partial<Usuario>
   fechaEvaluacion: string
+  observacion: string
 }

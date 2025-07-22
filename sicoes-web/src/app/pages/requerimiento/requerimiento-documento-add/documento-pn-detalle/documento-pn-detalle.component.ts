@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { RequerimientoDocumentoDetalle } from 'src/app/interface/requerimiento.model';
+import { ModalReqDocumentoObservacionComponent } from 'src/app/shared/modal-req-documento-observacion/modal-req-documento-observacion.component';
 import { EstadoReqDocDetalleEvalEnum as evaluacion } from 'src/helpers/constantes.components';
 
 @Component({
@@ -14,7 +16,9 @@ export class DocumentoPnDetalleComponent {
   @Input() requisito: RequerimientoDocumentoDetalle;
   @Input() rutaEvaluarDetalle: string[];
 
-  constructor() {}
+  constructor(
+    private dialog: MatDialog,
+  ) {}
 
   onChangeCheckbox(event: any, requisito: RequerimientoDocumentoDetalle) {
     requisito.archivo = event.checked ? null : requisito.archivo;
@@ -42,6 +46,17 @@ export class DocumentoPnDetalleComponent {
 
   isArchivoEditable(): boolean {
     return this.add || (this.subsanar && (this.requisito.evaluacion?.codigo == evaluacion.OBSERVADO || this.requisito.evaluacion === null));
+  }
+
+  abrirObservacion() {
+    this.dialog.open(ModalReqDocumentoObservacionComponent, {
+      width: '1200px',
+      maxHeight: '100%',
+      data: {
+        observacion: this.requisito.observacion,
+        accion: 'view'
+      },
+    })
   }
 
 }

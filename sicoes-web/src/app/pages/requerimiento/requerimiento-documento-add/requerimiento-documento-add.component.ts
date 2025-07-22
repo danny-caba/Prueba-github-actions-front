@@ -5,7 +5,8 @@ import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { REQUERIMIENTO_CONSTANTS, REQUERIMIENTO_INFORME_CONSTANTS } from 'src/helpers/requerimiento.constants';
 import { RequerimientoService } from 'src/app/service/requerimiento.service';
-import { RequerimientoDocumentoDetalle } from 'src/app/interface/requerimiento.model';
+import { RequerimientoDocumento, RequerimientoDocumentoDetalle } from 'src/app/interface/requerimiento.model';
+import { EstadoRequerimientoEnum } from 'src/helpers/constantes.components';
 
 @Component({
   selector: 'vex-requerimiento-documento-add',
@@ -20,6 +21,7 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
   requerimientoDocumentoUuid: string;
   requisitos: RequerimientoDocumentoDetalle[];
   isLoading: boolean = false;
+  requerimientoDocumento: Partial<RequerimientoDocumento>;
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -50,6 +52,10 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
       )
       .subscribe(listRes => {
         this.requisitos = listRes;
+        this.requerimientoDocumento = listRes[0].requerimientoDocumento;
+        if (this.requerimientoDocumento.estado.codigo !== EstadoRequerimientoEnum.PRELIMINAR) {
+          this.changeToView();
+        }
         this.isLoading = false;
       });
 
@@ -89,6 +95,10 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
   }
 
   private async sendDocumento(): Promise<void> {
+    this.requisitos.forEach(requisito => {
+      requisito.usuario = null;
+      requisito.requerimientoDocumento.estado = null;
+    });
     this.requerimientoService.registrarDocumento(this.requisitos)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -103,11 +113,15 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
 
   private async handleSuccess(): Promise<void> {
     await functionsAlert.success(REQUERIMIENTO_INFORME_CONSTANTS.MESSAGES.SUCCESS);
-    this.regresar();
+    this.changeToView();
   }
 
   private async showError(message: string): Promise<void> {
     await functionsAlert.error(message);
+  }
+
+  changeToView(): void {
+    this.router.navigate([...REQUERIMIENTO_CONSTANTS.ROUTES.VIEW, this.requerimientoDocumentoUuid], { replaceUrl: true });
   }
 
   regresar(): void {
@@ -115,6 +129,6 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
   }
 
   mostrarBotonRegistrar(): boolean {
-    return this.add || this.subsanar;
+    return (this.add || this.subsanar) && !this.isLoading;
   }
 }

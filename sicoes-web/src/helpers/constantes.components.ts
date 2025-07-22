@@ -289,3 +289,9 @@ export enum TipoDocumentoEnum {
     REGISTRO = 'REGISTRO',
     SUBSANACION = 'SUBSANACION'
 }
+
+export enum EstadoReqDocumentoEnum {
+    SOLICITUD_PRELIMINAR = 'SOLICITUD_PRELIMINAR',
+    EN_PROCESO = 'EN_PROCESO',
+    CONCLUIDO = 'CONCLUIDO',
+}

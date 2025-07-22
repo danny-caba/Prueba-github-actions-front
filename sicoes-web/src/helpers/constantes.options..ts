@@ -443,7 +443,8 @@ export const RolMenu = [
     'extranet/invitaciones',
     'extranet/contrato',
     'extranet/requerimientos/documentos/add',
-    'extranet/requerimientos/documentos/subsanar'
+    'extranet/requerimientos/documentos/subsanar',
+    'extranet/requerimientos/documentos/view'
   ]},
   { ROL: { CODIGO: RolEnum.EVA_ADMIN }, MENU: [menu02, menu04], path: [
     'intranet/solicitudes',

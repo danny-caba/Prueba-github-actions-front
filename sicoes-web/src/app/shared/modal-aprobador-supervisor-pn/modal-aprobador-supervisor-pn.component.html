@@ -1,24 +1,16 @@
 <form>
     <vex-modal-title titulo="Acción Aprobador"></vex-modal-title>
-    
     <mat-divider class="-mx-6 text-border"></mat-divider>
     <mat-dialog-content class="flex flex-col">
-        <mat-form-field  class="mt-6 flex-auto">
+        <mat-form-field class="mt-6 flex-auto">
             <mat-label>Observaciones</mat-label>
-            <textarea matInput #obsAdministrativa [formControl]="formGroup.controls.observacion" maxlength="256"></textarea>
+            <textarea matInput #obsAdministrativa [formControl]="formGroup.controls.observacion"
+                maxlength="256"></textarea>
         </mat-form-field>
     </mat-dialog-content>
-    <mat-progress-bar
-        *ngIf="loadingAprobacion"
-        mode="buffer"
-        [value]="progreso"
-        [bufferValue]="progreso"
-        class="w-full"
-    ></mat-progress-bar>
-    <p *ngIf="loadingAprobacion" class="text-sm text-gray-700 text-center py-3">{{ progreso | number: '1.0-0' }}% completado</p>
     <mat-dialog-actions align="end">
-        <button mat-raised-button color="primary"  (click)="guardar(AprobadorAccion.APROBADO)">Aprobar</button>
-        <button mat-raised-button color="primary"  (click)="guardar(AprobadorAccion.RECHAZADO)">Rechazar</button>
+        <button mat-raised-button color="primary" (click)="guardar(AprobadorAccion.APROBADO)">Aprobar</button>
+        <button mat-raised-button color="primary" (click)="guardar(AprobadorAccion.RECHAZADO)">Rechazar</button>
         <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
     </mat-dialog-actions>
 </form>

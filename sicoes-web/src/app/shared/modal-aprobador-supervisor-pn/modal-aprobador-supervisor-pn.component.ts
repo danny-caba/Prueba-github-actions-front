@@ -1,12 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { firstValueFrom, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
-import { AuthUser } from 'src/app/auth/store/auth.models';
-import { Asignacion } from 'src/app/interface/asignacion';
 import { EvaluadorService } from 'src/app/service/evaluador.service';
-import { AprobadorAccion, EvaluadorRol } from 'src/helpers/constantes.components';
+import { AprobadorAccion } from 'src/helpers/constantes.components';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { BaseComponent } from '../components/base.component';
 
@@ -15,21 +13,10 @@ import { BaseComponent } from '../components/base.component';
   templateUrl: './modal-aprobador-supervisor-pn.component.html',
   styleUrls: ['./modal-aprobador-supervisor-pn.component.scss']
 })
-export class ModalAprobadorSupervisorPnComponent extends BaseComponent implements OnInit {
-
-  asignacion: Asignacion
-
+export class ModalAprobadorSupervisorPnComponent extends BaseComponent {
   AprobadorAccion = AprobadorAccion
-
   listaSolicitudUuidSeleccionado = []
-  usuario$ = this.authFacade.user$;
-  usuario: AuthUser
-
-
-
-  progreso: number = 0;
-  loadingAprobacion: boolean = false;
-  errores: string[] = [];
+  errores: { uuid: string; error: any }[] = [];
 
   formGroup = this.fb.group({
     observacion: [null]
@@ -44,18 +31,7 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
     private dialog: MatDialog
   ) {
     super();
-
     this.listaSolicitudUuidSeleccionado = data.listaSolicitudUuidSeleccionado;
-
-
-
-  }
-
-  ngOnInit() {
-
-    this.usuario$.subscribe(usu => {
-      this.usuario = usu;
-    })
   }
 
   closeModal() {
@@ -86,22 +62,30 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
     functionsAlert.questionSiNo(msj).then(async (result) => {
 
       if (result.isConfirmed) {
-        this.loadingAprobacion = true;
-        for (let i = 0; i < this.listaSolicitudUuidSeleccionado.length; i++) {
 
-          let filtro = {
-            codigoTipoAprobador: EvaluadorRol.APROBADOR_TECNICO_COD,
-            solicitudUuid: this.listaSolicitudUuidSeleccionado[i]
+
+        for (const item of this.listaSolicitudUuidSeleccionado) {
+          const payload = {
+            estado: {
+              idListadoDetalle: item.tipo.idListadoDetalle,
+              codigo: msj
+            },
+            nuSiaf: '0023584512',
+            deObservacion: this.formGroup.get('observacion')?.value,
+            rol: 'GSE'
           };
 
-          //this.evaluadorService.requerimientosAprobar
-
-
-          let data$ = this.evaluadorService.listarAsignacionesAprobadores(filtro);
-          let res: any = await firstValueFrom(data$);
-
-          //this.dialogRef.close(true);
+          try {
+            await this.evaluadorService.requerimientosAprobar(item.requerimiento.requerimientoUuid, payload).toPromise();
+          } catch (error) {
+            this.errores.push({
+              uuid: item.requerimiento.requerimientoUuid,
+              error: error?.message || error
+            });
+          }
         }
+        functionsAlert.success('Acción masiva completada con éxito.');
+        this.dialogRef.close(true);
       }
     });
   }

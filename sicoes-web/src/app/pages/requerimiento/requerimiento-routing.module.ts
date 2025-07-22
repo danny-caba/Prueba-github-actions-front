@@ -5,10 +5,11 @@ import { AuthGuardService } from 'src/app/auth/guards';
 import { Link } from 'src/helpers/internal-urls.components';
 import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
 import { RequerimientoDocumentoAddComponent } from './requerimiento-documento-add/requerimiento-documento-add.component';
+import { RequerimientoDocumentoReviewComponent } from './requerimiento-documento-review/requerimiento-documento-review.component';
 
-const routes: VexRoutes = [{ 
+const routes: VexRoutes = [{
   path: '',
-  children:[
+  children: [
     {
       path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_ADD + '/:documentoUuid',
       canActivate: [AuthGuardService, RoleGuardService],
@@ -24,7 +25,12 @@ const routes: VexRoutes = [{
       data: {
         subsanar: true
       }
-    }
+    },
+    {
+      path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_REVISAR,
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoDocumentoReviewComponent,
+    },
     // },
     // {
     //   path: Link.REQUERIMIENTOS_INVITACION + '/' + Link.INVITACION_SEND + '/:requerimientoUuid',
@@ -40,7 +46,7 @@ const routes: VexRoutes = [{
     //   component: RequerimientoAprobacionHistorialComponent,
     // },
   ]
-  }];
+}];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

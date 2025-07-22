@@ -19,9 +19,9 @@ export const environment = {
   // apiUrl: 'http://localhost:8080/sicoes-api',
 
 
-  pathServe: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes-api',
-  apiOauth: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes-api',
-  apiUrl: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes-api',
+  pathServe: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes3-api',
+  apiOauth: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes3-api',
+  apiUrl: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes3-api',
 
 
 /*

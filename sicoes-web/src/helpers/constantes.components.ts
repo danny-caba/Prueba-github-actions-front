@@ -118,9 +118,9 @@ export enum SolicitudEstadoRevisionEnum {
 }
 
 export enum PerfilSesionEnum {
-    USUARIO_EXTERNO     = 512,
+    USUARIO_EXTERNO = 512,
     USUARIO_COORDINADOR = 513,
-    USUARIO_EVALUADOR   = 514
+    USUARIO_EVALUADOR = 514
 }
 
 export enum TipoDocumentoEnum {
@@ -204,7 +204,7 @@ export enum ListadoEnum {
     TIPO_SECCION = 'TIPO_SECCION',
     TIPO_DATO = 'TIPO_DATO',
     TIPO_CONTRATO = 'TIPO_CONTRATO',
-    
+
 
     TIPO_APROBACION_PERFECCIONAMIENTO = "TIPO_APROBACION_PERFECCIONAMIENTO",
     ESTADO_APROBACION_PERFECCIONAMIENTO = "ESTADO_APROBACION_PERFECCIONAMIENTO",
@@ -235,9 +235,9 @@ export enum solicitudContrato {
 export enum estadosIndexPerfCont {
     PRELIMINAR = '1',
     EN_PROCESO = '2',
-    OBSERVADO =  '3',
-    CONCLUIDO =  '4',
-    ARCHIVADO =  '5'
+    OBSERVADO = '3',
+    CONCLUIDO = '4',
+    ARCHIVADO = '5'
 }
 
 export enum estadosPerfCont {

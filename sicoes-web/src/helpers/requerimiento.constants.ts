@@ -1,5 +1,5 @@
 import { Requerimiento } from "src/app/interface/requerimiento.model";
-import { EstadoRequerimientoEnum } from "./constantes.components";
+import { EstadoRequerimientoEnum, TipoDocumentoEnum } from "./constantes.components";
 
 export const REQUERIMIENTO_INFORME_CONSTANTS = {
   MESSAGES: {
@@ -62,12 +62,16 @@ export const REQUERIMIENTO_CONSTANTS = {
     EstadoRequerimientoEnum.PRELIMINAR,
     EstadoRequerimientoEnum.EN_PROCESO
   ],
+  TIPO_DOCUMENTO: [
+    TipoDocumentoEnum.REGISTRO,
+    TipoDocumentoEnum.SUBSANACION,
+  ],
 
   // Columnas de lista de requerimientos
   COLUMNAS_LISTA_REQUERIMIENTOS: [
-    'expediente',
-    'fechaRegistro',
-    'division',
+    'nuExpediente',
+    'feRegistro',
+    'deDivision',
     'perfil',
     'nombresApellidos',
     'estado',
@@ -101,7 +105,7 @@ export const REQUERIMIENTO_CONSTANTS = {
     ],
 
   ROUTES: {
-    // CANCEL: ['intranet', 'solicitudes'],
+    CANCEL: ['intranet', 'contratos'],
     SUCCESS: ['extranet', 'contratos']
   },
 } as const; 

@@ -1,25 +1,29 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subject, switchMap, takeUntil } from "rxjs";
+import { forkJoin, Subject, switchMap, takeUntil } from "rxjs";
 import { ListadoDetalle } from "src/app/interface/listado.model";
+import { RequerimientoDocumentoDetalle } from "src/app/interface/requerimiento.model";
 import { AdjuntosService } from "src/app/service/adjuntos.service";
 import { ArchivoService } from "src/app/service/archivo.service";
 import { ParametriaService } from "src/app/service/parametria.service";
 import { RequerimientoService } from "src/app/service/requerimiento.service";
 import { ListadoEnum } from "src/helpers/constantes.components";
+import { BaseComponent } from "src/app/shared/components/base.component";
 
 @Component({
   selector: "vex-layout-evaluar-adjunto",
   templateUrl: "./layout-evaluar-adjunto.component.html"
 })
-export class LayoutEvaluarAdjuntoComponent implements OnInit, OnDestroy {
+export class LayoutEvaluarAdjuntoComponent extends BaseComponent implements OnInit, OnDestroy {
 
   archivo: any;
+  requisito: any;
   isLoading = true;
   destroy$ = new Subject<void>();
   requerimientoDocumentoDetalleUuid: string;
   estadosReqDocumentoDetalle: ListadoDetalle[] = [];
+  formBloqueado = false;
 
   ACC_REGISTRAR = 'ACC_REGISTRAR';
   ACC_CANCELAR = 'ACC_CANCELAR';
@@ -39,7 +43,9 @@ export class LayoutEvaluarAdjuntoComponent implements OnInit, OnDestroy {
     private parametriaService: ParametriaService,
     private router: Router,
     private requerimientoService: RequerimientoService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.initializeComponent();
@@ -47,17 +53,22 @@ export class LayoutEvaluarAdjuntoComponent implements OnInit, OnDestroy {
 
   private initializeComponent(): void {
     this.isLoading = true;
+
     this.activeRoute.params
       .pipe(
         takeUntil(this.destroy$),
         switchMap(params => {
           this.requerimientoDocumentoDetalleUuid = params['requerimientoDocumentoDetalleUuid'];
-          return this.archivoService.obtenerArchivoPorReqDocumentoDetalle(this.requerimientoDocumentoDetalleUuid);
+          return forkJoin({
+            archivo: this.archivoService.obtenerArchivoPorReqDocumentoDetalle(this.requerimientoDocumentoDetalleUuid),
+            requisito: this.requerimientoService.obtenerDocumentoDetalleEvaluar(this.requerimientoDocumentoDetalleUuid)
+          })
         }),
       )
       .subscribe({
-        next: (res) => {
-          this.archivo = res;
+        next: ({archivo, requisito}) => {
+          // Obtener el archivo
+          this.archivo = archivo;
           this.adjuntosService.obtenerUrlVisualizacion(this.archivo?.codigo).subscribe({
             next: (url) => {
               this.archivo = {
@@ -71,6 +82,20 @@ export class LayoutEvaluarAdjuntoComponent implements OnInit, OnDestroy {
               this.isLoading = false;
             }
           });
+
+          // Obtener el requisito
+          this.requisito = requisito;
+          // Buscar la referencia correcta en la lista para evaluacion
+          const evaluacionSeleccionada = this.estadosReqDocumentoDetalle.find(
+            e => e.codigo === this.requisito.evaluacion?.codigo
+          );
+          this.formGroup.patchValue({
+            evaluacion: evaluacionSeleccionada as any,
+            observacion: this.requisito.observacion,
+            usuarioEvaluador: this.requisito.usuario?.nombreUsuario,
+            fechaEvaluacion: this.requisito.fechaEvaluacion,
+          });
+          this.bloquearFormularioSiCorresponde();
         },
         error: (error) => {
           console.error('Error al cargar obtener archivo:', error);
@@ -103,21 +128,24 @@ export class LayoutEvaluarAdjuntoComponent implements OnInit, OnDestroy {
       }
       this.requerimientoService.evaluarDocumentoDetalle(data).subscribe({
         next: (res) => {
+          // Buscar la referencia correcta en la lista para evaluacion
+          const evaluacionSeleccionada = this.estadosReqDocumentoDetalle.find(
+            e => e.codigo === res.evaluacion?.codigo
+          );
           this.formGroup.patchValue({
-            evaluacion: res.evaluacion,
+            evaluacion: evaluacionSeleccionada as any,
             observacion: res.observacion,
             usuarioEvaluador: res.usuario?.nombreUsuario,
             fechaEvaluacion: res.fechaEvaluacion,
           });
-          console.log(this.formGroup.value);
-          
+          this.bloquearFormularioSiCorresponde();
         },
         error: (error) => {
           console.error('Error al evaluar documento detalle:', error);
         }
       });
     } else {
-      this.router.navigate(['/requerimiento-documento-list']);
+      this.router.navigate(['intranet', 'requerimientos', 'documentos', 'evaluar', this.requisito.requerimientoDocumento.requerimientoDocumentoUuid]);
     }
   }
 
@@ -131,4 +159,15 @@ export class LayoutEvaluarAdjuntoComponent implements OnInit, OnDestroy {
       this.formGroup.controls.observacion.updateValueAndValidity();
     }
   }
-} 
+
+  private bloquearFormularioSiCorresponde() {
+    const v = this.formGroup.value;
+    if (v.evaluacion && v.usuarioEvaluador && v.fechaEvaluacion) {
+      this.formBloqueado = true;
+      this.formGroup.disable();
+    } else {
+      this.formBloqueado = false;
+      this.formGroup.enable();
+    }
+  }
+}

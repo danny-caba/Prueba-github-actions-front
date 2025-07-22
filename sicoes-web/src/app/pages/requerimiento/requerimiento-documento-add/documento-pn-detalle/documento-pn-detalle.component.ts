@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RequerimientoDocumentoDetalle } from 'src/app/interface/requerimiento.model';
+import { EstadoReqDocDetalleEvalEnum as evaluacion } from 'src/helpers/constantes.components';
 
 @Component({
   selector: 'vex-documento-pn-detalle',
@@ -8,6 +9,7 @@ import { RequerimientoDocumentoDetalle } from 'src/app/interface/requerimiento.m
 export class DocumentoPnDetalleComponent {
 
   @Input() add: boolean;
+  @Input() subsanar: boolean;
   @Input() evaluate: boolean;
   @Input() requisito: RequerimientoDocumentoDetalle;
   @Input() rutaEvaluarDetalle: string[];
@@ -16,6 +18,30 @@ export class DocumentoPnDetalleComponent {
 
   onChangeCheckbox(event: any, requisito: RequerimientoDocumentoDetalle) {
     requisito.archivo = event.checked ? null : requisito.archivo;
+  }
+
+  validarCheck(): boolean {
+    if (this.add) {
+      return this.requisito.archivo != null;
+    }
+    if (this.evaluate) {
+      return (
+        this.requisito.evaluacion?.codigo == evaluacion.CUMPLE || 
+        this.requisito.evaluacion?.codigo == evaluacion.OBSERVADO);
+    }
+    if (this.subsanar) {
+      return this.requisito.evaluacion?.codigo == evaluacion.CUMPLE;
+    }
+    return false;
+  }
+
+  mostrarResultado(): boolean {
+    return (this.evaluate && this.requisito.evaluacion != null) 
+      || (this.subsanar && this.requisito.evaluacion != null && this.requisito.evaluacion?.codigo == evaluacion.CUMPLE);
+  }
+
+  isArchivoEditable(): boolean {
+    return this.add || (this.subsanar && (this.requisito.evaluacion?.codigo == evaluacion.OBSERVADO || this.requisito.evaluacion === null));
   }
 
 }

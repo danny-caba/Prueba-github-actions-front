@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
@@ -11,7 +11,7 @@ import { ParametriaService } from 'src/app/service/parametria.service';
 import { Division } from 'src/app/interface/division.model';
 import { GestionUsuarioService } from 'src/app/service/gestion-usuarios.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { map, Observable, startWith, Subscription } from 'rxjs';
+import { map, Observable, startWith } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalCrearRequerimientoComponent } from 'src/app/shared/modal-crear-requerimiento/modal-crear-requerimiento.component';
 import { RequerimientoService } from 'src/app/service/requerimiento.service';
@@ -30,13 +30,11 @@ import { REQUERIMIENTO_CONSTANTS } from 'src/helpers/requerimiento.constants';
 })
 export class RequerimientoListComponent extends BasePageComponent<Requerimiento> implements OnInit, OnDestroy {
 
-  @Input() tabActivo$: Observable<boolean>;
-  private tabSubscription: Subscription;
-
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
   dateHoy = new Date();
 
+  ACC_NUEVO_REQUERIMIENTO = 'ACC_NUEVO_REQUERIMIENTO';
   ACC_ELABORAR_INFORME = 'ACC_ELABORAR_INFORME';
   ACC_ENVIAR_INVITACION = 'ACC_ENVIAR_INVITACION';
   ACC_ARCHIVAR_REQUERIMIENTO = 'ACC_ARCHIVAR_REQUERIMIENTO';
@@ -72,22 +70,11 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
 
   ngOnInit(): void {
     this.cargarCombo();
+    this.cargarTabla();
     this.setupFechaValidators();
-    
-    // Suscribirse al observable del tab padre
-    if (this.tabActivo$) {
-      this.tabSubscription = this.tabActivo$.subscribe(activo => {
-        if (activo) {
-          this.cargarTabla();
-        }
-      });
-    }
   }
 
   ngOnDestroy(): void {
-    if (this.tabSubscription) {
-      this.tabSubscription.unsubscribe();
-    }
   }
 
   cargarCombo() {
@@ -135,6 +122,7 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
 
   limpiar() {
     this.formGroup.reset();
+    this.cargarCombo();
     this.buscar();
   }
 
@@ -172,7 +160,7 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
     this.dialog
     .open(ModalArchivarRequerimientoComponent, {
       disableClose: true,
-      width: "800px",
+      width: "400px",
       maxHeight: "auto",
       data: {
         accion: 'Archivar Requerimiento',

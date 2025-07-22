@@ -203,7 +203,8 @@ export const OpcionPorRol = [{
     Opcion.CMP_EDIT_EVAL_TEC,
     Opcion.CMP_VIEW_OBS_ADM,
     Opcion.CMP_VIEW_OBS_TEC,
-    Opcion.VIEW_EVALUACION
+    Opcion.VIEW_EVALUACION,
+    Opcion.BANDEJA_REQUERIMIENTO,
   ]
 },{
   rol: RolEnum.EVA_TECNI,
@@ -253,11 +254,6 @@ export const OpcionPorRol = [{
   opciones: [
     Opcion.VIEW_EVALUACION,
     Opcion.BTN_APROBADOR_ACC,
-  ]
-},{
-  rol: RolEnum.COO_GESTION,
-  opciones: [
-    Opcion.BANDEJA_REQUERIMIENTO,
   ]
 }];
 
@@ -446,7 +442,8 @@ export const RolMenu = [
     'extranet/proceso',
     'extranet/invitaciones',
     'extranet/contrato',
-    'extranet/requerimientos/documentos/add'
+    'extranet/requerimientos/documentos/add',
+    'extranet/requerimientos/documentos/subsanar'
   ]},
   { ROL: { CODIGO: RolEnum.EVA_ADMIN }, MENU: [menu02, menu04], path: [
     'intranet/solicitudes',
@@ -483,9 +480,9 @@ export const RolMenu = [
     'intranet/empresa-supervisoras/suspender/',
     'intranet/empresa-supervisoras/cancelar/',
     'intranet/empresa-supervisoras/susp-canc/ver',
-    'intranet/procesos/gestionPaces'
-    
-    
+    'intranet/procesos/gestionPaces',
+    'intranet/requerimientos',
+    'intranet/requerimientos/informes/add'
   ]},
   { ROL: { CODIGO: RolEnum.APROB_TEC }, MENU: [menu05,menu19,menu20], path: [
     'intranet/solicitudes/ver/',
@@ -519,8 +516,13 @@ export const RolMenu = [
     'intranet/contratos',
     'intranet/bandeja-contratos'
   ]},
-  { ROL: { CODIGO: RolEnum.COO_GESTION }, MENU: [menu21], path: [
-    'intranet/requerimientos',
-    'intranet/requerimientos/informes/add'
+  { ROL: { CODIGO: RolEnum.APROB_GPPM }, MENU: [], path: [
+
   ]},
+  { ROL: { CODIGO: RolEnum.APROB_GSE }, MENU: [], path: [
+
+  ]},
+  { ROL: { CODIGO: RolEnum.INVITADO }, MENU: [], path: [
+
+  ]}
 ]

@@ -22,7 +22,7 @@
     <form [formGroup]="formGroup" class="flex flex-col gap-y-2">
       <mat-form-field class="flex-auto">
         <mat-label>Estado Documento</mat-label>
-        <mat-select [formControl]="formGroup.controls.evaluacion" (selectionChange)="onChangeEstado($event)">
+        <mat-select [formControl]="formGroup.controls.evaluacion" (selectionChange)="onChangeEstado($event)" [compareWith]="compareSelecIdListadoDetalle" [disabled]="formBloqueado">
           <mat-option *ngFor="let evaluacion of estadosReqDocumentoDetalle" [value]="evaluacion">
             {{ evaluacion.nombre }}
           </mat-option>
@@ -30,21 +30,29 @@
       </mat-form-field>
       <mat-form-field class="mt-6 flex-auto">
         <mat-label>Observación</mat-label>
-        <textarea matInput formControlName="observacion" maxlength="5000" rows="5"></textarea>
+        <textarea matInput formControlName="observacion" maxlength="5000" rows="5" [disabled]="formBloqueado"></textarea>
         <mat-hint align="end">{{ formGroup.get('observacion')?.value?.length || 0 }} / 5000</mat-hint>
         <mat-error *ngIf="formGroup.get('observacion')?.errors?.['required']">El campo es requerido</mat-error>
       </mat-form-field>
       <mat-form-field class="mt-6 flex-auto" [ngClass]="{'opacity-0': formGroup.get('usuarioEvaluador')?.value == null}">
         <mat-label>Evaluado por</mat-label>
-        <input matInput formControlName="usuarioEvaluador"/>
+        <input matInput formControlName="usuarioEvaluador" [disabled]="formBloqueado"/>
       </mat-form-field>
       <mat-form-field class="mt-6 flex-auto" [ngClass]="{'opacity-0': formGroup.get('fechaEvaluacion')?.value == null}">
         <mat-label>Fecha y Hora de Evaluación</mat-label>
-        <input matInput formControlName="fechaEvaluacion"/>
+        <input matInput formControlName="fechaEvaluacion" [disabled]="formBloqueado"/>
       </mat-form-field>
       <div class="flex justify-end gap-x-2">
-        <button mat-raised-button color="primary" (click)="accion(ACC_CANCELAR)">Cancelar</button>
-        <button mat-raised-button color="primary" (click)="accion(ACC_REGISTRAR)">Registrar</button>
+        <button 
+          mat-raised-button color="primary" 
+          (click)="accion(ACC_CANCELAR)"
+          [disabled]="isLoading"
+          >Cancelar</button>
+
+        <button 
+          mat-raised-button color="primary" 
+          (click)="accion(ACC_REGISTRAR)" 
+          *ngIf="!formBloqueado && !isLoading">Registrar</button>
       </div>
     </form>
   </div>

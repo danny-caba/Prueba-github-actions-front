@@ -177,9 +177,19 @@ export class RequerimientoService {
   );
   }
 
+  obtenerDocumentoDetalleEvaluar(uuid: string) {
+    const url = `${this._path_serve}/api/requerimientos/documentos/detalle/${uuid}`;
+    return this.http.get<RequerimientoDocumentoDetalle>(url);
+  }
+
   evaluarDocumentoDetalle(data: any) {
     const url = `${this._path_serve}/api/requerimientos/documentos/detalle`;
     return this.http.patch<any>(url, data);
+  }
+
+  finalizarEvaluarDocumento(data: any, uuid: string) {
+    const url = `${this._path_serve}/api/requerimientos/documentos/${uuid}/evaluar`;
+    return this.http.post<any>(url, data);
   }
 
 }

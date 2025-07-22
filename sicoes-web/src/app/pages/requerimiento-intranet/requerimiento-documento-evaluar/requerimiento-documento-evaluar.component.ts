@@ -91,14 +91,14 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
   }
 
   private async sendDocumento(): Promise<void> {
-    this.requerimientoService.registrarDocumento(this.requisitos)
+    this.requerimientoService.finalizarEvaluarDocumento(this.requisitos, this.requerimientoDocumentoUuid)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: async (response) => {
           await this.handleSuccess();
         },
         error: async (error) => {
-          console.error('Error al enviar informe:', error);
+          console.log('Error al enviar informe:', error);
         }
       });
   }
@@ -113,6 +113,6 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
   }
 
   regresar(): void {
-    this.router.navigate([...REQUERIMIENTO_CONSTANTS.ROUTES.SUCCESS]);
+    this.router.navigate([...REQUERIMIENTO_CONSTANTS.ROUTES.CANCEL]);
   }
 }

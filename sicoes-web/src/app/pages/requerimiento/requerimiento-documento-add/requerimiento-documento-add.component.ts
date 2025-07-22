@@ -16,6 +16,7 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
   usuario$ = this.authFacade.user$;
   requerimiento: any;
   add: boolean = false;
+  subsanar: boolean = false;
   requerimientoDocumentoUuid: string;
   requisitos: RequerimientoDocumentoDetalle[];
   isLoading: boolean = false;
@@ -56,6 +57,7 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         this.add = data.add || false;
+        this.subsanar = data.subsanar || false;
       });
       
   }
@@ -110,5 +112,9 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
 
   regresar(): void {
     this.router.navigate([...REQUERIMIENTO_CONSTANTS.ROUTES.SUCCESS]);
+  }
+
+  mostrarBotonRegistrar(): boolean {
+    return this.add || this.subsanar;
   }
 }

@@ -182,10 +182,19 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
     );
   }
 
+  isSubsanar(doc: RequerimientoDocumento) {
+    return REQUERIMIENTO_CONSTANTS.TIPO_DOCUMENTO.includes(doc.tipo?.codigo as any);
+  }
+
   // Acciones
   cargarDocumento(doc: RequerimientoDocumento) {
     this.router.navigate([Link.EXTRANET, Link.REQUERIMIENTOS_LIST, 
       Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_ADD, doc.requerimientoDocumentoUuid]);
+  }
+
+  subsanarDocumento(doc: RequerimientoDocumento) {
+    this.router.navigate([Link.EXTRANET, Link.REQUERIMIENTOS_LIST, 
+      Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_SUBSANAR, doc.requerimientoDocumentoUuid]);
   }
 
 }

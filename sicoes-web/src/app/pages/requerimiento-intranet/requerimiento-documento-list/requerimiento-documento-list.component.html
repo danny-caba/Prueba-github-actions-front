@@ -237,5 +237,19 @@
             <mat-icon svgIcon="mat:check_circle"></mat-icon>
             <span>Evaluar Documento</span>
         </button>
+                <button (click)="revisarDocumentos(row)" mat-menu-item>
+            <mat-icon svgIcon="mat:description"></mat-icon>
+            <span>Revisar documentos</span>
+        </button>
+
+        <button (click)="registrarContrato(row)" mat-menu-item>
+            <mat-icon svgIcon="mat:assignment"></mat-icon>
+            <span>Número de contrato</span>
+        </button>
+
+        <button (click)="editar(row)" mat-menu-item>
+            <mat-icon svgIcon="mat:edit"></mat-icon>
+            <span>Editar</span>
+        </button>
     </ng-template>
 </mat-menu>

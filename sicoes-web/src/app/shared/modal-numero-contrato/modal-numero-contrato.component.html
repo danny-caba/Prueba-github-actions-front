@@ -1,0 +1,16 @@
+<form>
+    <vex-modal-title titulo="Número de Contrato"></vex-modal-title>
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content class="flex flex-col">
+        <mat-form-field class="mt-6 flex-auto">
+            <mat-label>N° de Contrato</mat-label>
+            <input matInput [formControl]="formGroup.controls.numeroContrato" maxlength="10"
+                placeholder="N° de Contrato" />
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="guardar()"
+            [disabled]="formGroup.get('numeroContrato')?.invalid">Grabar</button>
+    </mat-dialog-actions>
+</form>

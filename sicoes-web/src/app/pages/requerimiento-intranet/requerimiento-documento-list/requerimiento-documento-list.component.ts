@@ -17,6 +17,8 @@ import { Division } from 'src/app/interface/division.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { GestionUsuarioService } from 'src/app/service/gestion-usuarios.service';
 import { SupervisoraService } from 'src/app/service/supervisora.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalNumeroContratoComponent } from 'src/app/shared/modal-numero-contrato/modal-numero-contrato.component';
 
 @Component({
   selector: 'vex-requerimiento-documento-list',
@@ -40,11 +42,11 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
 
   formGroup = this.fb.group({
     fechaInicio: [''],
-    fechaFin:    ['', this.fechaFinValidator()],
-    division:    [null],
-    perfil:      [null],
-    estado:      [null],
-    supervisor:  [null]
+    fechaFin: ['', this.fechaFinValidator()],
+    division: [null],
+    perfil: [null],
+    estado: [null],
+    supervisor: [null]
   });
 
   listEstadoReqDocumento: ListadoDetalle[] = [];
@@ -68,7 +70,8 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
     private parametriaService: ParametriaService,
     private requerimientoService: RequerimientoService,
     private gestionUsuarioService: GestionUsuarioService,
-    private supervisoraService: SupervisoraService
+    private supervisoraService: SupervisoraService,
+    private dialog: MatDialog,
   ) {
     super();
   }
@@ -87,7 +90,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
 
   cargarCombo() {
     const dataString = sessionStorage.getItem('ESTADO_REQ_DOCUMENTO');
-    if(dataString){
+    if (dataString) {
       this.listEstadoReqDocumento = JSON.parse(dataString);
     } else {
       this.parametriaService.obtenerMultipleListadoDetalle([
@@ -104,11 +107,11 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
 
     // Cargar perfiles
     this.gestionUsuarioService.listarPerfilesDetalle()
-    .subscribe(respuesta => {
-      this.dataSourcePerfil.data = respuesta;
-      this.listAllPerfilesDetalle = this.dataSourcePerfil.data;
-      this.setListPerfilesDetalle(this.listAllPerfilesDetalle);
-    });
+      .subscribe(respuesta => {
+        this.dataSourcePerfil.data = respuesta;
+        this.listAllPerfilesDetalle = this.dataSourcePerfil.data;
+        this.setListPerfilesDetalle(this.listAllPerfilesDetalle);
+      });
   }
 
   setListPerfilesDetalle(list: any) {
@@ -147,14 +150,14 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
     let filtro: any = {
       estado: this.formGroup.controls.estado?.value?.idListadoDetalle,
       fechaInicio: this.formGroup.controls.fechaInicio.value,
-      fechaFin:    this.formGroup.controls.fechaFin.value,
+      fechaFin: this.formGroup.controls.fechaFin.value,
     }
     return filtro;
   }
 
   mostrarOpcion(opt, objReq) {
     // Validaciones de acciones
-    if(opt == this.ACC_EVALUAR_DOCUMENTO && 
+    if (opt == this.ACC_EVALUAR_DOCUMENTO &&
       this.enProcesoEnabled(objReq)) return true;
 
     return false;
@@ -189,18 +192,18 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
   listarPerfilesPorDivision(event) {
     // Limpiamos el perfil seleccionado
     this.formGroup.get('perfil').setValue('');
-    
+
     if (!event.value || !event.value.idDivision) {
       // Si no hay división seleccionada, limpiamos la lista de perfiles
       this.setListPerfilesDetalle([]);
       return;
     }
-    
+
     // Filtramos los perfiles por la división seleccionada
-    const perfilesPorDivision = this.listAllPerfilesDetalle.filter(perfil => 
+    const perfilesPorDivision = this.listAllPerfilesDetalle.filter(perfil =>
       perfil.idDivision === event.value.idDivision
     );
-    
+
     // Actualizamos la lista filtrada y configuramos el observable
     this.setListPerfilesDetalle(perfilesPorDivision);
   }
@@ -211,24 +214,24 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
       if (!control.parent) {
         return null;
       }
-      
+
       const fechaFinValue = control.value;
       if (!fechaFinValue) {
         return null;
       }
-      
+
       const fechaInicioValue = control.parent.get('fechaInicio')?.value;
       if (!fechaInicioValue) {
         return null;
       }
-      
+
       const fechaInicio = new Date(fechaInicioValue);
       const fechaFin = new Date(fechaFinValue);
-      
+
       return fechaFin < fechaInicio ? { fechaInvalida: true } : null;
     };
   }
-  
+
   setupFechaValidators() {
     // Observar cambios en fechaInicio para revalidar fechaFin
     this.formGroup.controls.fechaInicio.valueChanges.subscribe(fechaInicio => {
@@ -237,7 +240,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
         this.formGroup.controls.fechaFin.updateValueAndValidity();
       }
     });
-    
+
     // También validar cuando el usuario introduce manualmente una fecha
     this.formGroup.controls.fechaFin.valueChanges.subscribe(fechaFin => {
       if (fechaFin) {
@@ -250,7 +253,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
       }
     });
   }
-  
+
   // Obtener la fecha mínima para fechaFin basada en fechaInicio
   getFechaMinima() {
     const fechaInicio = this.formGroup.controls.fechaInicio.value;
@@ -269,15 +272,15 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
   }
 
   accionesEnabled(req: Requerimiento) {
-    return REQUERIMIENTO_CONSTANTS.ESTADOS_CON_ACCIONES.some(estado => 
+    return REQUERIMIENTO_CONSTANTS.ESTADOS_CON_ACCIONES.some(estado =>
       REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[estado](req)
     );
   }
 
   // Acciones
   evaluarDocumento(doc: RequerimientoDocumento) {
-    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST, 
-      Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_EVALUAR, doc.requerimientoDocumentoUuid]);
+    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST,
+    Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_EVALUAR, doc.requerimientoDocumentoUuid]);
   }
 
   setListSupervisores(list: any) {
@@ -317,6 +320,26 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
     console.log('onPerfilSelected');
     this.formGroup.get('supervisor').setValue('');
     this.listarSupervisoresPorPerfil();
+  }
+
+  revisarDocumentos(row: any): void {
+    // lógica revisar documentos
+  }
+
+  registrarContrato(row: any): void {
+    this.dialog.open(ModalNumeroContratoComponent, {
+      width: '500px',
+      maxHeight: '100%',
+
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.buscar();
+      }
+    });
+  }
+
+  editar(row: any): void {
+    // lógica editar
   }
 
 }

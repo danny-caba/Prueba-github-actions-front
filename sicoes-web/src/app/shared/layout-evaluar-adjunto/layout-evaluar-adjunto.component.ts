@@ -8,7 +8,7 @@ import { AdjuntosService } from "src/app/service/adjuntos.service";
 import { ArchivoService } from "src/app/service/archivo.service";
 import { ParametriaService } from "src/app/service/parametria.service";
 import { RequerimientoService } from "src/app/service/requerimiento.service";
-import { ListadoEnum } from "src/helpers/constantes.components";
+import { EstadoReqDocDetalleEvalEnum, ListadoEnum, TipoDocumentoEnum } from "src/helpers/constantes.components";
 import { BaseComponent } from "src/app/shared/components/base.component";
 
 @Component({
@@ -161,13 +161,20 @@ export class LayoutEvaluarAdjuntoComponent extends BaseComponent implements OnIn
   }
 
   private bloquearFormularioSiCorresponde() {
-    const v = this.formGroup.value;
-    if (v.evaluacion && v.usuarioEvaluador && v.fechaEvaluacion) {
-      this.formBloqueado = true;
-      this.formGroup.disable();
-    } else {
-      this.formBloqueado = false;
-      this.formGroup.enable();
-    }
+
+    // if (this.requisito.tipo?.codigo === TipoDocumentoEnum.SUBSANACION 
+    //   && this.requisito.evaluacion?.codigo === EstadoReqDocDetalleEvalEnum.OBSERVADO) {
+    //   this.formBloqueado = false;
+    //   this.formGroup.enable();
+    // } else {
+      const v = this.formGroup.value;
+      if (v.evaluacion && v.usuarioEvaluador && v.fechaEvaluacion) {
+        this.formBloqueado = true;
+        this.formGroup.disable();
+      } else {
+        this.formBloqueado = false;
+        this.formGroup.enable();
+      }
+    // }
   }
 }

@@ -106,6 +106,7 @@ export const REQUERIMIENTO_CONSTANTS = {
 
   ROUTES: {
     CANCEL: ['intranet', 'contratos'],
-    SUCCESS: ['extranet', 'contratos']
+    SUCCESS: ['extranet', 'contratos'],
+    VIEW: ['extranet', 'requerimientos', 'documentos', 'view']
   },
 } as const; 

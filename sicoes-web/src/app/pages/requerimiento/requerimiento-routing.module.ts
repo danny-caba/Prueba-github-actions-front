@@ -31,6 +31,13 @@ const routes: VexRoutes = [{
       canActivate: [AuthGuardService, RoleGuardService],
       component: RequerimientoDocumentoReviewComponent,
     },
+      path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_VIEW + '/:documentoUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoDocumentoAddComponent,
+      data: {
+        view: true
+      }
+    }
     // },
     // {
     //   path: Link.REQUERIMIENTOS_INVITACION + '/' + Link.INVITACION_SEND + '/:requerimientoUuid',

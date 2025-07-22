@@ -94,6 +94,7 @@ export enum Link {
     DOCUMENTO_ADD = 'add',
     DOCUMENTO_SUBSANAR = 'subsanar',
     DOCUMENTO_EVALUAR = 'evaluar',
+    DOCUMENTO_VIEW = 'view',
     EVALUAR_DETALLE = 'evaluar-detalle',
     DOCUMENTO_REVISAR = 'revisar'
 }

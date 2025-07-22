@@ -24,6 +24,14 @@ const routes: VexRoutes = [{
       data: {
         subsanar: true
       }
+    },
+    {
+      path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_VIEW + '/:documentoUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoDocumentoAddComponent,
+      data: {
+        view: true
+      }
     }
     // },
     // {

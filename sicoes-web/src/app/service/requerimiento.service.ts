@@ -130,19 +130,7 @@ export class RequerimientoService {
 
   obtenerDocumentoDetalle(requerimientoUuid: string) {
     const url = `${this._path_serve}/api/requerimientos/documentos/${requerimientoUuid}/detalle`;
-    return this.http.get<RequerimientoDocumentoDetalle[]>(url)
-      .pipe(
-        map(respuesta => {
-          return respuesta.map(res => {
-            return {
-              ...res,
-              requerimientoDocumento: {
-                requerimientoDocumentoUuid: requerimientoUuid
-              }
-            }
-          });
-        })
-      );
+    return this.http.get<RequerimientoDocumentoDetalle[]>(url);
   }
 
   registrarDocumento(requisitos: RequerimientoDocumentoDetalle[]) {

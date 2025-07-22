@@ -2,160 +2,160 @@ import { EstadoEvaluacionAdministrativa, EstadoEvaluacionTecnica, EvaluadorRol, 
 
 export enum Opcion {
 
-    //PERFIL INSCRIPCION
-    BTN_PER_INS_AGREGAR = 'BTN_PER_INS_AGREGAR',
-    MEN_PER_INS_MODIFICAR = 'MEN_PER_INS_MODIFICAR',
-    MEN_PER_INS_ELIMINAR = 'MEN_PER_INS_ELIMINAR',
+  //PERFIL INSCRIPCION
+  BTN_PER_INS_AGREGAR = 'BTN_PER_INS_AGREGAR',
+  MEN_PER_INS_MODIFICAR = 'MEN_PER_INS_MODIFICAR',
+  MEN_PER_INS_ELIMINAR = 'MEN_PER_INS_ELIMINAR',
 
-    //GRADO ACADEMICO Y TITULOS
-    BTN_GRA_ACA_AGREGAR = 'BTN_GRA_ACA_AGREGAR',
-    MEN_GRA_ACA_EDITAR = 'MEN_GRA_ACA_EDITAR',
-    MEN_GRA_ACA_ELIMINAR = 'MEN_GRA_ACA_ELIMINAR',
-    MEN_GRA_ACA_EVALUAR = 'MEN_GRA_ACA_EVALUAR',
+  //GRADO ACADEMICO Y TITULOS
+  BTN_GRA_ACA_AGREGAR = 'BTN_GRA_ACA_AGREGAR',
+  MEN_GRA_ACA_EDITAR = 'MEN_GRA_ACA_EDITAR',
+  MEN_GRA_ACA_ELIMINAR = 'MEN_GRA_ACA_ELIMINAR',
+  MEN_GRA_ACA_EVALUAR = 'MEN_GRA_ACA_EVALUAR',
 
-    //CAPACITACION
-    BTN_CAPAC_AGREGAR = 'BTN_CAPAC_AGREGAR',
-    MEN_CAPAC_EDITAR = 'MEN_CAPAC_EDITAR',
-    MEN_CAPAC_ELIMINAR = 'MEN_CAPAC_ELIMINAR',
-    MEN_CAPAC_EVALUAR = 'MEN_CAPAC_EVALUAR',
-    MEN_CAPAC_SUBSANAR = 'MEN_CAPAC_SUBSANAR',
+  //CAPACITACION
+  BTN_CAPAC_AGREGAR = 'BTN_CAPAC_AGREGAR',
+  MEN_CAPAC_EDITAR = 'MEN_CAPAC_EDITAR',
+  MEN_CAPAC_ELIMINAR = 'MEN_CAPAC_ELIMINAR',
+  MEN_CAPAC_EVALUAR = 'MEN_CAPAC_EVALUAR',
+  MEN_CAPAC_SUBSANAR = 'MEN_CAPAC_SUBSANAR',
 
-    //DOC_EXPERIENCIA
-    BTN_DOC_EXP_AGREGAR = 'BTN_DOC_EXP_AGREGAR',
-    MEN_DOC_EXP_EDITAR = 'MEN_DOC_EXP_EDITAR',
-    MEN_DOC_EXP_ELIMINAR = 'MEN_DOC_EXP_ELIMINAR',
-    MEN_DOC_EXP_EVALUAR = 'MEN_DOC_EXP_EVALUAR',
+  //DOC_EXPERIENCIA
+  BTN_DOC_EXP_AGREGAR = 'BTN_DOC_EXP_AGREGAR',
+  MEN_DOC_EXP_EDITAR = 'MEN_DOC_EXP_EDITAR',
+  MEN_DOC_EXP_ELIMINAR = 'MEN_DOC_EXP_ELIMINAR',
+  MEN_DOC_EXP_EVALUAR = 'MEN_DOC_EXP_EVALUAR',
 
-    //DOC_EXPERIENCIA_ARCHIVO
-    BTN_DOC_EXP_EDITAR_ARCH = 'BTN_DOC_EXP_EDITAR_ARCH',
+  //DOC_EXPERIENCIA_ARCHIVO
+  BTN_DOC_EXP_EDITAR_ARCH = 'BTN_DOC_EXP_EDITAR_ARCH',
 
-    //RESP ADMIN
-    BTN_INT_REGRESAR = 'BTN_INT_REGRESAR',
-    CMP_EDIT_EVAL_TEC = 'CMP_EDIT_EVAL_TEC',
-    CMP_VIEW_EVAL_TEC = 'CMP_VIEW_EVAL_TEC',
-    CMP_EDIT_EVAL_ADM = 'CMP_EDIT_EVAL_ADM',
-    CMP_VIEW_EVAL_ADM = 'CMP_VIEW_EVAL_ADM',
+  //RESP ADMIN
+  BTN_INT_REGRESAR = 'BTN_INT_REGRESAR',
+  CMP_EDIT_EVAL_TEC = 'CMP_EDIT_EVAL_TEC',
+  CMP_VIEW_EVAL_TEC = 'CMP_VIEW_EVAL_TEC',
+  CMP_EDIT_EVAL_ADM = 'CMP_EDIT_EVAL_ADM',
+  CMP_VIEW_EVAL_ADM = 'CMP_VIEW_EVAL_ADM',
 
-    //OBSERVACIONES Y RESULTADO
-    CMP_EDIT_OBS_ADM = 'CMP_EDIT_OBS_ADM',
-    CMP_VIEW_OBS_ADM = 'CMP_VIEW_OBS_ADM',
-    CMP_EDIT_OBS_TEC = 'CMP_EDIT_OBS_TEC',
-    CMP_VIEW_OBS_TEC = 'CMP_VIEW_OBS_TEC',
+  //OBSERVACIONES Y RESULTADO
+  CMP_EDIT_OBS_ADM = 'CMP_EDIT_OBS_ADM',
+  CMP_VIEW_OBS_ADM = 'CMP_VIEW_OBS_ADM',
+  CMP_EDIT_OBS_TEC = 'CMP_EDIT_OBS_TEC',
+  CMP_VIEW_OBS_TEC = 'CMP_VIEW_OBS_TEC',
 
-    CPM_OTROS_DOC_EVALUAR = 'CPM_OTROS_DOC_EVALUAR',
+  CPM_OTROS_DOC_EVALUAR = 'CPM_OTROS_DOC_EVALUAR',
 
-    //EVIDENCIA
-    BTN_EVIDENCIA_ADD = 'BTN_EVIDENCIA_ADD',
+  //EVIDENCIA
+  BTN_EVIDENCIA_ADD = 'BTN_EVIDENCIA_ADD',
 
-    //RESULTADO
-    RESUL_EVAL_ADMIN = 'RESUL_EVAL_ADMIN',
-    RESUL_EVAL_TECNI = 'RESUL_EVAL_TECNI',
+  //RESULTADO
+  RESUL_EVAL_ADMIN = 'RESUL_EVAL_ADMIN',
+  RESUL_EVAL_TECNI = 'RESUL_EVAL_TECNI',
 
-    //FINALIZA
-    BTN_FIN_REV_ADM = 'BTN_FIN_REV_ADM',
-    BTN_FIN_REV_TEC = 'BTN_FIN_REV_TEC',
+  //FINALIZA
+  BTN_FIN_REV_ADM = 'BTN_FIN_REV_ADM',
+  BTN_FIN_REV_TEC = 'BTN_FIN_REV_TEC',
 
-    VIEW_EVALUACION = 'VIEW_EVALUACION',
-    VIEW_EVALUACION_EXT = 'VIEW_EVALUACION_EXT',
+  VIEW_EVALUACION = 'VIEW_EVALUACION',
+  VIEW_EVALUACION_EXT = 'VIEW_EVALUACION_EXT',
 
-    //APROBADOR
-    BTN_APROBADOR_ADD = 'BTN_APROBADOR_ADD',
-    BTN_APROBADOR_ACC = 'BTN_APROBADOR_ACC',
+  //APROBADOR
+  BTN_APROBADOR_ADD = 'BTN_APROBADOR_ADD',
+  BTN_APROBADOR_ACC = 'BTN_APROBADOR_ACC',
 
-    //CONTRATO
-    CONTRATO_EVALUACION = 'CONTRATO_EVALUACION',
+  //CONTRATO
+  CONTRATO_EVALUACION = 'CONTRATO_EVALUACION',
 
-    //REQUERIMIENTO
-    BANDEJA_REQUERIMIENTO = 'BANDEJA_REQUERIMIENTO',
+  //REQUERIMIENTO
+  BANDEJA_REQUERIMIENTO = 'BANDEJA_REQUERIMIENTO',
 }
 
 export const OpcionConfig = [
-//PERFIL INSCRIPCION
-{ codigo: Opcion.BTN_PER_INS_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.MEN_PER_INS_MODIFICAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.MEN_PER_INS_MODIFICAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.MEN_PER_INS_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  //PERFIL INSCRIPCION
+  { codigo: Opcion.BTN_PER_INS_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.MEN_PER_INS_MODIFICAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.MEN_PER_INS_MODIFICAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.MEN_PER_INS_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
 
-//GRADO ACADEMICO Y TITULOS
-{ codigo: Opcion.BTN_GRA_ACA_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.BTN_GRA_ACA_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.MEN_GRA_ACA_EDITAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.MEN_GRA_ACA_EDITAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.MEN_GRA_ACA_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.MEN_GRA_ACA_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.MEN_GRA_ACA_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD},
-{ codigo: Opcion.MEN_GRA_ACA_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD},
+  //GRADO ACADEMICO Y TITULOS
+  { codigo: Opcion.BTN_GRA_ACA_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.BTN_GRA_ACA_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.MEN_GRA_ACA_EDITAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.MEN_GRA_ACA_EDITAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.MEN_GRA_ACA_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.MEN_GRA_ACA_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.MEN_GRA_ACA_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.MEN_GRA_ACA_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD },
 
-//CAPACITACION
-{ codigo: Opcion.BTN_CAPAC_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.BTN_CAPAC_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.MEN_CAPAC_EDITAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.MEN_CAPAC_EDITAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.MEN_CAPAC_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.MEN_CAPAC_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.MEN_CAPAC_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD},
-{ codigo: Opcion.MEN_CAPAC_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD},
+  //CAPACITACION
+  { codigo: Opcion.BTN_CAPAC_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.BTN_CAPAC_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.MEN_CAPAC_EDITAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.MEN_CAPAC_EDITAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.MEN_CAPAC_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.MEN_CAPAC_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.MEN_CAPAC_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.MEN_CAPAC_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD },
 
-//DOC_EXPERIENCIA
-{ codigo: Opcion.BTN_DOC_EXP_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.BTN_DOC_EXP_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.MEN_DOC_EXP_EDITAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.MEN_DOC_EXP_EDITAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.MEN_DOC_EXP_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
-{ codigo: Opcion.MEN_DOC_EXP_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.MEN_DOC_EXP_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD},
-{ codigo: Opcion.MEN_DOC_EXP_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD},
+  //DOC_EXPERIENCIA
+  { codigo: Opcion.BTN_DOC_EXP_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.BTN_DOC_EXP_AGREGAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.MEN_DOC_EXP_EDITAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.MEN_DOC_EXP_EDITAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.MEN_DOC_EXP_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  { codigo: Opcion.MEN_DOC_EXP_ELIMINAR, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.MEN_DOC_EXP_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.MEN_DOC_EXP_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD },
 
-//BTN DOC EXP EDITAR ARCHIVO
-{ codigo: Opcion.BTN_DOC_EXP_EDITAR_ARCH, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
+  //BTN DOC EXP EDITAR ARCHIVO
+  { codigo: Opcion.BTN_DOC_EXP_EDITAR_ARCH, estadoSolicitud: SolicitudEstadoEnum.BORRADOR },
 
-//RESP ADMIN
-{ codigo: Opcion.BTN_INT_REGRESAR, estadoSolicitud: SolicitudEstadoEnum.ALL},
-{ codigo: Opcion.CMP_EDIT_EVAL_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
-{ codigo: Opcion.CMP_VIEW_EVAL_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
-{ codigo: Opcion.CMP_EDIT_EVAL_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
-{ codigo: Opcion.CMP_VIEW_EVAL_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
+  //RESP ADMIN
+  { codigo: Opcion.BTN_INT_REGRESAR, estadoSolicitud: SolicitudEstadoEnum.ALL },
+  { codigo: Opcion.CMP_EDIT_EVAL_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
+  { codigo: Opcion.CMP_VIEW_EVAL_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
+  { codigo: Opcion.CMP_EDIT_EVAL_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
+  { codigo: Opcion.CMP_VIEW_EVAL_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
 
-//OBSERVACIONES Y RESULTADO
-{ codigo: Opcion.CMP_EDIT_OBS_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.ASIGNADO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
-{ codigo: Opcion.CMP_EDIT_OBS_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.EN_PROCESO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
-{ codigo: Opcion.CMP_VIEW_OBS_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
-{ codigo: Opcion.CMP_EDIT_OBS_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD},
-{ codigo: Opcion.CMP_EDIT_OBS_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD},
-{ codigo: Opcion.CMP_VIEW_OBS_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
+  //OBSERVACIONES Y RESULTADO
+  { codigo: Opcion.CMP_EDIT_OBS_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.ASIGNADO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
+  { codigo: Opcion.CMP_EDIT_OBS_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.EN_PROCESO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
+  { codigo: Opcion.CMP_VIEW_OBS_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
+  { codigo: Opcion.CMP_EDIT_OBS_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.CMP_EDIT_OBS_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.CMP_VIEW_OBS_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
 
-//OTROS REQUISITOS
-{ codigo: Opcion.CPM_OTROS_DOC_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.ASIGNADO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
-{ codigo: Opcion.CPM_OTROS_DOC_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.EN_PROCESO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
+  //OTROS REQUISITOS
+  { codigo: Opcion.CPM_OTROS_DOC_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.ASIGNADO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
+  { codigo: Opcion.CPM_OTROS_DOC_EVALUAR, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.EN_PROCESO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
 
-//EVIDENCIA
-//{ codigo: Opcion.BTN_EVIDENCIA_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO},
+  //EVIDENCIA
+  //{ codigo: Opcion.BTN_EVIDENCIA_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO},
 
-{ codigo: Opcion.BTN_EVIDENCIA_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD},
-{ codigo: Opcion.BTN_EVIDENCIA_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD},
-{ codigo: Opcion.BTN_EVIDENCIA_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.ASIGNADO, evaluadorRol: EvaluadorRol.ADMINIS_COD},
-{ codigo: Opcion.BTN_EVIDENCIA_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.EN_PROCESO, evaluadorRol: EvaluadorRol.ADMINIS_COD},
+  { codigo: Opcion.BTN_EVIDENCIA_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.BTN_EVIDENCIA_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.BTN_EVIDENCIA_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.ASIGNADO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
+  { codigo: Opcion.BTN_EVIDENCIA_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.EN_PROCESO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
 
-//RESULTADO
-{ codigo: Opcion.RESUL_EVAL_ADMIN, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.ASIGNADO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
-{ codigo: Opcion.RESUL_EVAL_ADMIN, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.EN_PROCESO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
-{ codigo: Opcion.RESUL_EVAL_TECNI, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD },
-{ codigo: Opcion.RESUL_EVAL_TECNI, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  //RESULTADO
+  { codigo: Opcion.RESUL_EVAL_ADMIN, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.ASIGNADO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
+  { codigo: Opcion.RESUL_EVAL_ADMIN, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.EN_PROCESO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
+  { codigo: Opcion.RESUL_EVAL_TECNI, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.RESUL_EVAL_TECNI, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD },
 
-//FINALIZA
-{ codigo: Opcion.BTN_FIN_REV_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.ASIGNADO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
-{ codigo: Opcion.BTN_FIN_REV_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.EN_PROCESO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
-{ codigo: Opcion.BTN_FIN_REV_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD },
-{ codigo: Opcion.BTN_FIN_REV_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  //FINALIZA
+  { codigo: Opcion.BTN_FIN_REV_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.ASIGNADO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
+  { codigo: Opcion.BTN_FIN_REV_ADM, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionAdm: EstadoEvaluacionAdministrativa.EN_PROCESO, evaluadorRol: EvaluadorRol.ADMINIS_COD },
+  { codigo: Opcion.BTN_FIN_REV_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.BTN_FIN_REV_TEC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD },
 
-{ codigo: Opcion.VIEW_EVALUACION, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
-{ codigo: Opcion.VIEW_EVALUACION, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
-{ codigo: Opcion.VIEW_EVALUACION_EXT, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.VIEW_EVALUACION, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
+  { codigo: Opcion.VIEW_EVALUACION, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
+  { codigo: Opcion.VIEW_EVALUACION_EXT, estadoSolicitud: SolicitudEstadoEnum.OBSERVADO },
 
-//APROBADOR
-{ codigo: Opcion.BTN_APROBADOR_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD},
-{ codigo: Opcion.BTN_APROBADOR_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD},
-{ codigo: Opcion.BTN_APROBADOR_ACC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO},
+  //APROBADOR
+  { codigo: Opcion.BTN_APROBADOR_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.ASIGNADO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.BTN_APROBADOR_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD },
+  { codigo: Opcion.BTN_APROBADOR_ACC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO },
 
 ]
 
@@ -182,7 +182,7 @@ export const OpcionPorRol = [{
 
     Opcion.VIEW_EVALUACION_EXT
   ]
-},{
+}, {
   rol: RolEnum.RES_ADMIN,
   opciones: [
     Opcion.BTN_INT_REGRESAR,
@@ -195,7 +195,7 @@ export const OpcionPorRol = [{
     // ---
     Opcion.CONTRATO_EVALUACION
   ]
-},{
+}, {
   rol: RolEnum.RES_TECNI,
   opciones: [
     Opcion.BTN_INT_REGRESAR,
@@ -206,7 +206,7 @@ export const OpcionPorRol = [{
     Opcion.VIEW_EVALUACION,
     Opcion.BANDEJA_REQUERIMIENTO,
   ]
-},{
+}, {
   rol: RolEnum.EVA_TECNI,
   opciones: [
     Opcion.BTN_INT_REGRESAR,
@@ -226,7 +226,7 @@ export const OpcionPorRol = [{
     Opcion.BTN_EVIDENCIA_ADD,
     Opcion.BTN_APROBADOR_ADD
   ]
-},{
+}, {
   rol: RolEnum.EVA_ADMIN,
   opciones: [
     Opcion.BTN_INT_REGRESAR,
@@ -243,13 +243,13 @@ export const OpcionPorRol = [{
     Opcion.BTN_EVIDENCIA_ADD,
     //Opcion.BTN_APROBADOR_ADD
   ]
-},{
+}, {
   rol: RolEnum.APROB_TEC,
   opciones: [
     Opcion.VIEW_EVALUACION,
     Opcion.BTN_APROBADOR_ACC,
   ]
-},{
+}, {
   rol: RolEnum.APROB_ADM,
   opciones: [
     Opcion.VIEW_EVALUACION,

@@ -106,6 +106,7 @@ import { LayoutAdjuntosComponent } from './layout-adjuntos/layout-adjuntos.compo
 import { LayoutEvaluarAdjuntoComponent } from './layout-evaluar-adjunto/layout-evaluar-adjunto.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { SkeletonLoaderComponent } from './skeleton-loader/skeleton-loader.component';
+import { ModalNumeroContratoComponent } from './modal-numero-contrato/modal-numero-contrato.component';
 import { ModalReqDocumentoObservacionComponent } from './modal-req-documento-observacion/modal-req-documento-observacion.component';
 
 const sharedComponents = [
@@ -216,6 +217,7 @@ const sharedComponents = [
     LayoutAdjuntosComponent,
     LayoutEvaluarAdjuntoComponent,
     SkeletonLoaderComponent,
+    ModalNumeroContratoComponent
     ModalReqDocumentoObservacionComponent
   ];
 

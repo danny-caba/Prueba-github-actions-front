@@ -36,8 +36,8 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
 
   formGroup = this.fb.group({
     fechaInicio: [''],
-    fechaFin:    ['', this.fechaFinValidator()],
-    estado:      [null]
+    fechaFin: ['', this.fechaFinValidator()],
+    estado: [null]
   });
 
   listEstadoReqDocumento: ListadoDetalle[] = [];
@@ -67,7 +67,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
 
   cargarCombo() {
     const dataString = sessionStorage.getItem('ESTADO_REQ_DOCUMENTO');
-    if(dataString){
+    if (dataString) {
       this.listEstadoReqDocumento = JSON.parse(dataString);
     } else {
       this.parametriaService.obtenerMultipleListadoDetalle([
@@ -96,14 +96,14 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
     let filtro: any = {
       estado: this.formGroup.controls.estado?.value?.idListadoDetalle,
       fechaInicio: this.formGroup.controls.fechaInicio.value,
-      fechaFin:    this.formGroup.controls.fechaFin.value,
+      fechaFin: this.formGroup.controls.fechaFin.value,
     }
     return filtro;
   }
 
   mostrarOpcion(opt, objReq) {
     // Validaciones de acciones
-    if(opt == this.ACC_CARGAR_DOCUMENTO && 
+    if (opt == this.ACC_CARGAR_DOCUMENTO &&
       this.preliminarEnabled(objReq)) return true;
 
     return false;
@@ -119,24 +119,24 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
       if (!control.parent) {
         return null;
       }
-      
+
       const fechaFinValue = control.value;
       if (!fechaFinValue) {
         return null;
       }
-      
+
       const fechaInicioValue = control.parent.get('fechaInicio')?.value;
       if (!fechaInicioValue) {
         return null;
       }
-      
+
       const fechaInicio = new Date(fechaInicioValue);
       const fechaFin = new Date(fechaFinValue);
-      
+
       return fechaFin < fechaInicio ? { fechaInvalida: true } : null;
     };
   }
-  
+
   setupFechaValidators() {
     // Observar cambios en fechaInicio para revalidar fechaFin
     this.formGroup.controls.fechaInicio.valueChanges.subscribe(fechaInicio => {
@@ -145,7 +145,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
         this.formGroup.controls.fechaFin.updateValueAndValidity();
       }
     });
-    
+
     // También validar cuando el usuario introduce manualmente una fecha
     this.formGroup.controls.fechaFin.valueChanges.subscribe(fechaFin => {
       if (fechaFin) {
@@ -158,7 +158,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
       }
     });
   }
-  
+
   // Obtener la fecha mínima para fechaFin basada en fechaInicio
   getFechaMinima() {
     const fechaInicio = this.formGroup.controls.fechaInicio.value;
@@ -177,7 +177,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
   }
 
   accionesEnabled(req: Requerimiento) {
-    return REQUERIMIENTO_CONSTANTS.ESTADOS_CON_ACCIONES.some(estado => 
+    return REQUERIMIENTO_CONSTANTS.ESTADOS_CON_ACCIONES.some(estado =>
       REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[estado](req)
     );
   }
@@ -188,13 +188,26 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
 
   // Acciones
   cargarDocumento(doc: RequerimientoDocumento) {
-    this.router.navigate([Link.EXTRANET, Link.REQUERIMIENTOS_LIST, 
-      Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_ADD, doc.requerimientoDocumentoUuid]);
+    this.router.navigate([Link.EXTRANET, Link.REQUERIMIENTOS_LIST,
+    Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_ADD, doc.requerimientoDocumentoUuid]);
   }
 
   subsanarDocumento(doc: RequerimientoDocumento) {
-    this.router.navigate([Link.EXTRANET, Link.REQUERIMIENTOS_LIST, 
-      Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_SUBSANAR, doc.requerimientoDocumentoUuid]);
+    this.router.navigate([Link.EXTRANET, Link.REQUERIMIENTOS_LIST,
+    Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_SUBSANAR, doc.requerimientoDocumentoUuid]);
   }
+
+  revisarDocumentos(row: any): void {
+    // lógica revisar documentos
+  }
+
+  registrarContrato(row: any): void {
+    // lógica registrar contrato
+  }
+
+  editar(row: any): void {
+    // lógica editar
+  }
+
 
 }

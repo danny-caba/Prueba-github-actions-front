@@ -96,6 +96,7 @@ export enum Link {
     DOCUMENTO_EVALUAR = 'evaluar',
     DOCUMENTO_VIEW = 'view',
     EVALUAR_DETALLE = 'evaluar-detalle',
+    DOCUMENTO_REVISAR = 'revisar'
 }
 
 export enum Apis {

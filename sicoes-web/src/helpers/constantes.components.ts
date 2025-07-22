@@ -41,7 +41,10 @@ export enum RolEnum {
     ADM_BLOQU = '09',
     ADM_CONFIG = '11',
     EVA_CONTRA = '12',
-    COO_GESTION = '13',
+    APROB_GPPM = '16',
+    APROB_GSE = '17',
+    // ROL DE REQUERIMIENTO 348
+    INVITADO = '15'
 }
 
 export enum AprobadorAccion {
@@ -215,7 +218,8 @@ export enum ListadoEnum {
     CONST_ESTADO_PACE_APROBADO_ENVIADO = "PACE_APR_EN",
     CONST_ESTADO_PACE_CANCELADO = "PACE_CAN",
 
-    ESTADO_REQ_DOCUMENTO = 'ESTADO_REQ_DOCUMENTO'
+    ESTADO_REQ_DOCUMENTO = 'ESTADO_REQ_DOCUMENTO',
+    ESTADO_REQ_DOCUMENTO_DETALLE = 'ESTADO_REQ_DOCUMENTO_DETALLE'
     
 }
 
@@ -274,4 +278,14 @@ export enum EstadoRequerimientoEnum {
     OBSERVADO = 'OBSERVADO',
     CONCLUIDO = 'CONCLUIDO',
     ARCHIVADO = 'ARCHIVADO'
+}
+
+export enum EstadoReqDocDetalleEvalEnum {
+    CUMPLE = 'CUMPLE',
+    OBSERVADO = 'OBSERVADO'
+}
+
+export enum TipoDocumentoEnum {
+    REGISTRO = 'REGISTRO',
+    SUBSANACION = 'SUBSANACION'
 }

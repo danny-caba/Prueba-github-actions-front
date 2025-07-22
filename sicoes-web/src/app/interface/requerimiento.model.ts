@@ -1,5 +1,6 @@
 import { Division } from "./division.model"
 import { ListadoDetalle } from "./listado.model"
+import { Usuario } from "./pido.model"
 import { Supervisora } from "./supervisora.model"
 
 
@@ -58,4 +59,7 @@ export class RequerimientoDocumentoDetalle {
   requerimientoDocumento: Partial<RequerimientoDocumento>
   descripcionRequisito: string
   archivo: any
+  evaluacion: Partial<ListadoDetalle>
+  usuario: Partial<Usuario>
+  fechaEvaluacion: string
 }

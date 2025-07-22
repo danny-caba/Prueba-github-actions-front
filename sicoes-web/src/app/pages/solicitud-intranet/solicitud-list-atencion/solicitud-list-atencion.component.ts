@@ -50,7 +50,6 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
   listTipoSolicitud: any[]
   listEstadoRevision: any[]
   listEstadoEvaluacion: any[]
-  tabRequerimientoActivo = false
 
   displayedColumns: string[] = [
     'nroExpediente',
@@ -67,8 +66,6 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
     'notificacionArchivamiento',
     'actions'
   ];
-
-  @ViewChild('tabgroup') tabGroup: MatTabGroup;
 
   constructor(
     private authFacade: AuthFacade,
@@ -87,25 +84,6 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
   ngOnInit(): void {
     this.cargarCombo();
     this.cargarTabla();
-
-    // Verificar si hay query parameter para abrir el tab de requerimientos
-    this.route.queryParams.subscribe(params => {
-      if (params['tab'] === 'requerimientos') {
-        setTimeout(() => {
-          if (this.tabGroup) {
-            this.tabGroup.selectedIndex = 1;
-            this.tabRequerimientoActivo = true;
-            this.activarTabRequerimiento();
-            // Limpiar el query parameter después de cambiar al tab
-            this.router.navigate([], {
-              relativeTo: this.route,
-              queryParams: {},
-              replaceUrl: true
-            });
-          }
-        }, 100);
-      }
-    });
   }
 
   cargarCombo() {
@@ -190,27 +168,6 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
     }).afterClosed().subscribe(() => {
       this.cargarTabla();
     });
-  }
-  
-  onTabChange(event: MatTabChangeEvent) {
-    if (event.index === 1) {
-      this.tabRequerimientoActivo = true;
-      this.activarTabRequerimiento();
-    }
-  }
-
-  private activarTabRequerimiento() {
-    if (!this['_tabRequerimientoSubject']) {
-      this['_tabRequerimientoSubject'] = new BehaviorSubject<boolean>(false);
-    }
-    this['_tabRequerimientoSubject'].next(true);
-  }
-
-  get tabRequerimientoObservable() {
-    if (!this['_tabRequerimientoSubject']) {
-      this['_tabRequerimientoSubject'] = new BehaviorSubject<boolean>(false);
-    }
-    return this['_tabRequerimientoSubject'].asObservable();
   }
 
 }

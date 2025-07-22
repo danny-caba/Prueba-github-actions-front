@@ -13,6 +13,7 @@
                     {{ division.deDivision }}
                 </mat-option>
             </mat-select>
+            <mat-error *ngIf="formGroup.get('division').hasError('required')">Ingrese División</mat-error>
         </mat-form-field>
         <mat-form-field  class="mt-6 flex-auto">
             <mat-label>Perfil</mat-label>
@@ -22,6 +23,7 @@
                     <span class="body-1">{{ state.dePerfil }}</span>
                 </mat-option>
             </mat-autocomplete>
+            <mat-error *ngIf="formGroup.get('perfil').hasError('required')">Ingrese Perfil</mat-error>
         </mat-form-field>
     </mat-dialog-content>
     <p class="italic text-red-600">(*) Campos obligatorios</p>

@@ -25,7 +25,7 @@ export class ModalCrearRequerimientoComponent extends BaseComponent implements O
   listDivision: Division[];
   ACC_REGISTRAR = 'Registrar';
   ACC_ACTUALIZAR = 'Actualizar';
-  ACC_CREAR = 'Crear';
+  ACC_NUEVO_REQUERIMIENTO = 'ACC_NUEVO_REQUERIMIENTO';
   btnValue: string;
   disabledDivision: boolean = false;
   listAllPerfiles: any;
@@ -49,7 +49,7 @@ export class ModalCrearRequerimientoComponent extends BaseComponent implements O
     super();
 
     this.btnValue = data.accion;
-    this.title = data?.accion;
+    this.title = data?.accion === this.ACC_NUEVO_REQUERIMIENTO ? 'Crear' : 'Actualizar';
     this.listAllPerfiles = data?.perfiles;
     
     if (data?.accion === this.ACC_ACTUALIZAR) {
@@ -73,26 +73,17 @@ export class ModalCrearRequerimientoComponent extends BaseComponent implements O
         return;
       }
 
-      console.log(this.formGroup.get('perfil').value);
-      console.log(this.formGroup.get('division').value);
-      
-
       let requerimiento: Requerimiento = {
         division: this.formGroup.get('division').value,
-        perfil: {
-          idListadoDetalle: this.formGroup.get('perfil').value.idListadoDetalle,
-          idListado: null,
-          codigo: null,
-          orden: null,
-          nombre: null,
-          descripcion: null,
-          valor: null,
-          editable: null
-        }
+        perfil: this.formGroup.get('perfil').value
       };
 
-      if (this.btnValue === this.ACC_CREAR) {
-        this.registrarRequerimiento(requerimiento);
+      if (this.btnValue === this.ACC_NUEVO_REQUERIMIENTO) {
+        functionsAlertMod2.preguntarSiNo('¿Seguro de CREAR el requerimiento?', 'Sí, Crear').then((result) => {
+          if (result.isConfirmed) {
+            this.registrarRequerimiento(requerimiento);
+          }
+        });
       } else {
         // this.actualizarRequerimiento(requerimiento);
       }
@@ -109,7 +100,7 @@ export class ModalCrearRequerimientoComponent extends BaseComponent implements O
         if (res === null) {
           functionsAlertMod2.warningMensage('No se puede registrar el requerimiento');
         } else {
-          functionsAlertMod2.success('Registrado').then((result) => {
+          functionsAlertMod2.success(`El requerimiento ha sido recibido mediante el expediente Nro. ${res.nuExpediente}`).then((result) => {
             this.dialogRef.close(res);
           });
         }

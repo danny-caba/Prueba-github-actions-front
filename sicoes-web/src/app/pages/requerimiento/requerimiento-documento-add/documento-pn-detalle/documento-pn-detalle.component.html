@@ -1,22 +1,22 @@
 
 
-<div class="flex justify-between mb-4 items-center pb-2 px-6">
+<div class="flex justify-between mb-8 items-center pb-2 px-6">
   <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
     <mat-checkbox 
       color="primary" 
       [disabled]="true"
       (change)="onChangeCheckbox($event, requisito)"
-      [checked]="requisito.archivo != null"
+      [checked]="validarCheck()"
     ></mat-checkbox>
     <span class="break-words text-sm font-sans">
       {{ requisito.descripcionRequisito! }}
     </span>
   </div>
-  <div class="flex flex-col gap-y-2 items-end">
+  <div class="flex flex-col items-end">
     <vex-form-adjuntos-btn 
       *ngIf="!evaluate"
       [titulo]="'Archivo (*.pdf)'" 
-      [editable]="add"
+      [editable]="isArchivoEditable()"
       [codigo]="'ADJUNTAR ARCHIVO'"
       [reqDocDetalle]="requisito"
       [archivo]="requisito.archivo"
@@ -27,5 +27,35 @@
       [rutaEvaluarDetalle]="rutaEvaluarDetalle"
       [archivo]="requisito.archivo"
     ></vex-layout-adjuntos>
+    <div class="flex flex-col gap-y-2 items-end" *ngIf="mostrarResultado()">
+      <div class="flex gap-x-2 items-center">
+        <p class="text-xs font-sans font-semibold">
+          Estado:
+          <span class="font-light italic text-black">
+            {{ requisito.evaluacion?.nombre }}
+          </span>
+        </p>
+        <button
+          mat-raised-button 
+          type="button" 
+          class="hover-class"
+          color="primary"
+          (click)="true">Resultado</button>
+      </div>
+      <div class="flex flex-col gap-x-2 items-end">
+        <p class="text-xs font-sans font-semibold">
+          Evaluado por:
+          <span class="font-light italic text-black">
+            {{ requisito.usuario?.usuario }}
+          </span>
+        </p>
+        <p class="text-xs font-sans font-semibold">
+          Fecha de Evaluación:
+          <span class="font-light italic text-black">
+            {{ requisito.fechaEvaluacion }}
+          </span>
+        </p>
+      </div>
+    </div>
   </div>
 </div> 

@@ -92,6 +92,7 @@ export enum Link {
     // REQUERIMIENTOS DOCUMENTO
     REQUERIMIENTOS_DOCUMENTO = 'documentos',
     DOCUMENTO_ADD = 'add',
+    DOCUMENTO_SUBSANAR = 'subsanar',
     DOCUMENTO_EVALUAR = 'evaluar',
     EVALUAR_DETALLE = 'evaluar-detalle',
 }

@@ -63,4 +63,5 @@ export class Areas {
 export class Usuario {
     idUsuario:number
     nombres:string
+    usuario?:string
 }

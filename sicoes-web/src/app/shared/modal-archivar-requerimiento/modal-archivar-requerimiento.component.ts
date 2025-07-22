@@ -49,13 +49,9 @@ export class ModalArchivarRequerimientoComponent extends BaseComponent implement
       if (this.formGroup.invalid) {
         return;
       }
-      this.requerimientoService.archivar(this.requerimientoUuid, this.formGroup.value).subscribe(res => {
-        if (res === null) {
-          functionsAlertMod2.warningMensage('No se puede archivar el requerimiento');
-        } else {
-          functionsAlertMod2.success('Archivado').then((result) => {
-            this.dialogRef.close(res);
-          });
+      functionsAlertMod2.preguntarSiNo('¿Seguro de archivar el requerimiento? ', 'Sí, archivar').then((result) => {
+        if (result.isConfirmed) {
+          this.archivar();
         }
       });
     } else {
@@ -64,4 +60,20 @@ export class ModalArchivarRequerimientoComponent extends BaseComponent implement
     
   }
 
+  archivar() {
+    this.requerimientoService.archivar(this.requerimientoUuid, this.formGroup.value).subscribe({
+      next: (res) => {
+        if (res === null) {
+          functionsAlertMod2.warningMensage('No se puede archivar el requerimiento');
+        } else {
+          functionsAlertMod2.success('Requerimiento Archivado').then((result) => {
+            this.dialogRef.close(res);
+          });
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
 }

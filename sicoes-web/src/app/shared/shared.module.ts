@@ -217,7 +217,7 @@ const sharedComponents = [
     LayoutAdjuntosComponent,
     LayoutEvaluarAdjuntoComponent,
     SkeletonLoaderComponent,
-    ModalNumeroContratoComponent
+    ModalNumeroContratoComponent,
     ModalReqDocumentoObservacionComponent
   ];
 

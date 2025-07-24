@@ -20,19 +20,24 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
   evaluateDetail: boolean = false;
   requerimientoDocumentoUuid: string;
   requisitos: RequerimientoDocumentoDetalle[];
-  rutaEvaluarDetalle: string[] = [Link.INTRANET, Link.REQUERIMIENTOS_LIST, 
-    Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_EVALUAR, Link.EVALUAR_DETALLE];
+  rutaEvaluarDetalle: string[] = [Link.INTRANET, Link.REQUERIMIENTOS_LIST,
+  Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_EVALUAR, Link.EVALUAR_DETALLE];
   isLoading: boolean = false;
   private readonly destroy$ = new Subject<void>();
+  titulo = 'Evaluar Documentos';
+  isReview: boolean = false;
 
   constructor(
     private router: Router,
     private activeRoute: ActivatedRoute,
     private authFacade: AuthFacade,
-    private requerimientoService: RequerimientoService
-  ) {}
+    private requerimientoService: RequerimientoService,
+  ) { }
 
   ngOnInit(): void {
+    if (this.router.url.includes('/revisar/')) {
+      this.titulo = 'Revisar Documentos';
+    }
     this.initializeComponent();
   }
 
@@ -60,6 +65,7 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         this.evaluate = data.evaluate || false;
+        this.isReview = data.review || false;
       });
 
   }
@@ -91,17 +97,20 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
   }
 
   private async sendDocumento(): Promise<void> {
-    this.requerimientoService.finalizarEvaluarDocumento(this.requisitos, this.requerimientoDocumentoUuid)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: async (response) => {
-          await this.handleSuccess();
-        },
-        error: async (error) => {
-          console.log('Error al enviar informe:', error);
-        }
-      });
+    const apiCall = !this.evaluate
+      ? this.requerimientoService.finalizarRevisarDocumento(this.requisitos, this.requerimientoDocumentoUuid)
+      : this.requerimientoService.finalizarEvaluarDocumento(this.requisitos, this.requerimientoDocumentoUuid);
+
+    apiCall.pipe(takeUntil(this.destroy$)).subscribe({
+      next: async () => {
+        await this.handleSuccess();
+      },
+      error: async (error) => {
+        console.log('Error al enviar informe:', error);
+      }
+    });
   }
+
 
   private async handleSuccess(): Promise<void> {
     await functionsAlert.success(REQUERIMIENTO_INFORME_CONSTANTS.MESSAGES.SUCCESS);

@@ -30,14 +30,12 @@ import { DocumentoPnDetalleComponent } from './requerimiento-documento-add/docum
 import { RequerimientoDocumentoAddComponent } from './requerimiento-documento-add/requerimiento-documento-add.component';
 import { RequerimientoDocumentoListComponent } from './requerimiento-documento-list/requerimiento-documento-list.component';
 import { RequerimientoRoutingModule } from './requerimiento-routing.module';
-import { RequerimientoDocumentoReviewComponent } from './requerimiento-documento-review/requerimiento-documento-review.component';
 
 @NgModule({
   declarations: [
     RequerimientoDocumentoListComponent,
     RequerimientoDocumentoAddComponent,
     DocumentoPnDetalleComponent,
-    RequerimientoDocumentoReviewComponent
   ],
   imports: [
     CommonModule,

@@ -37,7 +37,7 @@ export enum Link {
     CONTRATOS_LIST = 'contratos',
     BANDEJA_CONTRATOS_LIST = 'bandeja-contratos',
     CONTRATO_SOLICITUD_EVALUAR = 'evaluar',
-    
+
     INVITACIONES_LIST = 'invitaciones',
 
     FORMULACION_CONSULTAS = 'formulacion-consultas',
@@ -62,15 +62,15 @@ export enum Link {
     SOLICITUDES_ACTUALIZAR = 'actualizar',
     SOLICITUDES_EDIT_MOD = 'modificar',
 
-    GESTION_USUARIO='gestion-usuarios',
-    GESTION_USUARIO_ADD ='registrar-usuario',
-    GESTION_USUARIO_CONF_PERFIL ='configurar-perfil',
+    GESTION_USUARIO = 'gestion-usuarios',
+    GESTION_USUARIO_ADD = 'registrar-usuario',
+    GESTION_USUARIO_CONF_PERFIL = 'configurar-perfil',
 
-    GESTION_ASIGNACION='gestion-asignacion',
+    GESTION_ASIGNACION = 'gestion-asignacion',
 
     SOLICITUDES_LIST_APROBACION_PACES = 'aprobacionPaces',
 
-    GESTION_CONFIGURACION='gestion-configuraciones',
+    GESTION_CONFIGURACION = 'gestion-configuraciones',
 
     CONTRATO_SOLICITUD_ADD = 'registro',
     CONTRATO_SOLICITUD_VIEW = 'ver',
@@ -96,11 +96,12 @@ export enum Link {
     DOCUMENTO_EVALUAR = 'evaluar',
     DOCUMENTO_VIEW = 'view',
     EVALUAR_DETALLE = 'evaluar-detalle',
-    DOCUMENTO_REVISAR = 'revisar'
+    DOCUMENTO_REVISAR = 'revisar',
+    DOCUMENTO_EDITAR = 'editar'
 }
 
 export enum Apis {
-    LST_OFICINA_REGISTRAL   = 'api/maestros/oficina-registral',
+    LST_OFICINA_REGISTRAL = 'api/maestros/oficina-registral',
 }
 
 @Injectable({
@@ -111,7 +112,7 @@ export class InternalUrls {
     link = Link;
     apis = Apis;
 
-    getPath(value){
+    getPath(value) {
         return '/' + value;
     }
 }

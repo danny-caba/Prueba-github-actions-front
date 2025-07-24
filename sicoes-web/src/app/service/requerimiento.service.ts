@@ -44,14 +44,14 @@ export class RequerimientoService {
         requerimientos.map(req => {
           if (req.supervisora?.tipoDocumento?.codigo === 'DNI') {
             req.nombresApellidos = req.supervisora.nombres +
-             ' ' + req.supervisora.apellidoPaterno + 
-             ' ' + req.supervisora.apellidoMaterno;
+              ' ' + req.supervisora.apellidoPaterno +
+              ' ' + req.supervisora.apellidoMaterno;
           } else if (req.supervisora?.tipoDocumento?.codigo === 'RUC') {
             req.nombresApellidos = req.supervisora.nombreRazonSocial;
           } else if (req.supervisora?.tipoDocumento?.codigo === 'CARNET_EXTRA') {
             req.nombresApellidos = req.supervisora?.nombres +
-             ' ' + req.supervisora?.apellidoPaterno + 
-             ' ' + req.supervisora?.apellidoMaterno;
+              ' ' + req.supervisora?.apellidoPaterno +
+              ' ' + req.supervisora?.apellidoMaterno;
           } else {
             req.nombresApellidos = '';
           }
@@ -110,14 +110,14 @@ export class RequerimientoService {
         requerimientos.map(req => {
           if (req.requerimiento?.supervisora?.tipoDocumento?.codigo === 'DNI') {
             req.nombresApellidos = req.requerimiento.supervisora.nombres +
-             ' ' + req.requerimiento.supervisora.apellidoPaterno + 
-             ' ' + req.requerimiento.supervisora.apellidoMaterno;
+              ' ' + req.requerimiento.supervisora.apellidoPaterno +
+              ' ' + req.requerimiento.supervisora.apellidoMaterno;
           } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'RUC') {
             req.nombresApellidos = req.requerimiento.supervisora.nombreRazonSocial;
           } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'CARNET_EXTRA') {
             req.nombresApellidos = req.requerimiento.supervisora?.nombres +
-             ' ' + req.requerimiento.supervisora?.apellidoPaterno + 
-             ' ' + req.requerimiento.supervisora?.apellidoMaterno;
+              ' ' + req.requerimiento.supervisora?.apellidoPaterno +
+              ' ' + req.requerimiento.supervisora?.apellidoMaterno;
           } else {
             req.nombresApellidos = '';
           }
@@ -147,14 +147,14 @@ export class RequerimientoService {
         requerimientos.map(req => {
           if (req.requerimiento?.supervisora?.tipoDocumento?.codigo === 'DNI') {
             req.nombresApellidos = req.requerimiento.supervisora.nombres +
-            ' ' + req.requerimiento.supervisora.apellidoPaterno + 
-            ' ' + req.requerimiento.supervisora.apellidoMaterno;
+              ' ' + req.requerimiento.supervisora.apellidoPaterno +
+              ' ' + req.requerimiento.supervisora.apellidoMaterno;
           } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'RUC') {
             req.nombresApellidos = req.requerimiento.supervisora.nombreRazonSocial;
           } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'CARNET_EXTRA') {
             req.nombresApellidos = req.requerimiento.supervisora?.nombres +
-            ' ' + req.requerimiento.supervisora?.apellidoPaterno + 
-            ' ' + req.requerimiento.supervisora?.apellidoMaterno;
+              ' ' + req.requerimiento.supervisora?.apellidoPaterno +
+              ' ' + req.requerimiento.supervisora?.apellidoMaterno;
           } else {
             req.nombresApellidos = '';
           }
@@ -162,7 +162,7 @@ export class RequerimientoService {
         respuesta.content = requerimientos;
         return respuesta;
       })
-  );
+    );
   }
 
   obtenerDocumentoDetalleEvaluar(uuid: string) {
@@ -180,4 +180,8 @@ export class RequerimientoService {
     return this.http.post<any>(url, data);
   }
 
+  finalizarRevisarDocumento(data: any, uuid: string) {
+    const url = `${this._path_serve}/api/requerimientos/documentos/${uuid}/revisar`;
+    return this.http.post<any>(url, data);
+  }
 }

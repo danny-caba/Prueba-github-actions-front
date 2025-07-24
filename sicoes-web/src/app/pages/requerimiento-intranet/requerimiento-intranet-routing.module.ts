@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { VexRoutes } from 'src/@vex/interfaces/vex-route.interface';
 import { AuthGuardService } from 'src/app/auth/guards';
-import { Link } from 'src/helpers/internal-urls.components';
 import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
+import { Link } from 'src/helpers/internal-urls.components';
+import { RequerimientoAprobacionHistorialComponent } from './requerimiento-aprobacion-historial/requerimiento-aprobacion-historial.component';
+import { RequerimientoDocumentoEvaluarDetalleComponent } from './requerimiento-documento-evaluar-detalle/requerimiento-documento-evaluar-detalle.component';
+import { RequerimientoDocumentoEvaluarComponent } from './requerimiento-documento-evaluar/requerimiento-documento-evaluar.component';
 import { RequerimientoInformeAddComponent } from './requerimiento-informe-add/requerimiento-informe-add.component';
 import { RequerimientoInvitacionListComponent } from './requerimiento-invitacion-list/requerimiento-invitacion-list.component';
-import { RequerimientoAprobacionHistorialComponent } from './requerimiento-aprobacion-historial/requerimiento-aprobacion-historial.component';
-import { RequerimientoDocumentoEvaluarComponent } from './requerimiento-documento-evaluar/requerimiento-documento-evaluar.component';
-import { RequerimientoDocumentoEvaluarDetalleComponent } from './requerimiento-documento-evaluar-detalle/requerimiento-documento-evaluar-detalle.component';
+import { RequerimientoEditarContratoComponent } from './requerimiento-editar-contrato/requerimiento-editar-contrato.component';
 
 const routes: VexRoutes = [{
   path: '',
@@ -49,7 +50,23 @@ const routes: VexRoutes = [{
       data: {
         evaluateDetail: true
       }
-    }
+    },
+    {
+      path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_REVISAR + '/:requerimientoDocumentoUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoDocumentoEvaluarComponent,
+      data: {
+        review: true
+      }
+    },
+    {
+      path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_EDITAR + '/:requerimientoDocumentoUuid',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoEditarContratoComponent,
+      data: {
+        review: true
+      }
+    },
   ]
 }];
 

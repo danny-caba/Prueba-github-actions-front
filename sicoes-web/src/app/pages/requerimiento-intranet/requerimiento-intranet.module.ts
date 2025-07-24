@@ -19,8 +19,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -38,6 +38,7 @@ import { RequerimientoDocumentoListComponent } from './requerimiento-documento-l
 import { RequerimientoDocumentoEvaluarComponent } from './requerimiento-documento-evaluar/requerimiento-documento-evaluar.component';
 import { RequerimientoModule } from '../requerimiento/requerimiento.module';
 import { RequerimientoDocumentoEvaluarDetalleComponent } from './requerimiento-documento-evaluar-detalle/requerimiento-documento-evaluar-detalle.component';
+import { RequerimientoEditarContratoComponent } from './requerimiento-editar-contrato/requerimiento-editar-contrato.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { RequerimientoDocumentoEvaluarDetalleComponent } from './requerimiento-d
     RequerimientoAprobacionSupervisorPnComponent,
     RequerimientoDocumentoListComponent,
     RequerimientoDocumentoEvaluarComponent,
-    RequerimientoDocumentoEvaluarDetalleComponent
+    RequerimientoDocumentoEvaluarDetalleComponent,
+    RequerimientoEditarContratoComponent
   ],
   imports: [
     CommonModule,
@@ -83,7 +85,7 @@ import { RequerimientoDocumentoEvaluarDetalleComponent } from './requerimiento-d
     ScrollbarModule,
     RequerimientoModule
   ],
-  exports:[
+  exports: [
     RequerimientoListComponent,
     RequerimientoInformeAddComponent,
     RequerimientoInformePnAddComponent,

@@ -39,10 +39,6 @@ import { ContratoDocumentosComponent } from './components/contrato-documentos/co
 import { ReemplazoPersonalComponent } from './components/reemplazo-personal/reemplazo-personal.component';
 import { ReemplazoPersFormComponent } from './components/reemplazo-pers-form/reemplazo-pers-form.component';
 import { ReemplazoPersFormEditComponent } from './components/reemplazo-pers-form/reemplazo-pers-form-edit/reemplazo-pers-form-edit.component';
-import { RevisarDocReemplazoComponent } from './components/revisar-doc-reemplazo/revisar-doc-reemplazo.component';
-import { RevisarDocReemplazoFormComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form.component';
-import { RevisarDocReemplazoFormReviewComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form-review/revisar-doc-reemplazo-form-review.component';
-import { AdendaFormUploadComponent } from './components/revisar-doc-reemplazo-form/adenda-form-upload/adenda-form-upload.component';
 import { CargaDocsInicioFormComponent } from './components/carga-docs-inicio-form/carga-docs-inicio-form.component';
 import { CargaDocsInicioComponent } from './components/carga-docs-inicio/carga-docs-inicio.component';
 import { CargaDocsInicioAddComponent } from './components/carga-docs-inicio-form/carga-docs-inicio-add/carga-docs-inicio-add.component';
@@ -61,10 +57,6 @@ import { CargaDocsInicioAddComponent } from './components/carga-docs-inicio-form
     ReemplazoPersonalComponent,
     ReemplazoPersFormComponent,
     ReemplazoPersFormEditComponent,
-    RevisarDocReemplazoComponent,
-    RevisarDocReemplazoFormComponent,
-    RevisarDocReemplazoFormReviewComponent,
-    AdendaFormUploadComponent,
     CargaDocsInicioFormComponent,
     CargaDocsInicioComponent,
     CargaDocsInicioAddComponent

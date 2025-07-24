@@ -153,15 +153,11 @@
             <mat-icon svgIcon="mat:preview"></mat-icon>
             <span>Inicio de Servicio</span>
         </button>
-        <button mat-menu-item (click)="goToFormContrato(row, ACCION_REEMPLAZAR)"  *vexOptionRoleReemplazo="opcion.BTN_REEMPLAZO">
+        <button mat-menu-item (click)="goToFormContrato(row, ACCION_REEMPLAZAR)"  *vexOptionRoleReemplazo="opcion.BTN_REEMP_PERS_ACC">
             <mat-icon svgIcon="mat:group"></mat-icon>
             <span>Reemplazar personal<br>propuesto</span>
         </button>
-        <button mat-menu-item (click)="goToFormContrato(row, ACCION_REVISAR)">
-            <mat-icon svgIcon="mat:edit"></mat-icon>
-            <span>Revisar Documento de<br>Personal de Reemplazo</span>
-        </button>
-        <button mat-menu-item (click)="goToCargaDocsInicio(row)" *vexOptionRoleReemplazo="opcion.BTN_REEMPLAZO">
+        <button mat-menu-item (click)="goToCargaDocsInicio(row)" *vexOptionRoleReemplazo="opcion.BTN_CARGA_DOC_INICIO_ACC">
             <mat-icon svgIcon="mat:upload_file"></mat-icon>
             <span>Documentación inicio<br>servicio</span>
         </button>

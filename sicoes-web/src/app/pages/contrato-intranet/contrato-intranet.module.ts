@@ -34,6 +34,10 @@ import { ContratoEvaluarDocumentosComponent } from './components/contrato-evalua
 import { ContratoEvaluarReemplazoComponent } from './components/contrato-evaluar-reemplazo/contrato-evaluar-reemplazo.component';
 import { ContratoFormEvalReempComponent } from './components/contrato-form-eval-reemp/contrato-form-eval-reemp.component';
 import { ContratoFormEvalReempReviewComponent } from './components/contrato-form-eval-reemp/contrato-form-eval-reemp-review/contrato-form-eval-reemp-review.component';
+import { RevisarDocReemplazoComponent } from './components/revisar-doc-reemplazo/revisar-doc-reemplazo.component';
+import { RevisarDocReemplazoFormComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form.component';
+import { AdendaFormUploadComponent } from './components/revisar-doc-reemplazo-form/adenda-form-upload/adenda-form-upload.component';
+import { RevisarDocReemplazoFormReviewComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form-review/revisar-doc-reemplazo-form-review.component';
 import { ContratoEvaluarDocsInicioComponent } from './components/contrato-evaluar-docs-inicio/contrato-evaluar-docs-inicio.component';
 import { ContratoEvaluarDocsInicioFormComponent } from './components/contrato-evaluar-docs-inicio-form/contrato-evaluar-docs-inicio-form.component';
 import { DocsInicioServicioReviewComponent } from './components/contrato-evaluar-docs-inicio-form/docs-inicio-servicio-review/docs-inicio-servicio-review.component';
@@ -47,6 +51,10 @@ import { DocsInicioServicioReviewComponent } from './components/contrato-evaluar
     ContratoEvaluarReemplazoComponent,
     ContratoFormEvalReempComponent,
     ContratoFormEvalReempReviewComponent,
+    RevisarDocReemplazoComponent,
+    RevisarDocReemplazoFormComponent,
+    RevisarDocReemplazoFormReviewComponent,
+    AdendaFormUploadComponent,
     ContratoEvaluarDocsInicioComponent,
     ContratoEvaluarDocsInicioFormComponent,
     DocsInicioServicioReviewComponent

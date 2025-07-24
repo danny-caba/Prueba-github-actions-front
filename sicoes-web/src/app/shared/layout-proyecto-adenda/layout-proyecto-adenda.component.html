@@ -4,42 +4,60 @@
 
 <ng-template #templateOficio>
     <div class="flex items-center w-full">
-        <mat-checkbox color="primary" (change)="setValueCheckedCartaReemplazo($event)">
+        <mat-checkbox color="primary" 
+            (change)="setValueCheckedCartaReemplazo($event)"
+            [disabled] = "isCargaAdenda || !rolePermisoCheckBox?.hasPermission"
+            [vexOptionRoleCheck]="opcion.CHECKBOX_ADENDA"
+            #rolePermisoCheckBox="vexOptionRoleCheck">
             <span>Documento Proyecto de Adenda</span>
         </mat-checkbox>
         <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="!(isReviewExt || !isCargaAdenda)">DocumentoMock.pdf</span>
-        <button *ngIf="!(isReviewExt || isCargaAdenda)" matTooltip="Descargar"
-            mat-icon-button type="button"
+        <span *vexOptionRoleReemplazo="opcion.DESCARGA_ADENDA"  
+            class="text-secondary">
+            DocumentoMock.pdf
+        </span>
+        <ng-container 
+            [vexOptionRoleCheck]="opcion.DESCARGA_ADENDA" 
+            #rolePermisoDownloadButton="vexOptionRoleCheck">
+        </ng-container>
+
+        <button *ngIf="!rolePermisoDownloadButton?.hasPermission || !isCargaAdenda"
+            matTooltip="Descargar"
+            mat-icon-button 
+            type="button"
             class="text-primary hover:bg-hover">
             <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
         </button>
-        <button *ngIf="!(isReviewExt || isCargaAdenda)" matTooltip="Eliminar"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
-        </button>
         <mat-radio-group
-            *ngIf="!(isReviewExt || !isCargaAdenda)"
+            *vexOptionRoleReemplazo="opcion.RAD_BTN_ADENDA"
             [disabled] = "isCargaAdenda"
             [(ngModel)]="marcacion"
             class="ml-12 flex items-center gap-4">
             <mat-radio-button value="si">Sí</mat-radio-button>
             <mat-radio-button value="no">No</mat-radio-button>
         </mat-radio-group>
-        <span *ngIf="!(isReviewExt || !isCargaAdenda)" class="text-secondary ml-12">Evaluado por:</span>
-        <span *ngIf="!(isReviewExt || !isCargaAdenda)" class="text-secondary ml-12">Fecha y Hora:</span>
+        <span *vexOptionRoleReemplazo="opcion.RAD_BTN_ADENDA" class="text-secondary ml-12">Evaluado por:</span>
+        <span *vexOptionRoleReemplazo="opcion.RAD_BTN_ADENDA" class="text-secondary ml-12">Fecha y Hora:</span>
+
+        <ng-container 
+            [vexOptionRoleCheck]="opcion.RAD_BTN_ADENDA" 
+            #rolePermisoSpan="vexOptionRoleCheck">
+                <span *ngIf="!(rolePermisoSpan?.hasPermission)" class="flex-1">
+                </span>
+        </ng-container>
         
-        <vex-form-adjuntos-btn class="ml-6" *ngIf="isReviewExt"
+        <vex-form-adjuntos-btn class="ml-6" *vexOptionRoleReemplazo="opcion.ADJUNTAR_ADENDA"
           [titulo]="'Archivo (*.pdf)'"
           [editable]="editable">
         </vex-form-adjuntos-btn>
     </div>
-    <div> 
+    <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
         <mat-form-field class="w-full">
           <textarea matInput
                  placeholder="Observación"
-                 [disabled] = "isCargaAdenda"
+                 [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
+                 [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
+                 #rolePermiso="vexOptionRoleCheck"
                  rows="2"
                  cdkTextareaAutosize
                  cdkAutosizeMinRows="2"

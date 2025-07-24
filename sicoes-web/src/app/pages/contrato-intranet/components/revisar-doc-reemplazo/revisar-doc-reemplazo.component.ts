@@ -56,18 +56,19 @@ export class RevisarDocReemplazoComponent extends BaseComponent implements OnIni
 
   toGoRevisarReemplazoPersonalForm() {
     const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
-    this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_REVIEW_FORM, encryptedId]);
+    this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_REVIEW_FORM + '/' + encryptedId]);
   }
 
   toGoCargarAdendaForm() {
     const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
-    this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.CARGA_ADENDA_FORM, encryptedId]);
+    this.router.navigate(['/intranet/contratos/' + Link.CARGA_ADENDA_FORM + '/' + encryptedId]);
+
   }
 
   toGoBandejaContratos() {
       functionsAlert.questionSiNo('¿Desea ir a la bandeja de contratos?').then((result) => {
           if (result.isConfirmed) {
-            this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST]);
+            this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST]);
           }
         });
   }

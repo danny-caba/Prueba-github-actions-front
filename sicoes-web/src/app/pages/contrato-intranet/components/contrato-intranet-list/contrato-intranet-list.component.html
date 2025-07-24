@@ -166,11 +166,15 @@
             <mat-icon svgIcon="mat:preview"></mat-icon>
             <span>Evaluar Documentos</span>
         </button>
-        <button mat-menu-item (click)="evaluarDocsReempPersonal(row)">
+        <button mat-menu-item (click)="evaluarDocsReempPersonal(row)" *vexOptionRoleReemplazo="opcion.BTN_EVAL_DOC_REEMP_ACC">
             <mat-icon svgIcon="mat:preview"></mat-icon>
             <span>Evaluar Documentos de<br>Personal de Reemplazo</span>
         </button>
-        <button mat-menu-item (click)="evaluarDocsInicioServicio(row)">
+        <button mat-menu-item (click)="revisarDocsReempPersonal(row)" *vexOptionRoleReemplazo="opcion.BTN_REV_DOC_REEMP_ACC">
+            <mat-icon svgIcon="mat:preview"></mat-icon>
+            <span>Revisar Documento de<br>Personal de Reemplazo</span>
+        </button>
+        <button mat-menu-item (click)="evaluarDocsInicioServicio(row)" *vexOptionRoleReemplazo="opcion.BTN_EVAL_DOC_INICIO_ACC">
             <mat-icon svgIcon="mat:preview"></mat-icon>
             <span>Evaluar Documentación<br>inicio de servicio</span>
         </button>

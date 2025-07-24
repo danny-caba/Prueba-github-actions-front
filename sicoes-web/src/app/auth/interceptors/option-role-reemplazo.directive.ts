@@ -8,7 +8,8 @@ import { AuthFacade } from '../store/auth.facade';
 import { AuthUser } from '../store/auth.models';
 
 @Directive({
-  selector: '[vexOptionRoleReemplazo]'
+  selector: '[vexOptionRoleReemplazo]',
+  exportAs: 'vexOptionRoleReemplazo'
 })
 export class OptionRoleReemplazoDirective implements OnInit, OnChanges, OnDestroy {
 
@@ -27,7 +28,6 @@ export class OptionRoleReemplazoDirective implements OnInit, OnChanges, OnDestro
     private viewContainer: ViewContainerRef,
     private authFacade: AuthFacade
   ) {
-    console.log('✅ Directiva inicializada');
     this.activeRoute.data.subscribe(data => {
       if(data.opcionPagina){
         this.opcionPagina = data.opcionPagina;
@@ -41,7 +41,6 @@ export class OptionRoleReemplazoDirective implements OnInit, OnChanges, OnDestro
   }
 
   ngOnInit(){
-    console.log('vexOptionRoleReemplazo', this.vexOptionRoleReemplazo);
     this.suscribirSolicitud();
   }
 
@@ -64,36 +63,15 @@ export class OptionRoleReemplazoDirective implements OnInit, OnChanges, OnDestro
 
   validarOpcion(){
     let buscarOpcion = false;
-    console.log('user', this.usuario);
     this.usuario?.roles?.forEach(element => {
-      let codigoRol = element.codigo;
-
-      let opcs: any = OpcionPorRol.find(ele => ele.rol == codigoRol);
-      console.log('opcs', opcs);
-      
-      let shouldSkip = false;
-      if(opcs?.opciones?.includes(this.vexOptionRoleReemplazo)){
-        if(shouldSkip){
-          return;
-        }
-        OpcionConfig.forEach(opCong => {
-          if(shouldSkip){
-            return;
-          }
-          if(opCong.codigo == this.vexOptionRoleReemplazo){
-            buscarOpcion = true;
-
-            if(buscarOpcion){
-              shouldSkip = true;
-            }
-          }
-        });
-
-        if(buscarOpcion){
-          shouldSkip = true;
-        }
+      let opcs: any = OpcionPorRol.find(ele => ele.rol == element.codigo);
+      if (opcs?.opciones?.includes(this.vexOptionRoleReemplazo)){
+        buscarOpcion = true;
+        return;
       }
+    
     });
+
     return buscarOpcion;
   }
 

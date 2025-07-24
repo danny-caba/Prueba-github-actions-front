@@ -33,6 +33,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
   usuario: AuthUser;
+  private userSub: Subscription;
 
   displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'estadoDocInicioServicio', 'tipo', 'actions'];
   ACCION_VER: string = solicitudContrato.ACCION_VER;
@@ -60,7 +61,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
 
   ngOnInit(): void {
     this.cargarTabla();
-    this.user$.subscribe(usu => {
+    this.userSub = this.user$.subscribe(usu => {
       this.usuario = usu;
     })
   }
@@ -68,6 +69,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.userSub?.unsubscribe();
   }
 
   serviceTable(filtro: any) {

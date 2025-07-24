@@ -97,11 +97,11 @@
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
     <ng-template let-row="customer" matMenuContent>
-        <button mat-menu-item (click)="toGoRevisarReemplazoPersonalForm()">
+        <button mat-menu-item (click)="toGoRevisarReemplazoPersonalForm()" *vexOptionRoleReemplazo="opcion.BTN_REV_DOC_REEMP_ACC">
             <mat-icon svgIcon="mat:edit"></mat-icon>
             <span>Revisar Documentos</span>
         </button>
-        <button mat-menu-item (click)="toGoCargarAdendaForm()">
+        <button mat-menu-item (click)="toGoCargarAdendaForm()" *vexOptionRoleReemplazo="opcion.BTN_CARGA_ADENDA_ACC">
             <mat-icon svgIcon="mat:upload_file"></mat-icon>
             <span>Cargar Adenda</span>
         </button>

@@ -42,7 +42,6 @@ export enum RolEnum {
     ADM_CONFIG = '11',
     EVA_CONTRA = '12',
 
-    EMP_SUPERV = '14',
     INVITADO = '15',
 }
 

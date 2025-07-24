@@ -43,7 +43,7 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
   toGoBandejaContratos() {
         functionsAlert.questionSiNo('¿Desea regresar a la sección de Revisar documento de Personal de Reemplazo?').then((result) => {
             if (result.isConfirmed) {
-              this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_REVIEW, this.idSolicitud]);
+              this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_REVIEW, this.idSolicitud]);
             }
           });
   }

@@ -9,8 +9,6 @@ import { ContratoFormComponent } from './components/contrato-form/contrato-form.
 import { ContratoDocumentosComponent } from './components/contrato-documentos/contrato-documentos.component';
 import { ReemplazoPersonalComponent } from './components/reemplazo-personal/reemplazo-personal.component';
 import { ReemplazoPersFormComponent } from './components/reemplazo-pers-form/reemplazo-pers-form.component';
-import { RevisarDocReemplazoComponent } from './components/revisar-doc-reemplazo/revisar-doc-reemplazo.component';
-import { RevisarDocReemplazoFormComponent } from './components/revisar-doc-reemplazo-form/revisar-doc-reemplazo-form.component';
 import { CargaDocsInicioComponent } from './components/carga-docs-inicio/carga-docs-inicio.component';
 import { CargaDocsInicioFormComponent } from './components/carga-docs-inicio-form/carga-docs-inicio-form.component'; 
 
@@ -56,24 +54,6 @@ const routes: VexRoutes = [{
       path: Link.CARGA_DOCS_INICIO_FORM + '/:idSolicitud',
       component: CargaDocsInicioFormComponent,
       canActivate: [AuthGuardService, RoleGuardService]
-    }, {
-      path: Link.REEMPLAZO_PERSONAL_REVIEW + '/:idSolicitud',
-      component: RevisarDocReemplazoComponent,
-      canActivate: [AuthGuardService, RoleGuardService],
-      data: { 
-        replaceable: true 
-      }
-    },{
-      path: Link.REEMPLAZO_PERSONAL_REVIEW_FORM + '/:idSolicitud',
-      component: RevisarDocReemplazoFormComponent,
-      canActivate: [AuthGuardService, RoleGuardService]
-    },{
-      path: Link.CARGA_ADENDA_FORM + '/:idSolicitud',
-      component: RevisarDocReemplazoFormComponent,
-      canActivate: [AuthGuardService, RoleGuardService],
-      data: { 
-        isCargaAdenda: true
-      }
     },{
       path: 'cargar-documentacion-inicio/:id',
       component: ContratoDocumentosComponent

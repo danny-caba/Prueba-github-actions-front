@@ -31,7 +31,7 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
 
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
-
+  selectedIndex = 0;
   ACC_HISTORIAL = 'ACC_HISTORIAL';
   ACC_REGISTRAR = 'ACC_REGISTRAR';
   ACC_EDITAR = 'ACC_EDITAR';
@@ -84,6 +84,8 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
   ngOnInit(): void {
     this.cargarCombo();
     this.cargarTabla();
+    const savedIndex = sessionStorage.getItem('mis-solicitudes-index');
+    this.selectedIndex = savedIndex ? parseInt(savedIndex) : 0;
   }
 
   cargarCombo() {
@@ -168,6 +170,11 @@ export class SolicitudListAtencionComponent extends BasePageComponent<Solicitud>
     }).afterClosed().subscribe(() => {
       this.cargarTabla();
     });
+  }
+
+  onTabChange(index: number) {
+    this.selectedIndex = index;
+    sessionStorage.setItem('mis-solicitudes-index', this.selectedIndex.toString());
   }
 
 }

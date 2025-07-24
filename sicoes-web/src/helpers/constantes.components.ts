@@ -41,10 +41,12 @@ export enum RolEnum {
     ADM_BLOQU = '09',
     ADM_CONFIG = '11',
     EVA_CONTRA = '12',
-    APROB_GPPM = '16',
-    APROB_GSE = '17',
-    // ROL DE REQUERIMIENTO 348
-    INVITADO = '15'
+    APROB_GPPM = '13',
+    APROB_GSE = '14',
+    INVITADO = '15',
+    APROB_GAF = '16',
+    JEFE_ULO = '17',
+    ABOGADA_G2 = '18'
 }
 
 export enum AprobadorAccion {
@@ -219,7 +221,8 @@ export enum ListadoEnum {
     CONST_ESTADO_PACE_CANCELADO = "PACE_CAN",
 
     ESTADO_REQ_DOCUMENTO = 'ESTADO_REQ_DOCUMENTO',
-    ESTADO_REQ_DOCUMENTO_DETALLE = 'ESTADO_REQ_DOCUMENTO_DETALLE'
+    ESTADO_REQ_DOCUMENTO_DETALLE = 'ESTADO_REQ_DOCUMENTO_DETALLE',
+    ESTADO_APROBACION = 'ESTADO_APROBACION'
     
 }
 
@@ -294,4 +297,9 @@ export enum EstadoReqDocumentoEnum {
     SOLICITUD_PRELIMINAR = 'SOLICITUD_PRELIMINAR',
     EN_PROCESO = 'EN_PROCESO',
     CONCLUIDO = 'CONCLUIDO',
+}
+
+export enum AprobadorRequerimientoAccionEnum {
+    APROBADO = 'APROBADO',
+    DESAPROBADO = 'DESAPROBADO'
 }

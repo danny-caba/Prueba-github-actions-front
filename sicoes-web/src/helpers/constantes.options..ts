@@ -525,5 +525,14 @@ export const RolMenu = [
   ]},
   { ROL: { CODIGO: RolEnum.INVITADO }, MENU: [], path: [
 
+  ]},
+  { ROL: { CODIGO: RolEnum.APROB_GAF }, MENU: [], path: [
+
+  ]},
+  { ROL: { CODIGO: RolEnum.JEFE_ULO }, MENU: [], path: [
+
+  ]},
+  { ROL: { CODIGO: RolEnum.ABOGADA_G2 }, MENU: [], path: [
+
   ]}
 ]

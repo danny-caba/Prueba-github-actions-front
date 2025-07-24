@@ -1,7 +1,13 @@
 <vex-page-layout mode="card">
     <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
     <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
-        <mat-tab-group selectedIndex="0" #tabgroup class="bg-white" animationDuration="0ms">
+        <mat-tab-group 
+            [selectedIndex]="selectedIndex" 
+            #tabgroup 
+            class="bg-white" 
+            animationDuration="0ms"
+            (selectedIndexChange)="onTabChange($event)"
+        >
             <mat-tab label="Bandeja de Solicitudes en Proceso de Atención" class="estilo-tab-activo">
                 <!-- <ng-template matTabContent> -->
                     <div class="card px-6 py-4">

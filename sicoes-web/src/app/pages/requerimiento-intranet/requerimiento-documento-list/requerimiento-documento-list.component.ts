@@ -322,8 +322,9 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
     this.listarSupervisoresPorPerfil();
   }
 
-  revisarDocumentos(row: any): void {
-    // lógica revisar documentos
+  revisarDocumentos(doc: RequerimientoDocumento) {
+    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST,
+    Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_REVISAR, doc.requerimientoDocumentoUuid]);
   }
 
   registrarContrato(row: any): void {
@@ -338,8 +339,9 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
     });
   }
 
-  editar(row: any): void {
-    // lógica editar
+  editar(doc: RequerimientoDocumento): void {
+    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST,
+    Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_EDITAR, doc.requerimientoDocumentoUuid]);
   }
 
 }

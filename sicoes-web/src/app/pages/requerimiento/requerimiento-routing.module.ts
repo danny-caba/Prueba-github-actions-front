@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { VexRoutes } from 'src/@vex/interfaces/vex-route.interface';
 import { AuthGuardService } from 'src/app/auth/guards';
-import { Link } from 'src/helpers/internal-urls.components';
 import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
+import { Link } from 'src/helpers/internal-urls.components';
 import { RequerimientoDocumentoAddComponent } from './requerimiento-documento-add/requerimiento-documento-add.component';
-import { RequerimientoDocumentoReviewComponent } from './requerimiento-documento-review/requerimiento-documento-review.component';
 
 const routes: VexRoutes = [{
   path: '',
@@ -27,10 +26,6 @@ const routes: VexRoutes = [{
       }
     },
     {
-      path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_REVISAR,
-      canActivate: [AuthGuardService, RoleGuardService],
-      component: RequerimientoDocumentoReviewComponent,
-    },
       path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_VIEW + '/:documentoUuid',
       canActivate: [AuthGuardService, RoleGuardService],
       component: RequerimientoDocumentoAddComponent,

@@ -15,10 +15,11 @@ export class DocumentoPnDetalleComponent {
   @Input() evaluate: boolean;
   @Input() requisito: RequerimientoDocumentoDetalle;
   @Input() rutaEvaluarDetalle: string[];
+  @Input() isReview: boolean = false;
 
   constructor(
     private dialog: MatDialog,
-  ) {}
+  ) { }
 
   onChangeCheckbox(event: any, requisito: RequerimientoDocumentoDetalle) {
     requisito.archivo = event.checked ? null : requisito.archivo;
@@ -30,17 +31,18 @@ export class DocumentoPnDetalleComponent {
     }
     if (this.evaluate) {
       return (
-        this.requisito.evaluacion?.codigo == evaluacion.CUMPLE || 
+        this.requisito.evaluacion?.codigo == evaluacion.CUMPLE ||
         this.requisito.evaluacion?.codigo == evaluacion.OBSERVADO);
     }
     if (this.subsanar) {
       return this.requisito.evaluacion?.codigo == evaluacion.CUMPLE;
     }
+
     return false;
   }
 
   mostrarResultado(): boolean {
-    return (this.evaluate && this.requisito.evaluacion != null) 
+    return (this.evaluate && this.requisito.evaluacion != null)
       || (this.subsanar && this.requisito.evaluacion != null && this.requisito.evaluacion?.codigo == evaluacion.CUMPLE);
   }
 

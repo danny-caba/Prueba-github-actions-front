@@ -197,17 +197,4 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
     Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_SUBSANAR, doc.requerimientoDocumentoUuid]);
   }
 
-  revisarDocumentos(row: any): void {
-    // lógica revisar documentos
-  }
-
-  registrarContrato(row: any): void {
-    // lógica registrar contrato
-  }
-
-  editar(row: any): void {
-    // lógica editar
-  }
-
-
 }

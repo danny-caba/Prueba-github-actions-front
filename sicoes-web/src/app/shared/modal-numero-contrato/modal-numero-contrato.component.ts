@@ -7,6 +7,7 @@ import { EvaluadorService } from 'src/app/service/evaluador.service';
 import { AprobadorAccion } from 'src/helpers/constantes.components';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { BaseComponent } from '../components/base.component';
+import { RequerimientoService } from 'src/app/service/requerimiento.service';
 
 @Component({
   selector: 'vex-modal-numero-contrato',
@@ -26,6 +27,7 @@ export class ModalNumeroContratoComponent extends BaseComponent {
     private dialogRef: MatDialogRef<ModalNumeroContratoComponent>,
     @Inject(MAT_DIALOG_DATA) data,
     private fb: FormBuilder,
+    private requerimientoService: RequerimientoService,
   ) {
     super();
   }
@@ -50,10 +52,21 @@ export class ModalNumeroContratoComponent extends BaseComponent {
     functionsAlert.questionSiNo('¿Está seguro de actualizar el número de contrato?').then(async (result) => {
 
       if (result.isConfirmed) {
+        const payload = {
+          requerimiento: { idRequerimiento: 47 },
+          numeroContrato: this.formGroup.value.numeroContrato
+        };
 
+        this.requerimientoService.registrarContrato(payload).subscribe({
+          next: () => {
+            functionsAlert.success('Número de contrato actualizado correctamente.');
+            this.dialogRef.close(true);
+          },
+          error: () => {
+            functionsAlert.error('Ocurrió un error al registrar el número de contrato.');
+          }
+        })
 
-        functionsAlert.success('Número de contrato actualizado correctamente.');
-        this.dialogRef.close(true);
       }
     });
   }

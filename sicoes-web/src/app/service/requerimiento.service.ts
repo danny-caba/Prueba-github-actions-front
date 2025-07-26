@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from '../core/services';
-import { Requerimiento, RequerimientoDocumento, RequerimientoDocumentoDetalle, RequerimientoInformeDetalle } from '../interface/requerimiento.model';
+import { EditarContratoRequest, RegistrarContratoRequest, Requerimiento, RequerimientoDocumento, RequerimientoDocumentoDetalle, RequerimientoInformeDetalle } from '../interface/requerimiento.model';
 import { Pageable } from '../interface/pageable.model';
 import { functions } from 'src/helpers/functions';
 import { BehaviorSubject, map, Observable } from 'rxjs';
@@ -184,4 +184,16 @@ export class RequerimientoService {
     const url = `${this._path_serve}/api/requerimientos/documentos/${uuid}/revisar`;
     return this.http.post<any>(url, data);
   }
+
+  registrarContrato(data: RegistrarContratoRequest) {
+    const url = `${this._path_serve}/api/requerimientos/contratos`;
+    return this.http.post<any>(url, data);
+  }
+
+  editarContrato(uuid: string, data: EditarContratoRequest) {
+    const url = `${this._path_serve}/api/requerimientos/contratos/${uuid}/editar`;
+    return this.http.post<any>(url, data);
+  }
+
+
 }

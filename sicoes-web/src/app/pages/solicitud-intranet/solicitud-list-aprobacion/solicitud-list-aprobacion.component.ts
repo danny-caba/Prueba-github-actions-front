@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator'; 
+import { MatPaginator } from '@angular/material/paginator';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
 import { ListadoEnum } from 'src/helpers/constantes.components';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
-import { SolicitudService } from 'src/app/service/solicitud.service'; 
+import { SolicitudService } from 'src/app/service/solicitud.service';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { ParametriaService } from 'src/app/service/parametria.service';
@@ -18,9 +18,10 @@ import { AdjuntosService } from 'src/app/service/adjuntos.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalAprobadorFirmaAccionComponent } from 'src/app/shared/modal-aprobador-firma-accion/modal-aprobador-firma-accion.component';
 import { LayoutAprobacionHistorialComponent } from 'src/app/shared/layout-aprobacion-historial/layout-aprobacion-historial.component';
-import { takeUntil } from 'rxjs/operators'; 
+import { takeUntil } from 'rxjs/operators';
 import { ModalAprobadorContratoComponent } from 'src/app/shared/modal-aprobador-contrato/modal-aprobador-contrato.component';
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'vex-solicitud-list-aprobacion',
@@ -103,6 +104,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     'estadoFirmaGerencia',
     'actionsPerfeccionamiento'
   ];
+  tabIndex: number = 0;
 
   dataSourcePerfeccionamiento = new MatTableDataSource<any>();
 
@@ -208,31 +210,31 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   }
 
   cargarTablaPerfeccionamiento() {
-  const filtro = this.obtenerFiltroPerfeccionamiento();
-  this.dataSourcePerfeccionamiento.data = [];
-  this.isLoading = true;
+    const filtro = this.obtenerFiltroPerfeccionamiento();
+    this.dataSourcePerfeccionamiento.data = [];
+    this.isLoading = true;
 
-  this.serviceTablePerfeccionamiento(filtro)
-    .subscribe(
-      (data) => {
-        const soloConEstado = data.content.filter(item =>
-          item.idEstadoEval != null &&
-          item.idEstadoEval.nombre != null &&
-          item.idEstadoEval.nombre.trim() !== ''
-        );
+    this.serviceTablePerfeccionamiento(filtro)
+      .subscribe(
+        (data) => {
+          const soloConEstado = data.content.filter(item =>
+            item.idEstadoEval != null &&
+            item.idEstadoEval.nombre != null &&
+            item.idEstadoEval.nombre.trim() !== ''
+          );
 
-        this.dataSourcePerfeccionamiento.data = soloConEstado;
-        if (this.paginatorPerfeccionamiento) {
-          this.paginatorPerfeccionamiento.length = soloConEstado.length;
+          this.dataSourcePerfeccionamiento.data = soloConEstado;
+          if (this.paginatorPerfeccionamiento) {
+            this.paginatorPerfeccionamiento.length = soloConEstado.length;
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error al cargar datos de perfeccionamiento:', error);
+          this.isLoading = false;
         }
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Error al cargar datos de perfeccionamiento:', error);
-        this.isLoading = false;
-      }
-    );
-}
+      );
+  }
 
   pageChangePerfeccionamiento(event: any) {
     this.cargarTablaPerfeccionamiento();
@@ -323,10 +325,10 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
         elementosSeleccionados: this.listaContratosSeleccionadosPerfeccionamiento,
       },
     }).afterClosed().subscribe(result => {
-      if (result === 'OK') { 
+      if (result === 'OK') {
         this.flagContrato = false;
-        this.buscarPerfeccionamiento(); 
-        this.listaContratosSeleccionadosPerfeccionamiento = []; 
+        this.buscarPerfeccionamiento();
+        this.listaContratosSeleccionadosPerfeccionamiento = [];
       } else {
         this.flagContrato = true;
         console.log('Proceso de aprobación/firma masiva de contratos cancelado o no completado.');
@@ -353,32 +355,32 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   }
 
   actualizarListaExpedientePerfeccionamiento(event: any, element: any) {
-  console.log('Evento de selección:', event.checked);
-  console.log('Elemento seleccionado:', element);
+    console.log('Evento de selección:', event.checked);
+    console.log('Elemento seleccionado:', element);
 
-  const selectedItem: SelectedPerfeccionamientoItem = {
-    numeroExpediente: element.solicitudPerfCont.propuesta.procesoItem.proceso.numeroExpediente,
-    idContrato: element.idContrato,
-  };
+    const selectedItem: SelectedPerfeccionamientoItem = {
+      numeroExpediente: element.solicitudPerfCont.propuesta.procesoItem.proceso.numeroExpediente,
+      idContrato: element.idContrato,
+    };
 
-  console.log('selectedItem a añadir/eliminar:', selectedItem);
+    console.log('selectedItem a añadir/eliminar:', selectedItem);
 
-  if (event.checked) {
-    if (!this.listaContratosSeleccionadosPerfeccionamiento.some(item => item.idContrato === selectedItem.idContrato)) {
-      this.listaContratosSeleccionadosPerfeccionamiento.push(selectedItem);
-      console.log('Añadido. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
+    if (event.checked) {
+      if (!this.listaContratosSeleccionadosPerfeccionamiento.some(item => item.idContrato === selectedItem.idContrato)) {
+        this.listaContratosSeleccionadosPerfeccionamiento.push(selectedItem);
+        console.log('Añadido. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
+      }
+    } else {
+      const index = this.listaContratosSeleccionadosPerfeccionamiento.findIndex(item => item.idContrato === selectedItem.idContrato);
+      if (index > -1) {
+        this.listaContratosSeleccionadosPerfeccionamiento.splice(index, 1);
+        console.log('Eliminado. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
+      }
     }
-  } else {
-    const index = this.listaContratosSeleccionadosPerfeccionamiento.findIndex(item => item.idContrato === selectedItem.idContrato);
-    if (index > -1) {
-      this.listaContratosSeleccionadosPerfeccionamiento.splice(index, 1);
-      console.log('Eliminado. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
-    }
+    console.log('Selección Perfeccionamiento Final:', this.listaContratosSeleccionadosPerfeccionamiento);
   }
-  console.log('Selección Perfeccionamiento Final:', this.listaContratosSeleccionadosPerfeccionamiento);
-}
 
-historyApproveAndSignPerfeccionamiento(row: any) {
+  historyApproveAndSignPerfeccionamiento(row: any) {
     this.dialog.open(ModalAprobadorHistorialContratoComponent, {
       width: '1200px',
       maxHeight: '100%',
@@ -390,5 +392,9 @@ historyApproveAndSignPerfeccionamiento(row: any) {
 
   redireccionAProbarPaces() {
     this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.SOLICITUDES_LIST_APROBACION_PACES]);
+  }
+
+  onTabChange(event: MatTabChangeEvent) {
+    this.tabIndex = event.index;
   }
 }

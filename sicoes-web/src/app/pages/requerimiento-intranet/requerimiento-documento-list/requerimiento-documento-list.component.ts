@@ -328,6 +328,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
   }
 
   registrarContrato(row: any): void {
+    console.log("========xxxxxxxxxxxxxxxx==========>", row)
     this.dialog.open(ModalNumeroContratoComponent, {
       width: '500px',
       maxHeight: '100%',

@@ -64,3 +64,17 @@ export class RequerimientoDocumentoDetalle {
   fechaEvaluacion: string
   observacion: string
 }
+
+export interface RegistrarContratoRequest {
+  requerimiento: {
+    idRequerimiento: number;
+  };
+  numeroContrato: string;
+}
+
+export interface EditarContratoRequest {
+  fechaSuscripcion: string;
+  fechaInicio: string;
+  fechaFin: string;
+  archivos: { idArchivo: number }[];
+}

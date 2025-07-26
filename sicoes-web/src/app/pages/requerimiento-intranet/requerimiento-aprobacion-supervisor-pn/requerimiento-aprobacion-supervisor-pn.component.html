@@ -56,8 +56,8 @@
     <div class="py-4 flex flex-col">
 
       <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
-        <button [disabled]="!listaSolicitudUuidSeleccionado.length" color="primary" style="margin-left: 0px; margin-right: auto" mat-raised-button type="button"
-          (click)="aprobar()">
+        <button [disabled]="!listaSolicitudUuidSeleccionado.length" color="primary"
+          style="margin-left: 0px; margin-right: auto" mat-raised-button type="button" (click)="aprobar()">
           Aprobar
         </button>
         <button color="primary" mat-raised-button type="button" (click)="buscar()">
@@ -94,7 +94,7 @@
       <th mat-header-cell *matHeaderCellDef>Documento / Informe</th>
       <td mat-cell *matCellDef="let e">
         <a href="javascript:void(0)" class="text-primary underline cursor-pointer" (click)="descargarArchivo(e)">
-          {{ e.archivoInforme?.nombre || "Docum.PDF" }}
+          {{ e.archivoInforme?.nombre }}
         </a>
       </td>
     </ng-container>
@@ -102,7 +102,11 @@
     <!-- Nombres y Apellidos -->
     <ng-container matColumnDef="nombres">
       <th mat-header-cell *matHeaderCellDef>Nombres y Apellidos</th>
-      <td mat-cell *matCellDef="let e">{{ e.requerimiento?.supervisora }}</td>
+      <td mat-cell *matCellDef="let e">
+        {{ e.requerimiento?.supervisora?.nombres }}
+        {{ e.requerimiento?.supervisora?.apellidoPaterno }}
+        {{ e.requerimiento?.supervisora?.apellidoMaterno }}
+      </td>
     </ng-container>
 
     <!-- División/Gerencia -->

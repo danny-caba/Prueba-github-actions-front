@@ -30,9 +30,9 @@ export class PersonalReemplazoService {
     return this.http.get<Pageable<any>>(urlEndpoint, { params });
   }
 
-  eliminarPersonalReemplazo(idReemplazo: number) {
+  eliminarPersonalReemplazo(idReemplazo: number): Observable<any> {
     const urlEndpoint = `${this._path_serve}/api/externo/reemplazo/solicitud/${idReemplazo}`
-    this.http.delete(urlEndpoint);
+    return this.http.delete(urlEndpoint);
   }
 
   listarSeccionesPersonalReemplazo(): Observable<SeccionReemplazoPersonal[]> {

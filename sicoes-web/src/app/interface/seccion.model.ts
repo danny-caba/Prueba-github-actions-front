@@ -52,6 +52,6 @@ export class SeccionReemplazoPersonal {
     orden?: number
     nombre?: string
     descripcion?: string
-    valor?: number
-    listado?: string
+    valor?: string
+    listado?: Listado
 }

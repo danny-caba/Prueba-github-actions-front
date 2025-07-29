@@ -48,10 +48,6 @@ export class ReemplazoPersonalComponent extends BaseComponent implements OnInit 
     this.destroy$.complete();
   }
 
-  doNothing(): void {
-
-  }
-
   toGoReemplazoPersonalForm() {
     const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
     this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_FORM, encryptedId]);
@@ -70,7 +66,7 @@ export class ReemplazoPersonalComponent extends BaseComponent implements OnInit 
     this.idSolicitud = Number(this.decrypt(idSolicitudHashed));
 
     this.personalReemplazoService
-    .listarPersonalReemplazo(this.idSolicitud)
+    .listarPersonalReemplazo(281)
     .subscribe(response => {
       this.listPersonalReemplazo = response.content;
     });
@@ -81,10 +77,30 @@ export class ReemplazoPersonalComponent extends BaseComponent implements OnInit 
     return `${persona.nombres} ${persona.apellidoPaterno} ${persona.apellidoMaterno}`.trim();
   }
 
+  deletePersonalReemplazo(personalReemplazo: PersonalReemplazo): void {    
+    functionsAlert.questionSiNo(
+      `¿Está seguro que desea eliminar al personal de reemplazo con ID ${personalReemplazo.idReemplazo}?`
+    ).then((result) => {
+      if (result.isConfirmed) {
+        this.personalReemplazoService.eliminarPersonalReemplazo(personalReemplazo.idReemplazo)
+          .subscribe({
+            next: () => {
+              functionsAlert.success('Eliminación exitosa');
+              this.cargarTabla();
+            },
+            error: (err) => {
+              console.error(err);
+              functionsAlert.error('Error al eliminar');
+            }
+          });
+        }
+    });
+}
+
   decrypt(encryptedData: string): string {
       const bytes = CryptoJS.AES.decrypt(encryptedData, URL_DECRYPT);
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
       return decrypted;
-    }
+  }
   
 }

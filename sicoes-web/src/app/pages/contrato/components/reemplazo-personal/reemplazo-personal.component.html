@@ -67,7 +67,7 @@
                         <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
                         <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
                             <button mat-menu-item>
-                                <mat-icon svgIcon="mat:delete"></mat-icon>
+                                <mat-icon svgIcon="mat:delete" (click)="deletePersonalReemplazo(row)"></mat-icon>
                             </button>
                         </td>
                       </ng-container>

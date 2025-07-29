@@ -1,4 +1,6 @@
 import { AdjuntoRequisto } from "./adjuntos.model"
+import { ListadoDetalle } from "./listado.model"
+import { Supervisora } from "./supervisora.model"
 
 export class PersonalPropuesto {
     idPersonal?: any
@@ -16,4 +18,24 @@ export class PersonalPropuesto {
         novinculo: AdjuntoRequisto;
         otros: AdjuntoRequisto;
       };
+}
+
+export class PersonalReemplazo {
+  idReemplazo: number;
+  idSolicitud: number;
+  personaPropuesta: Supervisora;
+  perfil: ListadoDetalle;
+  feFechaRegistro: Date;
+  feFechaInicioContractual: Date;
+  estadoReemplazo: ListadoDetalle;
+  personaBaja: Supervisora;
+  perfilBaja: ListadoDetalle;
+  feFechaBaja: Date;
+  feFechaDesvinculacion: Date;
+  feFechaFinalizacionContrato: Date;
+  estadoEvalDoc: ListadoDetalle;
+  estadoRevisarEval: ListadoDetalle;
+  estadoAprobacionInforme: ListadoDetalle;
+  estadoAprobacionAdenda: ListadoDetalle;
+  estadoEvalDocIniServ: ListadoDetalle;
 }

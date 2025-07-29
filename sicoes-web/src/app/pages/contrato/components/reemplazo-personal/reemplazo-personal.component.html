@@ -13,45 +13,53 @@
 
                 <div class="w-full overflow-x-auto shadow-2xl rounded items-center">
                   <!-- tabla -->
-                  <table @stagger [dataSource]="dummyDataSource" class="w-full table-auto" mat-table matSort>
+                  <table @stagger [dataSource]="listPersonalReemplazo" class="w-full table-auto" mat-table matSort>
                       <ng-container matColumnDef="tipoDocumento">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>Documento</th>
-                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoDocumento }}</td>
+                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+                            {{ element?.personaPropuesta?.tipoDocumento?.descripcion }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="numeroDocumento">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Número de<br>Documento</th>
-                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.numeroDocumento }}</td>
+                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+                            {{ element?.personaPropuesta?.numeroDocumento }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="nombreCompleto">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombres y apellidos</th>
-                          <td class="text-primary font-medium break-words whitespace-normal min-w-[300px] py-2" mat-cell *matCellDef="let element">{{ element?.nombreCompleto }}</td>
+                          <td class="text-primary font-medium break-words whitespace-normal min-w-[300px] py-2" mat-cell *matCellDef="let element">
+                            {{ getNombreCompleto(element?.personaPropuesta) }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="perfil">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</th>
-                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.perfil }}</td>
+                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+                            {{ element?.perfil?.codigo }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="fechaRegistro">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de<br>Registro</th>
-                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaRegistro }}</td>
+                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+                            {{ element?.feFechaRegistro }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="fechaInicioContractual">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha inicio<br>contractual</th>
-                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaInicioContractual }}</td>
+                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+                            {{ element?.feFechaInicioContractual }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="estadoReemplazo">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Reemplazar<br>Personal Propuesto</th>
-                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoReemplazo }}</td>
+                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+                            {{ element?.estadoReemplazo?.descripcion }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="estadoDocumento">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Documento<br>inicio servicio</th>
-                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoDocumento }}</td>
+                          <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+                            {{ element?.estadoEvalDocIniServ?.descripcion }}</td>
                       </ng-container>
 
                       <!-- Action Column -->
@@ -70,9 +78,7 @@
 
                       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                      <ng-container *ngIf="dummyDataSource?.length === 0">
-                        <tr mat-footer-row *matFooterRowDef="['vacio']"></tr>
-                      </ng-container>
+                      <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(listPersonalReemplazo != null && listPersonalReemplazo.length == 0) }"></tr>
                   </table>
                 </div>
 

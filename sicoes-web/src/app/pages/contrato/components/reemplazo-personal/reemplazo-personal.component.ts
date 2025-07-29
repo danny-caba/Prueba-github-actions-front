@@ -3,13 +3,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { PersonalReemplazo } from 'src/app/interface/reemplazo-personal.model';
+import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
+import * as CryptoJS from 'crypto-js';
+import { BasePageComponent } from 'src/app/shared/components/base-page.component';
+import { Supervisora } from 'src/app/interface/supervisora.model';
 
+const URL_DECRYPT = '3ncr1pt10nK3yuR1';
 @Component({
   selector: 'vex-reemplazo-personal',
   templateUrl: './reemplazo-personal.component.html',
+  styleUrls: ['./reemplazo-personal.component.scss'],
   animations: [
     fadeInUp400ms,
     stagger80ms
@@ -21,27 +28,19 @@ export class ReemplazoPersonalComponent extends BaseComponent implements OnInit 
   allowedToReplace: boolean = true;
   btnReplace: string = 'Reemplazar';
   private destroy$ = new Subject<void>();
-  dummyDataSource = [
-    {
-      tipoDocumento: "DNI",
-      numeroDocumento: '09856442',
-      nombreCompleto: 'CLAUDIA ROSA JIMENEZ PEREZ',
-      perfil: 'DB1_456',
-      fechaRegistro: '2023-10-01',
-      fechaInicioContractual: '2023-10-01',
-      estadoReemplazo: 'Preliminar',
-      estadoDocumento: 'Aprobado'
-    }
-  ];
+  listPersonalReemplazo: PersonalReemplazo[] = [];
+  idSolicitud: number;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private personalReemplazoService: PersonalReemplazoService
   ) {
     super();
   }
 
   ngOnInit(): void {
+    this.cargarTabla();
   }
 
   ngOnDestroy(): void {
@@ -65,4 +64,27 @@ export class ReemplazoPersonalComponent extends BaseComponent implements OnInit 
           }
         });
   }
+
+  cargarTabla() {
+    const idSolicitudHashed = this.route.snapshot.paramMap.get('idSolicitud');
+    this.idSolicitud = Number(this.decrypt(idSolicitudHashed));
+
+    this.personalReemplazoService
+    .listarPersonalReemplazo(this.idSolicitud)
+    .subscribe(response => {
+      this.listPersonalReemplazo = response.content;
+    });
+  }
+
+  getNombreCompleto(persona: Supervisora): string {
+    if (!persona) return '';
+    return `${persona.nombres} ${persona.apellidoPaterno} ${persona.apellidoMaterno}`.trim();
+  }
+
+  decrypt(encryptedData: string): string {
+      const bytes = CryptoJS.AES.decrypt(encryptedData, URL_DECRYPT);
+      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+      return decrypted;
+    }
+  
 }

@@ -36,3 +36,22 @@ export class SeccionRequisito {
     deSeccionRequisito?: string
     esSeccionRequisito?: string
 }
+
+export class Listado {
+    fecCreacion?: Date
+    idListado?: number
+    codigo?: number
+    nombre?: string
+    descripcion?: string
+}
+
+export class SeccionReemplazoPersonal {
+    idListadoDetalle?: number
+    idListado?: number
+    codigo?: string
+    orden?: number
+    nombre?: string
+    descripcion?: string
+    valor?: number
+    listado?: string
+}

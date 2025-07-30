@@ -109,10 +109,8 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
 
   obtenerSolicitud() {
     let idSolicitudDecrypt = Number(this.decrypt(this.idSolicitud));
-    console.log("ID SOLICITUD -> ", idSolicitudDecrypt);
 
     this.solicitudService.buscarSolicitudes(idSolicitudDecrypt).subscribe( resp => {
-      console.log("SOLICITUD -> ", resp)
     });
     
     
@@ -123,7 +121,6 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
 
       this.contratoService.obtenerSolicitudPorId(Number(idSolicitudDecrypt)).subscribe((response) => {
         this.contrato = response;
-        console.log("CONTRATO -> ", this.contrato)
         this.tipoContratoSeleccionado = this.contrato.tipoContratacion.idListadoDetalle;
       });
     }

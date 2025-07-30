@@ -1,62 +1,58 @@
 <div class="flex sm:gap-4 items-start mt-2" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
   <mat-form-field class="flex-auto">
     <mat-label>Nombres y Apellidos</mat-label>
-    <mat-select [formControl]="formGroup.controls.nombreCompleto">
+    <mat-select [formControl]="formGroup.controls.nombres">
       <mat-option [value]="null" disabled>Seleccione personal</mat-option>
-      <mat-option *ngFor="let obj of listPersonalPropuesto" [value]="obj">
-        {{ obj.nombreCompleto }}
+      <mat-option *ngFor="let obj of listBajaPersonalPropuesto" [value]="obj">
+        {{ getNombreCompleto(obj?.supervisora) }}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="formGroup.get('nombreCompleto')?.hasError('required')">
-      Seleccione personal
-    </mat-error>
   </mat-form-field>
-  <button class="mt-2" color="primary" mat-raised-button type="button">Guardar</button>
+  <button class="mt-2" color="primary" mat-raised-button type="button" (click)="guardarBajaPersonalPropuesto()">Guardar</button>
 </div>
 
 <div class="mx-0 py-2 border-b overflow-auto items-center" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
   <span class="text-secondary">Fecha Desvinculación</span>
   <mat-form-field class="ml-2 flex-none">
     <input [formControl]="formGroup.controls.fechaDesvinculacion" type="date" min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
-    <mat-error *ngIf="formGroup.get('fechaDesvinculacion').hasError('required')">Ingrese Fecha de Desvinculacion</mat-error>
   </mat-form-field>
 </div>
 
 <div class="w-full overflow-x-auto shadow-2xl rounded" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
-    <table @stagger [dataSource]="listPersonalAgregado" class="w-full table-auto" mat-table matSort>
+    <table @stagger [dataSource]="listPersonalBaja" class="w-full table-auto" mat-table matSort>
       <ng-container matColumnDef="tipoDocumento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>Documento</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoDocumento }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.personaBaja?.tipoDocumento?.descripcion }}</td>
       </ng-container>
 
       <ng-container matColumnDef="numeroDocumento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Número de<br>Documento</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.numeroDocumento }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.personaBaja?.numeroDocumento }}</td>
       </ng-container>
 
       <ng-container matColumnDef="nombreCompleto">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombres y apellidos</th>
-        <td class="text-primary font-medium break-words whitespace-normal min-w-[100px] py-2" mat-cell *matCellDef="let element">{{ element?.nombreCompleto }}</td>
+        <td class="text-primary font-medium break-words whitespace-normal min-w-[100px] py-2" mat-cell *matCellDef="let element">{{ getNombreCompleto(element?.personaBaja) }}</td>
       </ng-container>
 
       <ng-container matColumnDef="perfil">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.perfil }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.perfilBaja?.codigo }}</td>
       </ng-container>
 
       <ng-container matColumnDef="fechaRegistro">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de<br>Registro</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaRegistro }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.feFechaRegistro }}</td>
       </ng-container>
 
       <ng-container matColumnDef="fechaBaja">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Baja</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaInicioContractual }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{  element?.feFechaBaja }}</td>
       </ng-container>
 
       <ng-container matColumnDef="fechaDesvinculacion">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha<br>Desvinculación</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoReemplazo }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.feFechaDesvinculacion }}</td>
       </ng-container>
 
       <!-- Action Column -->
@@ -66,7 +62,8 @@
         <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
           <button
             mat-icon-button
-            type="button">
+            type="button"
+            (click)="eliminarPersonalBaja(row)">
             <mat-icon svgIcon="mat:delete"></mat-icon>
           </button>
         </td>
@@ -83,13 +80,13 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
       <tr mat-footer-row *matFooterRowDef="['vacio']"
-        [class.hidden]="listPersonalAgregado?.length > 0">
+        [class.hidden]="listPersonalBaja?.length > 0">
       </tr>
     </table>
 </div>
 
 <div class="w-full overflow-x-auto shadow-2xl rounded" *ngIf="isReview || isReviewExt || isCargaAdenda">
-  <table @stagger [dataSource]="listPersonalAgregado" class="w-full table-auto" mat-table matSort>
+  <table @stagger [dataSource]="listPersonalBaja" class="w-full table-auto" mat-table matSort>
     <ng-container matColumnDef="tipoDocumento">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>Documento</th>
       <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoDocumento }}</td>
@@ -137,7 +134,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumnsReview"></tr>
 
     <tr mat-footer-row *matFooterRowDef="['vacio']"
-      [class.hidden]="listPersonalAgregado?.length > 0">
+      [class.hidden]="listPersonalBaja?.length > 0">
     </tr>
   </table>
 </div>

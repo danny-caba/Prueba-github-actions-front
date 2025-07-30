@@ -2,15 +2,16 @@
             <mat-accordion multi="true">
                 <mat-expansion-panel class="mt-2" expanded="false">
                     <mat-expansion-panel-header>
-                        <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- {{secciones[itemSeccion]?.descripcion || 'Cargando descripción...' }}</mat-panel-title>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- {{secciones[itemSeccion + 1]?.descripcion || 'Cargando descripción...' }}</mat-panel-title>
                     </mat-expansion-panel-header>
                     <vex-layout-baja-personal-propuesto 
                         [isReview]="isReview"
+                        [idSolicitud]="idSolicitud"
                     #layoutBajaPersPropuesto></vex-layout-baja-personal-propuesto>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
                     <mat-expansion-panel-header>
-                        <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- {{secciones[itemSeccion + 1]?.descripcion || 'Cargando descripción...' }}</mat-panel-title>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- {{secciones[itemSeccion + 2]?.descripcion || 'Cargando descripción...' }}</mat-panel-title>
                     </mat-expansion-panel-header>
                     <vex-layout-personal-propuesto 
                     [isReview]="isReview" 
@@ -20,7 +21,7 @@
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
                     <mat-expansion-panel-header>
-                        <mat-panel-title class="font-bold">{{itemSeccion + 3}}.- {{secciones[itemSeccion + 2]?.descripcion || 'Cargando descripción...' }}</mat-panel-title>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 3}}.- {{secciones[itemSeccion + 3]?.descripcion || 'Cargando descripción...' }}</mat-panel-title>
                     </mat-expansion-panel-header>
                     <vex-layout-solicitud-reemplazo-supervisor 
                         [isReview]="isReview" 

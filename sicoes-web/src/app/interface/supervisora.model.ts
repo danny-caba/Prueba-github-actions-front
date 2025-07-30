@@ -51,3 +51,16 @@ export class Supervisora {
     fechaIngreso: string
     estado: string
 }
+
+export class SupervisoraPerfil {
+    idSupervisoraPerfil: number
+    supervisora: Supervisora
+    numeroExpediente: number
+    sector: ListadoDetalle
+    subsector: ListadoDetalle
+    actividad: ListadoDetalle
+    subCategoria: ListadoDetalle
+    unidad: ListadoDetalle
+    perfil: ListadoDetalle
+    fechaIngreso: Date
+}

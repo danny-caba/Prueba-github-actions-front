@@ -66,9 +66,9 @@ export class ReemplazoPersonalComponent extends BaseComponent implements OnInit 
     this.idSolicitud = Number(this.decrypt(idSolicitudHashed));
 
     this.personalReemplazoService
-    .listarPersonalReemplazo(281)
+    .listarPersonalReemplazo(this.idSolicitud)
     .subscribe(response => {
-      this.listPersonalReemplazo = response.content;
+      this.listPersonalReemplazo = response.content.filter(item => !!item.estadoReemplazo);
     });
   }
 

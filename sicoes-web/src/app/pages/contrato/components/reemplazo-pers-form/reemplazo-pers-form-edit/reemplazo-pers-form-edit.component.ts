@@ -1,9 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { SeccionReemplazoPersonal } from 'src/app/interface/seccion.model';
 import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
+import * as CryptoJS from 'crypto-js';
+import { functionsAlert } from 'src/helpers/functionsAlert';
+
+const URL_DECRYPT = '3ncr1pt10nK3yuR1';
+
 
 @Component({
   selector: 'vex-reemplazo-pers-form-edit',
@@ -19,9 +25,13 @@ export class ReemplazoPersFormEditComponent extends BaseComponent implements OnI
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
 
+  @Output() perfilBajaEvent = new EventEmitter<any>();
+
   itemSeccion: number = 0;
   isReview: boolean = false;
   secciones: SeccionReemplazoPersonal[] = [];
+
+  perfilBaja: any = null;
 
   constructor(
     private personalReemplazoService: PersonalReemplazoService
@@ -38,5 +48,32 @@ export class ReemplazoPersFormEditComponent extends BaseComponent implements OnI
         this.secciones = Array.isArray(response) ? response : [response];
       });
   }
+
+  recibirPerfilBaja(perfil: any): void {
+    this.perfilBaja = perfil;
+    this.perfilBajaEvent.emit(perfil);
+  }
+
+  registrar(){
+    const idSolicitudDecrypt = Number(this.decrypt(this.idSolicitud));
+
+    functionsAlert.questionSiNo('¿Desea ir a la bandeja de contratos?').then((result) => {
+      if (result.isConfirmed) {
+        this.personalReemplazoService
+        .listarPersonalReemplazo(idSolicitudDecrypt)
+        .subscribe(response => {
+          console.log('Personal Reemplazo:', response);  
+        });
+      }
+    });
+
+
+  }
+
+  decrypt(encryptedData: string): string {
+          const bytes = CryptoJS.AES.decrypt(encryptedData, URL_DECRYPT);
+          const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+          return decrypted;
+    }
 
 }

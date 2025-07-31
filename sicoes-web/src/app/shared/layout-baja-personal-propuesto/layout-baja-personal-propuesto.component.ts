@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BaseComponent } from '../components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
@@ -29,6 +29,8 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   @Input() isCargaAdenda?: boolean;
   @Input() idSolicitud: string;
 
+  @Output() perfilBajaEvent = new EventEmitter<any>();
+
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
   displayedColumnsReview: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaFinContrato'];
 
@@ -38,6 +40,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   contrato: any;
   tipoContratoSeleccionado: number;
   idSolicitudDecrypt: number;
+  perfilBaja: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -80,9 +83,12 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
         this.reemplazoService
           .guardarBajaPersonal(personalBaja)
           .subscribe({
-            next: () => {
+            next: (resp) => {
               console.log('Baja personal registrada correctamente');
-              this.formGroup.reset();
+              this.perfilBajaEvent.emit(resp);
+              this.perfilBaja = resp;
+              this.cargarTabla();
+
             },
             error: (err) => {
               console.error('Error al registrar la baja', err);
@@ -90,7 +96,6 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
           });
       }
 
-      this.formGroup.reset();
       this.cargarTabla();
     } else {
       this.formGroup.markAllAsTouched();
@@ -115,7 +120,8 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
     this.reemplazoService
     .listarPersonalReemplazo(this.idSolicitudDecrypt)
     .subscribe(response => {
-      this.listPersonalBaja = response.content.filter(item => !!item.personaBaja);
+      this.listPersonalBaja = response.content.filter(item => !!item.personaBaja && item.idReemplazo == this.perfilBaja?.idReemplazo);
+      console.log('Lista de personal baja:', this.listPersonalBaja);
     });
   }
 
@@ -152,8 +158,8 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   }
 
   private formatearFecha(fecha: string | Date): string {
-  const fechaObj = new Date(fecha);
-  return `${String(fechaObj.getDate()).padStart(2, '0')}/${
-    String(fechaObj.getMonth() + 1).padStart(2, '0')}/${fechaObj.getFullYear()}`;
-}
+    const fechaObj = new Date(fecha);
+    return `${String(fechaObj.getDate()).padStart(2, '0')}/${
+      String(fechaObj.getMonth() + 1).padStart(2, '0')}/${fechaObj.getFullYear()}`;
+  }
 }

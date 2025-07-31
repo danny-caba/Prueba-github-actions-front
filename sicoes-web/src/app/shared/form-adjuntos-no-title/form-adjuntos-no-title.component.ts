@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { AdjuntosService } from 'src/app/service/adjuntos.service';
 import { catchError, finalize, map, of } from "rxjs";
 import { EvidenciaService } from 'src/app/service/evidencia.service';
@@ -10,6 +10,7 @@ import { functionsAlert } from 'src/helpers/functionsAlert';
 import * as uuid from 'uuid';
 import { Solicitud } from 'src/app/interface/solicitud.model';
 import { OtroRequisito } from 'src/app/interface/otro-requisito.model';
+import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 
 @Component({
   selector: 'vex-form-adjuntos-no-title',
@@ -33,12 +34,24 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
   @Input() contrato: any;
   @Input() isOriginalEval: boolean;
 
+  @Input() idSeccion: string;
+  @Input() idTipoDocumento: string;
+  @Input() idReemplazoPersonal: string;
+  @Input() deNombreDocumento: string;
+  @Input() feFechaRegistro: string;
+  @Input() archivoDescripcion: string;
+
+  @Output() archivoAdjuntado = new EventEmitter<boolean>();
+
   validarRequerido: boolean = false;
   modoBorrador = true;
   booleanView: boolean = false;
   nuevo: boolean = true;
 
-  constructor(private adjuntoService: AdjuntosService,private _evidenciaServices:EvidenciaService) { }
+  constructor(
+    private adjuntoService: AdjuntosService,
+    private reemplazoService: PersonalReemplazoService
+  ) { }
 
   ngOnInit() {}
 
@@ -71,27 +84,19 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
     }
 
     if (attach.size / 1024 >= 40000) {
-      //this.snackMsg("El archivo excede el peso Permitido!")
       alert("El archivo excede el peso Permitido!");
       return;
     }
 
     let fileData = file.target.files[0];
     let formData = new FormData();
+    formData.append("seccion.idListadoDetalle", this.idSeccion);
+    formData.append("tipoDocumento.idListadoDetalle", this.idTipoDocumento);
+    formData.append("idReemplazoPersonal", this.idReemplazoPersonal);
+    formData.append("deNombreDocumento", this.deNombreDocumento);
+    formData.append("feFechaRegistro", this.feFechaRegistro);
+    formData.append("archivo.descripcion", this.archivoDescripcion);
     formData.append("file", fileData, fileData.name);
-    formData.append("codigo", this.codigo);
-    if(this.solicitud?.solicitudUuid){
-      formData.append("solicitudUuid", this.solicitud?.solicitudUuid + '');
-    }
-
-    if(this.proceso){
-      formData.append("idProceso", this.proceso + '');
-    }
-
-    if(this.contrato){
-      formData.append("idSolicitudSeccion", this.contrato?.idSolicitudSeccion + '');
-    }
-    
 
     if (this.nuevo) {
       itemAdjunto.inProgress = true;
@@ -99,8 +104,8 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
 
       this.adjuntoInput.idListadoDetalle = 1;
 
-      let upload$ = this.adjuntoService
-        .upload(formData, this.adjuntoInput)
+      let upload$ = this.reemplazoService
+        .adjuntarArchivo(formData)
         .pipe(
           map((event) => {
             switch (event.type) {
@@ -115,7 +120,7 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
             itemAdjunto.inProgress = false;
             itemAdjunto.error = true;
             file.inProgress = false;
-            //alert(`${fileData.name} upload failed.`);
+            this.archivoAdjuntado.emit(false);
             return of(`${fileData.name} upload failed.`);
           }),
           finalize(() => {
@@ -125,14 +130,9 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
 
       upload$.subscribe((event) => {
         if (typeof event === "object") {
+          this.archivoAdjuntado.emit(true);
           itemAdjunto.adjunto = event.body;
           itemAdjunto.esRequerido = false;
-          if (this.otroRequisito) {
-            this.otroRequisito.archivo = event.body;
-          }
-          if (this.contrato) {
-            this.contrato.archivo = event.body;
-          }
         }
       });
     }
@@ -149,7 +149,7 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
 
   descargar(adj) {
     let nombreAdjunto = adj.nombre != null ? adj.nombre : adj.nombreReal
-    this.adjuntoService.descargarWindowsJWT(adj.codigo, nombreAdjunto);
+    this.adjuntoService.descargarWindowsJWT(adj.archivo.codigo, nombreAdjunto);
   }
 
   obtenerAdjuntos() {
@@ -182,32 +182,15 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
     });
   }
 
-  @ViewChild('archivo') contentArchivo:LayoutMiemboComponent
   eliminar(adjunto) {
     functionsAlert.questionSiNo('¿Seguro que desea eliminar adjunto?').then((result) => {
       if (result.isConfirmed) {
         this.adjuntoInput = {};
-        this._evidenciaServices.eliminarPorCodigo(adjunto?.adjunto?.codigo).subscribe(res=>{
-          this.contentArchivo.contentArchivo = null
+        this.reemplazoService.eliminarAdjunto(adjunto?.adjunto.idDocumento).subscribe(res=>{
         });
-        if (this.otroRequisito) {
-          this.otroRequisito.archivo = null;
-        }
-        if (this.contrato) {
-          this.contrato.archivo = null;
-        }
+        this.archivoAdjuntado.emit(false);
       }
     });
-  }
-
-  eliminarSinMensaje(adjunto) {
-    this.adjuntoInput = {};
-    if (this.otroRequisito) {
-      this.otroRequisito.archivo = null;
-    }
-    if (this.contrato) {
-      this.contrato.archivo = null;
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {

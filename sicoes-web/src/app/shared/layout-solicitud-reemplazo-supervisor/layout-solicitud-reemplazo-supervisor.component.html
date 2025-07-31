@@ -5,18 +5,14 @@
 <ng-template #templateOficio>
     <div class="flex items-center w-full">
         <mat-checkbox color="primary" 
+        [checked]="adjuntoCargadoSolicitud"
         [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
         [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
         #rolePermisoCheckBox="vexOptionRoleCheck">
             <span>Oficio/Carta solicitando reemplazo del supervisor</span>
         </mat-checkbox>
         <span class="flex-1"></span>
-        <span class="text-secondary" *ngIf="isReview || isReviewExt || isCargaAdenda">Oficio/CartaMock.pdf</span>
-        <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Descargar"
-            mat-icon-button type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
+        
         <mat-radio-group
             *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
             [disabled] = "isCargaAdenda"
@@ -34,10 +30,17 @@
                 </span>
         </ng-container>
         
-        <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
-          [titulo]="'Archivo (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-btn>
+        <vex-form-adjuntos-no-title *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
+            class="ml-auto"
+            [idSeccion]="'983'"
+            [idTipoDocumento]="'1040'"
+            [idReemplazoPersonal]="perfilBaja?.idReemplazo"
+            [deNombreDocumento]="'SOLICITUD'"
+            [feFechaRegistro]="'21/07/2025'"
+            [archivoDescripcion]="'Solicitud reemplazo de supervisor'"
+            [editable]="editable"
+            (archivoAdjuntado)="onSolicitudAdjunta($event)">
+    </vex-form-adjuntos-no-title>
     </div>
     <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
         <mat-form-field class="w-full">

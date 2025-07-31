@@ -36,58 +36,75 @@
     <mat-label>Nombres y Apellidos</mat-label>
     <mat-select [formControl]="formGroup.controls.nombreCompleto">
       <mat-option [value]="null" [disabled]>Seleccione personal</mat-option>
-      <mat-option *ngFor="let obj of listPersonalPropuesto" [value]="obj">
-        {{ obj.nombreCompleto }}
+      <mat-option *ngFor="let obj of listPersonalApto" [value]="obj">
+        {{ getNombreCompleto(obj?.supervisora) }}
       </mat-option>
     </mat-select>
     <mat-error *ngIf="formGroup.get('nombreCompleto')?.hasError('required')">
       Seleccione personal
     </mat-error>
   </mat-form-field>
-  <button color="primary" mat-raised-button type="button">Agregar</button>
+  <button color="primary" mat-raised-button type="button" (click)="guardarPersonalPropuesto()">Agregar</button>
 </div>
-<div *ngFor="let personal of listPersonalPropuesto">
-    <ng-container [ngTemplateOutletContext]="{ otro: personal }" [ngTemplateOutlet]="templateNepotismo"></ng-container>
-    <ng-container [ngTemplateOutletContext]="{ otro: personal }" [ngTemplateOutlet]="templateImpedimento"></ng-container>
-    <ng-container [ngTemplateOutletContext]="{ otro: personal }" [ngTemplateOutlet]="templateNoVinculo"></ng-container>
-    <ng-container [ngTemplateOutletContext]="{ otro: personal }" [ngTemplateOutlet]="templateOtros"></ng-container>
+<div>
+    <ng-container [ngTemplateOutlet]="templateNepotismo"></ng-container>
+    <ng-container [ngTemplateOutlet]="templateImpedimento"></ng-container>
+    <ng-container [ngTemplateOutlet]="templateNoVinculo"></ng-container>
+    <ng-container [ngTemplateOutlet]="templateOtros"></ng-container>
 </div>
 
 <div class="w-full overflow-x-auto shadow-2xl rounded" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
-    <table @stagger [dataSource]="listPersonalAgregado" class="w-full table-auto" mat-table matSort>
+    <table @stagger [dataSource]="listPersonalPropuesto" class="w-full table-auto" mat-table matSort>
       <ng-container matColumnDef="tipoDocumento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de<br>Documento</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoDocumento }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.personaPropuesta?.tipoDocumento?.descripcion }}</td>
       </ng-container>
 
       <ng-container matColumnDef="numeroDocumento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Número de<br>Documento</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.numeroDocumento }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.personaPropuesta?.numeroDocumento }}</td>
       </ng-container>
 
       <ng-container matColumnDef="nombreCompleto">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombres y apellidos</th>
-        <td class="text-primary font-medium break-words whitespace-normal min-w-[100px] py-2" mat-cell *matCellDef="let element">{{ element?.nombreCompleto }}</td>
+        <td class="text-primary font-medium break-words whitespace-normal min-w-[100px] py-2" mat-cell *matCellDef="let element">
+          {{ getNombreCompleto(element?.personaPropuesta) }}</td>
       </ng-container>
 
       <ng-container matColumnDef="djNepotismo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>DJ del personal<br>propuesto por la<br>empresa (Nepotismo)</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.perfil }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="descargaDjNepotismo()">
+            <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+          </button>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="djImpedimento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>DJ impedimentos /<br>incompatibilidad y<br>prohibiciones</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaRegistro }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="descargaDjImpedimento()">
+            <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+          </button>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="djNoVinculo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>DJ no vínculo<br>contractual con<br>agente supervisado</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.fechaInicioContractual }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="descargaDjNoVinculo()">
+            <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+          </button>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="otrosDocumentos">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Otros<br>documentos</th>
-        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoReemplazo }}</td>
+        <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="descargaOtros()">
+            <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+          </button>
+        </td>
       </ng-container>
 
       <!-- Action Column -->
@@ -95,6 +112,12 @@
       <ng-container matColumnDef="actions">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
         <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+          <button
+            mat-icon-button
+            type="button"
+            (click)="eliminarPersonalPropuesto(row)">
+            <mat-icon svgIcon="mat:delete"></mat-icon>
+          </button>
         </td>
       </ng-container>
 
@@ -109,7 +132,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
       <tr mat-footer-row *matFooterRowDef="['vacio']"
-        [class.hidden]="listPersonalAgregado?.length > 0">
+        [class.hidden]="listPersonalPropuesto?.length > 0">
       </tr>
     </table>
 </div>
@@ -117,19 +140,16 @@
 <ng-template #templateNepotismo let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary" 
-      (change)="setValueCheckedDjNepotismo(formGroup, $event)"
+    [checked]="adjuntoCargadoDjNepotismo"
+    (change)="setValueCheckedDjNepotismo(formGroup, $event)"
       [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
       #rolePermisoCheckBox="vexOptionRoleCheck">
       <span>DJ del personal propuesto por la empresa (Nepotismo)</span>
     </mat-checkbox>
     <span class="flex-1"></span>
-    <span class="text-secondary" *ngIf="isReview || isReviewExt || isCargaAdenda">DjMock.pdf</span>
-    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Descargar"
-      mat-icon-button type="button"
-      class="text-primary hover:bg-hover">
-      <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-    </button>
+
+
     <mat-radio-group
       [disabled] = "isCargaAdenda"
       *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
@@ -147,11 +167,17 @@
       </span>
     </ng-container>
 
-    <vex-form-adjuntos-btn *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
+    <vex-form-adjuntos-no-title *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
       class="ml-auto"
-      [titulo]="'Archivo (*.pdf)'"
-      [editable]="editable">
-    </vex-form-adjuntos-btn>
+      [idSeccion]="'982'"
+      [idTipoDocumento]="'984'"
+      [idReemplazoPersonal]="perfilBaja?.idReemplazo"
+      [deNombreDocumento]="'DJ-NEPOTISMO'"
+      [feFechaRegistro]="'21/07/2025'"
+      [archivoDescripcion]="'Dj del personal propuesto por la empresa (Nepotismo)'"
+      [editable]="editable"
+      (archivoAdjuntado)="onDjNepotismoAdjunta($event)">
+    </vex-form-adjuntos-no-title>
   </div>
   <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
     <mat-form-field class="w-full">
@@ -172,6 +198,7 @@
 <ng-template #templateImpedimento let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary"
+      [checked]="adjuntoCargadoDjImpedimento"
       (change)="setValueCheckedDjImpedimento(formGroup, $event)"
       [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
@@ -179,12 +206,7 @@
       <span>DJ impedimentos / incompatibilidad y prohibiciones</span>
     </mat-checkbox>
     <span class="flex-1"></span>
-    <span class="text-secondary" *ngIf="isReview || isReviewExt || isCargaAdenda">DjMock.pdf</span>
-    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Descargar"
-      mat-icon-button type="button"
-      class="text-primary hover:bg-hover">
-      <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-    </button>
+    
     <mat-radio-group
       *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
       [disabled] = "isCargaAdenda"
@@ -202,10 +224,17 @@
       </span>
     </ng-container>
 
-    <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
-        [titulo]="'Archivo (*.pdf)'"
-        [editable]="editable">
-    </vex-form-adjuntos-btn>
+    <vex-form-adjuntos-no-title *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
+      class="ml-auto"
+      [idSeccion]="'982'"
+      [idTipoDocumento]="'985'"
+      [idReemplazoPersonal]="perfilBaja?.idReemplazo"
+      [deNombreDocumento]="'DJ-IMPEDIMENTO'"
+      [feFechaRegistro]="'21/07/2025'"
+      [archivoDescripcion]="'Dj impedimentos / incompatibilidad y prohibiciones'"
+      [editable]="editable"
+      (archivoAdjuntado)="onDjImpedimentoAdjunta($event)">
+    </vex-form-adjuntos-no-title>
   </div>
   <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
     <mat-form-field class="w-full">
@@ -225,6 +254,7 @@
 <ng-template #templateNoVinculo let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary" 
+      [checked]="adjuntoCargadoDjNoVinculo"  
       (change)="setValueCheckedDjNoVinculo(formGroup, $event)"
       [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
@@ -232,12 +262,7 @@
       <span>DJ no vínculo contractual con agente supervisado</span>
     </mat-checkbox>
     <span class="flex-1"></span>
-    <span class="text-secondary" *ngIf="isReview || isReviewExt || isCargaAdenda">DjMock.pdf</span>
-    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Descargar"
-      mat-icon-button type="button"
-      class="text-primary hover:bg-hover">
-      <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-    </button>
+    
     <mat-radio-group
       *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
       [disabled] = "isCargaAdenda"
@@ -255,10 +280,17 @@
       </span>
     </ng-container>
 
-    <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
-      [titulo]="'Archivo (*.pdf)'"
-      [editable]="editable">
-    </vex-form-adjuntos-btn>
+    <vex-form-adjuntos-no-title *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
+      class="ml-auto"
+      [idSeccion]="'982'"
+      [idTipoDocumento]="'986'"
+      [idReemplazoPersonal]="perfilBaja?.idReemplazo"
+      [deNombreDocumento]="'DJ-NO-VINCULO'"
+      [feFechaRegistro]="'21/07/2025'"
+      [archivoDescripcion]="'Dj no vinculo contractual con agente supervisado'"
+      [editable]="editable"
+      (archivoAdjuntado)="onDjNoVinculoAdjunta($event)">
+    </vex-form-adjuntos-no-title>
   </div>
   <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
     <mat-form-field class="w-full">
@@ -277,7 +309,8 @@
 
 <ng-template #templateOtros let-otro="otro">
   <div class="flex items-center w-full">
-    <mat-checkbox color="primary" 
+    <mat-checkbox color="primary"
+      [checked]="adjuntoCargadoOtros"
       (change)="setValueCheckedOtros(formGroup, $event)"
       [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
@@ -285,12 +318,7 @@
       <span>Otros documentos</span>
     </mat-checkbox>
     <span class="flex-1"></span>
-    <span class="text-secondary" *ngIf="isReview || isReviewExt || isCargaAdenda">DjMock.pdf</span>
-    <button *ngIf="isReview || isReviewExt || !isCargaAdenda" matTooltip="Descargar"
-      mat-icon-button type="button"
-      class="text-primary hover:bg-hover">
-      <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-    </button>
+    
     <mat-radio-group
       *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
       [disabled] = "isCargaAdenda"
@@ -308,10 +336,17 @@
       </span>
     </ng-container>
     
-    <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
-        [titulo]="'Archivo (*.pdf)'"
-        [editable]="editable">
-    </vex-form-adjuntos-btn>
+    <vex-form-adjuntos-no-title *ngIf="!(isReview || isReviewExt || isCargaAdenda)"
+      class="ml-auto"
+      [idSeccion]="'982'"
+      [idTipoDocumento]="'987'"
+      [idReemplazoPersonal]="perfilBaja?.idReemplazo"
+      [deNombreDocumento]="'OTROS'"
+      [feFechaRegistro]="'21/07/2025'"
+      [archivoDescripcion]="'Otros documentos'"
+      [editable]="editable"
+      (archivoAdjuntado)="onOtrosAdjunta($event)">
+    </vex-form-adjuntos-no-title>
   </div>
   <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
     <mat-form-field class="w-full">

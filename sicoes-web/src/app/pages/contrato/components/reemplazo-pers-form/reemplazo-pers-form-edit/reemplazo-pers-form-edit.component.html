@@ -7,6 +7,7 @@
                     <vex-layout-baja-personal-propuesto 
                         [isReview]="isReview"
                         [idSolicitud]="idSolicitud"
+                        (perfilBajaEvent)="recibirPerfilBaja($event)"
                     #layoutBajaPersPropuesto></vex-layout-baja-personal-propuesto>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -16,7 +17,8 @@
                     <vex-layout-personal-propuesto 
                     [isReview]="isReview" 
                     [idSolicitud] = "idSolicitud"
-                     [uuidSolicitud] = "uuidSolicitud"
+                    [uuidSolicitud] = "uuidSolicitud"
+                    [perfilBaja]="perfilBaja"
                     #layoutPersPropuesto></vex-layout-personal-propuesto>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -24,7 +26,9 @@
                         <mat-panel-title class="font-bold">{{itemSeccion + 3}}.- {{secciones[itemSeccion + 3]?.descripcion || 'Cargando descripción...' }}</mat-panel-title>
                     </mat-expansion-panel-header>
                     <vex-layout-solicitud-reemplazo-supervisor 
-                        [isReview]="isReview" 
+                        [idSolicitud]="idSolicitud"
+                        [isReview]="isReview"
+                        [perfilBaja]="perfilBaja" 
                     #layoutSolReempSuperv></vex-layout-solicitud-reemplazo-supervisor>
                 </mat-expansion-panel>
             </mat-accordion>

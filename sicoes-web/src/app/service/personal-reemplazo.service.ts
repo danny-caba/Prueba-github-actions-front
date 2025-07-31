@@ -25,7 +25,7 @@ export class PersonalReemplazoService {
   listarPersonalReemplazo(idSolicitud: number): Observable<any> {
     const params = new HttpParams()
     .set('page', '0')
-    .set('size', '10');
+    .set('size', '100');
 
     const urlEndpoint = `${this._path_serve}/api/externo/reemplazo/solicitud/obtener/${idSolicitud}`;
     return this.http.get<Pageable<any>>(urlEndpoint, { params });
@@ -67,8 +67,52 @@ export class PersonalReemplazoService {
     return this.http.put<any>(urlEndpoint, body);
   }
 
+  listarSupervisoraApto(idPerfil: number): Observable<any> {
+    const params = new HttpParams()
+    .set('idPerfil', idPerfil)
+    .set('page', '0')
+    .set('size', '10');
 
+    const urlEndpoint = `${this._path_serve}/api/supervisora-perfiles/profesionales/propuesto/reemplazo`;
+    return this.http.get<Pageable<any>>(urlEndpoint, { params });
+  }
 
+  adjuntarArchivo(formData: any): Observable<any> {
+    return this.http.post<any>(`${this._path_serve}/api/documentosreemplazo`, formData, {
+      reportProgress: true,
+      observe: 'events'
+    });
+  }
+
+  eliminarAdjunto(idDocumento: number): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/documentosreemplazo/${idDocumento}`;
+    return this.http.delete<any>(urlEndpoint);
+  }
+
+  guardarPersonalPropuesto(data: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/externo/reemplazo/solicitud/propuesta/inserta/propuesto`;    
+    return this.http.put<any>(urlEndpoint, data);
+  }
+
+  eliminarPersonalPropuesto(data: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/externo/reemplazo/solicitud/propuesta/elimina/propuesto`;    
+    return this.http.put<any>(urlEndpoint, data);
+  }
+
+  listarDocsReemplazo(idReemplazo: number): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/documentosreemplazo`;
+    const params = new HttpParams()
+    .set('idReemplazo', idReemplazo)
+    .set('page', '0')
+    .set('size', '100');
+
+    return this.http.get<Pageable<any>>(urlEndpoint, { params });
+  }
+
+  registrarReemplazo(data: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/externo/reemplazo/inserta`;
+    return this.http.put<Pageable<any>>(urlEndpoint, data);
+  }
 
 
 }

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
 import { FormBuilder, Validators } from '@angular/forms';
-import { PersonalPropuesto } from 'src/app/interface/reemplazo-personal.model';
+import { PersonalPropuesto, PersonalReemplazo } from 'src/app/interface/reemplazo-personal.model';
 import { ActivatedRoute } from '@angular/router';
 import { SeccionService } from 'src/app/service/seccion.service';
 import { ContratoService } from 'src/app/service/contrato.service';
@@ -10,6 +10,8 @@ import * as CryptoJS from 'crypto-js';
 import { SolicitudService } from 'src/app/service/solicitud.service';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
+import { Supervisora, SupervisoraPerfil } from 'src/app/interface/supervisora.model';
 
 const URL_DECRYPT = '3ncr1pt10nK3yuR1';
 
@@ -29,11 +31,13 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   @Input() isCargaAdenda: boolean;
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
+  @Input() perfilBaja: any;
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'djNepotismo', 'djImpedimento', 'djNoVinculo', 'otrosDocumentos', 'actions'];
   displayedColumnsReview: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto'];
 
-  listPersonalPropuesto: PersonalPropuesto[] = null;
+  listPersonalApto: SupervisoraPerfil[] = null;
+  listPersonalPropuesto: PersonalReemplazo[] = null;
   listPersonalAgregado: PersonalPropuesto[] = [];
 
   secciones: Seccion[] = [];
@@ -44,6 +48,10 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   evaluar: boolean;
   view: boolean;
   tipoContratoSeleccionado: number;
+  adjuntoCargadoDjNepotismo: boolean = false;
+  adjuntoCargadoDjImpedimento: boolean = false;
+  adjuntoCargadoDjNoVinculo: boolean = false;
+  adjuntoCargadoOtros: boolean = false;
   marcaDjNepotismo: 'si' | 'no' | null = null;
   marcaDjImpedimento: 'si' | 'no' | null = null;
   marcaDjNoVinculo: 'si' | 'no' | null = null;
@@ -52,59 +60,31 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
 
   constructor(
     private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute,
-    private seccionService: SeccionService,
     private contratoService: ContratoService,
-    private solicitudService: SolicitudService
+    private solicitudService: SolicitudService,
+    private reemplazoService: PersonalReemplazoService
   ) {
     super();
   }
 
   formGroup = this.fb.group({
       nombreCompleto: [null, Validators.required],
-      flagDjNepotismo: [null, Validators.required],
-      flagDjImpedimento: [null, Validators.required],
-      flagDjNoVinculo: [null, Validators.required],
-      flagOtros: [null, Validators.required]
+      flagDjNepotismo: [false, Validators.requiredTrue],
+      flagDjImpedimento: [false, Validators.requiredTrue],
+      flagDjNoVinculo: [false, Validators.requiredTrue],
+      flagOtros: [false, Validators.requiredTrue]
     });
 
   ngOnInit(): void {
-    this.listPersonalPropuesto = [
-      {
-        idPersonal: 1,
-        tipoDocumento: 'DNI',
-        numeroDocumento: '12345678',
-        nombreCompleto: 'Juan Pérez García',
-        perfil: 'RND-11',
-        fechaRegistro: '2025-06-10',
-        fechaBaja: '',
-        fechaDesvinculacion: '',
-        docs: {
-          nepotismo: {
-            idListadoDetalle: 1,
-            codigo: 'NEPOTISMO_1',
-            nombre: 'DJ Nepotismo',
-          },
-          impedimento: {
-            idListadoDetalle: 2,
-            codigo: 'IMPEDIMENTO_1',
-            nombre: 'DJ Impedimento',
-          },
-          novinculo: {
-            idListadoDetalle: 3,
-            codigo: 'NOVINCULO_1',
-            nombre: 'DJ No Vínculo',
-          },
-          otros: {
-            idListadoDetalle: 4,
-            codigo: 'OTROS_1',
-            nombre: 'Otros Documentos',
-          }
-        }
-      }
-    ];
+    this.cargarCombo();
     this.obtenerSolicitud();
-    this.listPersonalAgregado = this.listPersonalPropuesto;
+  }
+
+  ngOnChanges() {
+    if (this.perfilBaja) {
+      this.cargarCombo();
+      console.log('Ya puedo usar el perfilBaja:', this.perfilBaja);
+    }
   }
 
   obtenerSolicitud() {
@@ -115,10 +95,6 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     
     
     if (idSolicitudDecrypt) {
-      this.seccionService.obtenerSeccionPorSolicitud(Number(idSolicitudDecrypt)).subscribe((response) => {
-        this.secciones = Array.isArray(response) ? response : [response];
-      });
-
       this.contratoService.obtenerSolicitudPorId(Number(idSolicitudDecrypt)).subscribe((response) => {
         this.contrato = response;
         this.tipoContratoSeleccionado = this.contrato.tipoContratacion.idListadoDetalle;
@@ -126,9 +102,83 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     }
   }
 
-  doNothing(): void {
+  guardarPersonalPropuesto(): void {
+      if (this.formGroup.valid) {
+        const seleccionado: SupervisoraPerfil = this.formGroup.get('nombreCompleto')!.value as unknown as SupervisoraPerfil;
+  
+        if (seleccionado) { 
+          const idPropuesto = seleccionado.supervisora.idSupervisora;
+
+          let personalPropuesto: any = {
+            idReemplazo: this.perfilBaja?.idReemplazo,
+            personaPropuesta: seleccionado.supervisora,
+            perfil: seleccionado.perfil
+          }
+  
+          this.reemplazoService
+            .guardarPersonalPropuesto(personalPropuesto)
+            .subscribe({
+              next: () => {
+                console.log('Personal propuesto registrado correctamente');
+                this.cargarTabla();
+                this.cargarDocumentosReemplazo();
+  
+              },
+              error: (err) => {
+                console.error('Error al registrar propuesto', err);
+              }
+            });
+        }
+  
+        this.cargarTabla();
+      } else {
+        this.formGroup.markAllAsTouched();
+        console.error('Formulario inválido');
+      }
+    }
+  
+    eliminarPersonalPropuesto(row: PersonalReemplazo): void {
+      const body = {
+        idReemplazo: this.perfilBaja?.idReemplazo
+      };
+  
+      this.reemplazoService.eliminarPersonalPropuesto(body).subscribe({
+        next: () => {
+          console.log('Baja personal eliminada correctamente');
+          this.cargarTabla();
+        }
+      });
+    }
+
+  cargarCombo(): void {
+    if (this.perfilBaja){
+      this.reemplazoService
+        .listarSupervisoraApto(this.perfilBaja.perfilBaja.idListadoDetalle)
+        .subscribe(response => {
+          this.listPersonalApto = response.content;
+          console.log('Personal apto:', this.listPersonalApto);
+        });
+    }
+
+  }
+
+  cargarTabla() {
+    const idSolicitudDecrypt = Number(this.decrypt(this.idSolicitud));
+
+    this.reemplazoService
+    .listarPersonalReemplazo(idSolicitudDecrypt)
+    .subscribe(response => {
+      this.listPersonalPropuesto = response.content.filter(item => !!item.personaPropuesta && item.idReemplazo == this.perfilBaja?.idReemplazo);
+      console.log('Lista de personal propuesto:', this.listPersonalPropuesto);
+    });
 
 
+  }
+
+  cargarDocumentosReemplazo() {
+    this.reemplazoService.listarDocsReemplazo(this.perfilBaja.idReemplazo).subscribe(response => {
+      console.log('Documentos de reemplazo:', response.content);
+    });
   }
 
   setValueCheckedDjNepotismo(obj, even) {
@@ -147,10 +197,40 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     obj.flagOtros = even.value;
   }
 
+  onDjNepotismoAdjunta(valor: boolean) {
+    this.adjuntoCargadoDjNepotismo = valor;
+    this.formGroup.get('flagDjNepotismo')?.setValue(valor);
+  }
+
+  onDjImpedimentoAdjunta(valor: boolean) {
+    this.adjuntoCargadoDjImpedimento = valor;
+    this.formGroup.get('flagDjImpedimento')?.setValue(valor);
+  }
+
+  onDjNoVinculoAdjunta(valor: boolean) {
+    this.adjuntoCargadoDjNoVinculo = valor;
+    this.formGroup.get('flagDjNoVinculo')?.setValue(valor);
+  }
+
+  onOtrosAdjunta(valor: boolean) {
+    this.adjuntoCargadoOtros = valor;
+    this.formGroup.get('flagOtros')?.setValue(valor);
+  }
+
+  getNombreCompleto(persona: Supervisora): string {
+    if (!persona) return '';
+    return `${persona.nombres} ${persona.apellidoPaterno} ${persona.apellidoMaterno}`.trim();
+  }
+
   decrypt(encryptedData: string): string {
       const bytes = CryptoJS.AES.decrypt(encryptedData, URL_DECRYPT);
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
       return decrypted;
-    }
+  }
+
+  descargaDjNepotismo() {}
+  descargaDjImpedimento() {}
+  descargaDjNoVinculo() {}
+  descargaOtros() {}
 
 }

@@ -8,12 +8,15 @@ import { BaseComponent } from '../components/base.component';
 })
 export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent implements OnInit {
 
+  @Input() idSolicitud: string;
   @Input() isReview: boolean;
   @Input() isReviewExt: boolean;
   @Input() isCargaAdenda: boolean;
+  @Input() perfilBaja: any;
 
   editable: boolean = true;
   marcacion: 'si' | 'no' | null = null;
+  adjuntoCargadoSolicitud: boolean = false;
 
   constructor() {
     super();
@@ -23,6 +26,10 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   }
 
   setValueCheckedCartaReemplazo(even) {
+  }
+
+  onSolicitudAdjunta(valor: boolean) {
+    this.adjuntoCargadoSolicitud = valor;
   }
 
 }

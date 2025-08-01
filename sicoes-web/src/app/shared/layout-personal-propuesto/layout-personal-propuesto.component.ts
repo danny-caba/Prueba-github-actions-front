@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { PersonalPropuesto, PersonalReemplazo } from 'src/app/interface/reemplazo-personal.model';
 import { ActivatedRoute } from '@angular/router';
 import { SeccionService } from 'src/app/service/seccion.service';
@@ -12,8 +12,17 @@ import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { Supervisora, SupervisoraPerfil } from 'src/app/interface/supervisora.model';
+import { AdjuntosService } from 'src/app/service/adjuntos.service';
 
 const URL_DECRYPT = '3ncr1pt10nK3yuR1';
+
+function alMenosUnDocumentoMarcado(control: AbstractControl): ValidationErrors | null {
+  const { flagDjNepotismo, flagDjImpedimento, flagDjNoVinculo, flagOtros } = control.value;
+  
+  return (flagDjNepotismo || flagDjImpedimento || flagDjNoVinculo || flagOtros)
+    ? null
+    : { alMenosUnoRequerido: true };
+}
 
 @Component({
   selector: 'vex-layout-personal-propuesto',
@@ -32,13 +41,16 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
   @Input() perfilBaja: any;
+
+  @Output() seccionCompletada = new EventEmitter<any>();
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'djNepotismo', 'djImpedimento', 'djNoVinculo', 'otrosDocumentos', 'actions'];
   displayedColumnsReview: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto'];
 
-  listPersonalApto: SupervisoraPerfil[] = null;
-  listPersonalPropuesto: PersonalReemplazo[] = null;
+  listPersonalApto: SupervisoraPerfil[] = [];
+  listPersonalPropuesto: PersonalReemplazo[] = [];
   listPersonalAgregado: PersonalPropuesto[] = [];
+  listDocumentosReemplazo: any[] = [];
 
   secciones: Seccion[] = [];
   listTipoContrato: any;
@@ -47,6 +59,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   editable: boolean = true;
   evaluar: boolean;
   view: boolean;
+  mostrarTemplates: boolean = true;
   tipoContratoSeleccionado: number;
   adjuntoCargadoDjNepotismo: boolean = false;
   adjuntoCargadoDjImpedimento: boolean = false;
@@ -62,18 +75,19 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     private fb: FormBuilder,
     private contratoService: ContratoService,
     private solicitudService: SolicitudService,
-    private reemplazoService: PersonalReemplazoService
+    private reemplazoService: PersonalReemplazoService,
+    private adjuntoService: AdjuntosService,
   ) {
     super();
   }
 
   formGroup = this.fb.group({
       nombreCompleto: [null, Validators.required],
-      flagDjNepotismo: [false, Validators.requiredTrue],
-      flagDjImpedimento: [false, Validators.requiredTrue],
-      flagDjNoVinculo: [false, Validators.requiredTrue],
-      flagOtros: [false, Validators.requiredTrue]
-    });
+      flagDjNepotismo: [false, Validators.required],
+      flagDjImpedimento: [false, Validators.required],
+      flagDjNoVinculo: [false, Validators.required],
+      flagOtros: [false, Validators.required]
+    }, { validators: alMenosUnDocumentoMarcado });
 
   ngOnInit(): void {
     this.cargarCombo();
@@ -83,7 +97,6 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   ngOnChanges() {
     if (this.perfilBaja) {
       this.cargarCombo();
-      console.log('Ya puedo usar el perfilBaja:', this.perfilBaja);
     }
   }
 
@@ -107,8 +120,6 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
         const seleccionado: SupervisoraPerfil = this.formGroup.get('nombreCompleto')!.value as unknown as SupervisoraPerfil;
   
         if (seleccionado) { 
-          const idPropuesto = seleccionado.supervisora.idSupervisora;
-
           let personalPropuesto: any = {
             idReemplazo: this.perfilBaja?.idReemplazo,
             personaPropuesta: seleccionado.supervisora,
@@ -119,9 +130,10 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
             .guardarPersonalPropuesto(personalPropuesto)
             .subscribe({
               next: () => {
-                console.log('Personal propuesto registrado correctamente');
                 this.cargarTabla();
                 this.cargarDocumentosReemplazo();
+                this.resetButtons();
+                this.seccionCompletada.emit(true);
   
               },
               error: (err) => {
@@ -133,7 +145,6 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
         this.cargarTabla();
       } else {
         this.formGroup.markAllAsTouched();
-        console.error('Formulario inválido');
       }
     }
   
@@ -144,8 +155,8 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   
       this.reemplazoService.eliminarPersonalPropuesto(body).subscribe({
         next: () => {
-          console.log('Baja personal eliminada correctamente');
           this.cargarTabla();
+          this.seccionCompletada.emit(false);
         }
       });
     }
@@ -156,7 +167,6 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
         .listarSupervisoraApto(this.perfilBaja.perfilBaja.idListadoDetalle)
         .subscribe(response => {
           this.listPersonalApto = response.content;
-          console.log('Personal apto:', this.listPersonalApto);
         });
     }
 
@@ -169,7 +179,6 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     .listarPersonalReemplazo(idSolicitudDecrypt)
     .subscribe(response => {
       this.listPersonalPropuesto = response.content.filter(item => !!item.personaPropuesta && item.idReemplazo == this.perfilBaja?.idReemplazo);
-      console.log('Lista de personal propuesto:', this.listPersonalPropuesto);
     });
 
 
@@ -177,7 +186,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
 
   cargarDocumentosReemplazo() {
     this.reemplazoService.listarDocsReemplazo(this.perfilBaja.idReemplazo).subscribe(response => {
-      console.log('Documentos de reemplazo:', response.content);
+      this.listDocumentosReemplazo = response.content;
     });
   }
 
@@ -228,9 +237,24 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
       return decrypted;
   }
 
-  descargaDjNepotismo() {}
-  descargaDjImpedimento() {}
-  descargaDjNoVinculo() {}
-  descargaOtros() {}
+  resetButtons() {
+    this.adjuntoCargadoDjNepotismo = false;
+    this.adjuntoCargadoDjImpedimento = false;
+    this.adjuntoCargadoDjNoVinculo = false;
+    this.adjuntoCargadoOtros = false;
+    this.mostrarTemplates = false;
+    setTimeout(() => this.mostrarTemplates = true, 0);
+  }
 
+  tieneArchivo(tipoDoc: string): boolean {
+    return this.listDocumentosReemplazo.some(item => !!item.archivo && item.deNombreDocumento === tipoDoc);
+  }
+
+  descargar(tipoDoc: string) {
+    const found = this.listDocumentosReemplazo.find(item => !!item.archivo && item.deNombreDocumento == tipoDoc);
+    if (found) {
+      let nombreAdjunto = found.archivo.nombreReal;
+      this.adjuntoService.descargarWindowsJWT(found.archivo.codigo, nombreAdjunto);
+    }
+  }
 }

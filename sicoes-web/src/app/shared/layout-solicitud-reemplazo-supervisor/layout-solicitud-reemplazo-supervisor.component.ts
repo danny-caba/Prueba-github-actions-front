@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
 
 @Component({
@@ -13,6 +13,8 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   @Input() isReviewExt: boolean;
   @Input() isCargaAdenda: boolean;
   @Input() perfilBaja: any;
+
+  @Output() seccionCompletada = new EventEmitter<any>();
 
   editable: boolean = true;
   marcacion: 'si' | 'no' | null = null;
@@ -30,6 +32,7 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
 
   onSolicitudAdjunta(valor: boolean) {
     this.adjuntoCargadoSolicitud = valor;
+    this.seccionCompletada.emit(valor);
   }
 
 }

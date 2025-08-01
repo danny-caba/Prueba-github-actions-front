@@ -2,19 +2,25 @@
   <mat-form-field class="flex-auto">
     <mat-label>Nombres y Apellidos</mat-label>
     <mat-select [formControl]="formGroup.controls.nombres">
-      <mat-option [value]="null" disabled>Seleccione personal</mat-option>
+      <mat-option [value]="null">Seleccione personal</mat-option>
       <mat-option *ngFor="let obj of listBajaPersonalPropuesto" [value]="obj">
         {{ getNombreCompleto(obj?.supervisora) }}
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <button class="mt-2" color="primary" mat-raised-button type="button" (click)="guardarBajaPersonalPropuesto()">Guardar</button>
+  <button class="mt-2" 
+    color="primary" 
+    mat-raised-button type="button" 
+    (click)="guardarBajaPersonalPropuesto()"
+    [disabled] = "formGroup.invalid || listPersonalBaja.length > 0">
+    Guardar
+  </button>
 </div>
 
 <div class="mx-0 py-2 border-b overflow-auto items-center" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
   <span class="text-secondary">Fecha Desvinculación</span>
   <mat-form-field class="ml-2 flex-none">
-    <input [formControl]="formGroup.controls.fechaDesvinculacion" type="date" min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
+    <input class="fecha-input" [formControl]="formGroup.controls.fechaDesvinculacion" type="date" min="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
   </mat-form-field>
 </div>
 

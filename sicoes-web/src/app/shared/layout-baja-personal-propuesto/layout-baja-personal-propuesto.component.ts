@@ -30,6 +30,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   @Input() idSolicitud: string;
 
   @Output() perfilBajaEvent = new EventEmitter<any>();
+  @Output() seccionCompletada = new EventEmitter<any>();
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
   displayedColumnsReview: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaFinContrato'];
@@ -84,10 +85,10 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
           .guardarBajaPersonal(personalBaja)
           .subscribe({
             next: (resp) => {
-              console.log('Baja personal registrada correctamente');
               this.perfilBajaEvent.emit(resp);
               this.perfilBaja = resp;
               this.cargarTabla();
+              this.seccionCompletada.emit(true);
 
             },
             error: (err) => {
@@ -108,8 +109,8 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
 
     this.reemplazoService.eliminarBajaPersonal(idReemplazo, idSolicitudDecrypt).subscribe({
       next: () => {
-        console.log('Baja personal eliminada correctamente');
         this.cargarTabla();
+        this.seccionCompletada.emit(false);
       }
     });
   }
@@ -128,22 +129,14 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
 
   cargarCombo(): void {
     let idSolicitudDecrypt = Number(this.decrypt(this.idSolicitud));
-        console.log("ID SOLICITUD -> ", idSolicitudDecrypt);
 
     this.contratoService.obtenerSolicitudPorId(Number(idSolicitudDecrypt)).subscribe((response) => {
         this.contrato = response;
-        console.log("CONTRATO -> ", this.contrato)
+        this.reemplazoService.listarSupervisoraPerfil(this.contrato.propuesta.idPropuesta).subscribe((response) => {
+          this.listBajaPersonalPropuesto = response.content;
+        });
         this.tipoContratoSeleccionado = this.contrato.tipoContratacion.idListadoDetalle;
       });
-
-      //contrato.propuesta?.idPropuesta
-
-    this.reemplazoService.listarSupervisoraPerfil(1121).subscribe((response) => {
-      this.listBajaPersonalPropuesto = response.content;
-      console.log("LISTA DE BAJA PERSONAL PROPUESTO -> ", this.listBajaPersonalPropuesto);
-    });
-
-
   }
 
   decrypt(encryptedData: string): string {
@@ -158,8 +151,14 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   }
 
   private formatearFecha(fecha: string | Date): string {
-    const fechaObj = new Date(fecha);
-    return `${String(fechaObj.getDate()).padStart(2, '0')}/${
-      String(fechaObj.getMonth() + 1).padStart(2, '0')}/${fechaObj.getFullYear()}`;
+    if (typeof fecha === 'string') {
+      const [year, month, day] = fecha.split('-').map(Number);
+      return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+    } else {
+      const fechaObj = new Date(fecha);
+      return `${String(fechaObj.getDate()).padStart(2, '0')}/${
+        String(fechaObj.getMonth() + 1).padStart(2, '0')}/${fechaObj.getFullYear()}`;
+    }
   }
+
 }

@@ -8,6 +8,7 @@
                         [isReview]="isReview"
                         [idSolicitud]="idSolicitud"
                         (perfilBajaEvent)="recibirPerfilBaja($event)"
+                        (seccionCompletada)="seccionBajaPersonalCompletada($event)"
                     #layoutBajaPersPropuesto></vex-layout-baja-personal-propuesto>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -19,6 +20,7 @@
                     [idSolicitud] = "idSolicitud"
                     [uuidSolicitud] = "uuidSolicitud"
                     [perfilBaja]="perfilBaja"
+                    (seccionCompletada)="seccionPersonalPropuestoCompletada($event)"
                     #layoutPersPropuesto></vex-layout-personal-propuesto>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -28,7 +30,8 @@
                     <vex-layout-solicitud-reemplazo-supervisor 
                         [idSolicitud]="idSolicitud"
                         [isReview]="isReview"
-                        [perfilBaja]="perfilBaja" 
+                        [perfilBaja]="perfilBaja"
+                        (seccionCompletada)="seccionSolicitudReemplazoSupervisorCompletada($event)" 
                     #layoutSolReempSuperv></vex-layout-solicitud-reemplazo-supervisor>
                 </mat-expansion-panel>
             </mat-accordion>

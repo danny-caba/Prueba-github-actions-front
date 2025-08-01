@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
-import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { SeccionReemplazoPersonal } from 'src/app/interface/seccion.model';
 import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
@@ -26,9 +25,14 @@ export class ReemplazoPersFormEditComponent extends BaseComponent implements OnI
   @Input() uuidSolicitud: string;
 
   @Output() perfilBajaEvent = new EventEmitter<any>();
+  @Output() seccionesCompletadas = new EventEmitter<boolean>();
 
   itemSeccion: number = 0;
+
   isReview: boolean = false;
+  seccionBajaPersonalFlag: boolean = false;
+  seccionPersonalPropuestoFlag: boolean = false;
+  seccionSolicitudReemplazoSupervisorFlag: boolean = false;
   secciones: SeccionReemplazoPersonal[] = [];
 
   perfilBaja: any = null;
@@ -54,6 +58,29 @@ export class ReemplazoPersFormEditComponent extends BaseComponent implements OnI
     this.perfilBajaEvent.emit(perfil);
   }
 
+  seccionBajaPersonalCompletada(completada: boolean): void {
+    this.seccionBajaPersonalFlag = completada;
+    this.verificarSeccionesCompletadas();
+  }
+
+  seccionPersonalPropuestoCompletada(completada: boolean): void {
+    this.seccionPersonalPropuestoFlag = completada;
+    this.verificarSeccionesCompletadas();
+  }
+
+  seccionSolicitudReemplazoSupervisorCompletada(completada: boolean): void {
+    this.seccionSolicitudReemplazoSupervisorFlag = completada;
+    this.verificarSeccionesCompletadas();
+  }
+
+  private verificarSeccionesCompletadas(): void {
+    const todasCompletadas = this.seccionBajaPersonalFlag &&
+                              this.seccionPersonalPropuestoFlag &&
+                              this.seccionSolicitudReemplazoSupervisorFlag;
+
+    this.seccionesCompletadas.emit(todasCompletadas);
+  }
+
   registrar(){
     const idSolicitudDecrypt = Number(this.decrypt(this.idSolicitud));
 
@@ -62,7 +89,6 @@ export class ReemplazoPersFormEditComponent extends BaseComponent implements OnI
         this.personalReemplazoService
         .listarPersonalReemplazo(idSolicitudDecrypt)
         .subscribe(response => {
-          console.log('Personal Reemplazo:', response);  
         });
       }
     });

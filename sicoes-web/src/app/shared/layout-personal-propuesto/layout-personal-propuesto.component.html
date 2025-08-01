@@ -44,13 +44,18 @@
       Seleccione personal
     </mat-error>
   </mat-form-field>
-  <button color="primary" mat-raised-button type="button" (click)="guardarPersonalPropuesto()">Agregar</button>
+  <button color="primary" 
+    mat-raised-button type="button" 
+    (click)="guardarPersonalPropuesto()"
+    [disabled] = "formGroup.invalid || listPersonalPropuesto.length > 0">
+    Agregar
+  </button>
 </div>
 <div>
-    <ng-container [ngTemplateOutlet]="templateNepotismo"></ng-container>
-    <ng-container [ngTemplateOutlet]="templateImpedimento"></ng-container>
-    <ng-container [ngTemplateOutlet]="templateNoVinculo"></ng-container>
-    <ng-container [ngTemplateOutlet]="templateOtros"></ng-container>
+    <ng-container *ngIf="mostrarTemplates" [ngTemplateOutlet]="templateNepotismo"></ng-container>
+    <ng-container *ngIf="mostrarTemplates" [ngTemplateOutlet]="templateImpedimento"></ng-container>
+    <ng-container *ngIf="mostrarTemplates" [ngTemplateOutlet]="templateNoVinculo"></ng-container>
+    <ng-container *ngIf="mostrarTemplates" [ngTemplateOutlet]="templateOtros"></ng-container>
 </div>
 
 <div class="w-full overflow-x-auto shadow-2xl rounded" *ngIf="!(isReview || isReviewExt || isCargaAdenda)">
@@ -74,8 +79,8 @@
       <ng-container matColumnDef="djNepotismo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>DJ del personal<br>propuesto por la<br>empresa (Nepotismo)</th>
         <td class="text-primary font-medium" mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" (click)="descargaDjNepotismo()">
-            <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+          <button mat-icon-button color="primary" (click)="descargar('DJ-NEPOTISMO')">
+            <img *ngIf="tieneArchivo('DJ-NEPOTISMO')" class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
           </button>
         </td>
       </ng-container>
@@ -83,8 +88,8 @@
       <ng-container matColumnDef="djImpedimento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>DJ impedimentos /<br>incompatibilidad y<br>prohibiciones</th>
         <td class="text-primary font-medium" mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" (click)="descargaDjImpedimento()">
-            <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+          <button mat-icon-button color="primary" (click)="descargar('DJ-IMPEDIMENTO')">
+            <img *ngIf="tieneArchivo('DJ-IMPEDIMENTO')" class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
           </button>
         </td>
       </ng-container>
@@ -92,8 +97,8 @@
       <ng-container matColumnDef="djNoVinculo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>DJ no vínculo<br>contractual con<br>agente supervisado</th>
         <td class="text-primary font-medium" mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" (click)="descargaDjNoVinculo()">
-            <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+          <button mat-icon-button color="primary" (click)="descargar('DJ-NO-VINCULO')">
+            <img *ngIf="tieneArchivo('DJ-NO-VINCULO')" class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
           </button>
         </td>
       </ng-container>
@@ -101,8 +106,8 @@
       <ng-container matColumnDef="otrosDocumentos">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Otros<br>documentos</th>
         <td class="text-primary font-medium" mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" (click)="descargaOtros()">
-            <img class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
+          <button mat-icon-button color="primary" (click)="descargar('OTROS')">
+            <img *ngIf="tieneArchivo('OTROS')" class="w-6" src="assets/img/icons/logos/pdf-icon.png" alt="Logo PDF">
           </button>
         </td>
       </ng-container>

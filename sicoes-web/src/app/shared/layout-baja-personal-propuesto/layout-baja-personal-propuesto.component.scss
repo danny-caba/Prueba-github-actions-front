@@ -88,3 +88,22 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
   justify-content: flex-start !important;
   text-align: left !important;
 }
+
+:host ::ng-deep .mat-form-field {
+    .fecha-input {
+      font-size: 14px;
+      text-align: center;
+      padding: 0.1em 0;
+      display: flex;
+      align-items: center;
+      min-height: 18px;
+      width: 130px;
+
+      &:disabled {
+        color: #888;
+        border-color: #ccc;
+        opacity: 1 !important;
+        cursor: not-allowed;
+      }
+    }
+}

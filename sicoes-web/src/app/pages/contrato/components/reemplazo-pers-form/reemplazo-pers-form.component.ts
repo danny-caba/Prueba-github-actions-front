@@ -16,7 +16,10 @@ export class ReemplazoPersFormComponent extends BaseComponent implements OnInit 
   btnRegister: string = 'Registrar';
   idSolicitud: string = '';
   uuidSolicitud: string= '';
+
   isCargaDocsInicio: boolean = false;
+  puedeRegistrar: boolean = false;
+
   perfilBaja: any = null;
 
   constructor(
@@ -47,17 +50,14 @@ export class ReemplazoPersFormComponent extends BaseComponent implements OnInit 
   getIdSolicitud(): void {
     this.idSolicitud = this.route.snapshot.paramMap.get('idSolicitud');
     this.uuidSolicitud = this.route.snapshot.paramMap.get('solicitudUuid');
-    console.log("idSolicitud -> ", this.idSolicitud);
-    console.log("uuidSolicitud -> ", this.uuidSolicitud);
-  }
-
-  doNothing(): void {
-
   }
 
   recibirPerfilBaja(perfil: any): void {
     this.perfilBaja = perfil;
-    console.log('Perfil de baja recibido:', perfil);
+  }
+
+  recibirFlagSeccionesCompletadas(flag: boolean): void {
+    this.puedeRegistrar = flag;
   }
 
   registrar(){
@@ -70,7 +70,7 @@ export class ReemplazoPersFormComponent extends BaseComponent implements OnInit 
           this.personalReemplazoService
           .registrarReemplazo(body)
           .subscribe(response => {
-            console.log('Personal Reemplazo:', response);  
+            this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_ADD, this.idSolicitud]);  
           });
         }
       });

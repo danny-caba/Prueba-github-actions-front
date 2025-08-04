@@ -70,7 +70,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
   async realizarAccion(tipoAccion: string): Promise<void> {
 
     this.errores = [];
-    let msj = `¿Está seguro de que desea ${tipoAccion.toLowerCase()} la evaluación?`;
+    let msj = `¿Está seguro de que desea ${tipoAccion} la evaluación?`;
 
     if (this.validarObservacion()) {
       return;

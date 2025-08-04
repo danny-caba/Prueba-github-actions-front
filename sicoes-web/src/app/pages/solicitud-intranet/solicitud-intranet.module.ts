@@ -33,6 +33,7 @@ import { SolicitudListAprobacionComponent } from './solicitud-list-aprobacion/so
 import { ReemplazarPersonalComponent } from '../contrato/components/reemplazar-personal-propuesto/reemplazar-personal-propuesto.component';
 import { AdendaReemplazarPersonalComponent } from '../contrato/components/adenda-reemplazar-personal/adenda-reemplazar-personal.component';
 import { HistoriaAprobacionesComponent } from '../contrato/components/historial-aprobaciones/historial-aprobaciones.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { HistoriaAprobacionesComponent } from '../contrato/components/historial-
     MatDatepickerModule,
     SharedModule,
 
-    SolicitudModule
+    SolicitudModule,
+    MatAutocompleteModule
   ]
 })
 export class SolicitudIntranetModule { }

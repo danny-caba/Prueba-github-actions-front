@@ -70,7 +70,7 @@
 <div class="overflow-auto shadow-2xl rounded">
   <table class="w-full border" mat-table matSort [dataSource]="dataSourceReemplazar">
      <ng-container matColumnDef="tipoAprobacion">
-      <th mat-header-cell *matHeaderCellDef style="text-align: center;">Tipo de Aprobación</th>
+      <th mat-header-cell *matHeaderCellDef style="text-align: center;">Tipo Aprobación</th>
       <td mat-cell *matCellDef="let element">
         <mat-checkbox color="primary" (change)="actualizarListaExpedientePersonal($event, element)">
         </mat-checkbox>&nbsp;
@@ -79,7 +79,7 @@
     </ng-container>
 
     <ng-container matColumnDef="numeroExpediente">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-center">Número <br>expediente</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Número <br>Expediente</th>
       <td mat-cell *matCellDef="let element">
         {{ element.numeroExpediente }}
       </td>
@@ -119,12 +119,12 @@
     </ng-container>
 
     <ng-container matColumnDef="tipoSolicitud" *ngIf="!tipousuario.EVALUADOR">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Tipo de <br>Solicitud</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de <br>Solicitud</th>
       <td mat-cell *matCellDef="let element">{{ element.tipoSolicitud }}</td>
     </ng-container>
 
     <ng-container matColumnDef="tipoSolicitud" *ngIf="tipousuario.EVALUADOR">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Tipo de <br>Contrato</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Tipo de <br>Contrato</th>
       <td mat-cell *matCellDef="let element">{{ element.tipoSolicitud }}</td>
     </ng-container>
 
@@ -134,27 +134,27 @@
     </ng-container>
 
     <ng-container matColumnDef="estadoAprobacion">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Estado <br>Aprobación</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado <br>Aprobación</th>
       <td mat-cell *matCellDef="let element">{{ element.estadoAprobacion }}</td>
     </ng-container>
 
     <ng-container matColumnDef="estadoAprobacionLogistica">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Estado Aprobación <br>Logística</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación <br>Logística</th>
       <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionLogistica }}</td>
     </ng-container>
 
     <ng-container matColumnDef="estadoVbGAF">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Estado BV <br>GAF</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Estado VB <br>GAF</th>
       <td mat-cell *matCellDef="let element">{{ element.estadoEvalGaf }}</td>
     </ng-container>
 
     <ng-container matColumnDef="estadoFirma">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Estado Firma <br>jefe Unidad</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Estado Firma <br>Jefe Unidad</th>
       <td mat-cell *matCellDef="let element">{{ element.estadoEvalGaf }}</td>
     </ng-container>
 
     <ng-container matColumnDef="estadoFirmaGe">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Estado Firma <br>Gerente</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Estado Firma <br>Gerente</th>
       <td mat-cell *matCellDef="let element">{{ element.estadoEvalGaf }}</td>
     </ng-container>
 

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { functions } from 'src/helpers/functions';
@@ -151,6 +151,48 @@ export class SolicitudService {
     let urlEndpoint = `${this._path_serve}/api/solicitudes/modificar/${solicitudUuid}`
     return this.http.put<Solicitud>(urlEndpoint, null);
   }
+
+  buscarContratista(filtro: string){
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/aprobaciones/contratistas`
+    let params = new HttpParams()
+      .set('filtro', filtro)
+    return this.http.get<any>(urlEndpoint, { params: params });
+  }
+
+  buscarAprobaciones(
+  requerimiento: string,
+  tipoaprob: number,
+  estadoaprob: number,
+  tiposolicitud: number,
+  idcontratista: number,
+  numexpediente: number
+) {
+  const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/aprobaciones/${requerimiento}`;
+  let params = new HttpParams();
+
+  if (this.isValidParam(tipoaprob)) {
+    params = params.set('tipoaprob', tipoaprob.toString());
+  }
+  if (this.isValidParam(estadoaprob)) {
+    params = params.set('estadoaprob', estadoaprob.toString());
+  }
+  if (this.isValidParam(tiposolicitud)) {
+    params = params.set('tiposolicitud', tiposolicitud.toString());
+  }
+  if (this.isValidParam(idcontratista)) {
+    params = params.set('idcontratista', idcontratista.toString());
+  }
+  if (this.isValidParam(numexpediente)) {
+    params = params.set('numexpediente', numexpediente.toString());
+  }
+
+  return this.http.get<any>(urlEndpoint, { params: params });
+}
+
+private isValidParam(value: any): boolean {
+  return value !== null && value !== undefined && value !== '' && !isNaN(value);
+}
+
 
 
 }

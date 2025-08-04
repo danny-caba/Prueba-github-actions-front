@@ -104,7 +104,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     'actionsPerfeccionamiento'
   ];
 
-  usuario:any='05';
+  usuario:any[]=[];
+  idRoles: number[] = [];
   roles=UsuariosRoles;
   dataSourcePerfeccionamiento = new MatTableDataSource<any>();
 
@@ -125,6 +126,9 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   }
 
   ngOnInit(): void {
+    this.usuario = JSON.parse(sessionStorage.getItem("rolesusuario") || "[]");
+    this.idRoles = this.usuario.map(u => u.idRol);
+    console.log("this.usuario",this.usuario)
     this.cargarCombo();
     this.cargarTabla();
     this.cargarTablaPerfeccionamiento();
@@ -148,6 +152,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       this.listTipoAprobacionP = listRes[4];
       this.listEstadoAprobacionP = listRes[5];
     });
+
+
   }
 
   serviceTable(filtro) {

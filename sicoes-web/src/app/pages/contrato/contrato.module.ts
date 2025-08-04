@@ -36,6 +36,7 @@ import { FielCumplimientoComponent } from './components/fiel-cumplimiento/fiel-c
 import { MontoDiferencialComponent } from './components/monto-diferencial/monto-diferencial.component';
 import { CmpEvaluacionContratoComponent } from './components/cmp-evaluacion-contrato/cmp-evaluacion-contrato.component';
 import { ContratoDocumentosComponent } from './components/contrato-documentos/contrato-documentos.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { ContratoDocumentosComponent } from './components/contrato-documentos/co
     SharedModule,
     MatSidenavModule,
     ScrollingModule,
-    ScrollbarModule
+    ScrollbarModule,
+    MatAutocompleteModule
   ], exports: [
     ContratoSeccionComponent,
     DocumentoContratoComponent,

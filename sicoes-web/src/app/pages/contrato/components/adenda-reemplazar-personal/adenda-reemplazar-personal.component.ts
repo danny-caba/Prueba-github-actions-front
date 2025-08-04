@@ -124,8 +124,8 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
       ListadoEnum.ESTADO_REVISION,
       ListadoEnum.RESULTADO_EVALUACION_TEC_ADM,
       ListadoEnum.TIPO_CONTRATO,
-      ListadoEnum.TIPO_APROBACION_PERFECCIONAMIENTO,
-      ListadoEnum.ESTADO_APROBACION_PERFECCIONAMIENTO
+      ListadoEnum.TIPO_APROBACION,
+      ListadoEnum.ESTADO_APROBACION
     ]).subscribe(listRes => {
       this.listTipoSolicitud = listRes[0];
       this.listEstadoRevision = listRes[1];

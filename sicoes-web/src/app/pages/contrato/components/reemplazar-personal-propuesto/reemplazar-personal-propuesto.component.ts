@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild, OnDestroy, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator'; 
+import { MatPaginator } from '@angular/material/paginator';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
-import { ListadoEnum } from 'src/helpers/constantes.components';
+import { ListadoEnum, REQUERIMIENTO, UsuariosRoles } from 'src/helpers/constantes.components';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
-import { SolicitudService } from 'src/app/service/solicitud.service'; 
+import { SolicitudService } from 'src/app/service/solicitud.service';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { ParametriaService } from 'src/app/service/parametria.service';
@@ -21,6 +21,7 @@ import { LayoutAprobacionHistorialComponent } from 'src/app/shared/layout-aproba
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
 import { ModalAprobadorPersonalComponent } from 'src/app/shared/modal-aprobador-personal/modal-aprobador-personal.component';
 import { ModalInformativoComponent } from 'src/app/shared/modal-informativo/modal-informativo.component';
+import { debounceTime, distinctUntilChanged, filter, map, Observable, startWith, switchMap } from 'rxjs';
 
 @Component({
   selector: 'reemplazar-personal-propuesto',
@@ -33,11 +34,11 @@ import { ModalInformativoComponent } from 'src/app/shared/modal-informativo/moda
 })
 export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> implements OnInit {
 
-  @Input() usuario:any;
+  @Input() usuario: any;
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
   SOLICITUD: any;
-  tipousuario="GL"
+  tipousuario = "GL"
 
   ACC_HISTORIAL = 'ACC_HISTORIAL';
   ACC_REGISTRAR = 'ACC_REGISTRAR';
@@ -48,24 +49,16 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     nroExpediente: [''],
     contratista: [''],
     tipoSolicitud: [null],
-    tipoAprobacion:[null],
+    tipoAprobacion: [null],
     estadoAprobacion: [null]
   });
 
-  listContratista:any[];
+  listContratista: any[];
   listTipoSolicitud: any[];
-  listEstadoRevision: any[];
-  listEstadoEvaluacionTecnica: any[];
-  listEstadoEvaluacionAdminis: any[];
-  listEstadoAprobacion: any[];
-
-  listTipoContrato: any[];
   listTipoAprobacionP: any[];
   listEstadoAprobacionP: any[];
-
-  listaNroExpedienteSeleccionado: string[] = [];
-  listaSolicitudUuidSeleccionado: string[] = [];
-
+  idRoles: number[] = [];
+  roles = UsuariosRoles;
   listaContratosSeleccionadosPerfeccionamiento: SelectedPerfeccionamientoItem[] = [];
 
 
@@ -75,7 +68,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     'documento',
     'tp',
     'contratista',
-    'tipoSolicitud',
+    'tipoSolictiud',
     'fechaIngreso',
     'estadoAprobacion',
     'estadoAprobacionLogistica',
@@ -84,7 +77,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   ];
 
   dataSourceReemplazar = new MatTableDataSource<any>();
- 
+  filteredContratistas!: Observable<any[]>;
 
   @ViewChild('paginatorReemplazar') paginatorReemplazar: MatPaginator;
 
@@ -104,36 +97,44 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
 
   ngOnInit(): void {
     this.cargarCombo();
-     this.dataSourceReemplazar.data=[{'tipoAprobacion':"Aprobar",
-    'numeroExpediente':"1234",
-    'documento':"fecha.pdf",
-    'tp':"PJ",
-    'contratista':"Volvo peru",
-    'tipoSolicitud':"",
-    'fechaIngreso':"17/12/2024",
-    'estadoAprobacion':"Aprobado",
-    'estadoAprobacionLogistica':"",
-    'estadoVbGAF':"",}]
+    this.dataSourceReemplazar.data = []
     //this.cargarTabla();
+    this.filteredContratistas = this.formGroup.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? value : value.contratista),
+      map(nombre => nombre ? this._filterContratistas(nombre) : this.listContratista.slice())
+    );
+
+
+    this.filteredContratistas = this.formGroup.get('contratista')!.valueChanges.pipe(
+      filter(value => typeof value === 'string' && value.length >= 3),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(value => this.solicitudService.buscarContratista(value))
+    );
+
+    this.usuario = JSON.parse(sessionStorage.getItem("rolesusuario") || "[]");
+    this.idRoles = this.usuario.map(u => u.idRol);
+    console.log("this.usuario", this.usuario)
+  }
+  private _filterContratistas(nombre: string): any[] {
+    const filterValue = nombre.toLowerCase();
+    return this.listContratista.filter(option => option.nombre.toLowerCase().includes(filterValue));
+  }
+
+  displayContratista(obj: any): string {
+    return obj && obj.nombre ? obj.nombre : '';
   }
 
   cargarCombo() {
     this.parametriaService.obtenerMultipleListadoDetalle([
       ListadoEnum.TIPO_SOLICITUD,
-      ListadoEnum.ESTADO_REVISION,
-      ListadoEnum.RESULTADO_EVALUACION_TEC_ADM,
-      ListadoEnum.TIPO_CONTRATO,
-      ListadoEnum.TIPO_APROBACION_PERFECCIONAMIENTO,
-      ListadoEnum.ESTADO_APROBACION_PERFECCIONAMIENTO
+      ListadoEnum.TIPO_APROBACION,
+      ListadoEnum.ESTADO_APROBACION
     ]).subscribe(listRes => {
       this.listTipoSolicitud = listRes[0];
-      this.listEstadoRevision = listRes[1];
-      this.listEstadoEvaluacionTecnica = listRes[2];
-      this.listEstadoEvaluacionAdminis = listRes[2];
-
-      this.listTipoContrato = listRes[3];
-      this.listTipoAprobacionP = listRes[4];
-      this.listEstadoAprobacionP = listRes[5];
+      this.listTipoAprobacionP = listRes[1];
+      this.listEstadoAprobacionP = listRes[2];
     });
   }
 
@@ -141,14 +142,38 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     return this.solicitudService.buscarSolicitudesAprobador(filtro);
   }
 
-
   buscar() {
     this.paginator.pageIndex = 0;
-    this.cargarTabla();
-    this.listaNroExpedienteSeleccionado = [];
-    this.listaSolicitudUuidSeleccionado = [];
+    let requerimiento = "";
+    if (this.idRoles.includes(this.roles.GER_G2)) {
+      requerimiento = REQUERIMIENTO.EVAL_INFO_APROB_G2_GER_DIV;
+    } else if (this.idRoles.includes(this.roles.GER_03)) {
+      requerimiento = REQUERIMIENTO.EVAL_INFO_APROB_G3_GER_LIN;
+    }
+
+    this.solicitudService.buscarAprobaciones(
+      requerimiento,
+      this.getValidNumber('tipoAprobacion'),
+      this.getValidNumber('estadoAprobacion'),
+      this.getValidNumber('tipoSolicitud'),
+      this.getValidNumber('contratista'),
+      this.getValidNumber('nroExpediente')
+    ).subscribe(resp => {
+      this.dataSourceReemplazar.data = resp;
+    });
   }
 
+  getValidNumber(controlName: string): number | null {
+  const value = this.formGroup.get(controlName)?.value;
+
+  // Si el valor es un objeto con la propiedad 'orden', usamos esa propiedad
+  if (value && typeof value === 'object' && 'orden' in value) {
+    return value.orden !== null && value.orden !== undefined && value.orden !== '' ? Number(value.orden) : null;
+  }
+
+  // Si no es objeto, validamos directamente
+  return value !== null && value !== undefined && value !== '' ? Number(value) : null;
+}
 
   limpiar() {
     this.formGroup.reset();
@@ -163,7 +188,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
       //idEstadoEvaluacionTecnica: this.formGroup.controls.estadoEvalTecnica.value?.idListadoDetalle,
       //idEstadoEvaluacionAdministrativa: this.formGroup.controls.estadoEvalAdministrativa.value?.idListadoDetalle,
       nroExpediente: this.formGroup.controls.nroExpediente.value,
-     // solicitante: this.formGroup.controls.solicitante.value,
+      // solicitante: this.formGroup.controls.solicitante.value,
     };
     return filtro;
   }
@@ -204,10 +229,10 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
         elementosSeleccionados: this.listaContratosSeleccionadosPerfeccionamiento,
       },
     }).afterClosed().subscribe(result => {
-      if (result === 'OK') { 
+      if (result === 'OK') {
         this.flagContrato = false;
-        this.buscar(); 
-        this.listaContratosSeleccionadosPerfeccionamiento = []; 
+        this.buscar();
+        this.listaContratosSeleccionadosPerfeccionamiento = [];
       } else {
         this.flagContrato = true;
         console.log('Proceso de aprobación/firma masiva de contratos cancelado o no completado.');
@@ -217,49 +242,35 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
 
   @ViewChild('tabAprobacionHistorial') tabAprobacionHistorial: LayoutAprobacionHistorialComponent;
 
-  actualizarListaExpediente(event: any, nroExpediente: string, solicitudUuid: string) {
-    if (event.checked) {
-      this.listaNroExpedienteSeleccionado.push(nroExpediente);
-      this.listaSolicitudUuidSeleccionado.push(solicitudUuid);
-    } else {
-      const indexNro = this.listaNroExpedienteSeleccionado.indexOf(nroExpediente);
-      if (indexNro > -1) {
-        this.listaNroExpedienteSeleccionado.splice(indexNro, 1);
-      }
-      const indexUuid = this.listaSolicitudUuidSeleccionado.indexOf(solicitudUuid);
-      if (indexUuid > -1) {
-        this.listaSolicitudUuidSeleccionado.splice(indexUuid, 1);
-      }
-    }
-  }
+
 
   actualizarListaExpedientePersonal(event: any, element: any) {
-  console.log('Evento de selección:', event.checked);
-  console.log('Elemento seleccionado:', element);
+    console.log('Evento de selección:', event.checked);
+    console.log('Elemento seleccionado:', element);
 
-  const selectedItem: SelectedPerfeccionamientoItem = {
-    numeroExpediente: element.numeroExpediente,
-    idContrato: element.idContrato,
-  };
+    const selectedItem: SelectedPerfeccionamientoItem = {
+      numeroExpediente: element.numeroExpediente,
+      idContrato: element.idContrato,
+    };
 
-  console.log('selectedItem a añadir/eliminar:', selectedItem);
+    console.log('selectedItem a añadir/eliminar:', selectedItem);
 
-  if (event.checked) {
-    if (!this.listaContratosSeleccionadosPerfeccionamiento.some(item => item.idContrato === selectedItem.idContrato)) {
-      this.listaContratosSeleccionadosPerfeccionamiento.push(selectedItem);
-      console.log('Añadido. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
+    if (event.checked) {
+      if (!this.listaContratosSeleccionadosPerfeccionamiento.some(item => item.idContrato === selectedItem.idContrato)) {
+        this.listaContratosSeleccionadosPerfeccionamiento.push(selectedItem);
+        console.log('Añadido. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
+      }
+    } else {
+      const index = this.listaContratosSeleccionadosPerfeccionamiento.findIndex(item => item.idContrato === selectedItem.idContrato);
+      if (index > -1) {
+        this.listaContratosSeleccionadosPerfeccionamiento.splice(index, 1);
+        console.log('Eliminado. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
+      }
     }
-  } else {
-    const index = this.listaContratosSeleccionadosPerfeccionamiento.findIndex(item => item.idContrato === selectedItem.idContrato);
-    if (index > -1) {
-      this.listaContratosSeleccionadosPerfeccionamiento.splice(index, 1);
-      console.log('Eliminado. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
-    }
+    console.log('Selección Perfeccionamiento Final:', this.listaContratosSeleccionadosPerfeccionamiento);
   }
-  console.log('Selección Perfeccionamiento Final:', this.listaContratosSeleccionadosPerfeccionamiento);
-}
 
-historyApproveAndSignPersonal(row: any) {
+  historyApproveAndSignPersonal(row: any) {
     this.dialog.open(ModalAprobadorHistorialContratoComponent, {
       width: '1200px',
       maxHeight: '100%',
@@ -273,15 +284,15 @@ historyApproveAndSignPersonal(row: any) {
     this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.SOLICITUDES_LIST_APROBACION_PACES]);
   }
 
-  modalInformativo(descripcion: string){
+  modalInformativo(descripcion: string) {
     this.dialog.open(ModalInformativoComponent, {
       width: '600px',
       maxHeight: '90%',
-      panelClass:'abarca-cabecera',
+      panelClass: 'abarca-cabecera',
       data: {
         title: 'Mensaje Informativo',
         description: descripcion,
-        titleConfirm:"Aceptar"
+        titleConfirm: "Aceptar"
       },
     })
   }

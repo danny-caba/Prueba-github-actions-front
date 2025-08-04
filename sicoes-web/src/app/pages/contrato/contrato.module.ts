@@ -37,6 +37,13 @@ import { MontoDiferencialComponent } from './components/monto-diferencial/monto-
 import { CmpEvaluacionContratoComponent } from './components/cmp-evaluacion-contrato/cmp-evaluacion-contrato.component';
 import { ContratoDocumentosComponent } from './components/contrato-documentos/contrato-documentos.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ReemplazoPersonalComponent } from './components/reemplazo-personal/reemplazo-personal.component';
+import { ReemplazoPersFormComponent } from './components/reemplazo-pers-form/reemplazo-pers-form.component';
+import { ReemplazoPersFormEditComponent } from './components/reemplazo-pers-form/reemplazo-pers-form-edit/reemplazo-pers-form-edit.component';
+import { CargaDocsInicioFormComponent } from './components/carga-docs-inicio-form/carga-docs-inicio-form.component';
+import { CargaDocsInicioComponent } from './components/carga-docs-inicio/carga-docs-inicio.component';
+import { CargaDocsInicioAddComponent } from './components/carga-docs-inicio-form/carga-docs-inicio-add/carga-docs-inicio-add.component';
+
 
 @NgModule({
   declarations: [
@@ -48,7 +55,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     FielCumplimientoComponent,
     MontoDiferencialComponent,
     CmpEvaluacionContratoComponent,
-    ContratoDocumentosComponent
+    ContratoDocumentosComponent,
+    ReemplazoPersonalComponent,
+    ReemplazoPersFormComponent,
+    ReemplazoPersFormEditComponent,
+    CargaDocsInicioFormComponent,
+    CargaDocsInicioComponent,
+    CargaDocsInicioAddComponent
   ],
   imports: [
     CommonModule,

@@ -64,6 +64,24 @@ export enum Opcion {
 
     //CONTRATO
     CONTRATO_EVALUACION = 'CONTRATO_EVALUACION',
+
+    //REEMPLAZO
+    BTN_REEMP_PERS_ACC = 'BTN_REEMP_PERS_ACC',
+    BTN_EVAL_DOC_REEMP_ACC = 'BTN_EVAL_DOC_REEMP_ACC',
+    BTN_REV_DOC_REEMP_ACC = 'BTN_REV_DOC_REEMP_ACC',
+    BTN_CARGA_ADENDA_ACC = 'BTN_CARGA_ADENDA_ACC',
+    BTN_CARGA_DOC_INICIO_ACC = 'BTN_CARGA_DOC_INICIO_ACC',
+    BTN_EVAL_DOC_INICIO_ACC = 'BTN_EVAL_DOC_INICIO_ACC',
+   
+    DATE_INPUT_INFORME = 'DATE_INPUT_INFORME',
+    RAD_BTN_INFORME = 'RAD_BTN_INFORME',
+    RAD_BTN_ADENDA = 'RAD_BTN_ADENDA',
+    VIEW_OBS_INPUT = 'VIEW_OBS_INPUT',
+    EDIT_OBS_INPUT = 'EDIT_OBS_INPUT',
+    CHECKBOX_ADENDA = 'CHECKBOX_ADENDA',
+    DESCARGA_ADENDA = 'DESCARGA_ADENDA',
+    ADJUNTAR_ADENDA = 'ADJUNTAR_ADENDA',
+    
 }
 
 export const OpcionConfig = [
@@ -154,6 +172,20 @@ export const OpcionConfig = [
 { codigo: Opcion.BTN_APROBADOR_ADD, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO, estadoRevisionTec: EstadoEvaluacionTecnica.EN_PROCESO, evaluadorRol: EvaluadorRol.TECNICO_COD},
 { codigo: Opcion.BTN_APROBADOR_ACC, estadoSolicitud: SolicitudEstadoEnum.EN_PROCESO},
 
+//EMPRESA SUPERVISORA
+{ codigo: Opcion.BTN_REEMP_PERS_ACC },
+{ codigo: Opcion.BTN_CARGA_DOC_INICIO_ACC },
+
+//INVITADO
+{ codigo: Opcion.BTN_REV_DOC_REEMP_ACC },
+{ codigo: Opcion.VIEW_OBS_INPUT },
+
+//EVALUADOR DE CONTRATOS
+{ codigo: Opcion.BTN_EVAL_DOC_REEMP_ACC },
+
+//RESPONSABLE TECNICO
+{ codigo: Opcion.BTN_EVAL_DOC_INICIO_ACC },
+
 ]
 
 export const OpcionPorRol = [{
@@ -177,7 +209,9 @@ export const OpcionPorRol = [{
 
     Opcion.BTN_DOC_EXP_EDITAR_ARCH,
 
-    Opcion.VIEW_EVALUACION_EXT
+    Opcion.VIEW_EVALUACION_EXT,
+    Opcion.BTN_REEMP_PERS_ACC,
+    Opcion.BTN_CARGA_DOC_INICIO_ACC,
   ]
 },{
   rol: RolEnum.RES_ADMIN,
@@ -200,7 +234,12 @@ export const OpcionPorRol = [{
     Opcion.CMP_EDIT_EVAL_TEC,
     Opcion.CMP_VIEW_OBS_ADM,
     Opcion.CMP_VIEW_OBS_TEC,
-    Opcion.VIEW_EVALUACION
+    Opcion.VIEW_EVALUACION,
+    Opcion.BTN_REV_DOC_REEMP_ACC,
+    Opcion.BTN_EVAL_DOC_INICIO_ACC,
+    Opcion.RAD_BTN_INFORME,
+    Opcion.CHECKBOX_ADENDA,
+    Opcion.ADJUNTAR_ADENDA
   ]
 },{
   rol: RolEnum.EVA_TECNI,
@@ -250,6 +289,25 @@ export const OpcionPorRol = [{
   opciones: [
     Opcion.VIEW_EVALUACION,
     Opcion.BTN_APROBADOR_ACC,
+  ]
+},{
+  rol: RolEnum.EVA_CONTRA,
+  opciones: [
+    Opcion.BTN_EVAL_DOC_REEMP_ACC,
+    Opcion.BTN_REV_DOC_REEMP_ACC,
+    Opcion.BTN_CARGA_ADENDA_ACC,
+    Opcion.RAD_BTN_INFORME,
+    Opcion.VIEW_OBS_INPUT,
+    Opcion.RAD_BTN_ADENDA,
+    Opcion.DESCARGA_ADENDA
+  ]
+},{
+  rol: RolEnum.INVITADO,
+  opciones: [
+    Opcion.BTN_REV_DOC_REEMP_ACC,
+    Opcion.VIEW_OBS_INPUT,
+    Opcion.EDIT_OBS_INPUT,
+    Opcion.DESCARGA_ADENDA
   ]
 }];
 
@@ -456,7 +514,7 @@ export const RolMenu = [
     'intranet/empresa-supervisoras/cancelar/',
     'intranet/empresa-supervisoras/susp-canc/ver'
   ]},
-  { ROL: { CODIGO: RolEnum.RES_TECNI }, MENU: [menu02, menu04, menu06, menu07,menu18], path: [
+  { ROL: { CODIGO: RolEnum.RES_TECNI }, MENU: [menu02, menu04, menu06, menu07, menu16 ,menu18], path: [
     'intranet/solicitudes',
     'intranet/solicitudes/ver/',
     'intranet/solicitudes/procesar/',
@@ -467,7 +525,8 @@ export const RolMenu = [
     'intranet/empresa-supervisoras/suspender/',
     'intranet/empresa-supervisoras/cancelar/',
     'intranet/empresa-supervisoras/susp-canc/ver',
-    'intranet/procesos/gestionPaces'
+    'intranet/procesos/gestionPaces',
+    'intranet/contratos'
     
     
   ]},
@@ -502,5 +561,7 @@ export const RolMenu = [
   { ROL: { CODIGO: RolEnum.EVA_CONTRA }, MENU: [menu16, menu17], path: [
     'intranet/contratos',
     'intranet/bandeja-contratos'
+  ]},{ ROL: { CODIGO: RolEnum.INVITADO }, MENU: [menu16], path: [
+    'intranet/contratos'
   ]},
 ]

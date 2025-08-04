@@ -98,6 +98,18 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ModalAprobadorHistorialContratoComponent } from './modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
 import { ModalAprobadorPersonalComponent } from './modal-aprobador-personal/modal-aprobador-personal.component';
 import { ModalInformativoComponent } from './modal-informativo/modal-informativo.component';
+import { LayoutBajaPersonalPropuestoComponent } from './layout-baja-personal-propuesto/layout-baja-personal-propuesto.component';
+import { LayoutPersonalPropuestoComponent } from './layout-personal-propuesto/layout-personal-propuesto.component';
+import { LayoutSolicitudReemplazoSupervisorComponent } from './layout-solicitud-reemplazo-supervisor/layout-solicitud-reemplazo-supervisor.component';
+import { LayoutInformeComponent } from './layout-informe/layout-informe.component';
+import { LayoutProyectoAdendaComponent } from './layout-proyecto-adenda/layout-proyecto-adenda.component';
+import { LayoutCargarAdendaComponent } from './layout-cargar-adenda/layout-cargar-adenda.component';
+import { LayoutPersPropuestoCargaComponent } from './layout-pers-propuesto-carga/layout-pers-propuesto-carga.component';
+import { LayoutDocsAdicionalesCargaComponent } from './layout-docs-adicionales-carga/layout-docs-adicionales-carga.component';
+import { FormAdjuntosNoTitleComponent } from './form-adjuntos-no-title/form-adjuntos-no-title.component';
+import { LayoutActaInicioComponent } from './layout-acta-inicio/layout-acta-inicio.component';
+import { OptionRoleReemplazoDirective } from '../auth/interceptors/option-role-reemplazo.directive';
+import { OptionRoleCheckDirective } from '../auth/interceptors/option-role-check.directive';
 
 const sharedComponents = [
 
@@ -107,7 +119,7 @@ const sharedComponents = [
     CmpAprobadorComponent,
     CmpPerfilComponent,
     CmpItemPerfilComponent,
-    
+
     CmpFechaEtapaComponent,
     CmpMiembroComponent,
 
@@ -116,6 +128,7 @@ const sharedComponents = [
 
     FormAdjuntosBtnComponent,
     FormAdjuntosMemoryComponent,
+    FormAdjuntosNoTitleComponent,
 
     UbigeoUpdComponent,
 
@@ -151,9 +164,20 @@ const sharedComponents = [
     LayoutInfoProcesoComponent,
     LayoutItemPerfilComponent,
     LayoutPublicarComponent,
-	LayoutDatosUsuarioComponent,
+	  LayoutDatosUsuarioComponent,
     LayoutRolUsuarioComponent,
     LayoutConfPerfilComponent,
+
+    LayoutBajaPersonalPropuestoComponent,
+    LayoutPersonalPropuestoComponent,
+    LayoutSolicitudReemplazoSupervisorComponent,
+    LayoutInformeComponent,
+    LayoutProyectoAdendaComponent,
+    LayoutCargarAdendaComponent,
+    LayoutPersPropuestoCargaComponent,
+    LayoutDocsAdicionalesCargaComponent,
+    LayoutActaInicioComponent,
+
     ModalTileComponent,
     ModalTileComponent2,
     ModalPerfilComponent,
@@ -204,9 +228,9 @@ const sharedComponents = [
 
 @NgModule({
   imports:      [ CommonModule, MaterialModule,FormsModule, ReactiveFormsModule, InputMaskModule, MatDialogModule],
-  declarations: [ ...sharedComponents, OptionRoleDirective ],
-  exports:      [ ...sharedComponents, CommonModule, FormsModule, ReactiveFormsModule, OptionRoleDirective ],
-  providers:    [ LoadingDialogService, DatePipe, OptionRoleDirective ],
+  declarations: [ ...sharedComponents, OptionRoleDirective, OptionRoleReemplazoDirective, OptionRoleCheckDirective ],
+  exports:      [ ...sharedComponents, CommonModule, FormsModule, ReactiveFormsModule, OptionRoleDirective, OptionRoleReemplazoDirective, OptionRoleCheckDirective ],
+  providers:    [ LoadingDialogService, DatePipe, OptionRoleDirective, OptionRoleReemplazoDirective, OptionRoleCheckDirective ],
   entryComponents: [...sharedComponents]
 })
 

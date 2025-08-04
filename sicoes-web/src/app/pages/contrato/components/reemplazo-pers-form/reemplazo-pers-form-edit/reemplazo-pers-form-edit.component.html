@@ -1,0 +1,37 @@
+            <!--CONTENIDO-->
+            <mat-accordion multi="true">
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- {{secciones[itemSeccion + 1]?.descripcion || 'Cargando descripción...' }}</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-baja-personal-propuesto 
+                        [isReview]="isReview"
+                        [idSolicitud]="idSolicitud"
+                        (perfilBajaEvent)="recibirPerfilBaja($event)"
+                        (seccionCompletada)="seccionBajaPersonalCompletada($event)"
+                    #layoutBajaPersPropuesto></vex-layout-baja-personal-propuesto>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- {{secciones[itemSeccion + 2]?.descripcion || 'Cargando descripción...' }}</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-personal-propuesto 
+                    [isReview]="isReview" 
+                    [idSolicitud] = "idSolicitud"
+                    [uuidSolicitud] = "uuidSolicitud"
+                    [perfilBaja]="perfilBaja"
+                    (seccionCompletada)="seccionPersonalPropuestoCompletada($event)"
+                    #layoutPersPropuesto></vex-layout-personal-propuesto>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">{{itemSeccion + 3}}.- {{secciones[itemSeccion + 3]?.descripcion || 'Cargando descripción...' }}</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <vex-layout-solicitud-reemplazo-supervisor 
+                        [idSolicitud]="idSolicitud"
+                        [isReview]="isReview"
+                        [perfilBaja]="perfilBaja"
+                        (seccionCompletada)="seccionSolicitudReemplazoSupervisorCompletada($event)" 
+                    #layoutSolReempSuperv></vex-layout-solicitud-reemplazo-supervisor>
+                </mat-expansion-panel>
+            </mat-accordion>

@@ -41,6 +41,8 @@ export enum RolEnum {
     ADM_BLOQU = '09',
     ADM_CONFIG = '11',
     EVA_CONTRA = '12',
+
+    INVITADO = '15',
 }
 
 export enum AprobadorAccion {
@@ -225,6 +227,11 @@ export enum etapasProcesoEnum {
 export enum solicitudContrato {
     ACCION_VER = 'ACCION_VER',
     ACCION_EDITAR = 'ACCION_EDITAR'
+}
+
+export enum reemplazoPersonalPropuesto {
+    ACCION_REEMPLAZAR = 'ACCION_REEMPLAZAR',
+    ACCION_REVISAR = 'ACCION_REVISAR'
 }
 
 export enum estadosIndexPerfCont {

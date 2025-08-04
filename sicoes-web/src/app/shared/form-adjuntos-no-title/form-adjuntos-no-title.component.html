@@ -1,0 +1,21 @@
+<input #fileInput name="{{nameInputRamdom}}" type="file" onclick="this.value = null" (change)="onFileInput($event)" style="display:none;" multiple/>
+<h2 class="border rounded body-2 font-medium m-0 p-2 text-primary flex items-center">
+    <span class="flex-auto text-secundary">{{ adjuntoInput.adjunto?.archivo.nombreReal || titulo}}</span>
+    <button color="primary" mat-button type="button" (click)="clickFile(adjuntoInput)" *ngIf="!adjuntoInput.adjunto" [disabled]="!editable" class="btn-fondo-azul">
+      <mat-icon class="ltr:mr-1 rtl:ml-1 ltr:-ml-1 rtl:-mr-1 icon-sm" svgIcon="mat:add"></mat-icon>
+      <span>Adjuntar...</span>
+    </button>
+    <button *ngIf="adjuntoInput.adjunto != null && !isOriginalEval" matTooltip="Descargar"
+        color="primary"
+        (click)="descargar(adjuntoInput?.adjunto)" class="text-primary leading-none flex items-center justify-center hover:bg-hover" mat-icon-button type="button">
+        <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
+    </button>
+    <div *ngIf="editable">
+        <button *ngIf="adjuntoInput.adjunto != null && !booleanView" matTooltip="Eliminar"
+            color="primary"
+            (click)="eliminar(adjuntoInput)" class="text-primary leading-none flex items-center justify-center hover:bg-hover" mat-icon-button type="button">
+            <mat-icon svgIcon="mat:delete" size="18px"></mat-icon>
+        </button>
+    </div>
+    <mat-progress-bar mode="query" color="warn" class="border p-0 rounded w-full" *ngIf="adjuntoInput.inProgress == true"></mat-progress-bar>
+</h2>

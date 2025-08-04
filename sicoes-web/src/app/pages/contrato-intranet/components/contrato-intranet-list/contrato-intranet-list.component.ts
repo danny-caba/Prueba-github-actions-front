@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { AuthFacade } from 'src/app/auth/store/auth.facade';
+import { AuthUser } from 'src/app/auth/store/auth.models';
 import { Contrato } from 'src/app/interface/contrato.model';
 import { ContratoService } from 'src/app/service/contrato.service';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
@@ -22,6 +25,11 @@ import { Link } from 'src/helpers/internal-urls.components';
 
 
 export class ContratoIntranetListComponent extends BasePageComponent<Contrato> implements OnInit {
+  
+  user$ = this.authFacade.user$;
+  usuario: AuthUser;
+  private userSub: Subscription;
+  
   displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'tipo', 'estadoDocInicio', 'actions'];
   ACCION_VER: string = solicitudContrato.ACCION_VER;
   ACCION_EDITAR: string = solicitudContrato.ACCION_EDITAR;
@@ -35,6 +43,7 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
   });
   
   constructor(
+    private authFacade: AuthFacade,
     private router: Router,
     private contratoService: ContratoService,
     private fb: FormBuilder,
@@ -44,6 +53,13 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
 
   ngOnInit(): void {
     this.obtenerDetalleSolicitud();
+    this.userSub = this.user$.subscribe(usu => {
+      this.usuario = usu;
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.userSub?.unsubscribe();
   }
 
   obtenerDetalleSolicitud() {
@@ -71,11 +87,11 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
 
   goToFormContrato(contrato: any, accion: string) {
     this.contratoService.validarFechaPresentacion(contrato.idSolicitud).subscribe((response) => {
-      if (response) {
+     // if (response) {
         this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST, accion === this.ACCION_VER ? Link.CONTRATO_SOLICITUD_VIEW : Link.CONTRATO_SOLICITUD_EVALUAR, contrato.idSolicitud]);
-      } else {
-        functionsAlert.error('La fecha límite de presentación ha expirado.');
-      }
+     // } else {
+     //   functionsAlert.error('La fecha límite de presentación ha expirado.');
+     // }
     });
   }
 
@@ -119,5 +135,17 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
 
   evaluarDocsInicio(row: any) {
     this.router.navigate(['/intranet/contratos/evaluar-documentos-inicio/' + row.idSolicitud]);
+  }
+
+  evaluarDocsReempPersonal(row: any){
+    this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_ADD + '/' + row.idSolicitud]);
+  }
+
+  revisarDocsReempPersonal(row: any){
+    this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_REVIEW + '/' + row.idSolicitud]);
+  }
+
+  evaluarDocsInicioServicio(row: any){
+    this.router.navigate(['/intranet/contratos/' + Link.EVAL_DOCS_INICIO + '/' + row.idSolicitud]);
   }
 }

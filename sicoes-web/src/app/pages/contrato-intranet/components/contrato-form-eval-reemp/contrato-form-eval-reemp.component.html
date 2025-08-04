@@ -1,0 +1,33 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+        <form action="">
+            <div class="card px-8 py-6">
+                <div class="flex flex-col sm:flex-row gap-x-8">
+                    <div class="flex-auto">
+                        <!-- Title -->
+                        <h2 class="text-lg font-bold">Evaluar Documentos</h2>
+                        <mat-divider></mat-divider>
+                    </div>
+                </div>
+
+                <vex-contrato-form-eval-reemp-review
+                  [idSolicitud] = "idSolicitud"
+                  [uuidSolicitud] = "uuidSolicitud"
+                #reemplazoPersFormEdit></vex-contrato-form-eval-reemp-review>
+
+                <div class="py-4 border-t flex flex-row justify-end gap-x-4">
+                    <button color="primary" mat-raised-button type="button" (click)="doNothing()">
+                        {{ btnApprove }}
+                    </button>
+                    <button color="primary" mat-raised-button type="button" (click)="doNothing()">
+                        {{ btnReject }}
+                    </button>
+                    <button color="primary" mat-raised-button type="button" (click)="toGoBandejaContratos()">
+                        Regresar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </vex-page-layout-content>
+</vex-page-layout>

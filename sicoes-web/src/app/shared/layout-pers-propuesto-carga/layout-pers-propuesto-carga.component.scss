@@ -1,0 +1,92 @@
+.fila-documento {
+    display: grid;
+    grid-template-columns:
+      150px          // Label documento
+      1fr            // Archivos / Inputs
+      auto auto      // Fecha Inicio y Fecha Fin
+      auto           // Radios
+      auto           // Evaluado por
+      auto;          // Fecha y Hora
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.1rem 0;
+    row-gap: 0;
+  
+    .tipo-doc {
+      min-width: 150px;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+  
+    .archivos {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      align-items: center;
+      width: 100%;
+      gap: 0.25rem;
+  
+      button {
+        padding: 0;
+        height: 24px;
+        width: 24px;
+      }
+    }
+  
+    .fecha-inicio,
+    .fecha-fin {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      width: 160px;
+    }
+  
+    .radios {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  
+    .evaluado-por,
+    .fecha-hora {
+      white-space: nowrap;
+      font-size: 12px;
+      text-align: center;
+    }
+  
+    .col-divider {
+      margin: 0 !important;
+      height: 1px;
+    }
+  }
+  
+
+:host ::ng-deep .mat-form-field {
+    .fecha-input {
+      font-size: 14px;
+      text-align: center;
+      padding: 0.1em 0;
+      display: flex;
+      align-items: center;
+      min-height: 18px;
+      width: 130px;
+
+      &:disabled {
+        color: #888;
+        border-color: #ccc;
+        opacity: 1 !important;
+        cursor: not-allowed;
+      }
+    }
+}
+
+::ng-deep {
+    .fecha-field {
+      min-height: 8px;
+      width: 130px !important;
+    }
+}
+
+::ng-deep .mat-divider {
+    border-top-color: rgba(68, 67, 67, 0.38) !important;
+}

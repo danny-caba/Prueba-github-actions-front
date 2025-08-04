@@ -1,0 +1,33 @@
+            <!--CONTENIDO-->
+            <mat-accordion multi="true">
+                <div class="flex flex-col sm:flex-row gap-x-8 mt-6">
+                    <div class="flex-auto">
+                        <!-- Title -->
+                        <h2 class="text-lg font-bold">PERSONAL PROPUESTO</h2>
+                        <mat-divider></mat-divider>
+                    </div>
+                </div>
+                <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold panel-title-container">
+                            <span class="id-field">12345678</span>
+                            <span class="name-field">Juan Pérez García</span>
+                            <span class="profile-field">RND-11</span>
+                            <span class="doc-count">TOTAL DOC: 1 DOCUMENTOS</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-divider></mat-divider>
+                    <vex-layout-pers-propuesto-carga
+                    #layoutPersPropuestoCarga></vex-layout-pers-propuesto-carga>
+                </mat-expansion-panel>
+                <mat-divider></mat-divider>
+                <div class="flex flex-col sm:flex-row gap-x-8 mt-6">
+                    <div class="flex-auto">
+                        <!-- Title -->
+                        <h2 class="text-lg font-bold">DOCUMENTACIÓN ADICIONAL</h2>
+                        <mat-divider></mat-divider>
+                    </div>
+                </div>
+                <vex-layout-docs-adicionales-carga
+                #layoutDocsAdicionalesCarga></vex-layout-docs-adicionales-carga>
+            </mat-accordion>

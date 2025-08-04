@@ -1,0 +1,104 @@
+.fila-documento {
+  font-family: 'Raleway', sans-serif;
+  font-size: 14px;
+  display: grid;
+  grid-template-columns:
+    250px          // Label documento
+    1fr            // Archivos / Inputs
+    600px;          // Espacio flexible
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+
+  .fecha-fin {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .tipo-doc {
+    min-width: 150px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .archivos {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+
+    button {
+      padding: 0;
+      height: 14px;
+      width: 24px;
+    }
+  }
+
+  .radios {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .evaluado-por,
+  .fecha-hora {
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .col-divider {
+    grid-column: 1 / -1;
+    margin-top: 0.5rem;
+  }
+}
+
+
+:host ::ng-deep .mat-form-field {
+  .fecha-input {
+    font-size: 14px;
+    text-align: center;
+    padding: 0.1em 0;
+    display: flex;
+    align-items: center;
+    min-height: 8px;
+    width: 160px;
+
+    &:disabled {
+      color: #888;
+      border-color: #ccc;
+      opacity: 1 !important;
+      cursor: not-allowed;
+    }
+  }
+}
+
+::ng-deep {
+  .fecha-field {
+    min-height: 12px;
+    width: 130px !important;
+  }
+}
+
+::ng-deep .mat-divider {
+  border-top-color: rgba(68, 67, 67, 0.38) !important;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0px !important;
+  padding-top: 0px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+::ng-deep .mat-form-field-underline {
+  display: none !important;
+}
+
+::ng-deep .mat-form-field-flex {
+  align-items: center !important;
+  height: 30px !important;
+}

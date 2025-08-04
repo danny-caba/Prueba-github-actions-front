@@ -7,10 +7,14 @@ import { Link } from 'src/helpers/internal-urls.components';
 import { ContratoListComponent } from './components/contrato-list/contrato-list.component';
 import { ContratoFormComponent } from './components/contrato-form/contrato-form.component';
 import { ContratoDocumentosComponent } from './components/contrato-documentos/contrato-documentos.component';
+import { ReemplazoPersonalComponent } from './components/reemplazo-personal/reemplazo-personal.component';
+import { ReemplazoPersFormComponent } from './components/reemplazo-pers-form/reemplazo-pers-form.component';
+import { CargaDocsInicioComponent } from './components/carga-docs-inicio/carga-docs-inicio.component';
+import { CargaDocsInicioFormComponent } from './components/carga-docs-inicio-form/carga-docs-inicio-form.component'; 
 
 
 
-const routes: VexRoutes = [{ 
+const routes: VexRoutes = [{
   path: '',
   children:[
     {
@@ -29,9 +33,28 @@ const routes: VexRoutes = [{
       canActivate: [AuthGuardService, RoleGuardService],
       component: ContratoFormComponent,
       data: {
-        editable: false
+        editable: 'false'
       }
     }, {
+      path: Link.REEMPLAZO_PERSONAL_ADD + '/:idSolicitud',
+      component: ReemplazoPersonalComponent,
+      canActivate: [AuthGuardService, RoleGuardService],
+      data: { 
+        replaceable: true 
+      }
+    }, {
+      path: Link.REEMPLAZO_PERSONAL_FORM + '/:idSolicitud',
+      component: ReemplazoPersFormComponent,
+      canActivate: [AuthGuardService, RoleGuardService]
+    },  {
+      path: Link.CARGA_DOCS_INICIO + '/:idSolicitud',
+      component: CargaDocsInicioComponent,
+      canActivate: [AuthGuardService, RoleGuardService]
+    }, {
+      path: Link.CARGA_DOCS_INICIO_FORM + '/:idSolicitud',
+      component: CargaDocsInicioFormComponent,
+      canActivate: [AuthGuardService, RoleGuardService]
+    },{
       path: 'cargar-documentacion-inicio/:id',
       component: ContratoDocumentosComponent
     },

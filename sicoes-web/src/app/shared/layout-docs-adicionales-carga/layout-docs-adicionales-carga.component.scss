@@ -1,0 +1,81 @@
+.fila-documento {
+  font-family: 'Raleway', sans-serif;
+  font-size: 14px;
+  display: grid;
+  grid-template-columns:
+    150px          // Label documento
+    1fr            // Archivos / Inputs
+    auto           // Radios
+    auto           // Evaluado por
+    auto          // Fecha y Hora
+    200px;          // Espacio flexible
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  row-gap: 0;
+
+  .tipo-doc {
+    min-width: 150px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .archivos {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    gap: 0.25rem;
+
+    button {
+      padding: 0;
+      height: 24px;
+      width: 24px;
+    }
+  }
+
+  .radios {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .evaluado-por,
+  .fecha-hora {
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .col-divider {
+    grid-column: 1 / -1;
+    margin-top: 0.5rem;
+  }
+}
+
+
+::ng-deep .mat-form-field {
+  .fecha-input {
+    font-size: 12px;
+    text-align: center;
+    line-height: 1;
+    padding: 0.2em 0;
+    display: flex;
+    align-items: center;
+    min-height: 12px;
+    width: 130px;
+  }
+}
+
+::ng-deep {
+  .fecha-field {
+    min-height: 12px;
+    width: 130px !important;
+  }
+}
+
+::ng-deep .mat-divider {
+  border-top-color: rgba(68, 67, 67, 0.38) !important;
+}

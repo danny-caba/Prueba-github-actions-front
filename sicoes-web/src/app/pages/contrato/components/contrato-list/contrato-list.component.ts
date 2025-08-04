@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Contrato } from 'src/app/interface/contrato.model';
 import { ContratoService } from 'src/app/service/contrato.service';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
-import { estadosIndexPerfCont, estadosPerfCont, tipoSolicitudPerfCont } from 'src/helpers/constantes.components';
+import { estadosIndexPerfCont, estadosPerfCont, reemplazoPersonalPropuesto, tipoSolicitudPerfCont } from 'src/helpers/constantes.components';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
 import { solicitudContrato } from '../../../../../helpers/constantes.components';
@@ -14,6 +14,7 @@ import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AuthFacade } from '../../../../auth/store/auth.facade';
 import * as CryptoJS from 'crypto-js';
+import { AuthUser } from 'src/app/auth/store/auth.models';
 
 const URL_ENCRIPT = '3ncr1pt10nK3yuR1';
 
@@ -31,10 +32,14 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
 
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
+  usuario: AuthUser;
+  private userSub: Subscription;
 
   displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'estadoDocInicioServicio', 'tipo', 'actions'];
   ACCION_VER: string = solicitudContrato.ACCION_VER;
   ACCION_EDITAR: string = solicitudContrato.ACCION_EDITAR;
+  ACCION_REEMPLAZAR: string = reemplazoPersonalPropuesto.ACCION_REEMPLAZAR;
+  ACCION_REVISAR: string = reemplazoPersonalPropuesto.ACCION_REVISAR;
   private destroy$ = new Subject<void>();
 
   formGroup = this.fb.group({
@@ -44,7 +49,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
     estadoProcesoSolicitud: [''],
     tipoSolicitud: [''],
   });
-  
+
   constructor(
     private authFacade: AuthFacade,
     private router: Router,
@@ -56,11 +61,15 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
 
   ngOnInit(): void {
     this.cargarTabla();
+    this.userSub = this.user$.subscribe(usu => {
+      this.usuario = usu;
+    })
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.userSub?.unsubscribe();
   }
 
   serviceTable(filtro: any) {
@@ -100,11 +109,18 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
           .pipe(takeUntil(this.destroy$))
           .subscribe((response) => {
           if (response) {
-            this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, accion === this.ACCION_VER ? Link.CONTRATO_SOLICITUD_VIEW : Link.CONTRATO_SOLICITUD_ADD, encodedId]);
+            const linkAccion = {
+              [this.ACCION_VER]:        Link.CONTRATO_SOLICITUD_VIEW,
+              [this.ACCION_EDITAR]:        Link.CONTRATO_SOLICITUD_ADD,
+              [this.ACCION_REEMPLAZAR]: Link.REEMPLAZO_PERSONAL_ADD,
+              [this.ACCION_REVISAR]: Link.REEMPLAZO_PERSONAL_REVIEW
+            }[accion];
+
+            this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, linkAccion, encodedId]);
           } else {
             functionsAlert.error('La fecha límite de presentación ha expirado.');
           }
-        }); 
+        });
       }
     });
   }
@@ -135,8 +151,14 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   }
 
   textoRequisito(contrato: Contrato): string {
-    return contrato.tipoSolicitud === tipoSolicitudPerfCont.INSCRIPCION 
+    return contrato.tipoSolicitud === tipoSolicitudPerfCont.INSCRIPCION
       ? 'requisitos' : 'subsanar';
+  }
+
+  reemplazoRequisitos(contrato: Contrato): boolean {
+    return contrato.estadoProcesoSolicitud === estadosIndexPerfCont.CONCLUIDO &&
+           (contrato.tipoSolicitud === tipoSolicitudPerfCont.INSCRIPCION ||
+            contrato.tipoSolicitud === tipoSolicitudPerfCont.SUBSANACION);
   }
 
   encrypt(data: string): string {
@@ -156,6 +178,11 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   irACargaDocInicio(contrato: Contrato): void {
     // Aquí mandamos el id de la solicitud, no el idDocInicio, para cargar el doc
   this.router.navigate(['/', Link.EXTRANET, Link.CONTRATOS_LIST, 'cargar-documentacion-inicio', contrato.idSolicitud]);
+  }
+
+  goToCargaDocsInicio(contrato: any): void {
+    // Aquí mandamos el id de la solicitud, no el idDocInicio, para cargar el doc
+  this.router.navigate(['/', Link.EXTRANET, Link.CONTRATOS_LIST, Link.CARGA_DOCS_INICIO, contrato.idSolicitud]);
   }
 
 }

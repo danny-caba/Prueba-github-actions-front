@@ -9,7 +9,8 @@ import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { AuthUser } from 'src/app/auth/store/auth.models';
 import { SelectedPerfeccionamientoItem } from 'src/app/interface/contrato.model';
 import { ContratoService } from 'src/app/service/contrato.service';
-import { UsuariosRoles } from 'src/helpers/constantes.components';
+import { REQUERIMIENTO, UsuariosRoles } from 'src/helpers/constantes.components';
+import { SelectedReemplazarItem } from 'src/app/interface/reemplazo-personal.model';
 
 @Component({
   selector: 'app-modal-aprobador-personal',
@@ -26,16 +27,17 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
 
   usuario$: any;
   usuario: AuthUser;
-  accion:any;
-  roles=UsuariosRoles
+  accion: any;
+  roles = UsuariosRoles
 
   constructor(
     private dialogRef: MatDialogRef<ModalAprobadorPersonalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
-      accion:any;
-      elementosSeleccionados: SelectedPerfeccionamientoItem[];
+      accion: any;
+      elementosSeleccionados: SelectedReemplazarItem[];
+      tipo: any;
     },
-    private contratoService: ContratoService,
+    private solicitudService: SolicitudService,
     private authFacade: AuthFacade
     // MatDialog ya no se inyecta aquí
   ) {
@@ -43,16 +45,16 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
   }
 
   ngOnInit(): void {
-    console.log("dataaaaa",this.data);
-    this.accion=this.data.accion[0]
+    console.log("dataaaaa", this.data);
+    this.accion = this.data.tipo;
     this.usuario$ = this.authFacade.user$;
     this.usuario$.subscribe(usu => {
       this.usuario = usu;
     });
 
-   /* if (this.data.elementosSeleccionados.length === 0) {
-      this.observacion.disable();
-    }*/
+    /* if (this.data.elementosSeleccionados.length === 0) {
+       this.observacion.disable();
+     }*/
   }
 
   cancelar(): void {
@@ -67,7 +69,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     return false;
   }
 
-  async realizarAccion(tipoAccion: string): Promise<void> {
+  async realizarAccion(tipoAccion: string, accion: number): Promise<void> {
 
     this.errores = [];
     let msj = `¿Está seguro de que desea ${tipoAccion} la evaluación?`;
@@ -78,53 +80,69 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
 
     functionsAlert.questionSiNo(msj).then(async (result) => {
       if (result.isConfirmed) {
-        /*this.loadingAccion = true;
-        this.progreso = 0;
+        let requerimiento="";
+        if(this.accion.includes(this.roles.GER_G2)){
+          requerimiento=REQUERIMIENTO.EVAL_INFO_APROB_G2_GER_DIV
+        }else if (this.accion.includes(this.roles.APROBADOR_G3)){
+          requerimiento=REQUERIMIENTO.EVAL_INFO_APROB_G3_GER_LIN
+        }else if(this.accion.includes(this.roles.EVALUADOR)){
+          requerimiento=REQUERIMIENTO.APROB_EVAL_CONTR
+        }
+        this.loadingAccion = true;
+        if (accion == 1) {
+          this.firmar();
+        } else if (accion == 2) {
+          this.vistoBueno();
+        } else if (accion == 3) {
+          this.aprobar(requerimiento);
+        } else if (accion == 4) {
+          this.rechazar(requerimiento);
+        }
 
-        const totalContratos = this.data.elementosSeleccionados.length;
-        let contratosProcesados = 0;
 
-        for (const contrato of this.data.elementosSeleccionados) {
-          const idsAfectados = [contrato.idContrato];
-
-          const requestPayload = {
-            ids: [ contrato.idContrato ],                // lista de IDs
-            accion: tipoAccion,                          // "APROBAR" o "RECHAZAR"
-            observacion: this.observacion.value   // texto de la observación
-          };
-          try {
-            await firstValueFrom(
-              this.contratoService.aprobarPerfeccionamientosMasivo(requestPayload)
-            );
-
-          } catch (error) {
-            console.error(`Error al procesar el contrato ${contrato.numeroExpediente}:`, error);
-            this.errores.push(contrato.numeroExpediente); // Añade el número de expediente que falló
-          } finally {
-            contratosProcesados++;
-            this.progreso = (contratosProcesados / totalContratos) * 100;
-
-            if (contratosProcesados === totalContratos) {
-              this.loadingAccion = false;
-
-              if (this.errores.length > 0) {
-                let errorMessage = 'Hubo errores al procesar los siguientes expedientes: ' + this.errores.join(', ');
-                if (this.errores.length === totalContratos && totalContratos === 1) {
-                    errorMessage = 'Error al procesar el expediente: ' + this.errores[0];
-                }
-                functionsAlert.error(errorMessage);
-              } else {
-                functionsAlert.success('Acción masiva completada con éxito.');
-              }
-
-              // Cierra el modal, indicando que la operación ha finalizado (correcta o incorrectamente)
-              // El componente padre (SolicitudListAprobacionComponent) deberá recargar la tabla
-              this.dialogRef.close('OK');
-            }
-          }
-        }*/
       }
     });
+  }
+
+  aprobar(requerimiento:string) {
+    let json = {
+      "idAprobacion": this.data.elementosSeleccionados[0].idAprobacion,
+      "estadoAprob": this.data.elementosSeleccionados[0].estadoAprob,
+      "deObservacion": this.observacion.value,
+      "requerimiento": requerimiento,
+      "accion": "A",
+      "conforme": true
+    }
+    this.solicitudService.aprobarReemplazo(json).subscribe(resp=>{
+      this.loadingAccion = false;
+      console.log("respuesta",resp);
+      this.cancelar()
+    })
+  }
+
+  rechazar(requerimiento:string) {
+    let json = {
+      "idAprobacion": this.data.elementosSeleccionados[0].idAprobacion,
+      "estadoAprob": this.data.elementosSeleccionados[0].estadoAprob,
+      "deObservacion": this.observacion.value,
+      "requerimiento": requerimiento,
+      "accion": "R",
+      "conforme": true
+    }
+    this.solicitudService.aprobarReemplazo(json).subscribe(resp=>{
+      this.loadingAccion = false;
+      console.log("respuesta",resp);
+      this.cancelar()
+    })
+    
+  }
+
+  firmar() {
+    this.loadingAccion = false;
+  }
+
+  vistoBueno() {
+    this.loadingAccion = false;
   }
 
 }

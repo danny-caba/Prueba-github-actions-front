@@ -72,7 +72,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatMenuModule,
     MatDatepickerModule,
     SharedModule,
-
     SolicitudModule,
     MatAutocompleteModule
   ]

@@ -39,3 +39,8 @@ export class PersonalReemplazo {
   estadoAprobacionAdenda: ListadoDetalle;
   estadoEvalDocIniServ: ListadoDetalle;
 }
+
+export interface SelectedReemplazarItem {
+  idAprobacion: number;
+  estadoAprob: number;
+}

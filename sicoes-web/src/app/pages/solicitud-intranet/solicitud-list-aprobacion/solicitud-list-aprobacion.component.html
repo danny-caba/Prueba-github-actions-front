@@ -303,7 +303,7 @@
          <mat-tab label="Reemplazar personal propuesto" *ngIf="idRoles.includes(roles.GER_G2) || idRoles.includes(roles.GER_03)">
             <reemplazar-personal-propuesto [usuario]="[idRoles]"></reemplazar-personal-propuesto>
         </mat-tab>
-        <mat-tab label="Adenda Reemplazar Personal propuesto" *ngIf="idRoles.includes(roles.EVALUADOR) || idRoles.includes(roles.APROBADOR_G2) || usuario.includes(roles.APROBADOR_G3) || usuario.includes(roles.APROBADOR_G4)">
+        <mat-tab label="Adenda Reemplazar Personal propuesto" *ngIf="idRoles.includes(roles.EVALUADOR) || idRoles.includes(roles.APROBADOR_G2) || idRoles.includes(roles.APROBADOR_G3) || idRoles.includes(roles.APROBADOR_G4)">
             <adenda-reemplazar-personal [usuario]="[idRoles]"></adenda-reemplazar-personal>
         </mat-tab>
         </mat-tab-group>

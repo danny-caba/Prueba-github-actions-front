@@ -139,8 +139,8 @@ export class SolicitudService {
 
   cancelarSolicitud(solicitudUuid : any){
     let urlEndpoint = `${this._path_serve}/api/solicitudes/cancelar/${solicitudUuid}`
-    return this.http.put<Solicitud>(urlEndpoint, null);
-  }
+    return this.http.put<Solicitud>(urlEndpoint,null);
+}
 
   actualizarSolicitudConcluido(request: any){
     let urlEndpoint = `${this._path_serve}/api/solicitudes/actualizar/${request.solicitudUuid}`
@@ -193,6 +193,16 @@ private isValidParam(value: any): boolean {
   return value !== null && value !== undefined && value !== '' && !isNaN(value);
 }
 
+ aprobarReemplazo(body: any){
+  console.log("body",body)
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/aprobacion`
+    return this.http.post<any>(urlEndpoint,body );
+  }
 
+  buscarDocumentoReemplazo(id:number){
+     const urlEndpoint = `${this._path_serve}/api/documentosreemplazo/`+id
+    return this.http.get<any>(urlEndpoint);
+    
+  }
 
 }

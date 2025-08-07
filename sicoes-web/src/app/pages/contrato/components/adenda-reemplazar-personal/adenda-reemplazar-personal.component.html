@@ -89,7 +89,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Documento</th>
       <td mat-cell *matCellDef="let element">{{ element.documento }}
         <button mat-icon-button type="button">
-        <mat-icon>get_app</mat-icon>
+        <mat-icon (click)="descargar(element.archivo,element.documento)">get_app</mat-icon>
       </button>
       </td>
     </ng-container>
@@ -100,7 +100,7 @@
         <div style="display: flex; align-items: center;">
           <span>{{ element.documento }}</span>
           <button mat-icon-button type="button">
-            <mat-icon>get_app</mat-icon>
+            <mat-icon (click)="descargar(element.archivo,element.documento)">get_app</mat-icon>
           </button>
         </div>
       </td>

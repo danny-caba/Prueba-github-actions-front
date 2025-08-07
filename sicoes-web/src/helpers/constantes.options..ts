@@ -564,4 +564,13 @@ export const RolMenu = [
   ]},{ ROL: { CODIGO: RolEnum.INVITADO }, MENU: [menu16], path: [
     'intranet/contratos'
   ]},
+  { ROL: { CODIGO: RolEnum.APROBADOR_G2 }, MENU: [menu05], path: [
+    'intranet/solicitudes/aprobacion'
+  ]},
+  { ROL: { CODIGO: RolEnum.APROBADOR_G3 }, MENU: [menu05], path: [
+    'intranet/solicitudes/aprobacion'
+  ]},
+  { ROL: { CODIGO: RolEnum.APROBADOR_G4 }, MENU: [menu05], path: [
+    'intranet/solicitudes/aprobacion'
+  ]},
 ]

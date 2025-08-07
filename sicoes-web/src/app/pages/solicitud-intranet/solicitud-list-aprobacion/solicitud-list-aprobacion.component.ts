@@ -128,7 +128,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   ngOnInit(): void {
     this.usuario = JSON.parse(sessionStorage.getItem("rolesusuario") || "[]");
     this.idRoles = this.usuario.map(u => u.idRol);
-    console.log("this.usuario",this.usuario)
+    console.log("this.idRoles",this.idRoles)
     this.cargarCombo();
     this.cargarTabla();
     this.cargarTablaPerfeccionamiento();

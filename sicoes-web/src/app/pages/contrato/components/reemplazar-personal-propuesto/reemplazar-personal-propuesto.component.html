@@ -83,7 +83,7 @@
       <td mat-cell *matCellDef="let element">
         <mat-checkbox color="primary" (change)="actualizarListaExpedientePersonal($event, element)">
         </mat-checkbox>&nbsp;
-        {{ element.tipoAprobacion }}
+        {{ element.nomTipoAprobacion }}
       </td>
     </ng-container>
 
@@ -100,8 +100,8 @@
       <td mat-cell *matCellDef="let element">
         <div class="documento-cell">
           {{ element.documento }}
-          <button mat-icon-button type="button" class="icon-button-small">
-            <mat-icon fontSet="material-icons" fontSize="16px">get_app</mat-icon>
+          <button mat-icon-button type="button" class="icon-button-small" >
+            <mat-icon fontSet="material-icons" fontSize="16px" (click)="descargar(element.archivo,element.documento)">get_app</mat-icon>
           </button>
         </div>
       </td>
@@ -112,7 +112,7 @@
       <td mat-cell *matCellDef="let element">
         <div style="display: flex; align-items: center;">
           <span>{{ element.informe }}</span>
-          <button mat-icon-button type="button">
+          <button mat-icon-button type="button" (click)="descargar(element.idInforme,element.informe)">
             <mat-icon>get_app</mat-icon>
           </button>
         </div>
@@ -185,8 +185,8 @@
         encuentran resultados para los filtros seleccionados</td>
     </ng-container>
 
-    <tr mat-footer-row *matFooterRowDef="['vacioPersonal']"
-      [ngClass]="{ hide: !(dataSourceReemplazar.data.length === 0) }"></tr>
+    <tr mat-footer-row *matFooterRowDef="['vacioPersonal']" [ngClass]="{ hide: !(paginatorReemplazar.length === 0) }">
+    </tr>
   </table>
   <mat-paginator #paginatorReemplazar class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
     showFirstLastButtons></mat-paginator>
@@ -198,9 +198,9 @@
       <mat-icon svgIcon="mat:preview"></mat-icon>
       <span>Ver</span>
     </button-->
-    <button mat-menu-item (click)="historyApproveAndSignPersonal(row)">
+    <button mat-menu-item>
       <mat-icon svgIcon="mat:history"></mat-icon>
-      <span>Historial Aprobar y firmar</span>
+      <span>Revisar documento<br>de personal de reemplazo</span>
     </button>
   </ng-template>
 </mat-menu>

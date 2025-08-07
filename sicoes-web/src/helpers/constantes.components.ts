@@ -43,6 +43,9 @@ export enum RolEnum {
     EVA_CONTRA = '12',
 
     INVITADO = '15',
+    APROBADOR_G2='18',
+    APROBADOR_G3='17',
+    APROBADOR_G4='16'
 }
 
 export enum AprobadorAccion {

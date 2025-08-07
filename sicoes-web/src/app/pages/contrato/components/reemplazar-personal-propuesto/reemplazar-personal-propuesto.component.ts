@@ -22,6 +22,7 @@ import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-a
 import { ModalAprobadorPersonalComponent } from 'src/app/shared/modal-aprobador-personal/modal-aprobador-personal.component';
 import { ModalInformativoComponent } from 'src/app/shared/modal-informativo/modal-informativo.component';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, startWith, switchMap } from 'rxjs';
+import { SelectedReemplazarItem } from 'src/app/interface/reemplazo-personal.model';
 
 @Component({
   selector: 'reemplazar-personal-propuesto',
@@ -59,7 +60,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   listEstadoAprobacionP: any[];
   idRoles: number[] = [];
   roles = UsuariosRoles;
-  listaContratosSeleccionadosPerfeccionamiento: SelectedPerfeccionamientoItem[] = [];
+  listaContratosSeleccionadosPerfeccionamiento: SelectedReemplazarItem[] = [];
 
 
   displayedColumnsPersonal: string[] = [
@@ -160,6 +161,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
       this.getValidNumber('nroExpediente')
     ).subscribe(resp => {
       this.dataSourceReemplazar.data = resp;
+      this.paginatorReemplazar.length=this.dataSourceReemplazar.data.length;
     });
   }
 
@@ -224,7 +226,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
       width: '1000px',
       maxHeight: '100%',
       data: {
-        tipo: 'contrato',
+        tipo: this.idRoles,
         accion: action,
         elementosSeleccionados: this.listaContratosSeleccionadosPerfeccionamiento,
       },
@@ -248,20 +250,20 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     console.log('Evento de selección:', event.checked);
     console.log('Elemento seleccionado:', element);
 
-    const selectedItem: SelectedPerfeccionamientoItem = {
-      numeroExpediente: element.numeroExpediente,
-      idContrato: element.idContrato,
+    const selectedItem: SelectedReemplazarItem = {
+      estadoAprob: element.idEsAprob,
+      idAprobacion: element.id,
     };
 
     console.log('selectedItem a añadir/eliminar:', selectedItem);
 
     if (event.checked) {
-      if (!this.listaContratosSeleccionadosPerfeccionamiento.some(item => item.idContrato === selectedItem.idContrato)) {
+      if (!this.listaContratosSeleccionadosPerfeccionamiento.some(item => item.idAprobacion === selectedItem.idAprobacion)) {
         this.listaContratosSeleccionadosPerfeccionamiento.push(selectedItem);
         console.log('Añadido. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
       }
     } else {
-      const index = this.listaContratosSeleccionadosPerfeccionamiento.findIndex(item => item.idContrato === selectedItem.idContrato);
+      const index = this.listaContratosSeleccionadosPerfeccionamiento.findIndex(item => item.idAprobacion === selectedItem.idAprobacion);
       if (index > -1) {
         this.listaContratosSeleccionadosPerfeccionamiento.splice(index, 1);
         console.log('Eliminado. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
@@ -295,5 +297,10 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
         titleConfirm: "Aceptar"
       },
     })
+  }
+
+  descargar(id:string,nombre:string){
+    console.log("entrando a descargar")
+    this.adjuntoService.descargarWindowsJWT(id,nombre);
   }
 }

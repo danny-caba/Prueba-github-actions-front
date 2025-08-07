@@ -36,8 +36,9 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
   ACC_ENVIAR_INVITACION = 'ACC_ENVIAR_INVITACION';
 
   formGroup = this.fb.group({
-    supervisor: [null],
-    saldoContrato: [null]
+    supervisora: [null],
+    saldoContrato: [null],
+    cantidad: [null]
   });
 
   dataSourceSupervisor = new MatTableDataSource<any>();
@@ -111,16 +112,16 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
   setListSupervisores(list: any) {
     this.listSupervisoresFiltradosPorPerfil = list;
 
-    this.filteredSupervisores$ = this.formGroup.controls.supervisor.valueChanges.pipe(
+    this.filteredSupervisores$ = this.formGroup.controls.supervisora.valueChanges.pipe(
       startWith(''),
       map((value: any) => typeof value === 'string' ? value : value?.nombres),
-      map(supervisor => supervisor ? this.filterSupervisores(supervisor) : this.listSupervisoresFiltradosPorPerfil.slice())
+      map(supervisora => supervisora ? this.filterSupervisores(supervisora) : this.listSupervisoresFiltradosPorPerfil.slice())
     );
   }
 
   filterSupervisores(nombreUsuario: string) {
-    return this.listSupervisoresFiltradosPorPerfil.filter(supervisor =>
-      supervisor.nombres?.toLowerCase().indexOf(nombreUsuario?.toLowerCase()) >= 0);
+    return this.listSupervisoresFiltradosPorPerfil.filter(supervisora =>
+      supervisora.nombres?.toLowerCase().indexOf(nombreUsuario?.toLowerCase()) >= 0);
   }
 
   serviceTable(filtro) {
@@ -157,17 +158,17 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
     return '';
   }
 
-  blurSupervisor() {
+  blurSupervisora() {
     setTimeout(() => {
-      if (!(this.formGroup.controls.supervisor.value instanceof Object)) {
-        this.formGroup.controls.supervisor.setValue("");
-        this.formGroup.controls.supervisor.markAsTouched();
+      if (!(this.formGroup.controls.supervisora.value instanceof Object)) {
+        this.formGroup.controls.supervisora.setValue("");
+        this.formGroup.controls.supervisora.markAsTouched();
       }
     }, 200);
   }
 
   listarSupervisoresPorPerfil() {
-    this.formGroup.get('supervisor').setValue('');
+    this.formGroup.get('supervisora').setValue('');
 
     this.supervisoraService.listarProfesionalesPerfil(this.requerimiento.perfil.idListadoDetalle)
     .subscribe(respuesta => {
@@ -177,33 +178,46 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
     });
   }
 
-  onSupervisorSelected(supervisor: any) {
-    if (supervisor && supervisor.numeroDocumento) {
-      this.personaService.validarVinculoLaboral(supervisor.numeroDocumento).subscribe(
-        (response: any) => {
+  onSupervisoraSelected(supervisora: any, supervisoraInput: any) {
+    setTimeout(() => supervisoraInput.blur(), 0);
+    this.formGroup.get('saldoContrato').setValue(null);
+    this.formGroup.get('cantidad').setValue(null);
+    if (supervisora && supervisora.numeroDocumento) {
+      this.personaService.validarVinculoLaboral(supervisora.numeroDocumento).subscribe({
+        next: (response: any) => {
           if (response.respuesta == '1') {
             // Si tiene vínculo laboral con Osinergmin, mostrar alerta y limpiar el campo
-            functionsAlert.vigente(`No es posible realizar la invitación.`, `La invitación al supervisor persona natural ${supervisor.nombre}, mantiene vínculo laboral con OSINERGMIN`).then((result) => {
-              this.formGroup.get('supervisor').setValue('');
+            functionsAlert.vigente(`No es posible realizar la invitación.`, `La invitación al supervisor persona natural ${supervisora.nombre}, mantiene vínculo laboral con OSINERGMIN`).then((result) => {
+              this.formGroup.get('supervisora').setValue('');
             });
           } else {
-            this.saldoService.obtenerSaldoSupervisora(supervisor.idSupervisora).subscribe(respuesta => {
-              if(respuesta.saldoContrato) {
-                if (respuesta.cantidad > 730) {
-                  functionsAlert.vigente(`No es posible realizar la invitación.`, `La invitación al supervisor persona natural ${supervisor.nombre}, supera el período máximo de contratación (02 años)`).then((result) => {
-                    this.formGroup.get('supervisor').setValue('');
-                  });
+            this.saldoService.obtenerSaldoSupervisora(supervisora.idSupervisora).subscribe({
+              next: (respuesta) => {
+                if(respuesta !== null) {
+                  if (respuesta.cantidad > 730) {
+                    functionsAlert.vigente(`No es posible realizar la invitación.`, `La invitación al supervisor persona natural ${supervisora.nombre}, supera el período máximo de contratación (02 años)`).then((result) => {
+                      this.formGroup.get('supervisora').setValue('');
+                    });
+                  } else {
+                    this.formGroup.get('saldoContrato').setValue(respuesta.saldoContrato);
+                    this.formGroup.get('cantidad').setValue(respuesta.cantidad);
+                  }
                 } else {
-                  this.formGroup.get('saldoContrato').setValue(respuesta.saldoContrato);
+                  functionsAlert.vigente(`No es posible realizar la invitación.`, `El supervisor persona natural ${supervisora.nombre}, no tiene saldo contrato registrado`).then((result) => {
+                    this.formGroup.get('supervisora').setValue('');
+                  });
                 }
+              },
+              error: (error) => {
+                console.error('Error al obtener saldo:', error);
               }
             });
           }
         },
-        (error) => {
+        error: (error) => {
           console.error('Error al validar trabajador:', error);
         }
-      );
+      });
     }
   }
 
@@ -211,10 +225,10 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
     if (accion == this.ACC_ENVIAR_INVITACION) {
       const requerimientoInvitacion: RequerimientoInvitacion = {
         supervisora: {
-          idSupervisora: this.formGroup.controls.supervisor.value.idSupervisora
+          idSupervisora: this.formGroup.controls.supervisora.value.idSupervisora
         },
         requerimiento: this.requerimiento,
-        saldoContrato: this.formGroup.controls.saldoContrato.value
+        saldoContrato: this.formGroup.controls.cantidad.value
       }
 
       this.requerimientoService.enviarInvitacion(requerimientoInvitacion).subscribe(respuesta => {

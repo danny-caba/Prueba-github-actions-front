@@ -1,5 +1,5 @@
 import { Requerimiento } from "src/app/interface/requerimiento.model";
-import { EstadoRequerimientoEnum, TipoDocumentoEnum } from "./constantes.components";
+import { EstadoReqDocumentoEnum, EstadoRequerimientoEnum, TipoDocumentoEnum } from "./constantes.components";
 
 export const REQUERIMIENTO_INFORME_CONSTANTS = {
   MESSAGES: {
@@ -56,14 +56,16 @@ export const REQUERIMIENTO_CONSTANTS = {
   // Validaciones de estado de requerimiento
   ESTADO_VALIDACIONES: {
     [EstadoRequerimientoEnum.PRELIMINAR]: (req: Requerimiento) => req.estado?.codigo === EstadoRequerimientoEnum.PRELIMINAR,
-    [EstadoRequerimientoEnum.EN_PROCESO]: (req: Requerimiento) => req.estado?.codigo === EstadoRequerimientoEnum.EN_PROCESO
+    [EstadoRequerimientoEnum.EN_PROCESO]: (req: Requerimiento) => req.estado?.codigo === EstadoRequerimientoEnum.EN_PROCESO,
+    [EstadoRequerimientoEnum.CONCLUIDO]: (req: Requerimiento) => req.estado?.codigo === EstadoRequerimientoEnum.CONCLUIDO
   },
   ESTADOS_CON_ACCIONES: [
     EstadoRequerimientoEnum.PRELIMINAR,
-    EstadoRequerimientoEnum.EN_PROCESO
+    EstadoRequerimientoEnum.EN_PROCESO,
+    EstadoRequerimientoEnum.CONCLUIDO
   ],
   TIPO_DOCUMENTO: [
-    TipoDocumentoEnum.REGISTRO,
+    // TipoDocumentoEnum.REGISTRO,
     TipoDocumentoEnum.SUBSANACION,
   ],
 
@@ -76,6 +78,16 @@ export const REQUERIMIENTO_CONSTANTS = {
     'nombresApellidos',
     'estado',
     'acciones'
+  ],
+
+  ESTADO_VALIDACIONES_DOCUMENTO: {
+    [EstadoReqDocumentoEnum.SOLICITUD_PRELIMINAR]: (reqDoc: any) => reqDoc.estado?.codigo === EstadoReqDocumentoEnum.SOLICITUD_PRELIMINAR,
+    [EstadoReqDocumentoEnum.EN_PROCESO]: (reqDoc: any) => reqDoc.estado?.codigo === EstadoReqDocumentoEnum.EN_PROCESO
+  },
+
+  ESTADOS_CON_ACCIONES_DOCUMENTO: [
+    EstadoReqDocumentoEnum.SOLICITUD_PRELIMINAR,
+    EstadoReqDocumentoEnum.EN_PROCESO
   ],
 
   // Columnas de lista de requerimientos documentos
@@ -91,18 +103,30 @@ export const REQUERIMIENTO_CONSTANTS = {
     'acciones'
   ],
 
-    // Columnas de lista de requerimientos documentos
-    COLUMNAS_LISTA_REQUERIMIENTOS_DOCUMENTOS_INTRANET: [
-      'expediente',
-      'fechaRegistro',
-      'numeroContrato',
-      'division',
-      'perfil',
-      'nombresApellidos',
-      'tipo',
-      'estado',
-      'acciones'
-    ],
+  // Columnas de lista de requerimientos documentos
+  COLUMNAS_LISTA_REQUERIMIENTOS_DOCUMENTOS_INTRANET: [
+    'expediente',
+    'fechaRegistro',
+    'numeroContrato',
+    'division',
+    'perfil',
+    'nombresApellidos',
+    'tipo',
+    'estado',
+    'acciones'
+  ],
+
+  // Columnas de lista de contratos PN
+  COLUMNAS_LISTA_REQUERIMIENTOS_CONTRATOS_PN: [
+    'expediente',
+    'numeroContrato',
+    'division',
+    'perfil',
+    'nombresApellidos',
+    'tipo',
+    'estado',
+    'acciones'
+  ],
 
   ROUTES: {
     CANCEL: ['intranet', 'contratos'],

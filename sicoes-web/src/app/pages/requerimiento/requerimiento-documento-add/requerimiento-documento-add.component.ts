@@ -6,7 +6,7 @@ import { functionsAlert } from 'src/helpers/functionsAlert';
 import { REQUERIMIENTO_CONSTANTS, REQUERIMIENTO_INFORME_CONSTANTS } from 'src/helpers/requerimiento.constants';
 import { RequerimientoService } from 'src/app/service/requerimiento.service';
 import { RequerimientoDocumento, RequerimientoDocumentoDetalle } from 'src/app/interface/requerimiento.model';
-import { EstadoRequerimientoEnum } from 'src/helpers/constantes.components';
+import { EstadoReqDocumentoEnum } from 'src/helpers/constantes.components';
 
 @Component({
   selector: 'vex-requerimiento-documento-add',
@@ -53,7 +53,7 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
       .subscribe(listRes => {
         this.requisitos = listRes;
         this.requerimientoDocumento = listRes[0].requerimientoDocumento;
-        if (this.requerimientoDocumento.estado.codigo !== EstadoRequerimientoEnum.PRELIMINAR) {
+        if (this.requerimientoDocumento.estado.codigo !== EstadoReqDocumentoEnum.SOLICITUD_PRELIMINAR) {
           this.changeToView();
         }
         this.isLoading = false;

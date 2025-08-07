@@ -107,13 +107,13 @@ export class InvitacionSupervisorPnComponent
     }));
   }
 
-  verDetalle(sol: any): void {
+  verDetalle(invitacion: any): void {
+    this.invitacionService.setInvitacion(invitacion);
     this.router.navigate([
       Link.EXTRANET,
       Link.INVITACIONES_LIST,
-      "ver",
-      sol.idPropuestaProfesional,
-      sol.propuesta?.propuestaUuid,
+      Link.INVITACION_EVALUAR,
+      invitacion.requerimientoInvitacionUuid,
     ]);
   }
 }

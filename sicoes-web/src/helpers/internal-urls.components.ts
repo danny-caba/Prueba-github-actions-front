@@ -97,7 +97,14 @@ export enum Link {
     DOCUMENTO_VIEW = 'view',
     EVALUAR_DETALLE = 'evaluar-detalle',
     DOCUMENTO_REVISAR = 'revisar',
-    DOCUMENTO_EDITAR = 'editar'
+    DOCUMENTO_EDITAR = 'editar',
+
+    // REQUERIMIENTOS CONTRATO
+    REQUERIMIENTOS_CONTRATO = 'contratos',
+    CONTRATO_EDITAR = 'editar',
+
+    // REQUERIMIENTOS INVITACION
+    INVITACION_EVALUAR = 'evaluar',
 }
 
 export enum Apis {

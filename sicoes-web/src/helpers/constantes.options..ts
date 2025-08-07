@@ -67,6 +67,9 @@ export enum Opcion {
 
   //REQUERIMIENTO
   BANDEJA_REQUERIMIENTO = 'BANDEJA_REQUERIMIENTO',
+  BTN_REVISAR_DOCUMENTOS = 'BTN_REVISAR_DOCUMENTOS',
+  BTN_EVALUAR_DOCUMENTOS = 'BTN_EVALUAR_DOCUMENTOS',
+  BTN_NUMERO_CONTRATO = 'BTN_NUMERO_CONTRATO',
 }
 
 export const OpcionConfig = [
@@ -205,6 +208,8 @@ export const OpcionPorRol = [{
     Opcion.CMP_VIEW_OBS_TEC,
     Opcion.VIEW_EVALUACION,
     Opcion.BANDEJA_REQUERIMIENTO,
+    Opcion.BTN_EVALUAR_DOCUMENTOS,
+    Opcion.BTN_NUMERO_CONTRATO,
   ]
 }, {
   rol: RolEnum.EVA_TECNI,
@@ -254,6 +259,11 @@ export const OpcionPorRol = [{
   opciones: [
     Opcion.VIEW_EVALUACION,
     Opcion.BTN_APROBADOR_ACC,
+  ]
+}, {
+  rol: RolEnum.EVA_CONTRA,
+  opciones: [
+    Opcion.BTN_REVISAR_DOCUMENTOS,
   ]
 }];
 
@@ -482,8 +492,9 @@ export const RolMenu = [
     'intranet/empresa-supervisoras/cancelar/',
     'intranet/empresa-supervisoras/susp-canc/ver',
     'intranet/procesos/gestionPaces',
-    'intranet/requerimientos',
-    'intranet/requerimientos/informes/add'
+    // 'intranet/requerimientos',
+    'intranet/requerimientos/informes/add',
+    'intranet/requerimientos/documentos/evaluar',
   ]},
   { ROL: { CODIGO: RolEnum.APROB_TEC }, MENU: [menu05,menu19,menu20], path: [
     'intranet/solicitudes/ver/',
@@ -515,7 +526,9 @@ export const RolMenu = [
   ]},
   { ROL: { CODIGO: RolEnum.EVA_CONTRA }, MENU: [menu16, menu17], path: [
     'intranet/contratos',
-    'intranet/bandeja-contratos'
+    'intranet/bandeja-contratos',
+    'intranet/requerimientos/documentos/revisar',
+    'intranet/requerimientos/contratos/editar'
   ]},
   { ROL: { CODIGO: RolEnum.APROB_GPPM }, MENU: [], path: [
 

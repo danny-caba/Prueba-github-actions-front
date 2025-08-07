@@ -109,7 +109,7 @@
             Fecha<br />Plazo Confirmación
           </th>
           <td mat-cell *matCellDef="let e" class="text-primary font-medium">
-            {{ e.fechaPlazoConfirmacion }}
+            {{ e.fechaCaducidad }}
           </td>
         </ng-container>
 
@@ -118,14 +118,14 @@
             Gerencia /<br />División
           </th>
           <td mat-cell *matCellDef="let e" class="text-primary font-medium">
-            {{ e.gerencia }}
+            {{ e.requerimiento?.division?.deDivision }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="perfil">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</th>
           <td mat-cell *matCellDef="let e" class="text-primary font-medium">
-            {{ e.perfil }}
+            {{ e.requerimiento?.perfil?.nombre }}
           </td>
         </ng-container>
 
@@ -134,7 +134,7 @@
             Nombres<br />y Apellidos
           </th>
           <td mat-cell *matCellDef="let e" class="text-primary font-medium">
-            {{ e.nombres }}
+            {{ e.supervisora?.nombreCompleto }}
           </td>
         </ng-container>
 
@@ -143,7 +143,7 @@
             Saldo<br />Contrato
           </th>
           <td mat-cell *matCellDef="let e" class="text-primary font-medium">
-            {{ e.saldo }}
+            {{ e.saldoContrato }}
           </td>
         </ng-container>
 
@@ -152,7 +152,7 @@
             Estado<br />Invitación
           </th>
           <td mat-cell *matCellDef="let e" class="text-primary font-medium">
-            {{ e.estado }}
+            {{ e.estado?.nombre }}
           </td>
         </ng-container>
 
@@ -163,7 +163,7 @@
             class="w-10 text-primary text-center"
             mat-cell
           >
-            <button (click)="verDetalle(row)" matTooltip="Ver invitación">
+            <button (click)="verDetalle(row)" matTooltip="Ver invitación" *ngIf="row.estado?.codigo === 'INVITADO'">
               <mat-icon svgIcon="mat:visibility"></mat-icon>
             </button>
           </td>

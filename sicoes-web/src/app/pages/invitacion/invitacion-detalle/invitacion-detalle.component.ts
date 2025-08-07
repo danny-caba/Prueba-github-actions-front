@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InvitacionService } from "src/app/service/invitacion.service";
+import { functionsAlert } from "src/helpers/functionsAlert";
+import { functionsAlertMod2 } from "src/helpers/funtionsAlertMod2";
 import { Link } from "src/helpers/internal-urls.components";
 
 @Component({
@@ -11,7 +13,9 @@ import { Link } from "src/helpers/internal-urls.components";
 export class InvitacionDetalleComponent implements OnInit {
   ESTADO_PROCESO_ITEM: string;
   uuid: string;
-  idPropuesta: number;
+  invitacion: any;
+  ESTADO_ACEPTADO = "ACEPTADO";
+  ESTADO_RECHAZADO = "RECHAZADO";
 
   constructor(
     private router: Router,
@@ -20,21 +24,38 @@ export class InvitacionDetalleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.idPropuesta = +this.route.snapshot.paramMap.get(
-      "idPropuestaProfesional"
-    );
-    this.uuid = this.route.snapshot.paramMap.get("propuestaUuid");
+    this.initialize();
   }
 
-  evaluarInvitacion(): void {
+  initialize(): void {
+    this.uuid = this.route.snapshot.paramMap.get("requerimientoInvitacionUuid");
+    this.invitacionService.suscribeInvitacion().subscribe({
+      next: (data) => {
+        if (data !== null) {
+          this.invitacion = data;
+        } else {
+          this.router.navigate([Link.EXTRANET, Link.INVITACIONES_LIST]);
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  evaluarInvitacion(estado: string): void {
     const body = {
-      idListadoDetalle: 948,
-      codigo: "ACEPTADO",
+      codigo: estado,
     };
 
     this.invitacionService.evaluarInvitacion(this.uuid, body).subscribe({
       next: () => {
-        console.log("Evaluado");
+        functionsAlert.successDescargar("Invitación evaluada correctamente").then((result) => {
+          this.router.navigate([Link.EXTRANET, Link.INVITACIONES_LIST]);
+        });
+      },
+      error: (error) => {
+        console.log(error);
       },
     });
   }

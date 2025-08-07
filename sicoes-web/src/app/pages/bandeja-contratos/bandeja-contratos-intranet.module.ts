@@ -32,7 +32,7 @@ import { BandejaContratosIntranetRoutingModule } from './bandeja-contratos-intra
 import { BandejaContratosListComponent } from './components/bandeja-contratos-list/bandeja-contratos-list.component';
 import { BandejaContratosProcesarComponent } from './components/bandeja-contratos-procesar/bandeja-contratos-procesar.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { RequerimientoIntranetModule } from '../requerimiento-intranet/requerimiento-intranet.module';
 
 
 @NgModule({
@@ -72,7 +72,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ScrollbarModule,
     ContratoModule,
     MatNativeDateModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RequerimientoIntranetModule
   ]
 })
 export class BandejaContratosIntranetModule { }

@@ -5,6 +5,11 @@
             <!-- Campos de filtro -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-1">
                 <mat-form-field  class="flex-auto">
+                    <mat-label>Número de Contrato</mat-label>
+                    <input [formControl]="formGroup.controls.numeroContrato" matInput />
+                </mat-form-field>
+
+                <mat-form-field  class="flex-auto">
                     <mat-label>Gerencia/División</mat-label>
                     <mat-select [formControl]="formGroup.controls.division" (selectionChange)="listarPerfilesPorDivision($event)">
                         <mat-option *ngFor="let obj of listDivision" [value]="obj">
@@ -33,28 +38,6 @@
                             <span class="body-1">{{ supervisor.nombre }}</span>
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
-
-                <mat-form-field  class="flex-auto">
-                    <mat-label>Estado Documento</mat-label>
-                    <mat-select [formControl]="formGroup.controls.estado">
-                        <mat-option *ngFor="let obj of listEstadoReqDocumento" [value]="obj">
-                            {{ obj.nombre }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <mat-form-field  class="flex-auto date-field">
-                    <mat-label>Fecha Inicio Ingreso</mat-label>
-                    <input [formControl]="formGroup.controls.fechaInicio" type="date" min="1900-01-01" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput />
-                    <mat-error *ngIf="formGroup.get('fechaInicio').hasError('required')">Ingrese Fecha Inicio</mat-error>
-                </mat-form-field>
-
-                <mat-form-field  class="flex-auto date-field">
-                    <mat-label>Fecha Fin Ingreso</mat-label>
-                    <input [formControl]="formGroup.controls.fechaFin" type="date" [min]="getFechaMinima()" matInput />
-                    <mat-error *ngIf="formGroup.get('fechaFin').hasError('required')">Ingrese Fecha Fin</mat-error>
-                    <mat-error *ngIf="formGroup.get('fechaFin').hasError('fechaInvalida')">La fecha fin no puede ser menor a la fecha inicio</mat-error>
                 </mat-form-field>
             </div>
 
@@ -97,22 +80,10 @@
                     </td>
                 </ng-container>
 
-                <!-- Columna Fecha Registro -->
-                <ng-container matColumnDef="fechaRegistro">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-semibold px-4 py-3">
-                        <div class="flex items-center">
-                            Fecha de Ingreso
-                        </div>
-                    </th>
-                    <td mat-cell *matCellDef="let element" class="px-4 py-3 border-b border-gray-100">
-                        <span class="text-gray-700">{{ element?.fechaIngreso }}</span>
-                    </td>
-                </ng-container>
-
                 <!-- Columna Número de Contrato -->
                 <ng-container matColumnDef="numeroContrato">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Número de Contrato</th>
-                    <td mat-cell *matCellDef="let element">{{ element?.contrato?.numeroContrato }}</td>
+                    <td mat-cell *matCellDef="let element">{{ element?.numeroContrato }}</td>
                 </ng-container>
 
                 <!-- Columna División/Gerencia -->
@@ -233,28 +204,10 @@
 <!-- Menú de acciones -->
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
     <ng-template let-row="customer" matMenuContent>
-        <div *vexOptionRoleRequerimiento="opcion.BTN_EVALUAR_DOCUMENTOS">
-            <button 
-                (click)="evaluarDocumento(row)"
-                *ngIf="mostrarOpcion(ACC_EVALUAR_DOCUMENTO, row)" mat-menu-item>
-                <mat-icon svgIcon="mat:check_circle"></mat-icon>
-                <span>Evaluar Documento</span>
-            </button>0
-
-            <button 
-                (click)="registrarContrato(row)" 
-                *ngIf="mostrarOpcion(ACC_NUMERO_CONTRATO, row)" mat-menu-item>
-                <mat-icon svgIcon="mat:assignment"></mat-icon>
-                <span>Número de contrato</span>
-            </button>
-        </div>
-
         <div *vexOptionRoleRequerimiento="opcion.BTN_REVISAR_DOCUMENTOS">
-            <button 
-                (click)="revisarDocumentos(row)" 
-                *ngIf="mostrarOpcion(ACC_REVISAR_DOCUMENTO, row)" mat-menu-item>
-                <mat-icon svgIcon="mat:description"></mat-icon>
-                <span>Revisar documentos</span>
+            <button (click)="editar(row)" mat-menu-item>
+                <mat-icon svgIcon="mat:edit"></mat-icon>
+                <span>Editar</span>
             </button>
         </div>
     </ng-template>

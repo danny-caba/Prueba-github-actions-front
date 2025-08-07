@@ -8,6 +8,7 @@ import { AprobadorAccion } from 'src/helpers/constantes.components';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { BaseComponent } from '../components/base.component';
 import { RequerimientoService } from 'src/app/service/requerimiento.service';
+import { Requerimiento } from 'src/app/interface/requerimiento.model';
 
 @Component({
   selector: 'vex-modal-numero-contrato',
@@ -18,6 +19,8 @@ export class ModalNumeroContratoComponent extends BaseComponent {
   AprobadorAccion = AprobadorAccion
   listaSolicitudUuidSeleccionado = []
   errores: { uuid: string; error: any }[] = [];
+  
+  requerimiento: Requerimiento;
 
   formGroup = this.fb.group({
     numeroContrato: ['', [Validators.required, Validators.maxLength(10)]]
@@ -25,11 +28,12 @@ export class ModalNumeroContratoComponent extends BaseComponent {
 
   constructor(
     private dialogRef: MatDialogRef<ModalNumeroContratoComponent>,
-    @Inject(MAT_DIALOG_DATA) data,
+    @Inject(MAT_DIALOG_DATA) public data: { requerimiento: Requerimiento },
     private fb: FormBuilder,
     private requerimientoService: RequerimientoService,
   ) {
     super();
+    this.requerimiento = data.requerimiento;
   }
 
   closeModal() {
@@ -47,13 +51,12 @@ export class ModalNumeroContratoComponent extends BaseComponent {
   aprobadores: Observable<any>
 
   guardar() {
-
-
     functionsAlert.questionSiNo('¿Está seguro de actualizar el número de contrato?').then(async (result) => {
+      const { idRequerimiento } = this.requerimiento;
 
       if (result.isConfirmed) {
         const payload = {
-          requerimiento: { idRequerimiento: 47 },
+          requerimiento: { idRequerimiento },
           numeroContrato: this.formGroup.value.numeroContrato
         };
 
@@ -63,7 +66,7 @@ export class ModalNumeroContratoComponent extends BaseComponent {
             this.dialogRef.close(true);
           },
           error: () => {
-            functionsAlert.error('Ocurrió un error al registrar el número de contrato.');
+            console.error('Error al registrar el número de contrato.');
           }
         })
 

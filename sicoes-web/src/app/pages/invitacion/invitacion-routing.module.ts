@@ -17,7 +17,7 @@ const routes: VexRoutes = [
         component: InvitacionListComponent,
       },
       {
-        path: "ver/:idPropuestaProfesional/:propuestaUuid",
+        path: "evaluar/:requerimientoInvitacionUuid",
         canActivate: [AuthGuardService],
         component: InvitacionDetalleComponent,
       },
@@ -25,7 +25,7 @@ const routes: VexRoutes = [
         path: ":idPropuestaProfesional/:propuestaUuid",
         canActivate: [AuthGuardService],
         component: InvitacionFormComponent,
-      },
+      }
     ],
   },
 ];

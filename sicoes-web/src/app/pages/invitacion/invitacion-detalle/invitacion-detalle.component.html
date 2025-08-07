@@ -29,10 +29,20 @@
           </button>
           <span class="flex-auto"></span>
           <div class="flex flex-row gap-x-6">
-            <button color="primary" mat-raised-button type="button">
+            <button 
+              color="primary" 
+              mat-raised-button 
+              type="button"
+              (click)="evaluarInvitacion(ESTADO_RECHAZADO)"
+            >
               <span>Rechazar</span>
             </button>
-            <button color="primary" mat-raised-button type="button">
+            <button 
+              color="primary" 
+              mat-raised-button type="button"
+              type="button"
+              (click)="evaluarInvitacion(ESTADO_ACEPTADO)"
+            >
               <span>Aceptar</span>
             </button>
           </div>
@@ -57,19 +67,19 @@
     <div class="text-primary px-4 py-4">
       <div class="grid grid-cols-2 md:grid-cols-4">
         <label class="md:col-span-1">Fecha de invitación:</label>
-        <label class="font-bold md:col-span-3"> 2025-06-01 14:00 </label>
+        <label class="font-bold md:col-span-3"> {{ invitacion.fechaInvitacion }} </label>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4">
         <label class="md:col-span-1">Fecha que se cancela la invitación:</label>
-        <label class="font-bold md:col-span-3"> 2025-12-14 15:30 </label>
+        <label class="font-bold md:col-span-3"> {{ invitacion.fechaCaducidad }} </label>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4">
         <label>Gerencia / División:</label>
-        <label class="font-bold"> Energía </label>
+        <label class="font-bold"> {{ invitacion.requerimiento?.division?.deDivision }} </label>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4">
         <label>Perfil:</label>
-        <label class="font-bold"> Supervisor Técnico </label>
+        <label class="font-bold"> {{ invitacion.requerimiento?.perfil?.nombre }} </label>
       </div>
     </div>
   </div>

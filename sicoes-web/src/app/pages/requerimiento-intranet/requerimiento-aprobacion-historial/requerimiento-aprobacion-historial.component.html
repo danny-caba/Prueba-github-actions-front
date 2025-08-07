@@ -27,7 +27,7 @@
         <ng-container matColumnDef="tipo">
           <th class="text-center" mat-header-cell *matHeaderCellDef>Tipo</th>
           <td mat-cell *matCellDef="let element" class="text-primary font-medium">
-            {{ element?.tipo?.nombre }}
+            {{ element?.tipoAprobador?.nombre }}
           </td>
         </ng-container>
 
@@ -43,7 +43,7 @@
         <ng-container matColumnDef="fechaDesignacion">
           <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha Designación</th>
           <td mat-cell *matCellDef="let element" class="text-primary font-medium">
-            {{ element?.fechaDesignacion | date: 'dd/MM/yyyy HH:mm' }}
+            {{ element?.fechaAsignacion }}
           </td>
         </ng-container>
 
@@ -51,7 +51,7 @@
         <ng-container matColumnDef="aprobador">
           <th class="text-center" mat-header-cell *matHeaderCellDef>Aprobador</th>
           <td mat-cell *matCellDef="let element" class="text-primary font-medium">
-            {{ element?.nombreRolAprobador }}
+            {{ element?.usuario?.nombreUsuario }}
           </td>
         </ng-container>
 
@@ -59,7 +59,7 @@
         <ng-container matColumnDef="fechaAprobacion">
           <th class="text-center" mat-header-cell *matHeaderCellDef>Fecha Aprobación</th>
           <td mat-cell *matCellDef="let element" class="text-primary font-medium">
-            {{ element?.fechaAprobacion | date: 'dd/MM/yyyy HH:mm' }}
+            {{ element?.estado?.codigo === 'APROBADO' ? element?.fechaAprobacion : element?.fechaRechazo }}
           </td>
         </ng-container>
 

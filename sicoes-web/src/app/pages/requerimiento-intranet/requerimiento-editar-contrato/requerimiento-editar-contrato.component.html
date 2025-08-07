@@ -50,25 +50,35 @@
                         </mat-form-field>
                     </div>
                     <div class="flex gap-x-4 items-center max-w-md">
-                        <mat-form-field appearance="outline" class="flex-grow">
-                            <mat-label>Número de Contrato</mat-label>
-                            <input matInput type="number" formControlName="numeroContrato"
-                                placeholder="Número de Contrato"
-                                onkeypress="return (event.charCode >= 48 && event.charCode <= 57)">
-                            <mat-error *ngIf="numeroContrato?.invalid && numeroContrato?.touched">
-                                <span *ngIf="numeroContrato?.errors?.required">El número de contrato es
-                                    obligatorio.</span>
-                                <span *ngIf="numeroContrato?.errors?.pattern">Solo se permiten números.</span>
-                            </mat-error>
+                        <mat-form-field  class="flex-auto">
+                            <mat-select formControlName="tipoRequisito">
+                                <mat-option *ngFor="let obj of tipoRequisitoOptions" [value]="obj">
+                                    {{ obj.viewValue }}
+                                </mat-option>
+                            </mat-select>
                         </mat-form-field>
                         <div class="pb-1">
                             <button mat-stroked-button color="primary" type="button" (click)="adjuntarArchivo()"
-                                [disabled]="!contratoForm.get('numeroContrato')?.valid" class="adjuntar-btn">
+                                [disabled]="!contratoForm.get('tipoRequisito')?.valid" class="adjuntar-btn">
                                 + Adjuntar ...
                             </button>
                              <input type="file" #fileInput hidden (change)="onFileSelected($event)">
                         </div>
                     </div>
+                    <!-- <mat-form-field  class="flex-auto">
+                        <mat-select formControlName="tipoRequisito">
+                            <mat-option *ngFor="let obj of tipoRequisitoOptions" [value]="obj">
+                                {{ obj.viewValue }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="pb-1">
+                    <button mat-stroked-button color="primary" type="button" (click)="adjuntarArchivo()"
+                            [disabled]="!contratoForm.get('numeroContrato')?.valid" class="adjuntar-btn">
+                            + Adjuntar ...
+                        </button>
+                         <input type="file" #fileInput hidden (change)="onFileSelected($event)">
+                    </div> -->
                 </div>
             </form>
             <div class="overflow-auto shadow-2xl rounded mt-6 tabla-container-60">

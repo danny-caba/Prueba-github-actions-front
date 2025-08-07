@@ -77,6 +77,7 @@
       <th mat-header-cell *matHeaderCellDef>Tipo Aprobación</th>
       <td mat-cell *matCellDef="let e">
         <mat-checkbox color="primary" class="flex-auto" [(ngModel)]="e.seleccionado"
+          *ngIf="e.accionAprobar"
           (change)="actualizarSeleccionados()">
           {{ e.tipo.descripcion }}
         </mat-checkbox>
@@ -126,30 +127,30 @@
     <!-- Estado Aprobación -->
     <ng-container matColumnDef="estadoAprobacion">
       <th mat-header-cell *matHeaderCellDef>Estado Aprobación</th>
-      <td mat-cell *matCellDef="let e">{{ e.requerimiento?.estado?.descripcion }}</td>
+      <td mat-cell *matCellDef="let e">{{ e.requerimiento?.estadoAprobacion?.nombre }}</td>
     </ng-container>
 
     <!-- Estado Firma Jefe Unidad -->
     <ng-container matColumnDef="firmaJefeUnidad">
-      <th mat-header-cell *matHeaderCellDef>Firma Jefe Unidad</th>
+      <th mat-header-cell *matHeaderCellDef>Estado Firma Jefe Unidad</th>
       <td mat-cell *matCellDef="let e">{{ e.estadoFirmaJefeUnidad }}</td>
     </ng-container>
 
     <!-- Estado Firma Gerente -->
     <ng-container matColumnDef="firmaGerente">
-      <th mat-header-cell *matHeaderCellDef>Firma Gerente</th>
+      <th mat-header-cell *matHeaderCellDef>Estado Firma Gerente</th>
       <td mat-cell *matCellDef="let e">{{ e.estadoFirmaGerente }}</td>
     </ng-container>
 
     <!-- Estado Aprobación GPPM -->
     <ng-container matColumnDef="aprobacionGppm">
-      <th mat-header-cell *matHeaderCellDef>Aprobación GPPM</th>
+      <th mat-header-cell *matHeaderCellDef>Estado Aprobación GPPM</th>
       <td mat-cell *matCellDef="let e">{{ e.estadoAprobacionGPPM }}</td>
     </ng-container>
 
     <!-- Estado Aprobación GSE -->
     <ng-container matColumnDef="aprobacionGse">
-      <th mat-header-cell *matHeaderCellDef>Aprobación GSE</th>
+      <th mat-header-cell *matHeaderCellDef>Estado Aprobación GSE</th>
       <td mat-cell *matCellDef="let e">{{ e.estadoAprobacionGSE }}</td>
     </ng-container>
 

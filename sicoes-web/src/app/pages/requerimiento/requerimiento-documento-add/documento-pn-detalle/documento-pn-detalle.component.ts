@@ -19,14 +19,19 @@ export class DocumentoPnDetalleComponent {
 
   constructor(
     private dialog: MatDialog,
-  ) { }
+  ) {
+  }
 
   onChangeCheckbox(event: any, requisito: RequerimientoDocumentoDetalle) {
-    requisito.archivo = event.checked ? null : requisito.archivo;
+    if (this.isReview) {
+      requisito.flagVistoBueno = event.checked ? '1' : '0';
+    } else {
+      requisito.archivo = event.checked ? null : requisito.archivo;
+    }
   }
 
   validarCheck(): boolean {
-    if (this.add) {
+    if (this.add || this.subsanar) {
       return this.requisito.archivo != null;
     }
     if (this.evaluate) {
@@ -34,9 +39,9 @@ export class DocumentoPnDetalleComponent {
         this.requisito.evaluacion?.codigo == evaluacion.CUMPLE ||
         this.requisito.evaluacion?.codigo == evaluacion.OBSERVADO);
     }
-    if (this.subsanar) {
-      return this.requisito.evaluacion?.codigo == evaluacion.CUMPLE;
-    }
+    // if (this.isReview) {
+    //   return this.requisito.evaluacion?.codigo == evaluacion.CUMPLE;
+    // }
 
     return false;
   }
@@ -47,7 +52,7 @@ export class DocumentoPnDetalleComponent {
   }
 
   isArchivoEditable(): boolean {
-    return this.add || (this.subsanar && (this.requisito.evaluacion?.codigo == evaluacion.OBSERVADO || this.requisito.evaluacion === null));
+    return this.add || (this.subsanar && (this.requisito.evaluacion?.codigo == evaluacion.OBSERVADO || this.requisito.evaluacion === null || this.requisito.evaluacion === undefined));
   }
 
   abrirObservacion() {

@@ -19,10 +19,10 @@ export class RequerimientoEditarContratoComponent implements OnInit {
   contratoForm!: FormGroup;
   contratoSeleccionadoId: number | null = null;
   tipoRequisitoOptions: any[] = [
-    { value: 'Acta de inicio', viewValue: 'Acta de inicio' },
+    // { value: 'Acta de inicio', viewValue: 'Acta de inicio' },
     { value: 'Contrato', viewValue: 'Contrato' },
-    { value: 'Adenda', viewValue: 'Adenda' },
-    { value: 'Informe Final', viewValue: 'Informe Final' }
+    // { value: 'Adenda', viewValue: 'Adenda' },
+    // { value: 'Informe Final', viewValue: 'Informe Final' }
   ];
   archivosAdjuntosDataSource = new MatTableDataSource<any>([]);
   displayedAdjuntosColumns: string[] = ['requisito', 'nombreArchivo', 'acciones'];
@@ -37,12 +37,11 @@ export class RequerimientoEditarContratoComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.uuidContrato = this.route.snapshot.paramMap.get('requerimientoUuid')!;
+    this.uuidContrato = this.route.snapshot.paramMap.get('requerimientoContratoUuid')!;
     this.contratoForm = this.fb.group({
       fechaSuscripcion: [''],
       fechaInicio: [''],
       fechaFin: [''],
-      numeroContrato: ['', Validators.required],
       tipoRequisito: ['']
     });
   }
@@ -94,6 +93,8 @@ export class RequerimientoEditarContratoComponent implements OnInit {
   descargarArchivo(element: any): void { }
   eliminarArchivo(index: number): void { }
   guardarContrato(): void {
+    console.log(this.contratoForm.invalid);
+    console.log(this.uuidContrato);
     if (this.contratoForm.invalid || !this.uuidContrato) return;
 
     const formValue = this.contratoForm.value;
@@ -102,7 +103,7 @@ export class RequerimientoEditarContratoComponent implements OnInit {
       fechaSuscripcion: this.formatDate(formValue.fechaSuscripcion),
       fechaInicio: this.formatDate(formValue.fechaInicio),
       fechaFin: this.formatDate(formValue.fechaFin),
-      archivos: [{ idArchivo: 12345 }]
+      archivos: this.archivosAdjuntosDataSource.data
     };
 
     this.requerimientoService.editarContrato(this.uuidContrato, payload).subscribe({

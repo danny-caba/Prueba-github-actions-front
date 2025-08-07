@@ -6,6 +6,7 @@ import { Pageable } from '../interface/pageable.model';
 import { functions } from 'src/helpers/functions';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { RequerimientoInvitacion } from '../interface/requerimientoInvitacion.model';
+import { asignarNombresApellidos } from 'src/helpers/requerimiento.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -80,7 +81,13 @@ export class RequerimientoService {
   listarInvitaciones(filtro: any) {
     let urlEndpoint = `${this._path_serve}/api/invitaciones`
     let params = functions.obtenerParams(filtro)
-    return this.http.get<Pageable<Requerimiento>>(urlEndpoint, { params });
+    return this.http.get<Pageable<RequerimientoInvitacion>>(urlEndpoint, { params }).pipe(
+      map(respuesta => {
+        const content = respuesta.content as unknown as RequerimientoInvitacion[];
+        respuesta.content = content.map(req => asignarNombresApellidos(req)) as unknown as [RequerimientoInvitacion];
+        return respuesta;
+      })
+    );
   }
 
   listarRequerimientosAprobaciones(filtro) {
@@ -106,23 +113,8 @@ export class RequerimientoService {
     let params = functions.obtenerParams(filtro)
     return this.http.get<Pageable<RequerimientoDocumento>>(urlEndpoint, { params }).pipe(
       map(respuesta => {
-        const requerimientos = respuesta.content;
-        requerimientos.map(req => {
-          if (req.requerimiento?.supervisora?.tipoDocumento?.codigo === 'DNI') {
-            req.nombresApellidos = req.requerimiento.supervisora.nombres +
-              ' ' + req.requerimiento.supervisora.apellidoPaterno +
-              ' ' + req.requerimiento.supervisora.apellidoMaterno;
-          } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'RUC') {
-            req.nombresApellidos = req.requerimiento.supervisora.nombreRazonSocial;
-          } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'CARNET_EXTRA') {
-            req.nombresApellidos = req.requerimiento.supervisora?.nombres +
-              ' ' + req.requerimiento.supervisora?.apellidoPaterno +
-              ' ' + req.requerimiento.supervisora?.apellidoMaterno;
-          } else {
-            req.nombresApellidos = '';
-          }
-        });
-        respuesta.content = requerimientos;
+        const content = respuesta.content as unknown as RequerimientoDocumento[];
+        respuesta.content = content.map(req => asignarNombresApellidos(req)) as unknown as [RequerimientoDocumento];
         return respuesta;
       })
     );
@@ -143,23 +135,8 @@ export class RequerimientoService {
     let params = functions.obtenerParams(filtro)
     return this.http.get<Pageable<RequerimientoDocumento>>(urlEndpoint, { params }).pipe(
       map(respuesta => {
-        const requerimientos = respuesta.content;
-        requerimientos.map(req => {
-          if (req.requerimiento?.supervisora?.tipoDocumento?.codigo === 'DNI') {
-            req.nombresApellidos = req.requerimiento.supervisora.nombres +
-              ' ' + req.requerimiento.supervisora.apellidoPaterno +
-              ' ' + req.requerimiento.supervisora.apellidoMaterno;
-          } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'RUC') {
-            req.nombresApellidos = req.requerimiento.supervisora.nombreRazonSocial;
-          } else if (req.requerimiento.supervisora?.tipoDocumento?.codigo === 'CARNET_EXTRA') {
-            req.nombresApellidos = req.requerimiento.supervisora?.nombres +
-              ' ' + req.requerimiento.supervisora?.apellidoPaterno +
-              ' ' + req.requerimiento.supervisora?.apellidoMaterno;
-          } else {
-            req.nombresApellidos = '';
-          }
-        });
-        respuesta.content = requerimientos;
+        const content = respuesta.content as unknown as RequerimientoDocumento[];
+        respuesta.content = content.map(req => asignarNombresApellidos(req)) as unknown as [RequerimientoDocumento];
         return respuesta;
       })
     );
@@ -190,10 +167,25 @@ export class RequerimientoService {
     return this.http.post<any>(url, data);
   }
 
-  editarContrato(uuid: string, data: EditarContratoRequest) {
+  editarContrato(uuid: string, data: any) {
     const url = `${this._path_serve}/api/requerimientos/contratos/${uuid}/editar`;
     return this.http.post<any>(url, data);
   }
 
+  obtenerIdInformeSiged(numeroExpediente) {
+    const url = `${this._path_serve}/api/requerimientos/${numeroExpediente}/obtenerIdInformeSiged`;
+    return this.http.get<any>(url);
+  }
+
+  listarContratos(filtro: any) {
+    const url = `${this._path_serve}/api/requerimientos/contratos`;
+    return this.http.get<Pageable<any>>(url, { params: functions.obtenerParams(filtro) }).pipe(
+      map(respuesta => {
+        const content = respuesta.content as unknown as any;
+        respuesta.content = content.map(req => asignarNombresApellidos(req)) as unknown as [any];
+        return respuesta;
+      })
+    );
+  }
 
 }

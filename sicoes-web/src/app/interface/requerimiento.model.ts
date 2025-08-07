@@ -63,6 +63,8 @@ export class RequerimientoDocumentoDetalle {
   usuario: Partial<Usuario>
   fechaEvaluacion: string
   observacion: string
+  origenRequisito?: ListadoDetalle
+  flagVistoBueno?: string
 }
 
 export interface RegistrarContratoRequest {

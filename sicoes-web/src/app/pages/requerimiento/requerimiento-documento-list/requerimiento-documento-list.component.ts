@@ -4,7 +4,7 @@ import { FormBuilder, ValidatorFn, AbstractControl, ValidationErrors } from '@an
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
-import { EstadoRequerimientoEnum, ListadoEnum } from 'src/helpers/constantes.components';
+import { EstadoReqDocumentoEnum, ListadoEnum } from 'src/helpers/constantes.components';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { ParametriaService } from 'src/app/service/parametria.service';
@@ -167,23 +167,21 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
 
   // Validaciones de estado de requerimiento
   preliminarEnabled(reqDoc: RequerimientoDocumento) {
-    // return req.estado?.codigo == EstadoRequerimientoEnum.PRELIMINAR;
-    return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[EstadoRequerimientoEnum.PRELIMINAR](reqDoc);
+    return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES_DOCUMENTO[EstadoReqDocumentoEnum.SOLICITUD_PRELIMINAR](reqDoc);
   }
 
-  enProcesoEnabled(req: Requerimiento) {
-    // return req.estado?.codigo == EstadoRequerimientoEnum.EN_PROCESO;
-    return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[EstadoRequerimientoEnum.EN_PROCESO](req);
+  enProcesoEnabled(reqDoc: RequerimientoDocumento) {
+    return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES_DOCUMENTO[EstadoReqDocumentoEnum.EN_PROCESO](reqDoc);
   }
 
-  accionesEnabled(req: Requerimiento) {
-    return REQUERIMIENTO_CONSTANTS.ESTADOS_CON_ACCIONES.some(estado =>
-      REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[estado](req)
+  accionesEnabled(reqDoc: RequerimientoDocumento) {
+    return REQUERIMIENTO_CONSTANTS.ESTADOS_CON_ACCIONES_DOCUMENTO.some(estado =>
+      REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES_DOCUMENTO[estado](reqDoc)
     );
   }
 
-  isSubsanar(doc: RequerimientoDocumento) {
-    return REQUERIMIENTO_CONSTANTS.TIPO_DOCUMENTO.includes(doc.tipo?.codigo as any);
+  isSubsanar(reqDoc: RequerimientoDocumento) {
+    return REQUERIMIENTO_CONSTANTS.TIPO_DOCUMENTO.includes(reqDoc.tipo?.codigo as any);
   }
 
   // Acciones

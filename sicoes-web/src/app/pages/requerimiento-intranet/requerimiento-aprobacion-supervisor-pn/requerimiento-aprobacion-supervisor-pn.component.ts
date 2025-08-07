@@ -153,7 +153,7 @@ export class RequerimientoAprobacionSupervisorPnComponent
       width: '1200px',
       maxHeight: '100%',
       data: {
-        listaSolicitudUuidSeleccionado: this.listaSolicitudUuidSeleccionado,
+        listaSolicitudUuidSeleccionado: this.listaSolicitudUuidSeleccionado
       },
     }).afterClosed().subscribe(result => {
       if (result) {

@@ -60,7 +60,7 @@ const routes: VexRoutes = [{
       }
     },
     {
-      path: Link.REQUERIMIENTOS_DOCUMENTO + '/' + Link.DOCUMENTO_EDITAR + '/:requerimientoDocumentoUuid',
+      path: Link.REQUERIMIENTOS_CONTRATO + '/' + Link.CONTRATO_EDITAR + '/:requerimientoContratoUuid',
       canActivate: [AuthGuardService, RoleGuardService],
       component: RequerimientoEditarContratoComponent,
       data: {

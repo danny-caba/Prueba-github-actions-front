@@ -26,6 +26,7 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
   private readonly destroy$ = new Subject<void>();
   titulo = 'Evaluar Documentos';
   isReview: boolean = false;
+  isFinalized: boolean = false;
 
   constructor(
     private router: Router,
@@ -58,6 +59,21 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
       )
       .subscribe(listRes => {
         this.requisitos = listRes;
+        
+        if (this.evaluate) {
+          this.requisitos = this.requisitos.filter(requisito => requisito.origenRequisito.codigo === 'EXTERNO');
+        }
+
+        if (this.isReview) {
+          this.requisitos = this.requisitos.map(requisito => {
+            if (requisito.flagVistoBueno === undefined || requisito.flagVistoBueno === null) {
+              requisito.flagVistoBueno = '0';
+            }
+            return requisito;
+          });
+          this.isFinalized = this.requisitos.some(requisito => requisito.flagVistoBueno !== undefined && requisito.flagVistoBueno !== null);
+        }
+        
         this.isLoading = false;
       });
 

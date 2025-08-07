@@ -24,7 +24,7 @@ export class SaldoService {
     params = functions.paramsAdd(params, 'idSupervisora', idSupervisora);
     return this.http.get<any>(urlEndpoint, { params }).pipe(
       map(respuesta => {
-        if (respuesta.cantidad) {
+        if (respuesta !== null) {
           // Transformamos cantidad(dias) a formato legible
           const anios = Math.floor(respuesta.cantidad / 365);
           const meses = Math.floor((respuesta.cantidad % 365) / 30.44);

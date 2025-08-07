@@ -17,7 +17,8 @@
             <div class="px-6 py-4 flex flex-col gap-y-2 sm:flex-row sm:gap-x-2 items-center justify-end"
                 *ngIf="evaluate || isReview">
                 <button color="primary" mat-raised-button type="button" class="hover-class"
-                    (click)="finalizarEvaluacion()">Finalizar Evaluación</button>
+                    *ngIf="!isFinalized && !isLoading"
+                    (click)="finalizarEvaluacion()">Finalizar {{ isReview ? 'Revisión' : 'Evaluación' }}</button>
                 <button color="primary" mat-raised-button type="button" class="hover-class"
                     (click)="regresar()">Regresar</button>
             </div>

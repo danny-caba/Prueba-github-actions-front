@@ -39,6 +39,7 @@ import { RequerimientoDocumentoEvaluarComponent } from './requerimiento-document
 import { RequerimientoModule } from '../requerimiento/requerimiento.module';
 import { RequerimientoDocumentoEvaluarDetalleComponent } from './requerimiento-documento-evaluar-detalle/requerimiento-documento-evaluar-detalle.component';
 import { RequerimientoEditarContratoComponent } from './requerimiento-editar-contrato/requerimiento-editar-contrato.component';
+import { RequerimientoContratoListComponent } from './requerimiento-contrato-list/requerimiento-contrato-list.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { RequerimientoEditarContratoComponent } from './requerimiento-editar-con
     RequerimientoDocumentoListComponent,
     RequerimientoDocumentoEvaluarComponent,
     RequerimientoDocumentoEvaluarDetalleComponent,
-    RequerimientoEditarContratoComponent
+    RequerimientoEditarContratoComponent,
+    RequerimientoContratoListComponent
   ],
   imports: [
     CommonModule,
@@ -91,7 +93,8 @@ import { RequerimientoEditarContratoComponent } from './requerimiento-editar-con
     RequerimientoInformePnAddComponent,
     RequerimientoAprobacionSupervisorPnComponent,
     RequerimientoDocumentoListComponent,
-    RequerimientoDocumentoEvaluarComponent
+    RequerimientoDocumentoEvaluarComponent,
+    RequerimientoContratoListComponent
   ]
 })
 export class RequerimientoIntranetModule { }

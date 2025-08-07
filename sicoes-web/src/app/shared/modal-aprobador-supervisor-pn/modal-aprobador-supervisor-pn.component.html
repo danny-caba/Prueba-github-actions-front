@@ -1,11 +1,16 @@
 <form>
     <vex-modal-title titulo="Acción Aprobador"></vex-modal-title>
-    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-divider class="-mx-6 text-border mb-6"></mat-divider>
     <mat-dialog-content class="flex flex-col">
-        <mat-form-field class="mt-6 flex-auto">
+        <mat-form-field *ngIf="someResponsableSIAF" class="flex-auto">
+            <mat-label>Número SIAF</mat-label>
+            <input matInput [formControl]="formGroup.controls.nuSiaf" />
+        </mat-form-field>
+        <mat-form-field class="flex-auto">
             <mat-label>Observaciones</mat-label>
             <textarea matInput #obsAdministrativa [formControl]="formGroup.controls.observacion"
-                maxlength="256"></textarea>
+                maxlength="5000"></textarea>
+            <mat-hint align="end">{{ formGroup.controls.observacion.value?.length || 0 }}/5000</mat-hint>
         </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions align="end">

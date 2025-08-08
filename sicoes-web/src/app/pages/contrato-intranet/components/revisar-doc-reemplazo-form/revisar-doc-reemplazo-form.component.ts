@@ -20,6 +20,7 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
   btnRegister: string = 'Registrar';
   btnGuardarAdenda: string = 'Guardar Adenda';
   idSolicitud: string = '';
+  idReemplazoPersonal: string = '';
   uuidSolicitud: string= '';
 
   isCargaAdenda: boolean = false;
@@ -37,7 +38,7 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
         this.isCargaAdenda = data.isCargaAdenda;
       }
     });
-    this.getIdSolicitud();
+    this.getParams();
   }
 
   toGoBandejaContratos() {
@@ -48,14 +49,13 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
           });
   }
 
-  getIdSolicitud(): void {
+  getParams(): void {
     this.idSolicitud = this.route.snapshot.paramMap.get('idSolicitud');
     this.uuidSolicitud = this.route.snapshot.paramMap.get('solicitudUuid');
-    console.log("idSolicitud -> ", this.idSolicitud);
-    console.log("uuidSolicitud -> ", this.uuidSolicitud);
+    this.idReemplazoPersonal = this.route.snapshot.paramMap.get('idReemplazo');
   }
 
-  doNothing(): void {
+  registrarRevision(): void {
 
   }
 

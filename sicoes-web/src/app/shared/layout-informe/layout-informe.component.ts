@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
 import { PersonalPropuesto } from 'src/app/interface/reemplazo-personal.model';
 import { FormBuilder, Validators } from '@angular/forms';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 
 @Component({
   selector: 'vex-layout-informe',
@@ -19,18 +20,23 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
 
   @Input() isReviewExt: boolean;
   @Input() isCargaAdenda?: boolean;
+  @Input() fechaDesvinculacion: string;
+  @Input() adjuntoInforme: any;
+  @Input() idDocumento: number;
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
 
   listPersonalPropuesto: PersonalPropuesto[] = null;
   listPersonalAgregado: PersonalPropuesto[] = [];
+  evaluadoPor: string = null;
+  fechaHora: string = null;
 
-  editable: boolean = true;
-  marcaFechaDesvinculacion: 'si' | 'no' | null = null;
-  marcaInformeCarta: 'si' | 'no' | null = null;
+  editable: boolean = false;
+  marcaInformeCarta: 'SI' | 'NO' | null = null;
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private reemplazoService: PersonalReemplazoService
   ) {
     super();
   }
@@ -42,70 +48,49 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.setFechaDesvinculacion();
-
-    this.listPersonalPropuesto = [
-      {
-        idPersonal: 1,
-        tipoDocumento: 'DNI',
-        numeroDocumento: '12345678',
-        nombreCompleto: 'Juan Pérez García',
-        perfil: 'RND-11',
-        fechaRegistro: '2025-06-10',
-        fechaBaja: '',
-        fechaDesvinculacion: ''
-      }
-    ];
   }
 
-  setFechaDesvinculacion(): void {
-    if (this.isCargaAdenda) {
-      const hoy = new Date();
-      const fechaInput = hoy.toISOString().split('T')[0];
-      
-      this.formGroup.patchValue({
-        fechaDesvinculacion: fechaInput
-      });
-      
-      this.formGroup.get('fechaDesvinculacion')?.disable();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['fechaDesvinculacion'] && changes['fechaDesvinculacion'].currentValue) {
+      const nuevaFecha = changes['fechaDesvinculacion'].currentValue;
+      this.setFechaDesvinculacion(nuevaFecha);
+    }
+
+    if (changes['adjuntoInforme'] && changes['adjuntoInforme'].currentValue) {
+      const nuevoAdjunto = changes['adjuntoInforme'].currentValue;
+      this.adjuntoInforme = nuevoAdjunto;
+    }
+
+    if (changes['idDocumento'] && changes['idDocumento'].currentValue) {
+      const nuevoIdInforme = changes['idDocumento'].currentValue;
+      this.idDocumento = nuevoIdInforme;
     }
   }
 
-  private formatDate(date: Date): string {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
+  setFechaDesvinculacion(fecha: string): void {
+    const [dd, mm, yyyy] = fecha.split('/');
+    fecha = `${yyyy}-${mm.padStart(2, '0')}-${dd.padStart(2, '0')}`;
     
-    return `${day}/${month}/${year}`;
+    this.formGroup.patchValue({
+      fechaDesvinculacion: fecha
+    });
+    this.formGroup.get('fechaDesvinculacion')?.disable();
   }
 
-  doNothing(): void {
-    if (this.formGroup.valid) {
-      const personalSeleccionado = this.formGroup.get('nombreCompleto')!.value as unknown as PersonalPropuesto;
-      console.log('Personal seleccionado:', personalSeleccionado);
-      const fechaDesvinculacion = this.formGroup.get('fechaDesvinculacion')?.value;
-      console.log('Fecha de desvinculación:', fechaDesvinculacion);
-
-      const yaExiste = this.listPersonalAgregado.some(p => p.nombreCompleto === personalSeleccionado.nombreCompleto);
-      console.log('Ya existe:', yaExiste);
-      if (yaExiste) {
-        functionsAlert.error('Personal ya fue agregado').then((result) => {
-        });
-        this.formGroup.reset();
-        return;
-      }
-
-      personalSeleccionado.fechaDesvinculacion = fechaDesvinculacion.toString();
-
-      this.listPersonalAgregado.push(personalSeleccionado);
-      this.listPersonalAgregado = [...this.listPersonalAgregado];
-      this.formGroup.reset();
-    } else {
-      this.formGroup.markAllAsTouched();
+  onMarcaInformeCartaChange(valor: string) {
+    console.log('Opción seleccionada:', valor);
+    let body = {
+      idDocumento: this.idDocumento,
+      conformidad: valor,
+      idRol: 2
     }
-  }
 
-  doNothing2(): void {
+    this.reemplazoService.grabaConformidad(body).subscribe({
+          next: (response) => {
+            this.evaluadoPor = response.evaluador;
+            this.fechaHora = response.fecEvaluacion;
+          }
+    });
 
 
   }

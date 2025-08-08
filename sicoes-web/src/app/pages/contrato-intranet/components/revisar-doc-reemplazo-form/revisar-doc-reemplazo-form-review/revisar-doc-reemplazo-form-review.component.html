@@ -5,14 +5,18 @@
                         <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- Informe</mat-panel-title>
                     </mat-expansion-panel-header>
                     <vex-layout-informe 
+                        [fechaDesvinculacion] = "fecDesvinculacion"
+                        [adjuntoInforme] = "adjuntoInforme"
                         [isReviewExt] = "isReviewExt"
+                        [idDocumento] = "idInforme"
                     #layoutInforme></vex-layout-informe>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
                     <mat-expansion-panel-header>
                         <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- Baja Personal Propuesto</mat-panel-title>
                     </mat-expansion-panel-header>
-                    <vex-layout-baja-personal-propuesto 
+                    <vex-layout-baja-personal-propuesto
+                        [idSolicitud] = "idSolicitud" 
                         [isReviewExt]="isReviewExt"
                     #layoutBajaPersPropuesto></vex-layout-baja-personal-propuesto>
                 </mat-expansion-panel>

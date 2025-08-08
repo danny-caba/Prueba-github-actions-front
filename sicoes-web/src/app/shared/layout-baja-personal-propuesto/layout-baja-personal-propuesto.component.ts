@@ -58,12 +58,15 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
 
 
 
-  ngOnInit(): void {
-    this.cargarCombo();
-    this.cargarTabla();
+  ngOnInit(): void {    
     this.isReview = this.isReview ?? false;
     this.isReviewExt = this.isReviewExt ?? false;
     this.isCargaAdenda = this.isCargaAdenda ?? false;
+
+    if (!this.isReviewExt) {
+      this.cargarCombo();
+      this.cargarTabla();
+    }
   }
 
   guardarBajaPersonalPropuesto(): void {
@@ -122,7 +125,6 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
     .listarPersonalReemplazo(this.idSolicitudDecrypt)
     .subscribe(response => {
       this.listPersonalBaja = response.content.filter(item => !!item.personaBaja && item.idReemplazo == this.perfilBaja?.idReemplazo);
-      console.log('Lista de personal baja:', this.listPersonalBaja);
     });
   }
 

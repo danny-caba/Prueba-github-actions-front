@@ -3,9 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { PersonalReemplazo } from 'src/app/interface/reemplazo-personal.model';
+import { Supervisora } from 'src/app/interface/supervisora.model';
+import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
+import * as CryptoJS from 'crypto-js';
+
+const URL_DECRYPT = '3ncr1pt10nK3yuR1';
 
 @Component({
   selector: 'vex-revisar-doc-reemplazo',
@@ -22,27 +28,19 @@ export class RevisarDocReemplazoComponent extends BaseComponent implements OnIni
   allowedToReplace: boolean = true;
   btnReplace: string = 'Reemplazar';
   private destroy$ = new Subject<void>();
-  dummyDataSource = [
-    {
-      tipoDocumento: "DNI",
-      numeroDocumento: '09856442',
-      nombreCompleto: 'CLAUDIA ROSA JIMENEZ PEREZ',
-      perfil: 'DB1_456',
-      fechaRegistro: '2023-10-01',
-      fechaInicioContractual: '2023-10-01',
-      estadoReemplazo: 'Preliminar',
-      estadoDocumento: 'Aprobado'
-    }
-  ];
+  listPersonalReemplazo: PersonalReemplazo[] = [];
+  idSolicitud: number;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private personalReemplazoService: PersonalReemplazoService
   ) {
     super();
   }
 
   ngOnInit(): void {
+    this.cargarTabla();
   }
 
   ngOnDestroy(): void {
@@ -54,9 +52,10 @@ export class RevisarDocReemplazoComponent extends BaseComponent implements OnIni
 
   }
 
-  toGoRevisarReemplazoPersonalForm() {
+  toGoRevisarReemplazoPersonalForm(row: PersonalReemplazo) {
     const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
-    this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_REVIEW_FORM + '/' + encryptedId]);
+    const idReemplazoPersonal = row.idReemplazo;
+    this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_REVIEW_FORM + '/' + encryptedId + '/' + idReemplazoPersonal]);
   }
 
   toGoCargarAdendaForm() {
@@ -71,5 +70,27 @@ export class RevisarDocReemplazoComponent extends BaseComponent implements OnIni
             this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST]);
           }
         });
+  }
+
+  cargarTabla() {
+    const idSolicitudHashed = this.route.snapshot.paramMap.get('idSolicitud');
+    this.idSolicitud = Number(idSolicitudHashed);
+
+    this.personalReemplazoService
+    .listarPersonalReemplazo(this.idSolicitud)
+    .subscribe(response => {
+      this.listPersonalReemplazo = response.content.filter(item => !!item.estadoReemplazo);
+    });
+  }
+
+  getNombreCompleto(persona: Supervisora): string {
+      if (!persona) return '';
+      return `${persona.nombres} ${persona.apellidoPaterno} ${persona.apellidoMaterno}`.trim();
+  }
+
+  decrypt(encryptedData: string): string {
+        const bytes = CryptoJS.AES.decrypt(encryptedData, URL_DECRYPT);
+        const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+        return decrypted;
   }
 }

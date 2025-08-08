@@ -78,7 +78,6 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
   }
 
   onMarcaInformeCartaChange(valor: string) {
-    console.log('Opción seleccionada:', valor);
     let body = {
       idDocumento: this.idDocumento,
       conformidad: valor,

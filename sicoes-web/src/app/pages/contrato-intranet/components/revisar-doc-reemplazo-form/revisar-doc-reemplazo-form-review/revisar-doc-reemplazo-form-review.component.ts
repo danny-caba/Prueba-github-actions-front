@@ -28,7 +28,16 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   personalReemplazo: PersonalReemplazo;
   listDocumentosReemplazo: any[] = [];
   adjuntoInforme: any;
+  adjuntoDjNepotismo: any;
+  adjuntoDjImpedimento: any;
+  adjuntoDjNoVinculo: any;
+  adjuntoOtros: any;
+
   idInforme: number;
+  idDjNepotismo: number;
+  idDjImpedimento: number;
+  idDJNoVinculo: number;
+  idOtros: number;
 
   constructor(
     private reemplazoService: PersonalReemplazoService
@@ -56,7 +65,15 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   }
 
   setAdjuntos(): void {
-    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'SOLICITUD_REEMPLAZO_SUPERVISOR');
+    this.setDatosInforme();
+    this.setDatosDjNepotismo();
+    this.setDatosDjImpedimento();
+    this.setDatosDjNoVinculo();
+    this.setDatosOtros();
+  }
+
+  setDatosInforme() {
+    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'INFORME');
     
     let informe = {
       adjunto: {
@@ -64,6 +81,54 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoInforme = informe;
-    this.idInforme = doc?.idDocumento;
+    this.idInforme = doc?.idDocumento; 
+  }
+
+  setDatosDjNepotismo() {
+    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'DJ_PERSONAL_PROPUESTO');
+    
+    let djNepotismo = {
+      adjunto: {
+        archivo: doc?.archivo
+      }
+    }
+    this.adjuntoDjNepotismo = djNepotismo;
+    this.idDjNepotismo = doc?.idDocumento; 
+  }
+
+  setDatosDjImpedimento() {
+    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'DJ_IMPEDIMENTOS');
+    
+    let djImpedimento = {
+      adjunto: {
+        archivo: doc?.archivo
+      }
+    }
+    this.adjuntoDjImpedimento = djImpedimento;
+    this.idDjImpedimento = doc?.idDocumento; 
+  }
+
+  setDatosDjNoVinculo() {
+    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'DJ_NO_VINCULO');
+    
+    let djNoVinculo = {
+      adjunto: {
+        archivo: doc?.archivo
+      }
+    }
+    this.adjuntoDjNoVinculo = djNoVinculo;
+    this.idDJNoVinculo = doc?.idDocumento; 
+  }
+
+  setDatosOtros() {
+    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'OTROS_DOCUMENTOS');
+    
+    let otros = {
+      adjunto: {
+        archivo: doc?.archivo
+      }
+    }
+    this.adjuntoOtros = otros;
+    this.idOtros = doc?.idDocumento; 
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
 import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { PersonalPropuesto, PersonalReemplazo } from 'src/app/interface/reemplazo-personal.model';
@@ -41,6 +41,15 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
   @Input() perfilBaja: any;
+  @Input() idDocDjNepotismo: number;
+  @Input() idDocDjImpedimento: number;
+  @Input() idDocDjNoVinculo: number;
+  @Input() idDocOtros: number;
+  @Input() adjuntoDjNepotismo: any;
+  @Input() adjuntoDjImpedimento: any;
+  @Input() adjuntoDjNoVinculo: any;
+  @Input() adjuntoOtros: any;
+  @Input() personalReemplazo: PersonalReemplazo;
 
   @Output() seccionCompletada = new EventEmitter<any>();
   
@@ -49,6 +58,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
 
   listPersonalApto: SupervisoraPerfil[] = [];
   listPersonalPropuesto: PersonalReemplazo[] = [];
+  listPersonalPropuestoReview: PersonalReemplazo[] = [];
   listPersonalAgregado: PersonalPropuesto[] = [];
   listDocumentosReemplazo: any[] = [];
 
@@ -65,10 +75,18 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   adjuntoCargadoDjImpedimento: boolean = false;
   adjuntoCargadoDjNoVinculo: boolean = false;
   adjuntoCargadoOtros: boolean = false;
-  marcaDjNepotismo: 'si' | 'no' | null = null;
-  marcaDjImpedimento: 'si' | 'no' | null = null;
-  marcaDjNoVinculo: 'si' | 'no' | null = null;
-  marcaOtros: 'si' | 'no' | null = null;
+  marcaDjNepotismo: 'SI' | 'NO' | null = null;
+  marcaDjImpedimento: 'SI' | 'NO' | null = null;
+  marcaDjNoVinculo: 'SI' | 'NO' | null = null;
+  marcaOtros: 'SI' | 'NO' | null = null;
+  djNepotismoEvaluadoPor: string = null;
+  djImpedimentoEvaluadoPor: string = null;
+  djNoVinculoEvaluadoPor: string = null;
+  otrosEvaluadoPor: string = null;
+  djNepotismoFechaHora: string = null;
+  djImpedimentoFechaHora: string = null;
+  djNoVinculoFechaHora: string = null;
+  otrosFechaHora: string = null;
 
 
   constructor(
@@ -90,14 +108,66 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     }, { validators: alMenosUnDocumentoMarcado });
 
   ngOnInit(): void {
-    this.cargarCombo();
-    this.obtenerSolicitud();
+    if (!this.isReviewExt) {
+      this.cargarCombo();
+      this.obtenerSolicitud();
+    }
+    this.editable = !this.isReviewExt;
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.perfilBaja) {
       this.cargarCombo();
     }
+
+    if (changes['idDocDjNepotismo'] && changes['idDocDjNepotismo'].currentValue) {
+      const nuevoIdDocumento = changes['idDocDjNepotismo'].currentValue;
+      this.idDocDjNepotismo = nuevoIdDocumento;
+    }
+
+    if (changes['idDocDjImpedimento'] && changes['idDocDjImpedimento'].currentValue) {
+      const nuevoIdDocumento = changes['idDocDjImpedimento'].currentValue;
+      this.idDocDjImpedimento = nuevoIdDocumento;
+    }
+
+    if (changes['idDocDjNoVinculo'] && changes['idDocDjNoVinculo'].currentValue) {
+      const nuevoIdDocumento = changes['idDocDjNoVinculo'].currentValue;
+      this.idDocDjNoVinculo = nuevoIdDocumento;
+    }
+
+    if (changes['idDocOtros'] && changes['idDocOtros'].currentValue) {
+      const nuevoIdDocumento = changes['idDocOtros'].currentValue;
+      this.idDocOtros = nuevoIdDocumento;
+    }
+
+    if (changes['adjuntoDjNepotismo'] && changes['adjuntoDjNepotismo'].currentValue) {
+      const nuevoAdjunto = changes['adjuntoDjNepotismo'].currentValue;
+      this.adjuntoDjNepotismo = nuevoAdjunto;
+      this.adjuntoCargadoDjNepotismo = !!nuevoAdjunto;
+    }
+
+    if (changes['adjuntoDjImpedimento'] && changes['adjuntoDjImpedimento'].currentValue) {
+      const nuevoAdjunto = changes['adjuntoDjImpedimento'].currentValue;
+      this.adjuntoDjImpedimento = nuevoAdjunto;
+      this.adjuntoCargadoDjImpedimento = !!nuevoAdjunto;
+    }
+
+    if (changes['adjuntoDjNoVinculo'] && changes['adjuntoDjNoVinculo'].currentValue) {
+      const nuevoAdjunto = changes['adjuntoDjNoVinculo'].currentValue;
+      this.adjuntoDjNoVinculo = nuevoAdjunto;
+      this.adjuntoCargadoDjNoVinculo = !!nuevoAdjunto;
+    }
+
+    if (changes['adjuntoOtros'] && changes['adjuntoOtros'].currentValue) {
+      const nuevoAdjunto = changes['adjuntoOtros'].currentValue;
+      this.adjuntoOtros = nuevoAdjunto;
+      this.adjuntoCargadoOtros = !!nuevoAdjunto;
+    }
+    
+    if (changes['personalReemplazo'] && changes['personalReemplazo'].currentValue) {
+      const nuevoPersonalReemplazo = changes['personalReemplazo'].currentValue;
+      this.cargarTablaReview(nuevoPersonalReemplazo);
+    }   
   }
 
   obtenerSolicitud() {
@@ -180,13 +250,75 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     .subscribe(response => {
       this.listPersonalPropuesto = response.content.filter(item => !!item.personaPropuesta && item.idReemplazo == this.perfilBaja?.idReemplazo);
     });
-
-
   }
+
+  cargarTablaReview(personalReemplazo: PersonalReemplazo): void {
+    this.listPersonalPropuestoReview = [...this.listPersonalPropuestoReview, personalReemplazo];
+  }    
 
   cargarDocumentosReemplazo() {
     this.reemplazoService.listarDocsReemplazo(this.perfilBaja.idReemplazo).subscribe(response => {
       this.listDocumentosReemplazo = response.content;
+    });
+  }
+
+  onMarcaDJNepotismoChange(valor: string) {
+    let body = {
+      idDocumento: this.idDocDjNepotismo,
+      conformidad: valor,
+      idRol: 2
+    }
+
+    this.reemplazoService.grabaConformidad(body).subscribe({
+          next: (response) => {
+            this.djNepotismoEvaluadoPor = response.evaluador;
+            this.djNepotismoFechaHora = response.fecEvaluacion;
+          }
+    });
+  }
+
+  onMarcaDJImpedimentoChange(valor: string) {
+    let body = {
+      idDocumento: this.idDocDjImpedimento,
+      conformidad: valor,
+      idRol: 2
+    }
+
+    this.reemplazoService.grabaConformidad(body).subscribe({
+          next: (response) => {
+            this.djImpedimentoEvaluadoPor = response.evaluador;
+            this.djImpedimentoFechaHora = response.fecEvaluacion;
+          }
+    });
+  }
+
+  onMarcaDJNoVinculoChange(valor: string) {
+    let body = {
+      idDocumento: this.idDocDjNoVinculo,
+      conformidad: valor,
+      idRol: 2
+    }
+
+    this.reemplazoService.grabaConformidad(body).subscribe({
+          next: (response) => {
+            this.djNoVinculoEvaluadoPor = response.evaluador;
+            this.djNoVinculoFechaHora = response.fecEvaluacion;
+          }
+    });
+  }
+
+  onMarcaOtrosChange(valor: string) {
+    let body = {
+      idDocumento: this.idDocOtros,
+      conformidad: valor,
+      idRol: 2
+    }
+
+    this.reemplazoService.grabaConformidad(body).subscribe({
+          next: (response) => {
+            this.otrosEvaluadoPor = response.evaluador;
+            this.otrosFechaHora = response.fecEvaluacion;
+          }
     });
   }
 

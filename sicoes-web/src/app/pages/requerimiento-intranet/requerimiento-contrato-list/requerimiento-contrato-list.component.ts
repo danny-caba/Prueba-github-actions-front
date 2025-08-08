@@ -1,36 +1,46 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormBuilder, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { stagger80ms } from 'src/@vex/animations/stagger.animation';
-import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
-import { EstadoRequerimientoEnum, ListadoEnum } from 'src/helpers/constantes.components';
-import { BasePageComponent } from 'src/app/shared/components/base-page.component';
-import { AuthFacade } from 'src/app/auth/store/auth.facade';
-import { ParametriaService } from 'src/app/service/parametria.service';
-import { RequerimientoService } from 'src/app/service/requerimiento.service';
-import { Requerimiento, RequerimientoDocumento } from 'src/app/interface/requerimiento.model';
-import { REQUERIMIENTO_CONSTANTS } from 'src/helpers/requerimiento.constants';
-import { ListadoDetalle } from 'src/app/interface/listado.model';
-import { map, Observable, startWith, Subscription } from 'rxjs';
-import { Division } from 'src/app/interface/division.model';
-import { MatTableDataSource } from '@angular/material/table';
-import { GestionUsuarioService } from 'src/app/service/gestion-usuarios.service';
-import { SupervisoraService } from 'src/app/service/supervisora.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ModalNumeroContratoComponent } from 'src/app/shared/modal-numero-contrato/modal-numero-contrato.component';
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
+import { Router } from "@angular/router";
+import {
+  FormBuilder,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+} from "@angular/forms";
+import { fadeInUp400ms } from "src/@vex/animations/fade-in-up.animation";
+import { stagger80ms } from "src/@vex/animations/stagger.animation";
+import { InternalUrls, Link } from "src/helpers/internal-urls.components";
+import {
+  EstadoRequerimientoEnum,
+  ListadoEnum,
+} from "src/helpers/constantes.components";
+import { BasePageComponent } from "src/app/shared/components/base-page.component";
+import { AuthFacade } from "src/app/auth/store/auth.facade";
+import { ParametriaService } from "src/app/service/parametria.service";
+import { RequerimientoService } from "src/app/service/requerimiento.service";
+import {
+  Requerimiento,
+  RequerimientoDocumento,
+} from "src/app/interface/requerimiento.model";
+import { REQUERIMIENTO_CONSTANTS } from "src/helpers/requerimiento.constants";
+import { ListadoDetalle } from "src/app/interface/listado.model";
+import { map, Observable, startWith, Subscription } from "rxjs";
+import { Division } from "src/app/interface/division.model";
+import { MatTableDataSource } from "@angular/material/table";
+import { GestionUsuarioService } from "src/app/service/gestion-usuarios.service";
+import { SupervisoraService } from "src/app/service/supervisora.service";
+import { MatDialog } from "@angular/material/dialog";
+import { ModalNumeroContratoComponent } from "src/app/shared/modal-numero-contrato/modal-numero-contrato.component";
 
 @Component({
-  selector: 'vex-requerimiento-contrato-list',
-  templateUrl: './requerimiento-contrato-list.component.html',
-  styleUrls: ['./requerimiento-contrato-list.component.scss'],
-  animations: [
-    fadeInUp400ms,
-    stagger80ms
-  ]
+  selector: "vex-requerimiento-contrato-list",
+  templateUrl: "./requerimiento-contrato-list.component.html",
+  styleUrls: ["./requerimiento-contrato-list.component.scss"],
+  animations: [fadeInUp400ms, stagger80ms],
 })
-export class RequerimientoContratoListComponent extends BasePageComponent<Requerimiento> implements OnInit, OnDestroy {
-
+export class RequerimientoContratoListComponent
+  extends BasePageComponent<Requerimiento>
+  implements OnInit, OnDestroy
+{
   @Input() tabActivo$: Observable<boolean>;
   private tabSubscription: Subscription;
 
@@ -38,20 +48,22 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
   user$ = this.authFacade.user$;
   dateHoy = new Date();
 
-  ACC_EVALUAR_DOCUMENTO = 'ACC_EVALUAR_DOCUMENTO';
-  ACC_REVISAR_DOCUMENTO = 'ACC_REVISAR_DOCUMENTO';
-  ACC_NUMERO_CONTRATO = 'ACC_NUMERO_CONTRATO';
+  ACC_EVALUAR_DOCUMENTO = "ACC_EVALUAR_DOCUMENTO";
+  ACC_REVISAR_DOCUMENTO = "ACC_REVISAR_DOCUMENTO";
+  ACC_NUMERO_CONTRATO = "ACC_NUMERO_CONTRATO";
 
   formGroup = this.fb.group({
-    numeroContrato: [''],
+    numeroContrato: [""],
     division: [null],
     perfil: [null],
     estado: [null],
-    supervisor: [null]
+    supervisor: [null],
   });
 
   listEstadoReqDocumento: ListadoDetalle[] = [];
-  displayedColumns: string[] = [...REQUERIMIENTO_CONSTANTS.COLUMNAS_LISTA_REQUERIMIENTOS_CONTRATOS_PN];
+  displayedColumns: string[] = [
+    ...REQUERIMIENTO_CONSTANTS.COLUMNAS_LISTA_REQUERIMIENTOS_CONTRATOS_PN,
+  ];
 
   listDivision: Division[] = [];
   dataSourcePerfil = new MatTableDataSource<any>();
@@ -72,7 +84,7 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
     private requerimientoService: RequerimientoService,
     private gestionUsuarioService: GestionUsuarioService,
     private supervisoraService: SupervisoraService,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {
     super();
   }
@@ -89,25 +101,26 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
   }
 
   cargarCombo() {
-    const dataString = sessionStorage.getItem('ESTADO_REQ_DOCUMENTO');
+    const dataString = sessionStorage.getItem("ESTADO_REQ_DOCUMENTO");
     if (dataString) {
       this.listEstadoReqDocumento = JSON.parse(dataString);
     } else {
-      this.parametriaService.obtenerMultipleListadoDetalle([
-        ListadoEnum.ESTADO_REQ_DOCUMENTO
-      ]).subscribe(res => {
-        this.listEstadoReqDocumento = res[0];
-      });
+      this.parametriaService
+        .obtenerMultipleListadoDetalle([ListadoEnum.ESTADO_REQ_DOCUMENTO])
+        .subscribe((res) => {
+          this.listEstadoReqDocumento = res[0];
+        });
     }
 
     // Cargar divisiones
-    this.parametriaService.listarDivisiones().subscribe(res => {
+    this.parametriaService.listarDivisiones().subscribe((res) => {
       this.listDivision = res;
     });
 
     // Cargar perfiles
-    this.gestionUsuarioService.listarPerfilesDetalle()
-      .subscribe(respuesta => {
+    this.gestionUsuarioService
+      .listarPerfilesDetalle()
+      .subscribe((respuesta) => {
         this.dataSourcePerfil.data = respuesta;
         this.listAllPerfilesDetalle = this.dataSourcePerfil.data;
         this.setListPerfilesDetalle(this.listAllPerfilesDetalle);
@@ -119,17 +132,26 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
     this.listPerfilesFiltradosPorDivision = list;
 
     // Filtrar perfiles
-    this.filteredStatesTecnico$ = this.formGroup.controls.perfil.valueChanges.pipe(
-      startWith(''),
-      map((value: any) => typeof value === 'string' ? value : value?.detalle),
-      map(state => state ? this.filterStatesTec(state) : this.listPerfilesFiltradosPorDivision.slice())
-    );
+    this.filteredStatesTecnico$ =
+      this.formGroup.controls.perfil.valueChanges.pipe(
+        startWith(""),
+        map((value: any) =>
+          typeof value === "string" ? value : value?.detalle
+        ),
+        map((state) =>
+          state
+            ? this.filterStatesTec(state)
+            : this.listPerfilesFiltradosPorDivision.slice()
+        )
+      );
   }
 
   filterStatesTec(nombreUsuario: string) {
     // Filtramos únicamente entre los perfiles de la división seleccionada
-    return this.listPerfilesFiltradosPorDivision.filter(state =>
-      state.dePerfil?.toLowerCase().indexOf(nombreUsuario?.toLowerCase()) >= 0);
+    return this.listPerfilesFiltradosPorDivision.filter(
+      (state) =>
+        state.dePerfil?.toLowerCase().indexOf(nombreUsuario?.toLowerCase()) >= 0
+    );
   }
 
   serviceTable(filtro) {
@@ -152,27 +174,27 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
       division: this.formGroup.controls.division.value?.idDivision,
       perfil: this.formGroup.controls.perfil.value?.idListadoDetalle,
       supervisor: this.formGroup.controls.supervisor.value,
-    }
+    };
     return filtro;
   }
 
   mostrarOpcion(opt, objReq) {
     // Validaciones de acciones
-    if (opt == this.ACC_EVALUAR_DOCUMENTO &&
-      this.enProcesoEnabled(objReq)) return true;
-    if (opt == this.ACC_REVISAR_DOCUMENTO &&
-      this.concluidoEnabled(objReq)) return true;
-    if (opt == this.ACC_NUMERO_CONTRATO &&
-      this.concluidoEnabled(objReq)) return true;
+    if (opt == this.ACC_EVALUAR_DOCUMENTO && this.enProcesoEnabled(objReq))
+      return true;
+    if (opt == this.ACC_REVISAR_DOCUMENTO && this.concluidoEnabled(objReq))
+      return true;
+    if (opt == this.ACC_NUMERO_CONTRATO && this.concluidoEnabled(objReq))
+      return true;
     return false;
   }
 
   displayFn(codi: any): string {
-    return codi && codi.dePerfil ? codi.dePerfil : '';
+    return codi && codi.dePerfil ? codi.dePerfil : "";
   }
 
   displayFnSupervisor(supervisor: any): string {
-    return supervisor && supervisor.nombre ? supervisor.nombre : '';
+    return supervisor && supervisor.nombre ? supervisor.nombre : "";
   }
 
   blurEvaluadorTecnico() {
@@ -195,7 +217,7 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
 
   listarPerfilesPorDivision(event) {
     // Limpiamos el perfil seleccionado
-    this.formGroup.get('perfil').setValue('');
+    this.formGroup.get("perfil").setValue("");
 
     if (!event.value || !event.value.idDivision) {
       // Si no hay división seleccionada, limpiamos la lista de perfiles
@@ -204,8 +226,8 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
     }
 
     // Filtramos los perfiles por la división seleccionada
-    const perfilesPorDivision = this.listAllPerfilesDetalle.filter(perfil =>
-      perfil.idDivision === event.value.idDivision
+    const perfilesPorDivision = this.listAllPerfilesDetalle.filter(
+      (perfil) => perfil.idDivision === event.value.idDivision
     );
 
     // Actualizamos la lista filtrada y configuramos el observable
@@ -215,21 +237,27 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
   // Validaciones de estado de requerimiento
   preliminarEnabled(reqDoc: RequerimientoDocumento) {
     // return req.estado?.codigo == EstadoRequerimientoEnum.PRELIMINAR;
-    return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[EstadoRequerimientoEnum.PRELIMINAR](reqDoc);
+    return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[
+      EstadoRequerimientoEnum.PRELIMINAR
+    ](reqDoc);
   }
 
   enProcesoEnabled(req: Requerimiento) {
     // return req.estado?.codigo == EstadoRequerimientoEnum.EN_PROCESO;
-    return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[EstadoRequerimientoEnum.EN_PROCESO](req);
+    return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[
+      EstadoRequerimientoEnum.EN_PROCESO
+    ](req);
   }
 
   concluidoEnabled(req: Requerimiento) {
     // return req.estado?.codigo == EstadoRequerimientoEnum.CONCLUIDO;
-    return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[EstadoRequerimientoEnum.CONCLUIDO](req);
+    return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[
+      EstadoRequerimientoEnum.CONCLUIDO
+    ](req);
   }
 
   accionesEnabled(req: Requerimiento) {
-    return REQUERIMIENTO_CONSTANTS.ESTADOS_CON_ACCIONES.some(estado =>
+    return REQUERIMIENTO_CONSTANTS.ESTADOS_CON_ACCIONES.some((estado) =>
       REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[estado](req)
     );
   }
@@ -237,20 +265,31 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
   setListSupervisores(list: any) {
     this.listSupervisoresFiltradosPorPerfil = list;
 
-    this.filteredSupervisores$ = this.formGroup.controls.supervisor.valueChanges.pipe(
-      startWith(''),
-      map((value: any) => typeof value === 'string' ? value : value?.nombres),
-      map(supervisor => supervisor ? this.filterSupervisores(supervisor) : this.listSupervisoresFiltradosPorPerfil.slice())
-    );
+    this.filteredSupervisores$ =
+      this.formGroup.controls.supervisor.valueChanges.pipe(
+        startWith(""),
+        map((value: any) =>
+          typeof value === "string" ? value : value?.nombres
+        ),
+        map((supervisor) =>
+          supervisor
+            ? this.filterSupervisores(supervisor)
+            : this.listSupervisoresFiltradosPorPerfil.slice()
+        )
+      );
   }
 
   filterSupervisores(nombreUsuario: string) {
-    return this.listSupervisoresFiltradosPorPerfil.filter(supervisor =>
-      supervisor.nombres?.toLowerCase().indexOf(nombreUsuario?.toLowerCase()) >= 0);
+    return this.listSupervisoresFiltradosPorPerfil.filter(
+      (supervisor) =>
+        supervisor.nombres
+          ?.toLowerCase()
+          .indexOf(nombreUsuario?.toLowerCase()) >= 0
+    );
   }
 
   listarSupervisoresPorPerfil() {
-    this.formGroup.get('supervisor').setValue('');
+    this.formGroup.get("supervisor").setValue("");
 
     const perfilSeleccionado = this.formGroup.controls.perfil.value;
     if (!perfilSeleccionado || !perfilSeleccionado.idListadoDetalle) {
@@ -259,8 +298,9 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
       return;
     }
 
-    this.supervisoraService.listarProfesionalesPerfil(perfilSeleccionado.idListadoDetalle)
-      .subscribe(respuesta => {
+    this.supervisoraService
+      .listarProfesionalesPerfil(perfilSeleccionado.idListadoDetalle)
+      .subscribe((respuesta) => {
         this.dataSourceSupervisor.data = respuesta;
         this.listAllSupervisores = this.dataSourceSupervisor.data;
         this.setListSupervisores(respuesta);
@@ -268,15 +308,20 @@ export class RequerimientoContratoListComponent extends BasePageComponent<Requer
   }
 
   onPerfilSelected() {
-    console.log('onPerfilSelected');
-    this.formGroup.get('supervisor').setValue('');
+    console.log("onPerfilSelected");
+    this.formGroup.get("supervisor").setValue("");
     this.listarSupervisoresPorPerfil();
   }
 
   // Acciones
   editar(doc: any): void {
-    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST,
-    Link.REQUERIMIENTOS_CONTRATO, Link.CONTRATO_EDITAR, doc.requerimientoContratoUuid]);
+    this.router.navigate([
+      Link.INTRANET,
+      Link.REQUERIMIENTOS_LIST,
+      Link.REQUERIMIENTOS_CONTRATO,
+      Link.CONTRATO_EDITAR,
+      doc.requerimientoContratoUuid,
+      doc.idRequerimientoContrato,
+    ]);
   }
-
 }

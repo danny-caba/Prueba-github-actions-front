@@ -86,7 +86,8 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
     // Cargar perfiles
     this.gestionUsuarioService.listarPerfilesDetalle()
     .subscribe(respuesta => {
-      this.dataSourcePerfil.data = respuesta;
+      // Filtramos solamente los perfiles S4
+      this.dataSourcePerfil.data = respuesta.filter(perfil => perfil.dePerfil.toUpperCase().includes('PERFIL S4'));
       this.listAllPerfilesDetalle = this.dataSourcePerfil.data;
       this.setListPerfilesDetalle(this.listAllPerfilesDetalle);
     });

@@ -495,6 +495,7 @@ export const RolMenu = [
     // 'intranet/requerimientos',
     'intranet/requerimientos/informes/add',
     'intranet/requerimientos/documentos/evaluar',
+    'intranet/requerimientos/invitaciones/send',
   ]},
   { ROL: { CODIGO: RolEnum.APROB_TEC }, MENU: [menu05,menu19,menu20], path: [
     'intranet/solicitudes/ver/',

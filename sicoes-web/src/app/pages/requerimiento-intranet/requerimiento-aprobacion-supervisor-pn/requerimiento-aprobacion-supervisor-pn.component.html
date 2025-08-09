@@ -120,14 +120,14 @@
     <ng-container matColumnDef="fechaIngreso">
       <th mat-header-cell *matHeaderCellDef>Fecha Ingreso</th>
       <td mat-cell *matCellDef="let e">
-        {{ e.fechaIngreso | date : "dd/MM/yyyy" }}
+        {{ e.fechaAsignacion }}
       </td>
     </ng-container>
 
     <!-- Estado Aprobación -->
     <ng-container matColumnDef="estadoAprobacion">
       <th mat-header-cell *matHeaderCellDef>Estado Aprobación</th>
-      <td mat-cell *matCellDef="let e">{{ e.requerimiento?.estadoAprobacion?.nombre }}</td>
+      <td mat-cell *matCellDef="let e">{{ e.requerimiento?.estado?.nombre }}</td>
     </ng-container>
 
     <!-- Estado Firma Jefe Unidad -->

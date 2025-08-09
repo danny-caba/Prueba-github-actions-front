@@ -95,72 +95,74 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
 
     functionsAlert.questionSiNo(msj).then(async (result) => {
 
+      let estado = this.estadosAprobacion.find(e => e.codigo === accion.APROBADO);
+
       if (result.isConfirmed) {
-        const estado = tipo === accion.APROBADO 
+        estado = tipo === accion.APROBADO 
         ? this.estadosAprobacion.find(e => e.codigo === accion.APROBADO) 
         : this.estadosAprobacion.find(e => e.codigo === accion.DESAPROBADO);
 
         for (const item of this.listaSolicitudUuidSeleccionado) {
-          const { idRequerimientoAprobacion } = item;
-          let payload = {
-            idRequerimientoAprobacion,
-            estado,
-            observacion: this.formGroup.get('observacion')?.value,
-            idEstadoRevision: item.idEstadoRevision,
-          };
+          // const { idRequerimientoAprobacion } = item;
+          // let payload = {
+          //   idRequerimientoAprobacion,
+          //   estado,
+          //   observacion: this.formGroup.get('observacion')?.value,
+          //   idEstadoRevision: item.idEstadoRevision,
+          // };
 
-          if (this.someResponsableSIAF) {
-            payload = {
-              ...payload,
-              requerimiento: {
-                nuSiaf: this.formGroup.get('nuSiaf')?.value
-              }
-            } as any;
-          }
+          // if (this.someResponsableSIAF) {
+          //   payload = {
+          //     ...payload,
+          //     requerimiento: {
+          //       nuSiaf: this.formGroup.get('nuSiaf')?.value
+          //     }
+          //   } as any;
+          // }
 
-          try {
-            this.evaluadorService.requerimientosAprobar(item.requerimiento.requerimientoUuid, payload).subscribe({
-              next: () => {
-                functionsAlert.success('Acción masiva completada con éxito.');
-                this.dialogRef.close(true);
-              },
-              error: (error) => {
-                console.log(error);
-              }
-            });
-            // this.activarFirmaDigital();
-          } catch (error) {
-            this.errores.push({
-              uuid: item.requerimiento.requerimientoUuid,
-              error: error?.message || error
-            });
-          }
+          // try {
+          //   this.evaluadorService.requerimientosAprobar(item.requerimiento.requerimientoUuid, payload).subscribe({
+          //     next: () => {
+          //       functionsAlert.success('Acción masiva completada con éxito.');
+          //       this.dialogRef.close(true);
+          //     },
+          //     error: (error) => {
+          //       console.log(error);
+          //     }
+          //   });
+            this.activarFirmaDigital();
+          // } catch (error) {
+          //   this.errores.push({
+          //     uuid: item.requerimiento.requerimientoUuid,
+          //     error: error?.message || error
+          //   });
+          // }
         }
-        functionsAlert.success('Acción masiva completada con éxito.');
-        this.dialogRef.close(true);
+        // functionsAlert.success('Acción masiva completada con éxito.');
+        // this.dialogRef.close(true);
       }
     });
   }
 
   activarFirmaDigital() {
     let listaIdArchivosSiged = [];
-    listaIdArchivosSiged.push(6257082);
-    this.abrirModalFirmaDigital(listaIdArchivosSiged);
+    // listaIdArchivosSiged.push(6257082);
+    // this.abrirModalFirmaDigital(listaIdArchivosSiged);
 
-    // for (const item of this.listaSolicitudUuidSeleccionado) {
-    //   this.requerimientoService.obtenerIdInformeSiged(item.requerimiento.nuExpediente).subscribe({
-    //     next: (res) => {
-    //       console.log(res);
-    //       if (res != 0) {
-    //         listaIdArchivosSiged.push(res);
-    //       }
-    //       this.abrirModalFirmaDigital(listaIdArchivosSiged);
-    //     },
-    //     error: (error) => {
-    //       console.log(error);
-    //     }
-    //   });
-    // }
+    for (const item of this.listaSolicitudUuidSeleccionado) {
+      this.requerimientoService.obtenerIdInformeSiged(item.requerimiento.nuExpediente).subscribe({
+        next: (res) => {
+          console.log(res);
+          if (res != 0) {
+            listaIdArchivosSiged.push(res);
+          }
+          this.abrirModalFirmaDigital(listaIdArchivosSiged);
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+    }
   }
 
   abrirModalFirmaDigital(listaIdArchivosSiged: number[]) {

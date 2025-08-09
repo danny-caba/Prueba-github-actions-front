@@ -233,7 +233,10 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
 
       this.requerimientoService.enviarInvitacion(requerimientoInvitacion).subscribe(respuesta => {
         if(respuesta) {
-          functionsAlert.vigente('Invitación enviada correctamente', 'La invitación se ha enviado correctamente').then((result) => {
+          // functionsAlert.vigente('Invitación enviada correctamente', 'La invitación se ha enviado correctamente').then((result) => {
+          //   this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST]);
+          // });
+          functionsAlert.success('La invitación se ha enviado correctamente').then((result) => {
             this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST]);
           });
         } else {

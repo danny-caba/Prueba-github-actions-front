@@ -90,8 +90,8 @@ export class RequerimientoAprobacionSupervisorPnComponent
 
   private listarPerfiles() {
     this.parametriaService.buscarPerfiles().subscribe((listRes) => {
-      this.listAprobadoresALL = listRes;
-      this.perfiles = this.obtenerPerfilesUnicos(listRes);
+      this.listAprobadoresALL = listRes.filter(list => list.perfil.nombre.toUpperCase().includes('PERFIL S4'));
+      this.perfiles = this.obtenerPerfilesUnicos(this.listAprobadoresALL);
     });
   }
 
@@ -126,11 +126,11 @@ export class RequerimientoAprobacionSupervisorPnComponent
     const form = this.formGroup;
 
     return {
-      nroExpediente: form.controls.nroExpediente.value,
-      idGerencia: form.controls.gerencia.value?.idListadoDetalle,
-      idPerfil: form.controls.perfil.value?.idListadoDetalle,
-      idSupervisor: form.controls.supervisor.value?.idListadoDetalle,
-      idEstadoRevision: form.controls.estadoRevision.value?.idListadoDetalle,
+      expediente: form.controls.nroExpediente.value,
+      division: form.controls.gerencia.value?.idListadoDetalle,
+      perfil: form.controls.perfil.value?.idListadoDetalle,
+      supervisora: form.controls.supervisor.value?.idListadoDetalle,
+      estadoAprobacion: form.controls.estadoRevision.value?.idListadoDetalle,
     };
   }
 

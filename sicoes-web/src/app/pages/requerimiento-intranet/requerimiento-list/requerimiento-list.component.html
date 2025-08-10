@@ -221,29 +221,35 @@
 <!-- Menú de acciones -->
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below" class="action-menu">
     <ng-template let-row="customer" matMenuContent>
-        <button 
-            (click)="elaborarInforme(row)" 
-            *ngIf="mostrarOpcion(ACC_ELABORAR_INFORME, row)" 
-            mat-menu-item
-            class="flex items-center px-4 py-3 hover:bg-blue-50">
-            <mat-icon class="mr-3" svgIcon="mat:edit"></mat-icon>
-            <span class="font-medium">Elaborar Informe</span>
-        </button>
-        <button 
-            (click)="enviarInvitacion(row)" 
-            *ngIf="mostrarOpcion(ACC_ENVIAR_INVITACION, row)" 
-            mat-menu-item
-            class="flex items-center px-4 py-3 hover:bg-green-50">
-            <mat-icon class="mr-3" svgIcon="mat:send"></mat-icon>
-            <span class="font-medium">Invitación S4</span>
-        </button>
-        <button 
-            (click)="archivarRequerimiento(row)" 
-            *ngIf="mostrarOpcion(ACC_ARCHIVAR_REQUERIMIENTO, row)" 
-            mat-menu-item
-            class="flex items-center px-4 py-3 hover:bg-orange-50">
-            <mat-icon class="mr-3" svgIcon="mat:archive"></mat-icon>
-            <span class="font-medium">Archivar Requerimiento</span>
-        </button>
+        <div *vexOptionRoleRequerimiento="opcion.BTN_ELABORAR_INFORME">
+            <button 
+                (click)="elaborarInforme(row)" 
+                *ngIf="mostrarOpcion(ACC_ELABORAR_INFORME, row)" 
+                mat-menu-item
+                class="flex items-center px-4 py-3 hover:bg-blue-50">
+                <mat-icon class="mr-3" svgIcon="mat:edit"></mat-icon>
+                <span class="font-medium">Elaborar Informe</span>
+            </button>
+        </div>
+        <div *vexOptionRoleRequerimiento="opcion.BTN_ENVIAR_INVITACION">
+            <button 
+                (click)="enviarInvitacion(row)" 
+                *ngIf="mostrarOpcion(ACC_ENVIAR_INVITACION, row)" 
+                mat-menu-item
+                class="flex items-center px-4 py-3 hover:bg-green-50">
+                <mat-icon class="mr-3" svgIcon="mat:send"></mat-icon>
+                <span class="font-medium">Invitación S4</span>
+            </button>
+        </div>
+        <div *vexOptionRoleRequerimiento="opcion.BTN_ARCHIVAR_REQUERIMIENTO">
+            <button 
+                (click)="archivarRequerimiento(row)" 
+                *ngIf="mostrarOpcion(ACC_ARCHIVAR_REQUERIMIENTO, row)" 
+                mat-menu-item
+                class="flex items-center px-4 py-3 hover:bg-orange-50">
+                <mat-icon class="mr-3" svgIcon="mat:archive"></mat-icon>
+                <span class="font-medium">Archivar Requerimiento</span>
+            </button>
+        </div>
     </ng-template>
 </mat-menu>

@@ -107,7 +107,6 @@ export class ModalCrearRequerimientoComponent extends BaseComponent implements O
       },
       error: (err) => {
         console.log(err);
-        functionsAlertMod2.warningMensage(err.error.mensaje);
       }
     });
   }

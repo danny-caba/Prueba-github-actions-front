@@ -5,6 +5,7 @@
         <mat-form-field *ngIf="someResponsableSIAF" class="flex-auto">
             <mat-label>Número SIAF</mat-label>
             <input matInput [formControl]="formGroup.controls.nuSiaf" />
+            <mat-error *ngIf="formGroup.get('nuSiaf')?.hasError('required')">El número SIAF es requerido</mat-error>
         </mat-form-field>
         <mat-form-field class="flex-auto">
             <mat-label>Observaciones</mat-label>

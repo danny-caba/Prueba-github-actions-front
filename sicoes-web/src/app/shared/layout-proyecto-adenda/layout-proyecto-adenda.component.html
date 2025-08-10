@@ -1,44 +1,36 @@
 <div>
-    <ng-container [ngTemplateOutlet]="templateOficio"></ng-container>
+    <ng-container [ngTemplateOutlet]="templateAdenda"></ng-container>
 </div>
 
-<ng-template #templateOficio>
+<ng-template #templateAdenda>
     <div class="flex items-center w-full">
         <mat-checkbox color="primary" 
             (change)="setValueCheckedCartaReemplazo($event)"
             [disabled] = "isCargaAdenda || !rolePermisoCheckBox?.hasPermission"
+            [checked]="adjuntoCargadoAdenda || adjuntoAdenda?.adjunto?.archivo != null"
             [vexOptionRoleCheck]="opcion.CHECKBOX_ADENDA"
             #rolePermisoCheckBox="vexOptionRoleCheck">
             <span>Documento Proyecto de Adenda</span>
         </mat-checkbox>
         <span class="flex-1"></span>
-        <span *vexOptionRoleReemplazo="opcion.DESCARGA_ADENDA"  
-            class="text-secondary">
-            DocumentoMock.pdf
-        </span>
-        <ng-container 
-            [vexOptionRoleCheck]="opcion.DESCARGA_ADENDA" 
-            #rolePermisoDownloadButton="vexOptionRoleCheck">
-        </ng-container>
 
-        <button *ngIf="!rolePermisoDownloadButton?.hasPermission || !isCargaAdenda"
-            matTooltip="Descargar"
-            mat-icon-button 
-            type="button"
-            class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-        </button>
+        <vex-form-adjuntos-no-title class="ml-6" *ngIf = "!isReviewExt"
+            [adjuntoInput] = "adjuntoAdenda"
+            [editable]="adjuntoAdenda?.adjunto?.archivo != null">
+        </vex-form-adjuntos-no-title>
+        
         <mat-radio-group
             *vexOptionRoleReemplazo="opcion.RAD_BTN_ADENDA"
-            [disabled] = "isCargaAdenda"
+            (change)="onMarcaAdendaChange($event.value)"
+            [disabled] = "isCargaAdenda || adjuntoAdenda?.adjunto?.archivo == null"
             [(ngModel)]="marcacion"
             class="ml-12 flex items-center gap-4">
             <mat-radio-button value="si">Sí</mat-radio-button>
             <mat-radio-button value="no">No</mat-radio-button>
         </mat-radio-group>
-        <span *vexOptionRoleReemplazo="opcion.RAD_BTN_ADENDA" class="text-secondary ml-12">Evaluado por:</span>
-        <span *vexOptionRoleReemplazo="opcion.RAD_BTN_ADENDA" class="text-secondary ml-12">Fecha y Hora:</span>
-
+        <span *ngIf="!isReviewExt" class="text-secondary ml-12">{{evaluadoPor || 'Evaluado por:'}}</span>
+        <span *ngIf="!isReviewExt" class="text-secondary ml-12 fecha-col">{{fechaHora || 'Fecha y Hora'}}</span>
+        
         <ng-container 
             [vexOptionRoleCheck]="opcion.RAD_BTN_ADENDA" 
             #rolePermisoSpan="vexOptionRoleCheck">
@@ -46,11 +38,19 @@
                 </span>
         </ng-container>
         
-        <vex-form-adjuntos-btn class="ml-6" *vexOptionRoleReemplazo="opcion.ADJUNTAR_ADENDA"
-          [titulo]="'Archivo (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-btn>
+        <vex-form-adjuntos-no-title *ngIf="isReviewExt"
+            class="ml-auto"
+            [idSeccion]="'1042'"
+            [idTipoDocumento]="'1042'"
+            [idReemplazoPersonal]="idReemplazo"
+            [deNombreDocumento]="'PROYECTO-ADENDA'"
+            [feFechaRegistro]="'21/07/2025'"
+            [archivoDescripcion]="'Proyecto de Adenda'"
+            [editable]="editable"
+            (archivoAdjuntado)="onAdendaAdjunta($event)">
+        </vex-form-adjuntos-no-title>
     </div>
+
     <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
         <mat-form-field class="w-full">
           <textarea matInput

@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { AuthFacade } from 'src/app/auth/store/auth.facade';
+import { AuthUser } from 'src/app/auth/store/auth.models';
 import { PersonalReemplazo } from 'src/app/interface/reemplazo-personal.model';
 import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
@@ -20,6 +22,9 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
 
+  usuario$ = this.authFacade.user$;
+  codRolRevisor: string
+  
   itemSeccion: number = 0;
   isReview: boolean = false;
   isReviewExt: boolean = true;
@@ -32,21 +37,32 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   adjuntoDjImpedimento: any;
   adjuntoDjNoVinculo: any;
   adjuntoOtros: any;
+  adjuntoSolicitudReemplazo: any;
 
   idInforme: number;
   idDjNepotismo: number;
   idDjImpedimento: number;
   idDJNoVinculo: number;
   idOtros: number;
+  idSolicitudReemplazo: number;
 
   constructor(
-    private reemplazoService: PersonalReemplazoService
+    private reemplazoService: PersonalReemplazoService,
+    private authFacade: AuthFacade
   ) {
     super();
    }
 
   ngOnInit(): void {
     this.cargarDatosReemplazo();
+    this.usuario$.subscribe(usu => {
+      this.setCodRolRevisor(usu);
+    })
+  }
+
+  setCodRolRevisor(user: AuthUser){
+    const codigosRevisores = ['02', '12', '15']
+    this.codRolRevisor = user.roles.find(rol => codigosRevisores.includes(rol.codigo))?.codigo;
   }
 
   cargarDatosReemplazo(): void {
@@ -70,10 +86,11 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
     this.setDatosDjImpedimento();
     this.setDatosDjNoVinculo();
     this.setDatosOtros();
+    this.setDatosSolicitudReemplazo();
   }
 
   setDatosInforme() {
-    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'INFORME');
+    const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'INFORME');
     
     let informe = {
       adjunto: {
@@ -85,7 +102,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   }
 
   setDatosDjNepotismo() {
-    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'DJ_PERSONAL_PROPUESTO');
+    const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'DJ_PERSONAL_PROPUESTO');
     
     let djNepotismo = {
       adjunto: {
@@ -97,7 +114,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   }
 
   setDatosDjImpedimento() {
-    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'DJ_IMPEDIMENTOS');
+    const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'DJ_IMPEDIMENTOS');
     
     let djImpedimento = {
       adjunto: {
@@ -109,7 +126,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   }
 
   setDatosDjNoVinculo() {
-    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'DJ_NO_VINCULO');
+    const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'DJ_NO_VINCULO');
     
     let djNoVinculo = {
       adjunto: {
@@ -121,7 +138,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   }
 
   setDatosOtros() {
-    const doc = this.listDocumentosReemplazo.find(doc => doc.seccion.codigo === 'OTROS_DOCUMENTOS');
+    const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'OTROS_DOCUMENTOS');
     
     let otros = {
       adjunto: {
@@ -130,5 +147,17 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
     }
     this.adjuntoOtros = otros;
     this.idOtros = doc?.idDocumento; 
+  }
+
+  setDatosSolicitudReemplazo() {
+    const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'OFICIO_CARTA_SOLI_REEMPLAZO');
+    
+    let solicitud = {
+      adjunto: {
+        archivo: doc?.archivo
+      }
+    }
+    this.adjuntoSolicitudReemplazo = solicitud;
+    this.idSolicitudReemplazo = doc?.idDocumento; 
   }
 }

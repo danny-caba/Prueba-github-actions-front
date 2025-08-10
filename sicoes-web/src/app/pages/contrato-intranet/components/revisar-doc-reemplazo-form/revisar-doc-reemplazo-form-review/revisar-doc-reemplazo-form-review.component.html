@@ -46,6 +46,8 @@
                     </mat-expansion-panel-header>
                     <vex-layout-solicitud-reemplazo-supervisor 
                         [isReviewExt]="isReviewExt" 
+                        [adjuntoSolicitud] = "adjuntoSolicitudReemplazo"
+                        [idDocSolicitud] = "idSolicitudReemplazo"
                     #layoutSolReempSuperv></vex-layout-solicitud-reemplazo-supervisor>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -53,7 +55,8 @@
                         <mat-panel-title class="font-bold">{{itemSeccion + 5}}.- Proyecto de Adenda</mat-panel-title>
                     </mat-expansion-panel-header>
                     <vex-layout-proyecto-adenda 
-                        [isReviewExt]="isReviewExt" 
+                        [isReviewExt]="isReviewExt"
+                        [personalReemplazo] = "personalReemplazo"
                     #layoutSolReempSuperv></vex-layout-proyecto-adenda>
                 </mat-expansion-panel>
             </mat-accordion>

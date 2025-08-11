@@ -17,6 +17,7 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   @Input() adjuntoSolicitud: any;
   @Input() idDocSolicitud: number;
   @Input() codRolRevisor: string;
+  @Input() obsAdjunto: string;
 
   @Output() seccionCompletada = new EventEmitter<any>();
   @Output() allConforme = new EventEmitter<any>();
@@ -53,6 +54,11 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
       const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
       this.codRolRevisor = nuevoCodRolRevisor;
     }
+
+    if (changes['obsAdjunto'] && changes['obsAdjunto'].currentValue) {
+      const nuevaObsAdjunto = changes['obsAdjunto'].currentValue;
+      this.obsAdjunto = nuevaObsAdjunto;
+    }
   }
 
   onMarcaSolicitudChange(valor: string) {
@@ -72,6 +78,8 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
             this.seccionCompletada.emit(true);
             if ("SI" == valor){
               this.allConforme.emit(true);
+            } else {
+              this.allConforme.emit(false);
             }
           }
     });

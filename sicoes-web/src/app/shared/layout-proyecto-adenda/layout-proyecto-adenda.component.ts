@@ -23,12 +23,15 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
   @Input() idDocAdenda: number;
   @Input() personalReemplazo: PersonalReemplazo;
   @Input() codRolRevisor: string;
+  @Input() obsAdjunto: string;
 
   @Output() seccionCompletada = new EventEmitter<any>();
+  @Output() allConforme = new EventEmitter<boolean>();
   @Output() observacionChange = new EventEmitter<string>();
 
   editable: boolean = true;
   allowedReviewProyAdenda: boolean = false;
+  isEvalContratos: boolean = false;
 
   marcacion: 'SI' | 'NO' | null = null;
   observacion: string = '';
@@ -65,26 +68,43 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
       }
 
       if (changes['codRolRevisor'] && changes['codRolRevisor'].currentValue) {
-      const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
-      this.codRolRevisor = nuevoCodRolRevisor;
-      if (['15', '12'].some(value => value === this.codRolRevisor)) {
-        this.editable = false;
-        this.allowedReviewProyAdenda = true;
+        const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
+        this.codRolRevisor = nuevoCodRolRevisor;
+        if (['15', '12'].some(value => value === this.codRolRevisor)) {
+          this.editable = false;
+          this.allowedReviewProyAdenda = true;
+        }
+
+        if ('12' === this.codRolRevisor){
+          this.isEvalContratos = true;
+        }
       }
-    }
+
+      if (changes['obsAdjunto'] && changes['obsAdjunto'].currentValue) {
+        const nuevaObsAdjunto = changes['obsAdjunto'].currentValue;
+        this.obsAdjunto = nuevaObsAdjunto;
+      }
   }
 
   onMarcaAdendaChange(valor: string) {
+    let codigoNum = parseInt(this.codRolRevisor, 10);
+
     let body = {
       idDocumento: this.idDocAdenda,
       conformidad: valor,
-      idRol: 2
+      idRol: codigoNum
     }
 
     this.reemplazoService.grabaConformidad(body).subscribe({
           next: (response) => {
             this.evaluadoPor = response.evaluador;
             this.fechaHora = response.fecEvaluacion;
+            this.seccionCompletada.emit(true);
+            if ("SI" == valor){
+              this.allConforme.emit(true);
+            } else {
+              this.allConforme.emit(false);
+            }
           }
     });
 

@@ -24,6 +24,7 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
   @Input() adjuntoInforme: any;
   @Input() idDocumento: number;
   @Input() codRolRevisor: string;
+  @Input() obsAdjunto: string;
 
   @Output() seccionCompletada = new EventEmitter<boolean>();
   @Output() allConforme = new EventEmitter<boolean>();
@@ -77,6 +78,11 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
       const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
       this.codRolRevisor = nuevoCodRolRevisor;
     }
+
+    if (changes['obsAdjunto'] && changes['obsAdjunto'].currentValue) {
+      const nuevaObsAdjunto = changes['obsAdjunto'].currentValue;
+      this.obsAdjunto = nuevaObsAdjunto;
+    }
   }
 
   setFechaDesvinculacion(fecha: string): void {
@@ -105,6 +111,8 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
             this.seccionCompletada.emit(true);
             if ("SI" == valor){
               this.allConforme.emit(true);
+            } else {
+              this.allConforme.emit(false);
             }
           }
     });

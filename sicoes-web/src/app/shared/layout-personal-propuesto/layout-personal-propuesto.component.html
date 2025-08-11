@@ -200,6 +200,7 @@
       <textarea matInput
              placeholder="Observación"
              [(ngModel)]="observacionDjNepotismo"
+             [ngModel]="obsAdjuntoDjNepotismo ?? ''"
              (ngModelChange)="emitirObservacionDjNepotismo()"
              [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
              [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
@@ -268,6 +269,7 @@
       <textarea matInput
              placeholder="Observación"
              [(ngModel)]="observacionDjImpedimento"
+             [ngModel]="obsAdjuntoDjImpedimento ?? ''"
              (ngModelChange)="emitirObservacionDjImpedimento()"
              [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
              [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
@@ -335,6 +337,7 @@
       <textarea matInput
              placeholder="Observación"
              [(ngModel)]="observacionDjNoVinculo"
+             [ngModel]="obsAdjuntoDjNoVinculo ?? ''"
              (ngModelChange)="emitirObservacionDjNoVinculo()"
              [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
              [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
@@ -402,6 +405,7 @@
       <textarea matInput
              placeholder="Observación"
              [(ngModel)]="observacionOtros"
+             [ngModel]="obsAdjuntoOtros ?? ''"
              (ngModelChange)="emitirObservacionOtros()"
              [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
              [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"

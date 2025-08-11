@@ -70,6 +70,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   allConformeInforme: boolean = false;
   allConformePersonalPropuesto: boolean = false;
   allConformeSolReemplazo: boolean = false;
+  allConformeProyAdenda: boolean = false;
 
   observacionInforme: string;
   observacionDjNepotismo: string;
@@ -95,7 +96,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   setCodRolRevisor(user: AuthUser){
     const codigosRevisores = ['02', '12', '15']
-    this.codRolRevisor = user.roles.find(rol => codigosRevisores.includes(rol.codigo))?.codigo;
+    this.codRolRevisor = user?.roles.find(rol => codigosRevisores.includes(rol.codigo))?.codigo;
   }
 
   cargarDatosReemplazo(): void {
@@ -136,6 +137,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoInforme = informe;
+    this.observacionInforme = doc?.evaluacion.observacion;
     this.idInforme = doc?.idDocumento; 
   }
 
@@ -152,6 +154,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoDjNepotismo = djNepotismo;
+    this.observacionDjNepotismo = doc?.evaluacion.observacion;
     this.idDjNepotismo = doc?.idDocumento; 
   }
 
@@ -168,6 +171,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoDjImpedimento = djImpedimento;
+    this.observacionDjImpedimento = doc?.evaluacion.observacion;
     this.idDjImpedimento = doc?.idDocumento; 
   }
 
@@ -184,6 +188,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoDjNoVinculo = djNoVinculo;
+    this.observacionDjNoVinculo = doc?.evaluacion.observacion;
     this.idDJNoVinculo = doc?.idDocumento; 
   }
 
@@ -200,6 +205,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoOtros = otros;
+    this.observacionOtros = doc?.evaluacion.observacion;
     this.idOtros = doc?.idDocumento; 
   }
 
@@ -216,6 +222,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoSolicitudReemplazo = solicitud;
+    this.observacionSolReemplazo = doc?.evaluacion.observacion;
     this.idSolicitudReemplazo = doc?.idDocumento; 
   }
 
@@ -232,6 +239,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoProyAdenda = solicitud;
+    this.observacionProyAdenda = doc?.evaluacion.observacion;
     this.idProyAdenda = doc?.idDocumento; 
   }
 
@@ -270,15 +278,20 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
     this.verificarSeccionesCompletadas();
   }
 
+  validarDocsSeccionProyAdenda(){
+    return !this.existeDocProyAdendaFlag;
+  }
+
   private verificarSeccionesCompletadas(): void {
     const todasCompletadas = (this.seccionInformeCompletaFlag || this.validarDocsSeccionInforme()) 
       && (this.seccionPersonalPropuestoCompletaFlag || this.validarDocsSeccionPersonalPropuesto())
       && (this.seccionSolReemplazoCompletaFlag || this.validarDocsSeccionSolicitudReemplazo())
-      && (this.seccionProyAdendaCompletaFlag);
+      && (this.seccionProyAdendaCompletaFlag || this.validarDocsSeccionProyAdenda());
 
     const allConforme = this.allConformeInforme 
       && this.allConformePersonalPropuesto 
-      && this.allConformeSolReemplazo;
+      && this.allConformeSolReemplazo
+      && this.allConformeProyAdenda;
 
     this.seccionesCompletadas.emit(todasCompletadas);
     this.codigoRevisor.emit(this.codRolRevisor);
@@ -296,6 +309,11 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   recibirConformidadSolReemplazo(allConforme: boolean){
     this.allConformeSolReemplazo = allConforme;
   }
+
+  recibirConformidadProyAdenda(allConforme: boolean){
+    this.allConformeProyAdenda = allConforme;
+  }
+
 
   recibirObservacionInforme(observacion: string){
     this.observacionInforme = observacion;

@@ -51,6 +51,10 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   @Input() adjuntoOtros: any;
   @Input() personalReemplazo: PersonalReemplazo;
   @Input() codRolRevisor: string;
+  @Input() obsAdjuntoDjNepotismo: string;
+  @Input() obsAdjuntoDjImpedimento: string;
+  @Input() obsAdjuntoDjNoVinculo: string;
+  @Input() obsAdjuntoOtros: string;
 
   @Output() seccionCompletada = new EventEmitter<any>();
   @Output() allConforme = new EventEmitter<any>();
@@ -192,7 +196,27 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
       const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
       this.codRolRevisor = nuevoCodRolRevisor;
       this.codRolRevisorNum = parseInt(this.codRolRevisor, 10);
-    }   
+    }
+
+    if (changes['obsAdjuntoDjNepotismo'] && changes['obsAdjuntoDjNepotismo'].currentValue) {
+      const nuevaObsAdjunto = changes['obsAdjuntoDjNepotismo'].currentValue;
+      this.obsAdjuntoDjNepotismo = nuevaObsAdjunto;
+    }
+
+    if (changes['obsAdjuntoDjImpedimento'] && changes['obsAdjuntoDjImpedimento'].currentValue) {
+      const nuevaObsAdjunto = changes['obsAdjuntoDjImpedimento'].currentValue;
+      this.obsAdjuntoDjImpedimento = nuevaObsAdjunto;
+    }
+
+    if (changes['obsAdjuntoDjNoVinculo'] && changes['obsAdjuntoDjNoVinculo'].currentValue) {
+      const nuevaObsAdjunto = changes['obsAdjuntoDjNoVinculo'].currentValue;
+      this.obsAdjuntoDjNoVinculo = nuevaObsAdjunto;
+    }
+
+    if (changes['obsAdjuntoOtros'] && changes['obsAdjuntoOtros'].currentValue) {
+      const nuevaObsAdjunto = changes['obsAdjuntoOtros'].currentValue;
+      this.obsAdjuntoOtros = nuevaObsAdjunto;
+    }
   }
 
   obtenerSolicitud() {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
@@ -22,6 +22,8 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
   @Input() adjuntoAdenda: any;
   @Input() idAdenda: number;
   @Input() personalReemplazo: PersonalReemplazo;
+
+  @Output() seccionCompletada = new EventEmitter<any>();
 
   editable: boolean = true;
   marcacion: 'SI' | 'NO' | null = null;
@@ -77,6 +79,7 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
 
   onAdendaAdjunta(valor: boolean) {
     this.adjuntoCargadoAdenda = valor;
+    this.seccionCompletada.emit(valor);
   }
 
   setValueCheckedCartaReemplazo(even) {

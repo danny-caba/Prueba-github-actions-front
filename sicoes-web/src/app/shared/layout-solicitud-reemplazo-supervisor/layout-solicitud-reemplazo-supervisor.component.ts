@@ -16,6 +16,7 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   @Input() perfilBaja: any;
   @Input() adjuntoSolicitud: any;
   @Input() idDocSolicitud: number;
+   @Input() codRolRevisor: string;
 
   @Output() seccionCompletada = new EventEmitter<any>();
 
@@ -48,16 +49,20 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   }
 
   onMarcaSolicitudChange(valor: string) {
+
+    let codigoNum = parseInt(this.codRolRevisor, 10);
+
     let body = {
       idDocumento: this.idDocSolicitud,
       conformidad: valor,
-      idRol: 2
+      idRol: codigoNum
     }
 
     this.reemplazoService.grabaConformidad(body).subscribe({
           next: (response) => {
             this.evaluadoPor = response.evaluador;
             this.fechaHora = response.fecEvaluacion;
+            this.seccionCompletada.emit(true);
           }
     });
   }

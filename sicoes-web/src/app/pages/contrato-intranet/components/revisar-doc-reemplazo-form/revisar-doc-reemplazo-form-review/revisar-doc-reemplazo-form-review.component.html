@@ -9,6 +9,8 @@
                         [adjuntoInforme] = "adjuntoInforme"
                         [isReviewExt] = "isReviewExt"
                         [idDocumento] = "idInforme"
+                        [codRolRevisor] = "codRolRevisor"
+                        (seccionCompletada)="seccionInformeCompletada($event)"
                     #layoutInforme></vex-layout-informe>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -38,6 +40,8 @@
                     [adjuntoDjImpedimento] = "adjuntoDjImpedimento"
                     [adjuntoDjNoVinculo] = "adjuntoDjNoVinculo"
                     [adjuntoOtros] = "adjuntoOtros"
+                    [codRolRevisor] = "codRolRevisor"
+                    (seccionCompletada)="seccionPersonalPropuestoCompletada($event)"
                     #layoutPersPropuesto></vex-layout-personal-propuesto>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -48,6 +52,8 @@
                         [isReviewExt]="isReviewExt" 
                         [adjuntoSolicitud] = "adjuntoSolicitudReemplazo"
                         [idDocSolicitud] = "idSolicitudReemplazo"
+                        [codRolRevisor] = "codRolRevisor"
+                        (seccionCompletada)="seccionSolicitudReemplazoCompletada($event)"
                     #layoutSolReempSuperv></vex-layout-solicitud-reemplazo-supervisor>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -57,6 +63,7 @@
                     <vex-layout-proyecto-adenda 
                         [isReviewExt]="isReviewExt"
                         [personalReemplazo] = "personalReemplazo"
+                        (seccionCompletada)="seccionProyAdendaCompletada($event)"
                     #layoutSolReempSuperv></vex-layout-proyecto-adenda>
                 </mat-expansion-panel>
             </mat-accordion>

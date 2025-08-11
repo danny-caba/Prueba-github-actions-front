@@ -50,6 +50,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   @Input() adjuntoDjNoVinculo: any;
   @Input() adjuntoOtros: any;
   @Input() personalReemplazo: PersonalReemplazo;
+  @Input() codRolRevisor: string;
 
   @Output() seccionCompletada = new EventEmitter<any>();
   
@@ -71,14 +72,23 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   view: boolean;
   mostrarTemplates: boolean = true;
   tipoContratoSeleccionado: number;
+  codRolRevisorNum: number;
+
   adjuntoCargadoDjNepotismo: boolean = false;
   adjuntoCargadoDjImpedimento: boolean = false;
   adjuntoCargadoDjNoVinculo: boolean = false;
   adjuntoCargadoOtros: boolean = false;
+
+  docNepotismoRevisado: boolean = false;
+  docImpedimentoRevisado: boolean = false;
+  docNoVinculoRevisado: boolean = false;
+  docOtrosRevisado: boolean = false;
+
   marcaDjNepotismo: 'SI' | 'NO' | null = null;
   marcaDjImpedimento: 'SI' | 'NO' | null = null;
   marcaDjNoVinculo: 'SI' | 'NO' | null = null;
   marcaOtros: 'SI' | 'NO' | null = null;
+
   djNepotismoEvaluadoPor: string = null;
   djImpedimentoEvaluadoPor: string = null;
   djNoVinculoEvaluadoPor: string = null;
@@ -167,6 +177,12 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     if (changes['personalReemplazo'] && changes['personalReemplazo'].currentValue) {
       const nuevoPersonalReemplazo = changes['personalReemplazo'].currentValue;
       this.cargarTablaReview(nuevoPersonalReemplazo);
+    }
+
+    if (changes['codRolRevisor'] && changes['codRolRevisor'].currentValue) {
+      const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
+      this.codRolRevisor = nuevoCodRolRevisor;
+      this.codRolRevisorNum = parseInt(this.codRolRevisor, 10);
     }   
   }
 
@@ -266,13 +282,15 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     let body = {
       idDocumento: this.idDocDjNepotismo,
       conformidad: valor,
-      idRol: 2
+      idRol: this.codRolRevisorNum
     }
 
     this.reemplazoService.grabaConformidad(body).subscribe({
           next: (response) => {
             this.djNepotismoEvaluadoPor = response.evaluador;
             this.djNepotismoFechaHora = response.fecEvaluacion;
+            this.docNepotismoRevisado = true;
+            this.validarConformidades();
           }
     });
   }
@@ -281,13 +299,15 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     let body = {
       idDocumento: this.idDocDjImpedimento,
       conformidad: valor,
-      idRol: 2
+      idRol: this.codRolRevisorNum
     }
 
     this.reemplazoService.grabaConformidad(body).subscribe({
           next: (response) => {
             this.djImpedimentoEvaluadoPor = response.evaluador;
             this.djImpedimentoFechaHora = response.fecEvaluacion;
+            this.docImpedimentoRevisado = true;
+            this.validarConformidades();
           }
     });
   }
@@ -296,13 +316,15 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     let body = {
       idDocumento: this.idDocDjNoVinculo,
       conformidad: valor,
-      idRol: 2
+      idRol: this.codRolRevisorNum
     }
 
     this.reemplazoService.grabaConformidad(body).subscribe({
           next: (response) => {
             this.djNoVinculoEvaluadoPor = response.evaluador;
             this.djNoVinculoFechaHora = response.fecEvaluacion;
+            this.docNoVinculoRevisado = true;
+            this.validarConformidades();
           }
     });
   }
@@ -311,15 +333,26 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     let body = {
       idDocumento: this.idDocOtros,
       conformidad: valor,
-      idRol: 2
+      idRol: this.codRolRevisorNum
     }
 
     this.reemplazoService.grabaConformidad(body).subscribe({
           next: (response) => {
             this.otrosEvaluadoPor = response.evaluador;
             this.otrosFechaHora = response.fecEvaluacion;
+            this.docOtrosRevisado = true;
+            this.validarConformidades();
           }
     });
+  }
+
+  validarConformidades(){
+    const docNepotismoValido = !this.adjuntoDjNepotismo || this.docNepotismoRevisado;
+    const docImpedimentoValido = !this.adjuntoDjImpedimento || this.docImpedimentoRevisado;
+    const docNoVinculoValido = !this.adjuntoDjNoVinculo || this.docNoVinculoRevisado;
+    const docOtrosValido = !this.adjuntoOtros || this.docOtrosRevisado;
+
+    this.seccionCompletada.emit(docNepotismoValido && docImpedimentoValido && docNoVinculoValido && docOtrosValido);
   }
 
   setValueCheckedDjNepotismo(obj, even) {

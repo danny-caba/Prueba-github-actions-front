@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
 import { PersonalPropuesto } from 'src/app/interface/reemplazo-personal.model';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -23,6 +23,9 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
   @Input() fechaDesvinculacion: string;
   @Input() adjuntoInforme: any;
   @Input() idDocumento: number;
+  @Input() codRolRevisor: string;
+
+  @Output() seccionCompletada = new EventEmitter<boolean>();
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
 
@@ -65,6 +68,11 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
       const nuevoIdInforme = changes['idDocumento'].currentValue;
       this.idDocumento = nuevoIdInforme;
     }
+
+    if (changes['codRolRevisor'] && changes['codRolRevisor'].currentValue) {
+      const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
+      this.codRolRevisor = nuevoCodRolRevisor;
+    }
   }
 
   setFechaDesvinculacion(fecha: string): void {
@@ -78,16 +86,19 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
   }
 
   onMarcaInformeCartaChange(valor: string) {
+    let codigoNum = parseInt(this.codRolRevisor, 10);
+
     let body = {
       idDocumento: this.idDocumento,
       conformidad: valor,
-      idRol: 2
+      idRol: codigoNum
     }
 
     this.reemplazoService.grabaConformidad(body).subscribe({
           next: (response) => {
             this.evaluadoPor = response.evaluador;
             this.fechaHora = response.fecEvaluacion;
+            this.seccionCompletada.emit(true);
           }
     });
 

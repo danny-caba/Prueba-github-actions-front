@@ -124,4 +124,10 @@ export class PersonalReemplazoService {
     
     return this.http.post<any>(urlEndpoint, data);
   }
+
+  guardarRevDocumentos(data: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/reemplazo/solicitud/registra/propuesto/revision`;
+    
+    return this.http.post<any>(urlEndpoint, data);
+  }
 }

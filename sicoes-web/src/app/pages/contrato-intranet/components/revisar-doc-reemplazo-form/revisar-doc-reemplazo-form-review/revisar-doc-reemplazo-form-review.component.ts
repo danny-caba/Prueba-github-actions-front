@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
@@ -21,6 +21,10 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   @Input() idReemplazo: string;
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
+
+  @Output() seccionesCompletadas = new EventEmitter<boolean>();
+  @Output() codigoRevisor = new EventEmitter<string>();
+
 
   usuario$ = this.authFacade.user$;
   codRolRevisor: string
@@ -45,6 +49,18 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   idDJNoVinculo: number;
   idOtros: number;
   idSolicitudReemplazo: number;
+
+  seccionInformeCompletaFlag: boolean = false;
+  seccionPersonalPropuestoCompletaFlag: boolean = false;
+  seccionSolReemplazoCompletaFlag: boolean = false;
+  seccionProyAdendaCompletaFlag: boolean = false;
+
+  existeDocInformeFlag: boolean = false;
+  existeDocDjNepotismoFlag: boolean = false;
+  existeDocDjImpedimentoFlag: boolean = false;
+  existeDocNoVinculoFlag: boolean = false;
+  existeDocOtrosFlag: boolean = false;
+  existeDocSolReemplazoFlag: boolean = false;
 
   constructor(
     private reemplazoService: PersonalReemplazoService,
@@ -74,6 +90,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
           next: (response) => {
             this.listDocumentosReemplazo = response.content;
             this.setAdjuntos();
+            this.verificarSeccionesCompletadas();
           }
         })
       }
@@ -91,6 +108,9 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   setDatosInforme() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'INFORME');
+    if (doc) {
+      this.existeDocInformeFlag = true;
+    }
     
     let informe = {
       adjunto: {
@@ -103,6 +123,10 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   setDatosDjNepotismo() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'DJ_PERSONAL_PROPUESTO');
+
+    if (doc) {
+      this.existeDocDjNepotismoFlag = true;
+    }
     
     let djNepotismo = {
       adjunto: {
@@ -115,6 +139,10 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   setDatosDjImpedimento() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'DJ_IMPEDIMENTOS');
+
+    if (doc) {
+      this.existeDocDjImpedimentoFlag = true;
+    }
     
     let djImpedimento = {
       adjunto: {
@@ -127,6 +155,10 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   setDatosDjNoVinculo() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'DJ_NO_VINCULO');
+
+    if (doc) {
+      this.existeDocNoVinculoFlag = true;
+    }
     
     let djNoVinculo = {
       adjunto: {
@@ -139,6 +171,10 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   setDatosOtros() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'OTROS_DOCUMENTOS');
+
+    if (doc) {
+      this.existeDocOtrosFlag = true;
+    }
     
     let otros = {
       adjunto: {
@@ -151,6 +187,10 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   setDatosSolicitudReemplazo() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'OFICIO_CARTA_SOLI_REEMPLAZO');
+
+    if (doc) {
+      this.existeDocSolReemplazoFlag = true;
+    }
     
     let solicitud = {
       adjunto: {
@@ -159,5 +199,50 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
     }
     this.adjuntoSolicitudReemplazo = solicitud;
     this.idSolicitudReemplazo = doc?.idDocumento; 
+  }
+
+  seccionInformeCompletada(completada: boolean): void {
+    this.seccionInformeCompletaFlag = completada;
+    this.verificarSeccionesCompletadas();
+  }
+  
+  validarDocsSeccionInforme(){
+    return !this.existeDocInformeFlag;
+  }
+
+  seccionPersonalPropuestoCompletada(completada: boolean): void {
+    this.seccionPersonalPropuestoCompletaFlag = completada;
+    this.verificarSeccionesCompletadas();
+  }
+
+  validarDocsSeccionPersonalPropuesto(){
+    return !(this.existeDocDjNepotismoFlag 
+      || this.existeDocDjImpedimentoFlag 
+      || this.existeDocNoVinculoFlag 
+      || this.existeDocOtrosFlag);
+  }
+
+  seccionSolicitudReemplazoCompletada(completada: boolean): void {
+    this.seccionSolReemplazoCompletaFlag = completada;
+    this.verificarSeccionesCompletadas();
+  }
+  
+  validarDocsSeccionSolicitudReemplazo(){
+    return !this.existeDocSolReemplazoFlag;
+  }
+
+  seccionProyAdendaCompletada(completada: boolean): void {
+    this.seccionProyAdendaCompletaFlag = completada;
+    this.verificarSeccionesCompletadas();
+  }
+
+  private verificarSeccionesCompletadas(): void {
+    const todasCompletadas = (this.seccionInformeCompletaFlag || this.validarDocsSeccionInforme()) 
+      && (this.seccionPersonalPropuestoCompletaFlag || this.validarDocsSeccionPersonalPropuesto())
+      && (this.seccionSolReemplazoCompletaFlag || this.validarDocsSeccionSolicitudReemplazo())
+      && (this.seccionProyAdendaCompletaFlag);
+
+    this.seccionesCompletadas.emit(todasCompletadas);
+    this.codigoRevisor.emit(this.codRolRevisor);
   }
 }

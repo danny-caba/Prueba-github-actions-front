@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
@@ -22,12 +23,15 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
   idSolicitud: string = '';
   idReemplazoPersonal: string = '';
   uuidSolicitud: string= '';
+  codRolRevisor: string = null;
 
   isCargaAdenda: boolean = false;
+  puedeRegistrar: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private reemplazoService: PersonalReemplazoService
   ) {
     super();
   }
@@ -56,7 +60,28 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
   }
 
   registrarRevision(): void {
+    const body = {
+        idReemplazo: this.idReemplazoPersonal,
+        codRol: this.codRolRevisor
+      }
+  
+      functionsAlert.questionSiNo('¿Seguro de registrar la revisión de documentos del personal propuesto de reemplazo?').then((result) => {
+        if (result.isConfirmed) {
+          this.reemplazoService
+          .guardarRevDocumentos(body)
+          .subscribe(response => {
+            this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_REVIEW, this.idSolicitud]);
+          });
+        }
+      });
+  }
 
+  recibirFlagSeccionesCompletadas(flag: boolean): void {
+    this.puedeRegistrar = flag;
+  }
+
+  recibirCodigoRevisor(codigoRevisor: string){
+    this.codRolRevisor = codigoRevisor;
   }
 
 }

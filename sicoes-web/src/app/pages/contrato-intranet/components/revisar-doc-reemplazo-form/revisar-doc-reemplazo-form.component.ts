@@ -27,6 +27,7 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
 
   isCargaAdenda: boolean = false;
   puedeRegistrar: boolean = false;
+  allDocsConforme: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -64,8 +65,10 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
         idReemplazo: this.idReemplazoPersonal,
         codRol: this.codRolRevisor
       }
+
+      const mensajeConfirmacion = this.obtenerMensajeConfirmacion();
   
-      functionsAlert.questionSiNo('¿Seguro de registrar la revisión de documentos del personal propuesto de reemplazo?').then((result) => {
+      functionsAlert.questionSiNo(mensajeConfirmacion).then((result) => {
         if (result.isConfirmed) {
           this.reemplazoService
           .guardarRevDocumentos(body)
@@ -76,12 +79,24 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
       });
   }
 
+  obtenerMensajeConfirmacion(){
+    if (this.allDocsConforme) {
+      return '¿Seguro de registrar la revisión de documentos del personal propuesto de reemplazo?';
+    } else {
+      return 'Se encontró al menos un No, seguro de enviar para que subsane la empresa supervisora';
+    }
+  }
+
   recibirFlagSeccionesCompletadas(flag: boolean): void {
     this.puedeRegistrar = flag;
   }
 
   recibirCodigoRevisor(codigoRevisor: string){
     this.codRolRevisor = codigoRevisor;
+  }
+
+  recibirConformidades(allConforme: boolean){
+    this.allDocsConforme = allConforme;
   }
 
 }

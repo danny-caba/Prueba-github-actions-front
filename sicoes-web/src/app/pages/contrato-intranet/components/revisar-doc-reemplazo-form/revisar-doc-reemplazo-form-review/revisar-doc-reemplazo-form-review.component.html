@@ -11,6 +11,7 @@
                         [idDocumento] = "idInforme"
                         [codRolRevisor] = "codRolRevisor"
                         (seccionCompletada)="seccionInformeCompletada($event)"
+                        (allConforme) = "recibirConformidadInforme($event)"
                     #layoutInforme></vex-layout-informe>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -42,6 +43,7 @@
                     [adjuntoOtros] = "adjuntoOtros"
                     [codRolRevisor] = "codRolRevisor"
                     (seccionCompletada)="seccionPersonalPropuestoCompletada($event)"
+                    (allConforme) = "recibirConformidadPersonalPropuesto($event)"
                     #layoutPersPropuesto></vex-layout-personal-propuesto>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -54,6 +56,7 @@
                         [idDocSolicitud] = "idSolicitudReemplazo"
                         [codRolRevisor] = "codRolRevisor"
                         (seccionCompletada)="seccionSolicitudReemplazoCompletada($event)"
+                        (allConforme) = "recibirConformidadSolReemplazo($event)"
                     #layoutSolReempSuperv></vex-layout-solicitud-reemplazo-supervisor>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">

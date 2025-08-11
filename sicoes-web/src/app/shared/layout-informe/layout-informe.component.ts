@@ -26,6 +26,7 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
   @Input() codRolRevisor: string;
 
   @Output() seccionCompletada = new EventEmitter<boolean>();
+  @Output() allConforme = new EventEmitter<boolean>();
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
 
@@ -99,6 +100,9 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
             this.evaluadoPor = response.evaluador;
             this.fechaHora = response.fecEvaluacion;
             this.seccionCompletada.emit(true);
+            if ("SI" == valor){
+              this.allConforme.emit(true);
+            }
           }
     });
 

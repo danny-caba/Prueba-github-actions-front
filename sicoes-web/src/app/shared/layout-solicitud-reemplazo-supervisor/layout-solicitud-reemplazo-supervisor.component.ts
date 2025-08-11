@@ -19,6 +19,7 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
    @Input() codRolRevisor: string;
 
   @Output() seccionCompletada = new EventEmitter<any>();
+  @Output() allConforme = new EventEmitter<any>();
 
   editable: boolean = false;
   marcacion: 'SI' | 'NO' | null = null;
@@ -63,6 +64,9 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
             this.evaluadoPor = response.evaluador;
             this.fechaHora = response.fecEvaluacion;
             this.seccionCompletada.emit(true);
+            if ("SI" == valor){
+              this.allConforme.emit(true);
+            }
           }
     });
   }

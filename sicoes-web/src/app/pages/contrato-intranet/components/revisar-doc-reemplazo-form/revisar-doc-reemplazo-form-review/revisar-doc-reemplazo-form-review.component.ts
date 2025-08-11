@@ -24,6 +24,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   @Output() seccionesCompletadas = new EventEmitter<boolean>();
   @Output() codigoRevisor = new EventEmitter<string>();
+  @Output() allMarcasConforme = new EventEmitter<boolean>();
 
 
   usuario$ = this.authFacade.user$;
@@ -61,6 +62,10 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   existeDocNoVinculoFlag: boolean = false;
   existeDocOtrosFlag: boolean = false;
   existeDocSolReemplazoFlag: boolean = false;
+
+  allConformeInforme: boolean = false;
+  allConformePersonalPropuesto: boolean = false;
+  allConformeSolReemplazo: boolean = false;
 
   constructor(
     private reemplazoService: PersonalReemplazoService,
@@ -242,7 +247,24 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       && (this.seccionSolReemplazoCompletaFlag || this.validarDocsSeccionSolicitudReemplazo())
       && (this.seccionProyAdendaCompletaFlag);
 
+    const allConforme = this.allConformeInforme 
+      && this.allConformePersonalPropuesto 
+      && this.allConformeSolReemplazo;
+
     this.seccionesCompletadas.emit(todasCompletadas);
     this.codigoRevisor.emit(this.codRolRevisor);
+    this.allMarcasConforme.emit(allConforme)
+  }
+
+  recibirConformidadInforme(allConforme: boolean){
+    this.allConformeInforme = allConforme;
+  }
+
+  recibirConformidadPersonalPropuesto(allConforme: boolean){
+    this.allConformePersonalPropuesto = allConforme;
+  }
+
+  recibirConformidadSolReemplazo(allConforme: boolean){
+    this.allConformeSolReemplazo = allConforme;
   }
 }

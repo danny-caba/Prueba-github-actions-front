@@ -53,6 +53,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   @Input() codRolRevisor: string;
 
   @Output() seccionCompletada = new EventEmitter<any>();
+  @Output() allConforme = new EventEmitter<any>();
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'djNepotismo', 'djImpedimento', 'djNoVinculo', 'otrosDocumentos', 'actions'];
   displayedColumnsReview: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto'];
@@ -291,6 +292,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
             this.djNepotismoFechaHora = response.fecEvaluacion;
             this.docNepotismoRevisado = true;
             this.validarConformidades();
+            this.allConforme.emit(this.validarMarcas());
           }
     });
   }
@@ -308,6 +310,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
             this.djImpedimentoFechaHora = response.fecEvaluacion;
             this.docImpedimentoRevisado = true;
             this.validarConformidades();
+            this.allConforme.emit(this.validarMarcas());
           }
     });
   }
@@ -325,6 +328,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
             this.djNoVinculoFechaHora = response.fecEvaluacion;
             this.docNoVinculoRevisado = true;
             this.validarConformidades();
+            this.allConforme.emit(this.validarMarcas());
           }
     });
   }
@@ -342,17 +346,23 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
             this.otrosFechaHora = response.fecEvaluacion;
             this.docOtrosRevisado = true;
             this.validarConformidades();
+            this.allConforme.emit(this.validarMarcas());
           }
     });
   }
 
   validarConformidades(){
-    const docNepotismoValido = !this.adjuntoDjNepotismo || this.docNepotismoRevisado;
-    const docImpedimentoValido = !this.adjuntoDjImpedimento || this.docImpedimentoRevisado;
-    const docNoVinculoValido = !this.adjuntoDjNoVinculo || this.docNoVinculoRevisado;
-    const docOtrosValido = !this.adjuntoOtros || this.docOtrosRevisado;
+    const docNepotismoValido = !this.adjuntoDjNepotismo.adjunto.archivo || this.docNepotismoRevisado;
+    const docImpedimentoValido = !this.adjuntoDjImpedimento.adjunto.archivo || this.docImpedimentoRevisado;
+    const docNoVinculoValido = !this.adjuntoDjNoVinculo.adjunto.archivo || this.docNoVinculoRevisado;
+    const docOtrosValido = !this.adjuntoOtros.adjunto.archivo || this.docOtrosRevisado;
 
     this.seccionCompletada.emit(docNepotismoValido && docImpedimentoValido && docNoVinculoValido && docOtrosValido);
+  }
+
+  validarMarcas(): boolean {
+    return [this.marcaDjNepotismo, this.marcaDjImpedimento, this.marcaDjNoVinculo, this.marcaOtros]
+      .every(valor => valor === 'SI');
   }
 
   setValueCheckedDjNepotismo(obj, even) {

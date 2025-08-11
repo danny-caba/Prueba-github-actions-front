@@ -116,7 +116,9 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
 
     this.usuario = JSON.parse(sessionStorage.getItem("rolesusuario") || "[]");
     this.idRoles = this.usuario.map(u => u.idRol);
-    console.log("this.usuario", this.usuario)
+    console.log("this.usuario", this.usuario);
+
+    this.buscar();
   }
   private _filterContratistas(nombre: string): any[] {
     const filterValue = nombre.toLowerCase();
@@ -131,7 +133,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     this.parametriaService.obtenerMultipleListadoDetalle([
       ListadoEnum.TIPO_SOLICITUD,
       ListadoEnum.TIPO_APROBACION,
-      ListadoEnum.ESTADO_APROBACION
+      ListadoEnum.ESTADO_APROBACION_REEMP
     ]).subscribe(listRes => {
       this.listTipoSolicitud = listRes[0];
       this.listTipoAprobacionP = listRes[1];
@@ -170,7 +172,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
 
   // Si el valor es un objeto con la propiedad 'orden', usamos esa propiedad
   if (value && typeof value === 'object' && 'orden' in value) {
-    return value.orden !== null && value.orden !== undefined && value.orden !== '' ? Number(value.orden) : null;
+    return value.idListadoDetalle !== null && value.idListadoDetalle !== undefined && value.idListadoDetalle !== '' ? Number(value.idListadoDetalle) : null;
   }
 
   // Si no es objeto, validamos directamente
@@ -231,6 +233,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
         elementosSeleccionados: this.listaContratosSeleccionadosPerfeccionamiento,
       },
     }).afterClosed().subscribe(result => {
+      console.log(result);
       if (result === 'OK') {
         this.flagContrato = false;
         this.buscar();
@@ -300,7 +303,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   }
 
   descargar(id:string,nombre:string){
-    console.log("entrando a descargar")
+    console.log("entrando a descargar",id)
     this.adjuntoService.descargarWindowsJWT(id,nombre);
   }
 }

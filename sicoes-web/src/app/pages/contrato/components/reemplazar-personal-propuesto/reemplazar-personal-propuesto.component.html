@@ -101,7 +101,7 @@
         <div class="documento-cell">
           {{ element.documento }}
           <button mat-icon-button type="button" class="icon-button-small" >
-            <mat-icon fontSet="material-icons" fontSize="16px" (click)="descargar(element.archivo,element.documento)">get_app</mat-icon>
+            <mat-icon fontSet="material-icons" fontSize="16px" (click)="descargar(element.idArchivo,element.documento)">get_app</mat-icon>
           </button>
         </div>
       </td>
@@ -112,7 +112,7 @@
       <td mat-cell *matCellDef="let element">
         <div style="display: flex; align-items: center;">
           <span>{{ element.informe }}</span>
-          <button mat-icon-button type="button" (click)="descargar(element.idInforme,element.informe)">
+          <button mat-icon-button type="button" (click)="descargar(element.idArchivo,element.informe)">
             <mat-icon>get_app</mat-icon>
           </button>
         </div>
@@ -198,9 +198,9 @@
       <mat-icon svgIcon="mat:preview"></mat-icon>
       <span>Ver</span>
     </button-->
-    <button mat-menu-item>
+    <!--button mat-menu-item>
       <mat-icon svgIcon="mat:history"></mat-icon>
       <span>Revisar documento<br>de personal de reemplazo</span>
-    </button>
+    </button-->
   </ng-template>
 </mat-menu>

@@ -21,6 +21,7 @@ import { LayoutAprobacionHistorialComponent } from 'src/app/shared/layout-aproba
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
 import { ModalAprobadorPersonalComponent } from 'src/app/shared/modal-aprobador-personal/modal-aprobador-personal.component';
 import { ModalInformativoComponent } from 'src/app/shared/modal-informativo/modal-informativo.component';
+import { debounceTime, distinctUntilChanged, filter, map, Observable, startWith, switchMap } from 'rxjs';
 
 @Component({
   selector: 'adenda-reemplazar-personal',
@@ -66,7 +67,7 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
   listaSolicitudUuidSeleccionado: string[] = [];
 
   listaContratosSeleccionadosPerfeccionamiento: SelectedPerfeccionamientoItem[] = [];
-
+  filteredContratistas!: Observable<any[]>;
 
   displayedColumnsPersonal: string[] = [
     'tipoAprobacion',
@@ -106,24 +107,35 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
 
   ngOnInit(): void {
     this.cargarCombo();
-    this.dataSourceReemplazar.data = [{
-      'tipoAprobacion': "Aprobar",
-      'numeroExpediente': "1234",
-      'documento': "fecha.pdf",
-      'tp': "PJ",
-      'contratista': "Volvo peru",
-      'tipoSolicitud': "",
-      'fechaIngreso': "17/12/2024",
-      'estadoAprobacion': "Aprobado",
-      'estadoAprobacionLogistica': "",
-      'estadoVbGAF': "",
-    }]
+    this.dataSourceReemplazar.data = [];
     //this.cargarTabla();
 
     this.usuario = JSON.parse(sessionStorage.getItem("rolesusuario") || "[]");
     this.idRoles = this.usuario.map(u => u.idRol);
+
+    this.filteredContratistas = this.formGroup.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? value : value.contratista),
+      map(nombre => nombre ? this._filterContratistas(nombre) : this.listContratista.slice())
+    );
+
+
+    this.filteredContratistas = this.formGroup.get('contratista')!.valueChanges.pipe(
+      filter(value => typeof value === 'string' && value.length >= 3),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(value => this.solicitudService.buscarContratista(value))
+    );
   }
 
+  private _filterContratistas(nombre: string): any[] {
+    const filterValue = nombre.toLowerCase();
+    return this.listContratista.filter(option => option.nombre.toLowerCase().includes(filterValue));
+  }
+
+  displayContratista(obj: any): string {
+    return obj && obj.nombre ? obj.nombre : '';
+  }
   cargarCombo() {
     this.parametriaService.obtenerMultipleListadoDetalle([
       ListadoEnum.TIPO_SOLICITUD,
@@ -131,7 +143,7 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
       ListadoEnum.RESULTADO_EVALUACION_TEC_ADM,
       ListadoEnum.TIPO_CONTRATO,
       ListadoEnum.TIPO_APROBACION,
-      ListadoEnum.ESTADO_APROBACION
+      ListadoEnum.ESTADO_APROBACION_REEMP
     ]).subscribe(listRes => {
       this.listTipoSolicitud = listRes[0];
       this.listEstadoRevision = listRes[1];
@@ -153,10 +165,15 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
     this.paginator.pageIndex = 0;
     this.paginator.pageIndex = 0;
     let requerimiento = "";
-    if (this.idRoles.includes(this.roles.GER_G2)) {
-      requerimiento = REQUERIMIENTO.EVAL_INFO_APROB_G2_GER_DIV;
-    } else if (this.idRoles.includes(this.roles.GER_03)) {
-      requerimiento = REQUERIMIENTO.EVAL_INFO_APROB_G3_GER_LIN;
+    if (this.idRoles.includes(this.roles.EVALUADOR)) {
+      requerimiento = REQUERIMIENTO.APROB_EVAL_CONTR;
+    } else if (this.idRoles.includes(this.roles.APROBADOR_G2)) {
+      requerimiento = REQUERIMIENTO.VB_APROB_G2_APROB_ADMIN;
+    } else if (this.idRoles.includes(this.roles.APROBADOR_G3)) {
+      requerimiento = REQUERIMIENTO.FIRMA_APROB_G3_APROB_ADMIN;
+    }
+    else if (this.idRoles.includes(this.roles.APROBADOR_G4)) {
+      requerimiento = REQUERIMIENTO.APROB_ADMIN_G4_GAF;
     }
 
     this.solicitudService.buscarAprobaciones(
@@ -199,21 +216,6 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
       // solicitante: this.formGroup.controls.solicitante.value,
     };
     return filtro;
-  }
-
-  verPersonal(contrato: any) {
-    this.router.navigate([Link.INTRANET, Link.PERFECCIONAMIENTO_LIST, Link.PERFECCIONAMIENTO_VIEW, contrato.idContrato]);
-  }
-
-
-
-  descargarItem(item: any) {
-    this.adjuntoService.descargarWindowsJWT(item.codigo, item.nombreReal);
-  }
-
-
-  aprobar_firmar(sol: Solicitud) {
-    this.router.navigate([Link.INTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_APROBAR, sol.solicitudUuid]);
   }
 
   flagContrato: boolean = true;
@@ -293,19 +295,13 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
   }
 
   historyApproveAndSignPersonal(row: any) {
-    this.router.navigate([Link.INTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_LIST_APROBACION, "historial"])
-    /*this.dialog.open(ModalAprobadorHistorialContratoComponent, {
-      width: '1200px',
-      maxHeight: '100%',
-      data: {
-        idContrato: row.idContrato
-      }
-    });*/
+     this.router.navigate(
+    [Link.INTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_LIST_APROBACION, "historial"],
+    { state: { rowData: row } }
+  );
+    
   }
 
-  redireccionAProbarPaces() {
-    this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.SOLICITUDES_LIST_APROBACION_PACES]);
-  }
 
   modalInformativo(descripcion: string) {
     this.dialog.open(ModalInformativoComponent, {
@@ -319,8 +315,8 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
     })
   }
 
-  descargar(id:string,nombre:string){
+  descargar(id: string, nombre: string) {
     console.log("entrando a descargar")
-    this.adjuntoService.descargarWindowsJWT(id,nombre);
+    this.adjuntoService.descargarWindowsJWT(id, nombre);
   }
 }

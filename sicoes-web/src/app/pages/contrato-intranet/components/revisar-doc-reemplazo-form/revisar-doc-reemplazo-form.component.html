@@ -20,8 +20,12 @@
                 </div>
 
                 <vex-revisar-doc-reemplazo-form-review *ngIf="!isCargaAdenda"
+                  [idReemplazo] = "idReemplazoPersonal"
                   [idSolicitud] = "idSolicitud"
                   [uuidSolicitud] = "uuidSolicitud"
+                  (seccionesCompletadas) = "recibirFlagSeccionesCompletadas($event)"
+                  (codigoRevisor) = "recibirCodigoRevisor($event)"
+                  (allMarcasConforme) = "recibirConformidades($event)"
                 #reemplazoPersFormEdit></vex-revisar-doc-reemplazo-form-review>
 
                 <vex-adenda-form-upload *ngIf="isCargaAdenda"
@@ -30,10 +34,13 @@
                 #adendaFormUpload></vex-adenda-form-upload >
 
                 <div class="py-4 border-t flex flex-row justify-end gap-x-4">
-                    <button *ngIf="!isCargaAdenda" color="primary" mat-raised-button type="button" (click)="doNothing()">
+                    <button *ngIf="!isCargaAdenda" 
+                        color="primary" mat-raised-button type="button" 
+                        [disabled] = "!puedeRegistrar"
+                        (click)="registrarRevision()">
                         {{ btnRegister }}
                     </button>
-                    <button *ngIf="isCargaAdenda" color="primary" mat-raised-button type="button" (click)="doNothing()">
+                    <button *ngIf="isCargaAdenda" color="primary" mat-raised-button type="button">
                         {{ btnGuardarAdenda }}
                     </button>
                     <button color="primary" mat-raised-button type="button" (click)="toGoBandejaContratos()">

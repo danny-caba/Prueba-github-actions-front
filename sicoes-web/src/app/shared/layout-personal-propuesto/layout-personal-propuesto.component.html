@@ -1,18 +1,21 @@
 <div class="w-full overflow-x-auto rounded items-center mb-6 mt-4" *ngIf="isReview || isReviewExt || isCargaAdenda">
-  <table @stagger [dataSource]="listPersonalAgregado" class="w-full table-auto" mat-table matSort>
+  <table @stagger [dataSource]="listPersonalPropuestoReview" class="w-full table-auto" mat-table matSort>
     <ng-container matColumnDef="tipoDocumento">
       <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-left">Tipo de<br>Documento</th>
-      <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.tipoDocumento }}</td>
+      <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+        {{ element?.personaPropuesta?.tipoDocumento?.descripcion  }}</td>
     </ng-container>
 
     <ng-container matColumnDef="numeroDocumento">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Número de<br>Documento</th>
-      <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.numeroDocumento }}</td>
+      <td class="text-primary font-medium" mat-cell *matCellDef="let element">
+        {{ element?.personaPropuesta?.numeroDocumento }}</td>
     </ng-container>
 
     <ng-container matColumnDef="nombreCompleto">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombres y apellidos</th>
-      <td class="text-primary font-medium break-words whitespace-normal min-w-[80px] py-2" mat-cell *matCellDef="let element">{{ element?.nombreCompleto }}</td>
+      <td class="text-primary font-medium break-words whitespace-normal min-w-[80px] py-2" mat-cell *matCellDef="let element">
+        {{ getNombreCompleto(element?.personaPropuesta) }}</td>
     </ng-container>
 
     <ng-container matColumnDef="vacio">
@@ -26,7 +29,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumnsReview"></tr>
 
     <tr mat-footer-row *matFooterRowDef="['vacio']"
-      [class.hidden]="listPersonalAgregado?.length > 0">
+      [class.hidden]="listPersonalPropuestoReview?.length > 0">
     </tr>
   </table>
 </div>
@@ -145,7 +148,7 @@
 <ng-template #templateNepotismo let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary" 
-    [checked]="adjuntoCargadoDjNepotismo"
+    [checked]="adjuntoDjNepotismo?.adjunto?.archivo != null"
     (change)="setValueCheckedDjNepotismo(formGroup, $event)"
       [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
@@ -154,17 +157,25 @@
     </mat-checkbox>
     <span class="flex-1"></span>
 
+    <vex-form-adjuntos-no-title *ngIf="isReview || isReviewExt || isCargaAdenda"
+      class="ml-auto"
+      [adjuntoInput] = "adjuntoDjNepotismo"
+      [editable]="editable">
+    </vex-form-adjuntos-no-title>
 
     <mat-radio-group
-      [disabled] = "isCargaAdenda"
+      [disabled] = "isCargaAdenda || adjuntoDjNepotismo?.adjunto?.archivo == null"
       *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
+      (change)="onMarcaDJNepotismoChange($event.value)"
       [(ngModel)]="marcaDjNepotismo"
       class="ml-12 flex items-center gap-4">
-      <mat-radio-button value="si">Sí</mat-radio-button>
-      <mat-radio-button value="no">No</mat-radio-button>
+      <mat-radio-button value="SI">Sí</mat-radio-button>
+      <mat-radio-button value="NO">No</mat-radio-button>
     </mat-radio-group>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Evaluado por:</span>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Fecha y Hora:</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">
+      {{djNepotismoEvaluadoPor || 'Evaluado por:'}}</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12 fecha-col">
+      {{djNepotismoFechaHora || 'Fecha y Hora'}}</span>
     <ng-container 
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME" 
       #rolePermisoSpan="vexOptionRoleCheck">
@@ -203,7 +214,7 @@
 <ng-template #templateImpedimento let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary"
-      [checked]="adjuntoCargadoDjImpedimento"
+      [checked]="adjuntoDjImpedimento?.adjunto?.archivo != null"
       (change)="setValueCheckedDjImpedimento(formGroup, $event)"
       [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
@@ -211,17 +222,26 @@
       <span>DJ impedimentos / incompatibilidad y prohibiciones</span>
     </mat-checkbox>
     <span class="flex-1"></span>
+
+    <vex-form-adjuntos-no-title *ngIf="isReview || isReviewExt || isCargaAdenda"
+      class="ml-auto"
+      [adjuntoInput] = "adjuntoDjImpedimento"
+      [editable]="editable">
+    </vex-form-adjuntos-no-title>
     
     <mat-radio-group
       *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
-      [disabled] = "isCargaAdenda"
+      [disabled] = "isCargaAdenda || adjuntoDjImpedimento?.adjunto?.archivo == null"
+      (change)="onMarcaDJImpedimentoChange($event.value)"
       [(ngModel)]="marcaDjImpedimento"
       class="ml-12 flex items-center gap-4">
-      <mat-radio-button value="si">Sí</mat-radio-button>
-      <mat-radio-button value="no">No</mat-radio-button>
+      <mat-radio-button value="SI">Sí</mat-radio-button>
+      <mat-radio-button value="NO">No</mat-radio-button>
     </mat-radio-group>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Evaluado por:</span>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Fecha y Hora:</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">
+      {{djImpedimentoEvaluadoPor || 'Evaluado por:'}}</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12 fecha-col">
+      {{djImpedimentoFechaHora || 'Fecha y Hora'}}</span>
     <ng-container 
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME" 
       #rolePermisoSpan="vexOptionRoleCheck">
@@ -259,7 +279,7 @@
 <ng-template #templateNoVinculo let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary" 
-      [checked]="adjuntoCargadoDjNoVinculo"  
+      [checked]="adjuntoDjNoVinculo?.adjunto?.archivo != null"  
       (change)="setValueCheckedDjNoVinculo(formGroup, $event)"
       [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
@@ -267,17 +287,26 @@
       <span>DJ no vínculo contractual con agente supervisado</span>
     </mat-checkbox>
     <span class="flex-1"></span>
+
+    <vex-form-adjuntos-no-title *ngIf="isReview || isReviewExt || isCargaAdenda"
+      class="ml-auto"
+      [adjuntoInput] = "adjuntoDjNoVinculo"
+      [editable]="editable">
+    </vex-form-adjuntos-no-title>
     
     <mat-radio-group
       *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
-      [disabled] = "isCargaAdenda"
+      [disabled] = "isCargaAdenda || adjuntoDjNoVinculo?.adjunto?.archivo == null"
+      (change)="onMarcaDJNoVinculoChange($event.value)"
       [(ngModel)]="marcaDjNoVinculo"
       class="ml-12 flex items-center gap-4">
-      <mat-radio-button value="si">Sí</mat-radio-button>
-      <mat-radio-button value="no">No</mat-radio-button>
+      <mat-radio-button value="SI">Sí</mat-radio-button>
+      <mat-radio-button value="NO">No</mat-radio-button>
     </mat-radio-group>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Evaluado por:</span>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Fecha y Hora:</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">
+      {{djNoVinculoEvaluadoPor || 'Evaluado por:'}}</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12 fecha-col">
+      {{djNoVinculoFechaHora || 'Fecha y Hora'}}</span>
     <ng-container 
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME" 
       #rolePermisoSpan="vexOptionRoleCheck">
@@ -315,7 +344,7 @@
 <ng-template #templateOtros let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary"
-      [checked]="adjuntoCargadoOtros"
+      [checked]="adjuntoOtros?.adjunto?.archivo != null"
       (change)="setValueCheckedOtros(formGroup, $event)"
       [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
@@ -323,17 +352,26 @@
       <span>Otros documentos</span>
     </mat-checkbox>
     <span class="flex-1"></span>
+
+    <vex-form-adjuntos-no-title *ngIf="isReview || isReviewExt || isCargaAdenda"
+      class="ml-auto"
+      [adjuntoInput] = "adjuntoOtros"
+      [editable]="editable">
+    </vex-form-adjuntos-no-title>
     
     <mat-radio-group
       *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
-      [disabled] = "isCargaAdenda"
+      [disabled] = "isCargaAdenda || adjuntoOtros?.adjunto?.archivo == null"
+      (change)="onMarcaOtrosChange($event.value)"
       [(ngModel)]="marcaOtros"
       class="ml-12 flex items-center gap-4">
-      <mat-radio-button value="si">Sí</mat-radio-button>
-      <mat-radio-button value="no">No</mat-radio-button>
+      <mat-radio-button value="SI">SI</mat-radio-button>
+      <mat-radio-button value="NO">NO</mat-radio-button>
     </mat-radio-group>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Evaluado por:</span>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Fecha y Hora:</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">
+      {{otrosEvaluadoPor || 'Evaluado por:'}}</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12 fecha-col">
+      {{otrosFechaHora || 'Fecha y Hora'}}</span>
     <ng-container 
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME" 
       #rolePermisoSpan="vexOptionRoleCheck">

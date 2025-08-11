@@ -105,4 +105,20 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
 ::ng-deep .mat-checkbox-layout {
     border-top: none !important;
     margin-top: 0 !important;
-  }
+}
+
+::ng-deep .mat-checkbox-disabled .mat-checkbox-label {
+  color: rgba(0, 0, 0, 0.87) !important; 
+}
+
+
+::ng-deep input.mat-input-element[disabled] {
+  color: rgba(0, 0, 0, 0.87) !important; 
+  -webkit-text-fill-color: rgba(0, 0, 0, 0.87) !important; 
+  opacity: 1 !important;
+}
+
+.fecha-col {
+  display: inline-block;
+  min-width: 100px;
+}

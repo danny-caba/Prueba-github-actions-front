@@ -60,7 +60,7 @@ const routes: VexRoutes = [{
         replaceable: true 
       }
     }, {
-      path: Link.REEMPLAZO_PERSONAL_REVIEW_FORM + '/:idSolicitud',
+      path: Link.REEMPLAZO_PERSONAL_REVIEW_FORM + '/:idSolicitud' + '/:idReemplazo',
       component: RevisarDocReemplazoFormComponent,
       canActivate: [AuthGuardService, RoleGuardService]
     }, {

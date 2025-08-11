@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BaseComponent } from '../components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
@@ -28,6 +28,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   @Input() isReviewExt?: boolean;
   @Input() isCargaAdenda?: boolean;
   @Input() idSolicitud: string;
+  @Input() personalReemplazo: PersonalReemplazo;
 
   @Output() perfilBajaEvent = new EventEmitter<any>();
   @Output() seccionCompletada = new EventEmitter<any>();
@@ -37,6 +38,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
 
   listBajaPersonalPropuesto: SupervisoraPerfil[] = null;
   listPersonalBaja: PersonalReemplazo[] = [];
+  listPersonalBajaReview: PersonalReemplazo[] = [];
 
   contrato: any;
   tipoContratoSeleccionado: number;
@@ -58,12 +60,23 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
 
 
 
-  ngOnInit(): void {
-    this.cargarCombo();
-    this.cargarTabla();
+  ngOnInit(): void {    
     this.isReview = this.isReview ?? false;
     this.isReviewExt = this.isReviewExt ?? false;
     this.isCargaAdenda = this.isCargaAdenda ?? false;
+
+    if (!this.isReviewExt) {
+      this.cargarCombo();
+      this.cargarTabla();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+      if (changes['personalReemplazo'] && changes['personalReemplazo'].currentValue) {
+        const nuevoPersonal = changes['personalReemplazo'].currentValue;
+        this.cargarTablaReview(nuevoPersonal);
+      }
+
   }
 
   guardarBajaPersonalPropuesto(): void {
@@ -122,7 +135,6 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
     .listarPersonalReemplazo(this.idSolicitudDecrypt)
     .subscribe(response => {
       this.listPersonalBaja = response.content.filter(item => !!item.personaBaja && item.idReemplazo == this.perfilBaja?.idReemplazo);
-      console.log('Lista de personal baja:', this.listPersonalBaja);
     });
   }
 
@@ -138,6 +150,10 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
         this.tipoContratoSeleccionado = this.contrato.tipoContratacion.idListadoDetalle;
       });
   }
+
+  cargarTablaReview(personalReemplazo: PersonalReemplazo): void {
+    this.listPersonalBajaReview = [...this.listPersonalBajaReview, personalReemplazo];
+  }    
 
   decrypt(encryptedData: string): string {
         const bytes = CryptoJS.AES.decrypt(encryptedData, URL_DECRYPT);

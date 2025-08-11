@@ -114,5 +114,20 @@ export class PersonalReemplazoService {
     return this.http.put<Pageable<any>>(urlEndpoint, data);
   }
 
+  obtenerPersonalReemplazo(idReemplazo: number): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/reemplazo/${idReemplazo}`;
+    return this.http.get<any>(urlEndpoint);
+  }
 
+  grabaConformidad(data: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/reemplazo/solicitud/propuesto/revisa`;
+    
+    return this.http.post<any>(urlEndpoint, data);
+  }
+
+  guardarRevDocumentos(data: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/reemplazo/solicitud/registra/propuesto/revision`;
+    
+    return this.http.post<any>(urlEndpoint, data);
+  }
 }

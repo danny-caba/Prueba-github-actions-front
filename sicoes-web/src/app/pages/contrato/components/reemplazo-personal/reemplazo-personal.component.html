@@ -67,13 +67,14 @@
                         <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
                         <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
                             <button mat-menu-item>
-                                <mat-icon svgIcon="mat:delete" (click)="deletePersonalReemplazo(row)"></mat-icon>
+                                <mat-icon svgIcon="mat:delete"></mat-icon>
                             </button>
                         </td>
                       </ng-container>
 
                       <ng-container matColumnDef="vacio">
-                          <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">No se encontraron registros</td>
+                          <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">
+                            No se encontraron registros</td>
                       </ng-container>
 
                       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -9,7 +9,6 @@ import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
 import * as CryptoJS from 'crypto-js';
-import { BasePageComponent } from 'src/app/shared/components/base-page.component';
 import { Supervisora } from 'src/app/interface/supervisora.model';
 
 const URL_DECRYPT = '3ncr1pt10nK3yuR1';

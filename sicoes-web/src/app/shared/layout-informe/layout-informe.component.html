@@ -2,10 +2,8 @@
   <span class="text-secondary" *ngIf="isReviewExt || isCargaAdenda">Fecha Desvinculación</span>
   <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field" >
     <input type="date"
+           [formControl]="formGroup.controls.fechaDesvinculacion"
            [min]="dateHoy | date:'yyyy-MM-dd'"
-           [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
-           [vexOptionRoleCheck]="opcion.DATE_INPUT_INFORME"
-           #rolePermiso="vexOptionRoleCheck"
            class="fecha-input"
            matInput>
     <mat-error *ngIf="formGroup.get('fechaDesvinculacion').hasError('required')">
@@ -13,45 +11,34 @@
     </mat-error>
   </mat-form-field>
   <span class="flex-1"></span>
-
-  <mat-radio-group
-      [(ngModel)]="marcaFechaDesvinculacion"
-      [disabled] = "isCargaAdenda"
-      *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
-      class="ml-12 flex gap-4">
-      <mat-radio-button value="si">Sí</mat-radio-button>
-      <mat-radio-button value="no">No</mat-radio-button>
-  </mat-radio-group>
-  <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Evaluado por:</span>
-  <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Fecha y Hora:</span>
 </div>
 
 <div class="flex items-center">
     <mat-checkbox color="primary" 
       (change)="setValueCheckedInforme(formGroup, $event)"
       [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
+      [checked]="adjuntoInforme?.adjunto?.archivo != null"
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
       #rolePermisoCheckBox="vexOptionRoleCheck">
         <span>Informe Reemplazo Personal Propuesto</span>
     </mat-checkbox>
     <span class="flex-1"></span>
 
-    <span class="text-secondary" *ngIf="isReviewExt || isCargaAdenda">InformeMock.pdf</span>
-    <button *ngIf="isReviewExt || !isCargaAdenda" matTooltip="Descargar"
-      mat-icon-button type="button"
-      class="text-primary hover:bg-hover">
-      <mat-icon svgIcon="mat:download" size="18px"></mat-icon>
-    </button>
+    <vex-form-adjuntos-no-title class="ml-6"
+      [adjuntoInput] = "adjuntoInforme"
+      [editable]="editable">
+    </vex-form-adjuntos-no-title>
     <mat-radio-group
       [(ngModel)]="marcaInformeCarta"
-      [disabled] = "isCargaAdenda"
+      (change)="onMarcaInformeCartaChange($event.value)"
+      [disabled] = "isCargaAdenda || adjuntoInforme?.adjunto?.archivo == null"
       *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
       class="ml-12 flex items-center gap-4">
-      <mat-radio-button value="si">Sí</mat-radio-button>
-      <mat-radio-button value="no">No</mat-radio-button>
+      <mat-radio-button value="SI">Sí</mat-radio-button>
+      <mat-radio-button value="NO">No</mat-radio-button>
     </mat-radio-group>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Evaluado por:</span>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">Fecha y Hora:</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">{{evaluadoPor || 'Evaluado por:'}}</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12 fecha-col">{{fechaHora || 'Fecha y Hora'}}</span>
     <ng-container 
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME" 
       #rolePermisoSpan="vexOptionRoleCheck">

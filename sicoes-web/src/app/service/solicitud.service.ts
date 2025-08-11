@@ -205,4 +205,10 @@ private isValidParam(value: any): boolean {
     
   }
 
+  historialReemplazo(id:number){
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/aprobaciones/historial/`+id
+    return this.http.get<any>(urlEndpoint);
+    
+  }
+
 }

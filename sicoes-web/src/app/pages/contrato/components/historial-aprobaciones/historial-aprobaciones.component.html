@@ -15,41 +15,41 @@
                 </div>
             </div>
             <div class="overflow-auto shadow-2xl rounded">
-                <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
+                <table @stagger [dataSource]="dataSourceHistorial" class="w-full rounded" mat-table matSort>
                     <ng-container matColumnDef="tipo">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{
-                            element?.deMes }}</td>
+                            element?.tipoAprobador }}</td>
                     </ng-container>
                     <ng-container matColumnDef="grupo" style="width: 450px;">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Grupo</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.deItemPaces
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.grupo
                             }}</td>
                     </ng-container>
                     <ng-container matColumnDef="desinacion">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 150px;">Fecha/Hora
                             Designación</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{
-                            element?.idTipoEstado }}</td>
+                            element?.fechaDesignacion }}</td>
                     </ng-container>
                     <ng-container matColumnDef="aprobador" style="width: 450px;">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Aprobador</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.deItemPaces
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.aprobador
                             }}</td>
                     </ng-container>
                     <ng-container matColumnDef="aprobacion" style="width: 450px;">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha/Hora Aprobación</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.deItemPaces
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.fechaAprobacion
                             }}</td>
                     </ng-container>
                     <ng-container matColumnDef="resultado" style="width: 450px;">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Resultado</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.deItemPaces
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.resultado
                             }}</td>
                     </ng-container>
                     <ng-container matColumnDef="observacion" style="width: 450px;">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Observación</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.deItemPaces
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element.observacion
                             }}</td>
                     </ng-container>
                     <ng-container matColumnDef="loading">
@@ -63,11 +63,11 @@
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                    <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSource != null }"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ hide: dataSourceHistorial != null }"></tr>
                     <tr mat-footer-row *matFooterRowDef="['vacio']"
-                        [ngClass]="{ hide: !(dataSource != null && dataSource.data.length == 0) }"></tr>
+                        [ngClass]="{ hide: !(dataSourceHistorial != null && dataSourceHistorial.data.length == 0) }"></tr>
                 </table>
-                <mat-paginator class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
+                <mat-paginator #paginatorHistorial class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChange($event)"
                     showFirstLastButtons></mat-paginator>
             </div>
             <br>

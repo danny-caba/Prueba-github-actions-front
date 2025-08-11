@@ -82,9 +82,9 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
       if (result.isConfirmed) {
         let requerimiento="";
         if(this.accion.includes(this.roles.GER_G2)){
-          requerimiento=REQUERIMIENTO.EVAL_INFO_APROB_G2_GER_DIV
+          requerimiento=REQUERIMIENTO.EVAL_INF_APROB_TEC_G2
         }else if (this.accion.includes(this.roles.APROBADOR_G3)){
-          requerimiento=REQUERIMIENTO.EVAL_INFO_APROB_G3_GER_LIN
+          requerimiento=REQUERIMIENTO.EVAL_INF_APROB_TEC_G3
         }else if(this.accion.includes(this.roles.EVALUADOR)){
           requerimiento=REQUERIMIENTO.APROB_EVAL_CONTR
         }

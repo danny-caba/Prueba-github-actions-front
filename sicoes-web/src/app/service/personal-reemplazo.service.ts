@@ -130,4 +130,10 @@ export class PersonalReemplazoService {
     
     return this.http.post<any>(urlEndpoint, data);
   }
+
+  registrarObservaciones(data: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/reemplazo/solicitud/propuesto/observaciones`;
+    
+    return this.http.post<any>(urlEndpoint, data);
+  }
 }

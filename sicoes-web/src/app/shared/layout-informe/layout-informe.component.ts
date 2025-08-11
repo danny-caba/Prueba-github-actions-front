@@ -27,6 +27,7 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
 
   @Output() seccionCompletada = new EventEmitter<boolean>();
   @Output() allConforme = new EventEmitter<boolean>();
+  @Output() observacionChange = new EventEmitter<string>();
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
 
@@ -36,7 +37,9 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
   fechaHora: string = null;
 
   editable: boolean = false;
+
   marcaInformeCarta: 'SI' | 'NO' | null = null;
+  observacion: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -105,8 +108,10 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
             }
           }
     });
+  }
 
-
+  emitirObservacion(){
+    this.observacionChange.emit(this.observacion);
   }
 
   setValueCheckedInforme(obj, even) {

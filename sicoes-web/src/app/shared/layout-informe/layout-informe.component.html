@@ -16,9 +16,9 @@
 <div class="flex items-center">
     <mat-checkbox color="primary" 
       (change)="setValueCheckedInforme(formGroup, $event)"
-      [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
+      [disabled] = "isCargaAdenda || !rolePermisoCheckBox?.hasPermission"
       [checked]="adjuntoInforme?.adjunto?.archivo != null"
-      [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
+      [vexOptionRoleCheck]="opcion.CHECKBOX_INFORME"
       #rolePermisoCheckBox="vexOptionRoleCheck">
         <span>Informe Reemplazo Personal Propuesto</span>
     </mat-checkbox>
@@ -56,6 +56,8 @@
   <mat-form-field class="w-full">
     <textarea matInput
            placeholder="Observación"
+           [(ngModel)]="observacion"
+           (ngModelChange)="emitirObservacion()"
            [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
            [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
            #rolePermiso="vexOptionRoleCheck"

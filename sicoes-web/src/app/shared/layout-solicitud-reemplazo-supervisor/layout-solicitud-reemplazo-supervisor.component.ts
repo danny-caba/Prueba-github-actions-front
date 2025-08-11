@@ -16,17 +16,18 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   @Input() perfilBaja: any;
   @Input() adjuntoSolicitud: any;
   @Input() idDocSolicitud: number;
-   @Input() codRolRevisor: string;
+  @Input() codRolRevisor: string;
 
   @Output() seccionCompletada = new EventEmitter<any>();
   @Output() allConforme = new EventEmitter<any>();
+  @Output() observacionChange = new EventEmitter<string>();
 
   editable: boolean = false;
   marcacion: 'SI' | 'NO' | null = null;
   adjuntoCargadoSolicitud: boolean = false;
   evaluadoPor: string = null;
   fechaHora: string = null;
-
+  observacion: string = '';
 
   constructor(
     private reemplazoService: PersonalReemplazoService
@@ -46,6 +47,11 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
     if (changes['idDocSolicitud'] && changes['idDocSolicitud'].currentValue) {
       const nuevoIdInforme = changes['idDocSolicitud'].currentValue;
       this.idDocSolicitud = nuevoIdInforme;
+    }
+
+    if (changes['codRolRevisor'] && changes['codRolRevisor'].currentValue) {
+      const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
+      this.codRolRevisor = nuevoCodRolRevisor;
     }
   }
 
@@ -77,6 +83,10 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   onSolicitudAdjunta(valor: boolean) {
     this.adjuntoCargadoSolicitud = valor;
     this.seccionCompletada.emit(valor);
+  }
+
+  emitirObservacion(){
+    this.observacionChange.emit(this.observacion);
   }
 
 }

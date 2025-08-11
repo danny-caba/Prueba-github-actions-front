@@ -25,7 +25,8 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   @Output() seccionesCompletadas = new EventEmitter<boolean>();
   @Output() codigoRevisor = new EventEmitter<string>();
   @Output() allMarcasConforme = new EventEmitter<boolean>();
-
+  @Output() allObsCompletas = new EventEmitter<boolean>();
+  @Output() obsRegistrar = new EventEmitter<any>();
 
   usuario$ = this.authFacade.user$;
   codRolRevisor: string
@@ -43,6 +44,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   adjuntoDjNoVinculo: any;
   adjuntoOtros: any;
   adjuntoSolicitudReemplazo: any;
+  adjuntoProyAdenda: any;
 
   idInforme: number;
   idDjNepotismo: number;
@@ -50,6 +52,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   idDJNoVinculo: number;
   idOtros: number;
   idSolicitudReemplazo: number;
+  idProyAdenda: number;
 
   seccionInformeCompletaFlag: boolean = false;
   seccionPersonalPropuestoCompletaFlag: boolean = false;
@@ -62,10 +65,19 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   existeDocNoVinculoFlag: boolean = false;
   existeDocOtrosFlag: boolean = false;
   existeDocSolReemplazoFlag: boolean = false;
+  existeDocProyAdendaFlag: boolean = false;
 
   allConformeInforme: boolean = false;
   allConformePersonalPropuesto: boolean = false;
   allConformeSolReemplazo: boolean = false;
+
+  observacionInforme: string;
+  observacionDjNepotismo: string;
+  observacionDjImpedimento: string;
+  observacionDjNoVinculo: string;
+  observacionOtros: string;
+  observacionSolReemplazo: string;
+  observacionProyAdenda: string;
 
   constructor(
     private reemplazoService: PersonalReemplazoService,
@@ -109,6 +121,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
     this.setDatosDjNoVinculo();
     this.setDatosOtros();
     this.setDatosSolicitudReemplazo();
+    this.setDatosProyAdenda();
   }
 
   setDatosInforme() {
@@ -206,6 +219,22 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
     this.idSolicitudReemplazo = doc?.idDocumento; 
   }
 
+  setDatosProyAdenda() {
+    const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'PROYECTO_ADENDA');
+
+    if (doc) {
+      this.existeDocProyAdendaFlag = true;
+    }
+    
+    let solicitud = {
+      adjunto: {
+        archivo: doc?.archivo
+      }
+    }
+    this.adjuntoProyAdenda = solicitud;
+    this.idProyAdenda = doc?.idDocumento; 
+  }
+
   seccionInformeCompletada(completada: boolean): void {
     this.seccionInformeCompletaFlag = completada;
     this.verificarSeccionesCompletadas();
@@ -266,5 +295,96 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   recibirConformidadSolReemplazo(allConforme: boolean){
     this.allConformeSolReemplazo = allConforme;
+  }
+
+  recibirObservacionInforme(observacion: string){
+    this.observacionInforme = observacion;
+    this.validarObservacionesCompletadas();
+  }
+
+  recibirObservacionDjNepotismo(observacion: string){
+    this.observacionDjNepotismo = observacion;
+    this.validarObservacionesCompletadas();
+  }
+
+  recibirObservacionDjImpedimento(observacion: string){
+    this.observacionDjImpedimento = observacion;
+    this.validarObservacionesCompletadas();
+  }
+
+  recibirObservacionDjNoVinculo(observacion: string){
+    this.observacionDjNoVinculo = observacion;
+    this.validarObservacionesCompletadas();
+  }
+
+  recibirObservacionOtros(observacion: string){
+    this.observacionOtros = observacion;
+    this.validarObservacionesCompletadas();
+  }
+
+  recibirObservacionSolReemplazo(observacion: string){
+    this.observacionSolReemplazo = observacion;
+    this.validarObservacionesCompletadas();
+  }
+
+  recibirObservacionProyAdenda(observacion: string){
+    this.observacionProyAdenda = observacion;
+    this.validarObservacionesCompletadas();
+  }
+
+  validarObservacionesCompletadas() {
+    const obsValidadas =  [this.observacionInforme, this.observacionDjNepotismo, this.observacionDjImpedimento, this.observacionDjNoVinculo, 
+      this.observacionOtros, this.observacionSolReemplazo, this.observacionProyAdenda].every(obs => this.isNotUndefinedEmpty(obs));
+
+      console.log("obs validadas -> ", obsValidadas)
+
+      if (obsValidadas) {
+        const obsList = [
+          {
+            idDocumento: this.idInforme,
+            observacion: this.observacionInforme,
+            idRol: 15
+          },
+          {
+            idDocumento: this.idDjNepotismo,
+            observacion: this.observacionDjNepotismo,
+            idRol: 15
+          },
+          {
+            idDocumento: this.idDjImpedimento,
+            observacion: this.observacionDjImpedimento,
+            idRol: 15
+          },
+          {
+            idDocumento: this.idDJNoVinculo,
+            observacion: this.observacionDjNoVinculo,
+            idRol: 15
+          },
+          {
+            idDocumento: this.idOtros,
+            observacion: this.observacionOtros,
+            idRol: 15
+          },
+          {
+            idDocumento: this.idSolicitudReemplazo,
+            observacion: this.observacionSolReemplazo,
+            idRol: 15
+          },
+          {
+            idDocumento: this.idProyAdenda,
+            observacion: this.observacionProyAdenda,
+            idRol: 15
+          }
+        ];
+
+        this.allObsCompletas.emit(true);
+        this.obsRegistrar.emit(obsList.filter(obs => obs.idDocumento != null));
+      } else {
+        this.allObsCompletas.emit(false);
+      }
+  }
+
+  isNotUndefinedEmpty(obs: string): boolean {
+    return !!obs?.trim();
   }
 }

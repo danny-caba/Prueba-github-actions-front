@@ -19,14 +19,19 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
   @Input() isReview: boolean;
   @Input() isReviewExt: boolean;
   @Input() isCargaAdenda: boolean;
-  @Input() adjuntoAdenda: any;
-  @Input() idAdenda: number;
+  @Input() adjuntoProyAdenda: any;
+  @Input() idDocAdenda: number;
   @Input() personalReemplazo: PersonalReemplazo;
+  @Input() codRolRevisor: string;
 
   @Output() seccionCompletada = new EventEmitter<any>();
+  @Output() observacionChange = new EventEmitter<string>();
 
   editable: boolean = true;
+  allowedReviewProyAdenda: boolean = false;
+
   marcacion: 'SI' | 'NO' | null = null;
+  observacion: string = '';
 
   adjuntoCargadoAdenda: boolean = false;
   evaluadoPor: string = null;
@@ -43,14 +48,14 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
   }
 
   ngOnChanges(changes: SimpleChanges): void { 
-      if (changes['adjuntoAdenda'] && changes['adjuntoAdenda'].currentValue) {
-        const nuevoAdjunto = changes['adjuntoAdenda'].currentValue;
-        this.adjuntoAdenda = nuevoAdjunto;
+      if (changes['adjuntoProyAdenda'] && changes['adjuntoProyAdenda'].currentValue) {
+        const nuevoAdjunto = changes['adjuntoProyAdenda'].currentValue;
+        this.adjuntoProyAdenda = nuevoAdjunto;
       }
   
-      if (changes['idAdenda'] && changes['idAdenda'].currentValue) {
-        const nuevoIdAdenda = changes['idAdenda'].currentValue;
-        this.idAdenda = nuevoIdAdenda;
+      if (changes['idDocAdenda'] && changes['idDocAdenda'].currentValue) {
+        const nuevoIdDocAdenda = changes['idDocAdenda'].currentValue;
+        this.idDocAdenda = nuevoIdDocAdenda;
       }
 
       if (changes['personalReemplazo'] && changes['personalReemplazo'].currentValue) {
@@ -58,11 +63,20 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
         this.personalReemplazo = nuevoPersonalReemplazo;
         this.idReemplazo = this.personalReemplazo?.idReemplazo.toString();
       }
+
+      if (changes['codRolRevisor'] && changes['codRolRevisor'].currentValue) {
+      const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
+      this.codRolRevisor = nuevoCodRolRevisor;
+      if (['15', '12'].some(value => value === this.codRolRevisor)) {
+        this.editable = false;
+        this.allowedReviewProyAdenda = true;
+      }
+    }
   }
 
   onMarcaAdendaChange(valor: string) {
     let body = {
-      idDocumento: this.idAdenda,
+      idDocumento: this.idDocAdenda,
       conformidad: valor,
       idRol: 2
     }
@@ -80,6 +94,10 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
   onAdendaAdjunta(valor: boolean) {
     this.adjuntoCargadoAdenda = valor;
     this.seccionCompletada.emit(valor);
+  }
+
+  emitirObservacion(){
+    this.observacionChange.emit(this.observacion);
   }
 
   setValueCheckedCartaReemplazo(even) {

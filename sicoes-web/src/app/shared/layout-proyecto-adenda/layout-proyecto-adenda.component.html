@@ -7,22 +7,22 @@
         <mat-checkbox color="primary" 
             (change)="setValueCheckedCartaReemplazo($event)"
             [disabled] = "isCargaAdenda || !rolePermisoCheckBox?.hasPermission"
-            [checked]="adjuntoCargadoAdenda || adjuntoAdenda?.adjunto?.archivo != null"
-            [vexOptionRoleCheck]="opcion.CHECKBOX_ADENDA"
+            [checked]="adjuntoCargadoAdenda || adjuntoProyAdenda?.adjunto?.archivo != null"
+            [vexOptionRoleCheck]="opcion.CHECKBOX_PROY_ADENDA"
             #rolePermisoCheckBox="vexOptionRoleCheck">
             <span>Documento Proyecto de Adenda</span>
         </mat-checkbox>
         <span class="flex-1"></span>
 
-        <vex-form-adjuntos-no-title class="ml-6" *ngIf = "!isReviewExt"
-            [adjuntoInput] = "adjuntoAdenda"
-            [editable]="adjuntoAdenda?.adjunto?.archivo != null">
+        <vex-form-adjuntos-no-title class="ml-6" *ngIf = "isReviewExt && allowedReviewProyAdenda"
+            [adjuntoInput] = "adjuntoProyAdenda"
+            [editable]="adjuntoProyAdenda?.adjunto?.archivo != null">
         </vex-form-adjuntos-no-title>
         
         <mat-radio-group
             *vexOptionRoleReemplazo="opcion.RAD_BTN_ADENDA"
             (change)="onMarcaAdendaChange($event.value)"
-            [disabled] = "isCargaAdenda || adjuntoAdenda?.adjunto?.archivo == null"
+            [disabled] = "isCargaAdenda || adjuntoProyAdenda?.adjunto?.archivo == null"
             [(ngModel)]="marcacion"
             class="ml-12 flex items-center gap-4">
             <mat-radio-button value="si">Sí</mat-radio-button>
@@ -38,7 +38,7 @@
                 </span>
         </ng-container>
         
-        <vex-form-adjuntos-no-title *ngIf="isReviewExt"
+        <vex-form-adjuntos-no-title *ngIf="isReviewExt && !allowedReviewProyAdenda"
             class="ml-auto"
             [idSeccion]="'1042'"
             [idTipoDocumento]="'1042'"
@@ -55,6 +55,8 @@
         <mat-form-field class="w-full">
           <textarea matInput
                  placeholder="Observación"
+                 [(ngModel)]="observacion"
+                 (ngModelChange)="emitirObservacion()"
                  [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
                  [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
                  #rolePermiso="vexOptionRoleCheck"

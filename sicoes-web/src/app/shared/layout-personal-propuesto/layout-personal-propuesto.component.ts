@@ -54,6 +54,10 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
 
   @Output() seccionCompletada = new EventEmitter<any>();
   @Output() allConforme = new EventEmitter<any>();
+  @Output() observacionDjNepotismoChange = new EventEmitter<string>();
+  @Output() observacionDjImpedimentoChange = new EventEmitter<string>();
+  @Output() observacionDjNoVinculoChange = new EventEmitter<string>();
+  @Output() observacionOtrosChange = new EventEmitter<string>();
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'djNepotismo', 'djImpedimento', 'djNoVinculo', 'otrosDocumentos', 'actions'];
   displayedColumnsReview: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto'];
@@ -99,6 +103,10 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   djNoVinculoFechaHora: string = null;
   otrosFechaHora: string = null;
 
+  observacionDjNepotismo: string = '';
+  observacionDjImpedimento: string = '';
+  observacionDjNoVinculo: string = '';
+  observacionOtros: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -399,6 +407,22 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   onOtrosAdjunta(valor: boolean) {
     this.adjuntoCargadoOtros = valor;
     this.formGroup.get('flagOtros')?.setValue(valor);
+  }
+
+  emitirObservacionDjNepotismo(){
+    this.observacionDjNepotismoChange.emit(this.observacionDjNepotismo);
+  }
+
+  emitirObservacionDjImpedimento(){
+    this.observacionDjImpedimentoChange.emit(this.observacionDjImpedimento);
+  }
+
+  emitirObservacionDjNoVinculo(){
+    this.observacionDjNoVinculoChange.emit(this.observacionDjNoVinculo);
+  }
+
+  emitirObservacionOtros(){
+    this.observacionOtrosChange.emit(this.observacionOtros);
   }
 
   getNombreCompleto(persona: Supervisora): string {

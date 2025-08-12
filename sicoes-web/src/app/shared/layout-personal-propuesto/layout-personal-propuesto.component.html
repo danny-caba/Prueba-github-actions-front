@@ -148,7 +148,7 @@
 <ng-template #templateNepotismo let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary" 
-    [checked]="adjuntoDjNepotismo?.adjunto?.archivo != null"
+    [checked]="adjuntoDjNepotismo?.adjunto?.archivo != null || adjuntoCargadoDjNepotismo"
     (change)="setValueCheckedDjNepotismo(formGroup, $event)"
       [disabled] = "isCargaAdenda || !rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.CHECKBOX_PERS_PROPUESTO"
@@ -217,7 +217,7 @@
 <ng-template #templateImpedimento let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary"
-      [checked]="adjuntoDjImpedimento?.adjunto?.archivo != null"
+      [checked]="adjuntoDjImpedimento?.adjunto?.archivo != null || adjuntoCargadoDjImpedimento"
       (change)="setValueCheckedDjImpedimento(formGroup, $event)"
       [disabled] = "isCargaAdenda || !rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.CHECKBOX_PERS_PROPUESTO"
@@ -285,7 +285,7 @@
 <ng-template #templateNoVinculo let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary" 
-      [checked]="adjuntoDjNoVinculo?.adjunto?.archivo != null"  
+      [checked]="adjuntoDjNoVinculo?.adjunto?.archivo != null || adjuntoCargadoDjNoVinculo"  
       (change)="setValueCheckedDjNoVinculo(formGroup, $event)"
       [disabled] = "isCargaAdenda || !rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.CHECKBOX_PERS_PROPUESTO"
@@ -353,7 +353,7 @@
 <ng-template #templateOtros let-otro="otro">
   <div class="flex items-center w-full">
     <mat-checkbox color="primary"
-      [checked]="adjuntoOtros?.adjunto?.archivo != null"
+      [checked]="adjuntoOtros?.adjunto?.archivo != null || adjuntoCargadoOtros"
       (change)="setValueCheckedOtros(formGroup, $event)"
       [disabled] = "isCargaAdenda || !rolePermisoCheckBox?.hasPermission"
       [vexOptionRoleCheck]="opcion.CHECKBOX_PERS_PROPUESTO"

@@ -137,7 +137,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoInforme = informe;
-    this.observacionInforme = doc?.evaluacion.observacion;
+    this.observacionInforme = doc?.evaluacion?.observacion;
     this.idInforme = doc?.idDocumento; 
   }
 
@@ -154,7 +154,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoDjNepotismo = djNepotismo;
-    this.observacionDjNepotismo = doc?.evaluacion.observacion;
+    this.observacionDjNepotismo = doc?.evaluacion?.observacion;
     this.idDjNepotismo = doc?.idDocumento; 
   }
 
@@ -171,7 +171,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoDjImpedimento = djImpedimento;
-    this.observacionDjImpedimento = doc?.evaluacion.observacion;
+    this.observacionDjImpedimento = doc?.evaluacion?.observacion;
     this.idDjImpedimento = doc?.idDocumento; 
   }
 
@@ -188,7 +188,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoDjNoVinculo = djNoVinculo;
-    this.observacionDjNoVinculo = doc?.evaluacion.observacion;
+    this.observacionDjNoVinculo = doc?.evaluacion?.observacion;
     this.idDJNoVinculo = doc?.idDocumento; 
   }
 
@@ -205,7 +205,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoOtros = otros;
-    this.observacionOtros = doc?.evaluacion.observacion;
+    this.observacionOtros = doc?.evaluacion?.observacion;
     this.idOtros = doc?.idDocumento; 
   }
 
@@ -222,7 +222,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoSolicitudReemplazo = solicitud;
-    this.observacionSolReemplazo = doc?.evaluacion.observacion;
+    this.observacionSolReemplazo = doc?.evaluacion?.observacion;
     this.idSolicitudReemplazo = doc?.idDocumento; 
   }
 
@@ -239,7 +239,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoProyAdenda = solicitud;
-    this.observacionProyAdenda = doc?.evaluacion.observacion;
+    this.observacionProyAdenda = doc?.evaluacion?.observacion;
     this.idProyAdenda = doc?.idDocumento; 
   }
 

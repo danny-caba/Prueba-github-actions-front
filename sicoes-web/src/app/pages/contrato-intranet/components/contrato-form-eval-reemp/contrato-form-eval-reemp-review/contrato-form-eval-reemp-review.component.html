@@ -4,14 +4,22 @@
                     <mat-expansion-panel-header>
                         <mat-panel-title class="font-bold">{{itemSeccion + 1}}.- Informe</mat-panel-title>
                     </mat-expansion-panel-header>
-                    <vex-layout-informe #layoutInforme></vex-layout-informe>
+                    <vex-layout-informe 
+                        [personalReemplazo] = "personalReemplazo"
+                        [isEvalDocReemplazo] = "isEvalDocReemplazo"
+                        [fechaDesvinculacion] = "fecDesvinculacion"
+                        [codRolRevisor] = "codRolRevisor"
+                        (seccionCompletada)="seccionInformeCompletada($event)"
+                    #layoutInforme></vex-layout-informe>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
                     <mat-expansion-panel-header>
                         <mat-panel-title class="font-bold">{{itemSeccion + 2}}.- Baja Personal propuesto</mat-panel-title>
                     </mat-expansion-panel-header>
                     <vex-layout-baja-personal-propuesto 
-                        [isReview]="isReview"
+                        [idSolicitud] = "idSolicitud" 
+                        [personalReemplazo] = "personalReemplazo"
+                        [isReviewExt]="isReview"
                     #layoutBajaPersPropuesto></vex-layout-baja-personal-propuesto>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -19,9 +27,22 @@
                         <mat-panel-title class="font-bold">{{itemSeccion + 3}}.- Personal propuesto</mat-panel-title>
                     </mat-expansion-panel-header>
                     <vex-layout-personal-propuesto 
-                    [isReview]="isReview"  
-                    [idSolicitud] = "idSolicitud"
-                     [uuidSolicitud] = "uuidSolicitud"
+                        [isReviewExt]="isReview"  
+                        [idSolicitud] = "idSolicitud"
+                        [uuidSolicitud] = "uuidSolicitud"
+                        [personalReemplazo] = "personalReemplazo"
+                        [idDocDjNepotismo] = "idDjNepotismo"
+                        [idDocDjImpedimento] = "idDjImpedimento"
+                        [idDocDjNoVinculo] = "idDJNoVinculo"
+                        [idDocOtros] = "idOtros"
+                        [adjuntoDjNepotismo] = "adjuntoDjNepotismo"
+                        [adjuntoDjImpedimento] = "adjuntoDjImpedimento"
+                        [adjuntoDjNoVinculo] = "adjuntoDjNoVinculo"
+                        [adjuntoOtros] = "adjuntoOtros"
+                        [codRolRevisor] = "codRolRevisor"
+                        [mostrarObs] = "!isEvalDocReemplazo"
+                        (seccionCompletada)="seccionPersonalPropuestoCompletada($event)"
+                        (allConforme) = "recibirConformidadPersonalPropuesto($event)"
                     #layoutPersPropuesto></vex-layout-personal-propuesto>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -29,7 +50,13 @@
                         <mat-panel-title class="font-bold">{{itemSeccion + 4}}.- Solicitud de reemplazo de supervisor</mat-panel-title>
                     </mat-expansion-panel-header>
                     <vex-layout-solicitud-reemplazo-supervisor 
-                        [isReview]="isReview" 
+                        [adjuntoSolicitud] = "adjuntoSolicitudReemplazo"
+                        [idDocSolicitud] = "idSolicitudReemplazo"
+                        [codRolRevisor] = "codRolRevisor"
+                        [isReviewExt]="isReview"
+                        [mostrarObs] = "!isEvalDocReemplazo"
+                        (seccionCompletada)="seccionSolicitudReemplazoCompletada($event)"
+                        (allConforme) = "recibirConformidadSolReemplazo($event)"
                     #layoutSolReempSuperv></vex-layout-solicitud-reemplazo-supervisor>
                 </mat-expansion-panel>
             </mat-accordion>

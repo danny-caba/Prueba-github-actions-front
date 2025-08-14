@@ -123,6 +123,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
       next: () => {
         this.cargarTabla();
         this.seccionCompletada.emit(false);
+        this.perfilBajaEvent.emit(null);
       }
     });
   }

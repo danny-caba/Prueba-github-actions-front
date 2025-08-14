@@ -288,6 +288,8 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
         .subscribe(response => {
           this.listPersonalApto = response.content;
         });
+    } else {
+      this.listPersonalApto = [];
     }
 
   }

@@ -66,7 +66,7 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
     let primeraVez = true;
 
     fechaControl?.valueChanges.subscribe(value => {
-      if (primeraVez) {
+      if (primeraVez || !this.isEvalDocReemplazo) {
         primeraVez = false;
         this.isValidFechaDesvinculacion = true;
         return;

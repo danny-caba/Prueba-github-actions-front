@@ -132,7 +132,7 @@ export class PersonalReemplazoService {
     return this.http.post<any>(urlEndpoint, data);
   }
 
-  obtenerSeccionAdenda(idReemplazo: number, seccion: string): Observable<any> {
+  obtenerSeccionAdenda(idReemplazo: number | string, seccion: string): Observable<any> {
     const urlEndpoint = `${this._path_serve}/documentosreemplazo/seccion?idReemplazo=${idReemplazo}&seccion=${seccion}`;
     return this.http.get<any>(urlEndpoint);
   }

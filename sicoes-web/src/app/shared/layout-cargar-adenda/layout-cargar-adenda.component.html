@@ -30,10 +30,14 @@
         <span *ngIf="!isCargaAdenda" class="text-secondary ml-12">Evaluado por:</span>
         <span *ngIf="!isCargaAdenda" class="text-secondary ml-12">Fecha y Hora:</span>
         
-        <vex-form-adjuntos-btn class="ml-6" *ngIf="isCargaAdenda"
-          [titulo]="'Archivo (*.pdf)'"
-          [editable]="editable">
-        </vex-form-adjuntos-btn>
+        <vex-form-adjuntos-no-title
+        [titulo]="'Archivo (*.pdf)'"
+        [editable]="editable"
+        class="ml-4"
+        >
+        </vex-form-adjuntos-no-title>
+        
+        
     </div>
     <div> 
         <mat-form-field class="w-full" *ngIf = "!isCargaAdenda">

@@ -64,7 +64,7 @@ const routes: VexRoutes = [{
       component: RevisarDocReemplazoFormComponent,
       canActivate: [AuthGuardService, RoleGuardService]
     }, {
-      path: Link.CARGA_ADENDA_FORM + '/:idSolicitud',
+      path: Link.CARGA_ADENDA_FORM + '/:idSolicitud' + '/:idReemplazo',
       component: RevisarDocReemplazoFormComponent,
       canActivate: [AuthGuardService, RoleGuardService],
       data: { 

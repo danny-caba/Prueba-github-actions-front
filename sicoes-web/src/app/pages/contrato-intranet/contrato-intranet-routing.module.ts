@@ -75,7 +75,7 @@ const routes: VexRoutes = [{
       component: ContratoEvaluarDocsInicioComponent,
       canActivate: [AuthGuardService, RoleGuardService]
     }, {
-      path: Link.EVAL_DOCS_INICIO_FORM + '/:idSolicitud',
+      path: Link.EVAL_DOCS_INICIO_FORM + '/:idSolicitud' + '/:idReemplazo',
       component: ContratoEvaluarDocsInicioFormComponent,
       canActivate: [AuthGuardService, RoleGuardService]
     },   

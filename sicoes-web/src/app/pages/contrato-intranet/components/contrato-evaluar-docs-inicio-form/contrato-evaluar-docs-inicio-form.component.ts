@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
@@ -18,7 +19,8 @@ export class ContratoEvaluarDocsInicioFormComponent extends BaseComponent implem
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private reemplazoService: PersonalReemplazoService
   ) {
     super();
   }

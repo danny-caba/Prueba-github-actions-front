@@ -55,6 +55,7 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   @Input() obsAdjuntoDjImpedimento: string;
   @Input() obsAdjuntoDjNoVinculo: string;
   @Input() obsAdjuntoOtros: string;
+  @Input() mostrarObs: boolean = true;
 
   @Output() seccionCompletada = new EventEmitter<any>();
   @Output() allConforme = new EventEmitter<any>();
@@ -107,10 +108,10 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   djNoVinculoFechaHora: string = null;
   otrosFechaHora: string = null;
 
-  observacionDjNepotismo: string = '';
-  observacionDjImpedimento: string = '';
-  observacionDjNoVinculo: string = '';
-  observacionOtros: string = '';
+  observacionDjNepotismo: string;
+  observacionDjImpedimento: string;
+  observacionDjNoVinculo: string;
+  observacionOtros: string;
 
   constructor(
     private fb: FormBuilder,
@@ -166,25 +167,25 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     if (changes['adjuntoDjNepotismo'] && changes['adjuntoDjNepotismo'].currentValue) {
       const nuevoAdjunto = changes['adjuntoDjNepotismo'].currentValue;
       this.adjuntoDjNepotismo = nuevoAdjunto;
-      this.adjuntoCargadoDjNepotismo = !!nuevoAdjunto;
+      this.adjuntoCargadoDjNepotismo = nuevoAdjunto?.adjunto?.archivo != null;
     }
 
     if (changes['adjuntoDjImpedimento'] && changes['adjuntoDjImpedimento'].currentValue) {
       const nuevoAdjunto = changes['adjuntoDjImpedimento'].currentValue;
       this.adjuntoDjImpedimento = nuevoAdjunto;
-      this.adjuntoCargadoDjImpedimento = !!nuevoAdjunto;
+      this.adjuntoCargadoDjImpedimento = nuevoAdjunto?.adjunto?.archivo != null ;
     }
 
     if (changes['adjuntoDjNoVinculo'] && changes['adjuntoDjNoVinculo'].currentValue) {
       const nuevoAdjunto = changes['adjuntoDjNoVinculo'].currentValue;
       this.adjuntoDjNoVinculo = nuevoAdjunto;
-      this.adjuntoCargadoDjNoVinculo = !!nuevoAdjunto;
+      this.adjuntoCargadoDjNoVinculo = nuevoAdjunto?.adjunto?.archivo != null ;
     }
 
     if (changes['adjuntoOtros'] && changes['adjuntoOtros'].currentValue) {
       const nuevoAdjunto = changes['adjuntoOtros'].currentValue;
       this.adjuntoOtros = nuevoAdjunto;
-      this.adjuntoCargadoOtros = !!nuevoAdjunto;
+      this.adjuntoCargadoOtros = nuevoAdjunto?.adjunto?.archivo != null ;
     }
     
     if (changes['personalReemplazo'] && changes['personalReemplazo'].currentValue) {
@@ -394,7 +395,8 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
 
   validarMarcas(): boolean {
     return [this.marcaDjNepotismo, this.marcaDjImpedimento, this.marcaDjNoVinculo, this.marcaOtros]
-      .every(valor => valor === 'SI');
+    .filter(marca => marca != null)
+    .every(valor => valor === 'SI');
   }
 
   setValueCheckedDjNepotismo(obj, even) {

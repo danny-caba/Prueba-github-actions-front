@@ -18,6 +18,7 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   @Input() idDocSolicitud: number;
   @Input() codRolRevisor: string;
   @Input() obsAdjunto: string;
+  @Input() mostrarObs: boolean = true;
 
   @Output() seccionCompletada = new EventEmitter<any>();
   @Output() allConforme = new EventEmitter<any>();
@@ -28,7 +29,7 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   adjuntoCargadoSolicitud: boolean = false;
   evaluadoPor: string = null;
   fechaHora: string = null;
-  observacion: string = '';
+  observacion: string;
 
   constructor(
     private reemplazoService: PersonalReemplazoService
@@ -76,11 +77,7 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
             this.evaluadoPor = response.evaluador;
             this.fechaHora = response.fecEvaluacion;
             this.seccionCompletada.emit(true);
-            if ("SI" == valor){
-              this.allConforme.emit(true);
-            } else {
-              this.allConforme.emit(false);
-            }
+            this.allConforme.emit(!this.adjuntoSolicitud.adjunto.archivo || ("SI" == valor));
           }
     });
   }

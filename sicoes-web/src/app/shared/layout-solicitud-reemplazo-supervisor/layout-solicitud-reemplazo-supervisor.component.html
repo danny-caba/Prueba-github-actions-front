@@ -51,14 +51,14 @@
             (archivoAdjuntado)="onSolicitudAdjunta($event)">
     </vex-form-adjuntos-no-title>
     </div>
-    <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
+    <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT; extraCondition: mostrarObs"> 
         <mat-form-field class="w-full">
           <textarea matInput
                  placeholder="Observación"
                  [(ngModel)]="observacion"
                  [ngModel]="obsAdjunto ?? ''"
                  (ngModelChange)="emitirObservacion()"
-                 [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
+                 [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission || adjuntoSolicitud?.adjunto?.archivo == null"
                  [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
                  #rolePermiso="vexOptionRoleCheck"
                  rows="2"

@@ -195,14 +195,14 @@
       (archivoAdjuntado)="onDjNepotismoAdjunta($event)">
     </vex-form-adjuntos-no-title>
   </div>
-  <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
+  <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT; extraCondition: mostrarObs"> 
     <mat-form-field class="w-full">
       <textarea matInput
              placeholder="Observación"
              [(ngModel)]="observacionDjNepotismo"
              [ngModel]="obsAdjuntoDjNepotismo ?? ''"
              (ngModelChange)="emitirObservacionDjNepotismo()"
-             [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
+             [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission || adjuntoDjNepotismo?.adjunto?.archivo == null"
              [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
              #rolePermiso="vexOptionRoleCheck"
              rows="2"
@@ -264,14 +264,14 @@
       (archivoAdjuntado)="onDjImpedimentoAdjunta($event)">
     </vex-form-adjuntos-no-title>
   </div>
-  <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
+  <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT; extraCondition: mostrarObs"> 
     <mat-form-field class="w-full">
       <textarea matInput
              placeholder="Observación"
              [(ngModel)]="observacionDjImpedimento"
              [ngModel]="obsAdjuntoDjImpedimento ?? ''"
              (ngModelChange)="emitirObservacionDjImpedimento()"
-             [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
+             [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission || adjuntoDjImpedimento?.adjunto?.archivo == null"
              [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
              #rolePermiso="vexOptionRoleCheck"
              rows="2"
@@ -332,14 +332,14 @@
       (archivoAdjuntado)="onDjNoVinculoAdjunta($event)">
     </vex-form-adjuntos-no-title>
   </div>
-  <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
+  <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT; extraCondition: mostrarObs"> 
     <mat-form-field class="w-full">
       <textarea matInput
              placeholder="Observación"
              [(ngModel)]="observacionDjNoVinculo"
              [ngModel]="obsAdjuntoDjNoVinculo ?? ''"
              (ngModelChange)="emitirObservacionDjNoVinculo()"
-             [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
+             [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission || adjuntoDjNoVinculo?.adjunto?.archivo == null"
              [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
              #rolePermiso="vexOptionRoleCheck"
              rows="2"
@@ -400,14 +400,14 @@
       (archivoAdjuntado)="onOtrosAdjunta($event)">
     </vex-form-adjuntos-no-title>
   </div>
-  <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
+  <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT; extraCondition: mostrarObs"> 
     <mat-form-field class="w-full">
       <textarea matInput
              placeholder="Observación"
              [(ngModel)]="observacionOtros"
              [ngModel]="obsAdjuntoOtros ?? ''"
              (ngModelChange)="emitirObservacionOtros()"
-             [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
+             [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission || adjuntoOtros?.adjunto?.archivo == null"
              [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
              #rolePermiso="vexOptionRoleCheck"
              rows="2"

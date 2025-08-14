@@ -58,7 +58,7 @@
                  [(ngModel)]="observacion"
                  [ngModel]="obsAdjunto ?? ''"
                  (ngModelChange)="emitirObservacion()"
-                 [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
+                 [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission || adjuntoProyAdenda?.adjunto?.archivo == null"
                  [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
                  #rolePermiso="vexOptionRoleCheck"
                  rows="2"

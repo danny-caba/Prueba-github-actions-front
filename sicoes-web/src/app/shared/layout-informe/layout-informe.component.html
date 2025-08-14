@@ -1,11 +1,11 @@
 <div class="flex items-center">
-  <span class="text-secondary" *ngIf="isReviewExt || isCargaAdenda">Fecha Desvinculación</span>
+  <span class="text-secondary" *ngIf="isReviewExt || isCargaAdenda || isEvalDocReemplazo">Fecha Desvinculación</span>
   <mat-form-field class="!mb-0 mt-2 ml-2 flex-none fecha-field" >
     <input type="date"
            [formControl]="formGroup.controls.fechaDesvinculacion"
            [min]="dateHoy | date:'yyyy-MM-dd'"
            class="fecha-input"
-           matInput>
+           matInput onkeydown="return false">
     <mat-error *ngIf="formGroup.get('fechaDesvinculacion').hasError('required')">
       Ingrese Fecha de Desvinculacion
     </mat-error>
@@ -16,29 +16,32 @@
 <div class="flex items-center">
     <mat-checkbox color="primary" 
       (change)="setValueCheckedInforme(formGroup, $event)"
-      [disabled] = "isCargaAdenda || !rolePermisoCheckBox?.hasPermission"
-      [checked]="adjuntoInforme?.adjunto?.archivo != null"
+      [disabled] = "isCargaAdenda || (!rolePermisoCheckBox?.hasPermission && !isEvalDocReemplazo)"
+      [checked]="adjuntoCargadoInforme || adjuntoInforme?.adjunto?.archivo != null"
       [vexOptionRoleCheck]="opcion.CHECKBOX_INFORME"
       #rolePermisoCheckBox="vexOptionRoleCheck">
         <span>Informe Reemplazo Personal Propuesto</span>
     </mat-checkbox>
     <span class="flex-1"></span>
 
-    <vex-form-adjuntos-no-title class="ml-6"
+    <vex-form-adjuntos-no-title class="ml-6" *ngIf="!isEvalDocReemplazo"
       [adjuntoInput] = "adjuntoInforme"
       [editable]="editable">
     </vex-form-adjuntos-no-title>
+
     <mat-radio-group
       [(ngModel)]="marcaInformeCarta"
       (change)="onMarcaInformeCartaChange($event.value)"
       [disabled] = "isCargaAdenda || adjuntoInforme?.adjunto?.archivo == null"
-      *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME"
+      *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME; extraCondition: !isEvalDocReemplazo"
       class="ml-12 flex items-center gap-4">
       <mat-radio-button value="SI">Sí</mat-radio-button>
       <mat-radio-button value="NO">No</mat-radio-button>
     </mat-radio-group>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12">{{evaluadoPor || 'Evaluado por:'}}</span>
-    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME" class="text-secondary ml-12 fecha-col">{{fechaHora || 'Fecha y Hora'}}</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME; extraCondition: !isEvalDocReemplazo" class="text-secondary ml-12">
+      {{evaluadoPor || 'Evaluado por:'}}</span>
+    <span *vexOptionRoleReemplazo="opcion.RAD_BTN_INFORME; extraCondition: !isEvalDocReemplazo" class="text-secondary ml-12 fecha-col">
+      {{fechaHora || 'Fecha y Hora'}}</span>
     <ng-container 
       [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME" 
       #rolePermisoSpan="vexOptionRoleCheck">
@@ -46,20 +49,27 @@
       </span>
     </ng-container>
 
-    <vex-form-adjuntos-btn class="ml-6" *ngIf="!(isReviewExt || isCargaAdenda)"
-      [titulo]="'Archivo (*.pdf)'"
-      [editable]="editable">
-    </vex-form-adjuntos-btn>
+    <vex-form-adjuntos-no-title *ngIf="isEvalDocReemplazo"
+            class="ml-auto"
+            [idSeccion]="'1041'"
+            [idTipoDocumento]="'1041'"
+            [idReemplazoPersonal]="personalReemplazo?.idReemplazo"
+            [deNombreDocumento]="'INFORME'"
+            [feFechaRegistro]="'21/07/2025'"
+            [archivoDescripcion]="'Informe Reemplazo Personal Propuesto'"
+            [editable]="adjuntoInforme == null"
+            (archivoAdjuntado)="onInformeAdjunto($event)">
+    </vex-form-adjuntos-no-title>
 </div>
 
-<div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
+<div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT; extraCondition: !isEvalDocReemplazo"> 
   <mat-form-field class="w-full">
     <textarea matInput
            placeholder="Observación"
            [(ngModel)]="observacion"
            [ngModel]="obsAdjunto ?? ''"
            (ngModelChange)="emitirObservacion()"
-           [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
+           [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission || adjuntoInforme?.adjunto?.archivo == null"
            [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
            #rolePermiso="vexOptionRoleCheck"
            rows="2"

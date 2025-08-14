@@ -58,7 +58,6 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
 
   getParams(): void {
     this.idSolicitud = this.route.snapshot.paramMap.get('idSolicitud');
-    this.uuidSolicitud = this.route.snapshot.paramMap.get('solicitudUuid');
     this.idReemplazoPersonal = this.route.snapshot.paramMap.get('idReemplazo');
   }
 

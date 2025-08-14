@@ -279,14 +279,16 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   }
 
   validarDocsSeccionProyAdenda(){
-    return !this.existeDocProyAdendaFlag;
+    return this.existeDocProyAdendaFlag;
   }
 
   private verificarSeccionesCompletadas(): void {
+
+    console.log("adenda completada", this.seccionProyAdendaCompletaFlag)
     const todasCompletadas = (this.seccionInformeCompletaFlag || this.validarDocsSeccionInforme()) 
       && (this.seccionPersonalPropuestoCompletaFlag || this.validarDocsSeccionPersonalPropuesto())
       && (this.seccionSolReemplazoCompletaFlag || this.validarDocsSeccionSolicitudReemplazo())
-      && (this.seccionProyAdendaCompletaFlag || this.validarDocsSeccionProyAdenda());
+      && (this.seccionProyAdendaCompletaFlag);
 
     const allConforme = this.allConformeInforme 
       && this.allConformePersonalPropuesto 
@@ -351,8 +353,13 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   }
 
   validarObservacionesCompletadas() {
-    const obsValidadas =  [this.observacionInforme, this.observacionDjNepotismo, this.observacionDjImpedimento, this.observacionDjNoVinculo, 
-      this.observacionOtros, this.observacionSolReemplazo, this.observacionProyAdenda].every(obs => this.isNotUndefinedEmpty(obs));
+    const  obsValidadas = !this.existeDocInformeFlag || this.isNotUndefinedEmpty(this.observacionInforme)
+      && !this.existeDocInformeFlag || this.isNotUndefinedEmpty(this.observacionDjNepotismo)
+      && !this.existeDocDjNepotismoFlag || this.isNotUndefinedEmpty(this.observacionDjImpedimento)
+      && !this.existeDocDjImpedimentoFlag || this.isNotUndefinedEmpty(this.observacionDjNoVinculo)
+      && !this.existeDocNoVinculoFlag || this.isNotUndefinedEmpty(this.observacionOtros)
+      && !this.existeDocSolReemplazoFlag || this.isNotUndefinedEmpty(this.observacionSolReemplazo)
+      && !this.existeDocProyAdendaFlag || this.isNotUndefinedEmpty(this.observacionProyAdenda)
 
       console.log("obs validadas -> ", obsValidadas)
 

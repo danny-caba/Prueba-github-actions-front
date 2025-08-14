@@ -34,7 +34,7 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
   isEvalContratos: boolean = false;
 
   marcacion: 'SI' | 'NO' | null = null;
-  observacion: string = '';
+  observacion: string;
 
   adjuntoCargadoAdenda: boolean = false;
   evaluadoPor: string = null;
@@ -100,11 +100,7 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
             this.evaluadoPor = response.evaluador;
             this.fechaHora = response.fecEvaluacion;
             this.seccionCompletada.emit(true);
-            if ("SI" == valor){
-              this.allConforme.emit(true);
-            } else {
-              this.allConforme.emit(false);
-            }
+            this.allConforme.emit(!this.adjuntoProyAdenda.adjunto.archivo || ("SI" == valor));
           }
     });
 

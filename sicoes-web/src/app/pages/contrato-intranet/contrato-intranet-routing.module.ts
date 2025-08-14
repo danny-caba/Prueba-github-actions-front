@@ -49,7 +49,7 @@ const routes: VexRoutes = [{
       canActivate: [AuthGuardService, RoleGuardService],
       component: ContratoEvaluarReemplazoComponent
     }, {
-      path: Link.EVAL_REEMPLAZO_PERSONAL_FORM + '/:idSolicitud',
+      path: Link.EVAL_REEMPLAZO_PERSONAL_FORM + '/:idSolicitud' + '/:idReemplazo',
       component: ContratoFormEvalReempComponent,
       canActivate: [AuthGuardService, RoleGuardService]
     }, {

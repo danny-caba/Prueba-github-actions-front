@@ -26,19 +26,6 @@ export class ContratoEvaluarDocsInicioComponent extends BaseComponent implements
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'estadoEvalDocReemp', 'estadoAprobInforme', 'estadoAprobAdenda', 'estadoEvalDocIniServ', 'actions'];
 
-  dummyDataSource = [
-    {
-      tipoDocumento: "DNI",
-      numeroDocumento: '09856442',
-      nombreCompleto: 'CLAUDIA ROSA JIMENEZ PEREZ',
-      perfil: 'DB1_456',
-      fechaRegistro: '2023-10-01',
-      fechaInicioContractual: '2023-10-01',
-      estadoReemplazo: 'Preliminar',
-      estadoDocumento: ''
-    }
-  ];
-
   private destroy$ = new Subject<void>();
   idSolicitud: number;
   listPersonalReemplazo: PersonalReemplazo[] = [];

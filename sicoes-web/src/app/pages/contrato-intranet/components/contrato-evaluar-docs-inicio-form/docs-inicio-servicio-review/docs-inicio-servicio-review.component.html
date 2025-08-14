@@ -10,10 +10,11 @@
                 <mat-expansion-panel class="mt-2" expanded="false">
                     <mat-expansion-panel-header>
                         <mat-panel-title class="font-bold panel-title-container">
-                            <span class="id-field">12345678</span>
-                            <span class="name-field">Juan Pérez García</span>
-                            <span class="profile-field">RND-11</span>
-                            <span class="doc-count">TOTAL DOC: 1 DOCUMENTOS</span>
+                            <span class="id-field">{{ personalReemplazo?.personaPropuesta?.numeroDocumento }}</span>
+                            <span class="name-field">{{ getNombreCompleto(personalReemplazo?.personaPropuesta) }}</span>
+                            <span class="profile-field">{{ personalReemplazo?.perfil?.codigo }}</span>
+                            <span class="doc-count">
+                                TOTAL DOC: {{ getCantidadDocsInicioServicio() }} DOCUMENTOS</span>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <mat-divider></mat-divider>

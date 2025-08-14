@@ -283,8 +283,6 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   }
 
   private verificarSeccionesCompletadas(): void {
-
-    console.log("adenda completada", this.seccionProyAdendaCompletaFlag)
     const todasCompletadas = (this.seccionInformeCompletaFlag || this.validarDocsSeccionInforme()) 
       && (this.seccionPersonalPropuestoCompletaFlag || this.validarDocsSeccionPersonalPropuesto())
       && (this.seccionSolReemplazoCompletaFlag || this.validarDocsSeccionSolicitudReemplazo())

@@ -82,14 +82,13 @@
                     </ng-container>
 
                     <ng-container matColumnDef="vacio">
-                        <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">No se encontraron registros</td>
-                    </ng-container>
+                          <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">
+                            No se encontraron registros</td>
+                      </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                    <ng-container *ngIf="dummyDataSource?.length === 0">
-                      <tr mat-footer-row *matFooterRowDef="['vacio']"></tr>
-                    </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                      <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ hide: !(listPersonalReemplazo != null && listPersonalReemplazo.length == 0) }"></tr>
                   </table>
                 </div>
 

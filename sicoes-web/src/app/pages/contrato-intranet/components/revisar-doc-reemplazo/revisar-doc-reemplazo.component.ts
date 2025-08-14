@@ -48,10 +48,6 @@ export class RevisarDocReemplazoComponent extends BaseComponent implements OnIni
     this.destroy$.complete();
   }
 
-  doNothing(): void {
-
-  }
-
   toGoRevisarReemplazoPersonalForm(row: PersonalReemplazo) {
     const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
     const idReemplazoPersonal = row.idReemplazo;

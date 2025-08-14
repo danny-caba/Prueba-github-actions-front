@@ -1,9 +1,7 @@
 import { Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Solicitud } from 'src/app/interface/solicitud.model';
-import { SolicitudEstadoEnum } from 'src/helpers/constantes.components';
-import { OpcionConfig, OpcionPorRol } from 'src/helpers/constantes.options.';
+import { OpcionPorRol } from 'src/helpers/constantes.options.';
 import { AuthFacade } from '../store/auth.facade';
 import { AuthUser } from '../store/auth.models';
 
@@ -14,7 +12,7 @@ import { AuthUser } from '../store/auth.models';
 export class OptionRoleReemplazoDirective implements OnInit, OnChanges, OnDestroy {
 
   @Input() vexOptionRoleReemplazo: string;
-  @Input() vexOptionRoleElse?: TemplateRef<unknown>;
+  @Input() vexOptionRoleReemplazoExtraCondition?: boolean = true;
 
   suscriptionSolicitud: Subscription;
   suscriptionUsuario: Subscription;
@@ -53,10 +51,8 @@ export class OptionRoleReemplazoDirective implements OnInit, OnChanges, OnDestro
     
     if(this.vexOptionRoleReemplazo){
       this.viewContainer.clear();  
-      if(buscarOpcion){
+      if(buscarOpcion && this.vexOptionRoleReemplazoExtraCondition){
         this.viewContainer.createEmbeddedView(this.templateRef);
-      }else if(this.vexOptionRoleElse){
-        this.viewContainer.createEmbeddedView(this.vexOptionRoleElse);
       }
     }
   }

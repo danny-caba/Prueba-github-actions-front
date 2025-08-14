@@ -33,9 +33,9 @@ export class PersonalReemplazoService {
     return this.http.get<SeccionReemplazoPersonal[]>(urlEndpoint);
   }
 
-  listarSupervisoraPerfil(idPropuesta: number): Observable<any> {
+  listarSupervisoraPerfil(idSolicitud: number): Observable<any> {
     const params = new HttpParams()
-      .set("idPropuesta", idPropuesta)
+      .set("idSolicitud", idSolicitud)
       .set("page", "0")
       .set("size", "10");
 
@@ -132,7 +132,37 @@ export class PersonalReemplazoService {
     return this.http.post<any>(urlEndpoint, data);
   }
 
-  obtenerSeccionAdenda(idReemplazo: number | string, seccion: string): Observable<any> {
+  registrarObservaciones(data: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/reemplazo/solicitud/propuesto/observaciones`;
+
+    return this.http.post<any>(urlEndpoint, data);
+  }
+
+  updateFechaDesvinculacion(
+    idReemplazo: string,
+    fecha: string
+  ): Observable<any> {
+    const fechaIso = new Date(fecha).toISOString();
+
+    const params = new HttpParams()
+      .set("id", Number(idReemplazo))
+      .set("fecha", "18/05/2025");
+
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/propuesto/evalua/fecha`;
+
+    return this.http.get<any>(urlEndpoint, { params });
+  }
+
+  registrarAprobacionRechazo(data: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/aprobacion`;
+
+    return this.http.post<any>(urlEndpoint, data);
+  }
+
+  obtenerSeccionAdenda(
+    idReemplazo: number | string,
+    seccion: string
+  ): Observable<any> {
     const urlEndpoint = `${this._path_serve}/documentosreemplazo/seccion?idReemplazo=${idReemplazo}&seccion=${seccion}`;
     return this.http.get<any>(urlEndpoint);
   }

@@ -13,14 +13,17 @@
 
                 <vex-contrato-form-eval-reemp-review
                   [idSolicitud] = "idSolicitud"
-                  [uuidSolicitud] = "uuidSolicitud"
+                  [idReemplazo] = "idReemplazoPersonal"
+                  (seccionesCompletadas) = "recibirFlagSeccionesCompletadas($event)"
+                  (codigoRevisor) = "recibirCodigoRevisor($event)"
+                  (allMarcasConforme) = "recibirConformidades($event)"
                 #reemplazoPersFormEdit></vex-contrato-form-eval-reemp-review>
 
                 <div class="py-4 border-t flex flex-row justify-end gap-x-4">
-                    <button color="primary" mat-raised-button type="button" (click)="doNothing()">
+                    <button color="primary" mat-raised-button type="button" [disabled] = "!puedeRegistrar" (click)="aprobarRechazar('A')">
                         {{ btnApprove }}
                     </button>
-                    <button color="primary" mat-raised-button type="button" (click)="doNothing()">
+                    <button color="primary" mat-raised-button type="button" [disabled] = "!puedeRegistrar" (click)="aprobarRechazar('R')">
                         {{ btnReject }}
                     </button>
                     <button color="primary" mat-raised-button type="button" (click)="toGoBandejaContratos()">

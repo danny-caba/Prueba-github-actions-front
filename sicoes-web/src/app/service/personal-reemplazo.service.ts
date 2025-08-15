@@ -163,7 +163,7 @@ export class PersonalReemplazoService {
     idReemplazo: number | string,
     seccion: string
   ): Observable<any> {
-    const urlEndpoint = `${this._path_serve}/documentosreemplazo/seccion?idReemplazo=${idReemplazo}&seccion=${seccion}`;
+    const urlEndpoint = `${this._path_serve}/api/documentosreemplazo/seccion?idReemplazo=${idReemplazo}&seccion=${seccion}`;
     return this.http.get<any>(urlEndpoint);
   }
 }

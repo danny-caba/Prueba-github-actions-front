@@ -1,20 +1,19 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { functionsAlert } from 'src/helpers/functionsAlert';
+import { Component, Inject, OnInit } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { functionsAlert } from "src/helpers/functionsAlert";
 
 @Component({
-  selector: 'vex-modal-firma-digital',
-  templateUrl: './modal-firma-digital.component.html',
-  styleUrls: ['./modal-firma-digital.component.scss']
+  selector: "vex-modal-firma-digital",
+  templateUrl: "./modal-firma-digital.component.html",
+  styleUrls: ["./modal-firma-digital.component.scss"],
 })
 export class ModalFirmaDigitalComponent implements OnInit {
-
-    action: any;
-    loginUsuario: any;
-    passwordUsuario: any;
-    archivosFirmar: any;
-    listaIdArchivo = [];
+  action: any;
+  loginUsuario: any;
+  passwordUsuario: any;
+  archivosFirmar: any;
+  listaIdArchivo = [];
 
   constructor(
     private dialogRef: MatDialogRef<ModalFirmaDigitalComponent>,
@@ -31,24 +30,30 @@ export class ModalFirmaDigitalComponent implements OnInit {
   }
 
   firmaDigital() {
-    const formulario = document.querySelector('#formulario') as HTMLFormElement;
-    const loginUsuario = document.querySelector('#loginUsuario') as HTMLInputElement;
-    const passwordUsuario = document.querySelector('#passwordUsuario') as HTMLInputElement;
-    const archivosFirmar = document.querySelector('#archivosFirmar') as HTMLInputElement;
-    
-    formulario.setAttribute('action', this.action);
+    const formulario = document.querySelector("#formulario") as HTMLFormElement;
+    const loginUsuario = document.querySelector(
+      "#loginUsuario"
+    ) as HTMLInputElement;
+    const passwordUsuario = document.querySelector(
+      "#passwordUsuario"
+    ) as HTMLInputElement;
+    const archivosFirmar = document.querySelector(
+      "#archivosFirmar"
+    ) as HTMLInputElement;
+
+    formulario.setAttribute("action", this.action);
     loginUsuario.value = this.loginUsuario;
     passwordUsuario.value = this.passwordUsuario;
     //archivosFirmar.value = this.archivosFirmar;
     archivosFirmar.remove();
 
-    this.listaIdArchivo = this.archivosFirmar.split(',')
-    
+    this.listaIdArchivo = this.archivosFirmar.split(",");
+
     for (let i = 0; i < this.listaIdArchivo.length; i++) {
-      const input: HTMLInputElement = document.createElement('input');
-      input.type = 'hidden';
-      input.id = 'archivosFirmar';
-      input.name = 'archivosFirmar';
+      const input: HTMLInputElement = document.createElement("input");
+      input.type = "hidden";
+      input.id = "archivosFirmar";
+      input.name = "archivosFirmar";
       input.value = this.listaIdArchivo[i].toString();
       formulario.appendChild(input);
     }
@@ -56,52 +61,64 @@ export class ModalFirmaDigitalComponent implements OnInit {
     formulario.submit();
 
     const win: Window = window;
-    win.addEventListener('message', this.onReceiveResultCallbackOsifirma, false);
+    win.addEventListener(
+      "message",
+      this.onReceiveResultCallbackOsifirma,
+      false
+    );
   }
 
   onReceiveResultCallbackOsifirma(e) {
-
-    if(e.origin != null && e.origin != 'null') {
-
+    if (e.origin != null && e.origin != "null") {
       try {
         var respuestaJSON = JSON.parse(e.data);
 
-        if(respuestaJSON.resultado == -1) {
+        if (respuestaJSON.resultado == -1) {
           //se trata de un error
           //this.dialogRef.close('OK');
           alert(respuestaJSON.mensaje);
-        }
-        else if(respuestaJSON.resultado == 1) {
+        } else if (respuestaJSON.resultado == 1) {
           //se trata de una cancelación
-          //this.dialogRef.close('OK');
+          this.dialogRef.close('OK');
           alert(respuestaJSON.mensaje);
-        }
-        else if(respuestaJSON.resultado == 0) {
-          //se trata de un éxito          
-          let mensaje = '';
+        } else if (respuestaJSON.resultado == 0) {
+          //se trata de un éxito
+          let mensaje = "";
           let i = 1;
 
           respuestaJSON.mensaje.forEach((archivoFirmado) => {
-            mensaje += i + '.- ID archivo original: ' + archivoFirmado.idArchivoOriginal + ', ID archivo firmado: ' + archivoFirmado.idArchivoFirmado + '. ';
+            mensaje +=
+              i +
+              ".- ID archivo original: " +
+              archivoFirmado.idArchivoOriginal +
+              ", ID archivo firmado: " +
+              archivoFirmado.idArchivoFirmado +
+              ". ";
             i++;
           });
 
-          //this.dialogRef.close('OK');
+          this.dialogRef.close('OK');
           alert(mensaje);
-        }
-        else {
+        } else {
           //se trata de una situación inesperada
           //this.dialogRef.close('OK');
-          alert('Algo Inesperado');
+          alert("Algo Inesperado");
         }
-      }
-      catch(err) {
+      } catch (err) {
         //this.dialogRef.close('OK');
-        alert('Ocurrió un error inesperado en el proceso de firmado digital: ' + e.data);
+        alert(
+          "Ocurrió un error inesperado en el proceso de firmado digital: " +
+            e.data
+        );
+        
       }
-    }
-    else {
+    } else {
       //this.dialogRef.close('OK');
+      this.cerrar();
     }
+  }
+
+  cerrar(): void {
+    this.dialogRef.close();
   }
 }

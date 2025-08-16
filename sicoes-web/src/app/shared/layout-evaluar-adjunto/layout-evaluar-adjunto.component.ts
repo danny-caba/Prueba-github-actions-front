@@ -139,6 +139,7 @@ export class LayoutEvaluarAdjuntoComponent extends BaseComponent implements OnIn
             fechaEvaluacion: res.fechaEvaluacion,
           });
           this.bloquearFormularioSiCorresponde();
+          this.regresar();
         },
         error: (error) => {
           console.error('Error al evaluar documento detalle:', error);
@@ -169,5 +170,15 @@ export class LayoutEvaluarAdjuntoComponent extends BaseComponent implements OnIn
         this.formBloqueado = false;
         this.formGroup.enable();
       }
+  }
+
+  private regresar() {
+    this.router.navigate([
+      "intranet",
+      "requerimientos",
+      "documentos",
+      "evaluar",
+      this.requisito.requerimientoDocumento.requerimientoDocumentoUuid,
+    ]);
   }
 }

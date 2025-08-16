@@ -200,7 +200,7 @@
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns" 
-                    class="hover:bg-gray-50 transition-colors duration-200 cursor-pointer"></tr>
+                    class="hover:bg-gray-50 transition-colors duration-200"></tr>
                 <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{ 'hidden': dataSource != null }"></tr>
                 <tr mat-footer-row *matFooterRowDef="['vacio']" [ngClass]="{ 'hidden': !(dataSource != null && dataSource.data.length == 0) }"></tr>
             </table>

@@ -108,7 +108,7 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
   }
 
   private async confirmEnvio(): Promise<boolean> {
-    const result = await functionsAlert.questionSiNo(REQUERIMIENTO_CONSTANTS.MESSAGES.DOCUMENTO_CONFIRMATION);
+    const result = !this.evaluate ? await functionsAlert.questionSiNo(REQUERIMIENTO_CONSTANTS.MESSAGES.DOCUMENTO_CONFIRMATION) : await functionsAlert.questionSiNo(REQUERIMIENTO_CONSTANTS.MESSAGES.EVALUAR_CONFIRMATION);
     return result.isConfirmed;
   }
 

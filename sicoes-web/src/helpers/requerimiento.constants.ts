@@ -51,6 +51,7 @@ export const REQUERIMIENTO_CONSTANTS = {
 
   MESSAGES: {
     DOCUMENTO_CONFIRMATION: '¿Seguro de Registrar la carga de documentos. Cualquier notificación sobre la solicitud se realizará a través del sistema de notificaciones electrónica?',
+    EVALUAR_CONFIRMATION: '¿Está seguro de querer finalizar la revisión de documentos? [Si] [No]", se muestra "¿Seguro de Registrar la carga de documentos. Cualquier notificación sobre la solicitud se realizará a través del sistema de notificaciones electrónica?',
   },
 
   // Validaciones de estado de requerimiento

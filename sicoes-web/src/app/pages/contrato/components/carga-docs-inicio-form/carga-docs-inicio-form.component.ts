@@ -14,15 +14,23 @@ export class CargaDocsInicioFormComponent extends BaseComponent implements OnIni
   btnRegister: string = 'Registrar';
   idSolicitud: string = '';
   uuidSolicitud: string= '';
-
+  data:any;
   constructor(
     private route: ActivatedRoute,
     private router: Router
   ) {
     super();
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      const row = navigation.extras.state['rowData'];
+      console.log('Datos recibidos:', row);
+      this.idSolicitud=row.id;
+      this.data=row
+    }
   }
 
   ngOnInit(): void {
+    console.log("dddddddddaaaaaaaaaataaaaaaaaa",this.data)
    
   }
 

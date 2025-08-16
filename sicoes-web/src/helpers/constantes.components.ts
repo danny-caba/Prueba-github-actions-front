@@ -278,7 +278,7 @@ export enum flagEnum {
 }
 
 export class UsuariosRoles{
-   static GER_G2=5;
+   static GER_G2=4;
    static GER_03=5;
    static EVALUADOR=12;
    static APROBADOR_G2=18;

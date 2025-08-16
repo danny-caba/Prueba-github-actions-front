@@ -22,6 +22,7 @@ import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-a
 import { ModalAprobadorPersonalComponent } from 'src/app/shared/modal-aprobador-personal/modal-aprobador-personal.component';
 import { ModalInformativoComponent } from 'src/app/shared/modal-informativo/modal-informativo.component';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, startWith, switchMap } from 'rxjs';
+import { SelectedReemplazarItem } from 'src/app/interface/reemplazo-personal.model';
 
 @Component({
   selector: 'adenda-reemplazar-personal',
@@ -66,7 +67,7 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
   listaNroExpedienteSeleccionado: string[] = [];
   listaSolicitudUuidSeleccionado: string[] = [];
 
-  listaContratosSeleccionadosPerfeccionamiento: SelectedPerfeccionamientoItem[] = [];
+  listaContratosSeleccionadosPerfeccionamiento: SelectedReemplazarItem[] = [];
   filteredContratistas!: Observable<any[]>;
 
   displayedColumnsPersonal: string[] = [
@@ -130,11 +131,11 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
 
   private _filterContratistas(nombre: string): any[] {
     const filterValue = nombre.toLowerCase();
-    return this.listContratista.filter(option => option.nombre.toLowerCase().includes(filterValue));
+    return this.listContratista.filter(option => option.valor.toLowerCase().includes(filterValue));
   }
 
   displayContratista(obj: any): string {
-    return obj && obj.nombre ? obj.nombre : '';
+    return obj && obj.valor ? obj.valor : '';
   }
   cargarCombo() {
     this.parametriaService.obtenerMultipleListadoDetalle([
@@ -195,7 +196,9 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
     if (value && typeof value === 'object' && 'orden' in value) {
       return value.orden !== null && value.orden !== undefined && value.orden !== '' ? Number(value.orden) : null;
     }
-
+    if (controlName == 'contratista') {
+      return value.id !== null && value.id !== undefined && value.id !== '' ? Number(value.id) : null;
+    }
     // Si no es objeto, validamos directamente
     return value !== null && value !== undefined && value !== '' ? Number(value) : null;
   }
@@ -272,20 +275,21 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
     console.log('Evento de selección:', event.checked);
     console.log('Elemento seleccionado:', element);
 
-    const selectedItem: SelectedPerfeccionamientoItem = {
-      numeroExpediente: element.numeroExpediente,
-      idContrato: element.idContrato,
+    const selectedItem: SelectedReemplazarItem = {
+      estadoAprob: element.idEsAprob,
+      idAprobacion: element.id,
+      idArchivo:element.idArchivo
     };
 
     console.log('selectedItem a añadir/eliminar:', selectedItem);
 
     if (event.checked) {
-      if (!this.listaContratosSeleccionadosPerfeccionamiento.some(item => item.idContrato === selectedItem.idContrato)) {
+      if (!this.listaContratosSeleccionadosPerfeccionamiento.some(item => item.idAprobacion === selectedItem.idAprobacion)) {
         this.listaContratosSeleccionadosPerfeccionamiento.push(selectedItem);
         console.log('Añadido. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
       }
     } else {
-      const index = this.listaContratosSeleccionadosPerfeccionamiento.findIndex(item => item.idContrato === selectedItem.idContrato);
+      const index = this.listaContratosSeleccionadosPerfeccionamiento.findIndex(item => item.idAprobacion === selectedItem.idAprobacion);
       if (index > -1) {
         this.listaContratosSeleccionadosPerfeccionamiento.splice(index, 1);
         console.log('Eliminado. Lista actual:', this.listaContratosSeleccionadosPerfeccionamiento);
@@ -295,11 +299,11 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
   }
 
   historyApproveAndSignPersonal(row: any) {
-     this.router.navigate(
-    [Link.INTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_LIST_APROBACION, "historial"],
-    { state: { rowData: row } }
-  );
-    
+    this.router.navigate(
+      [Link.INTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_LIST_APROBACION, "historial"],
+      { state: { rowData: row } }
+    );
+
   }
 
 
@@ -317,6 +321,10 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
 
   descargar(id: string, nombre: string) {
     console.log("entrando a descargar")
-    this.adjuntoService.descargarWindowsJWT(id, nombre);
+    if (id != undefined && id != null) {
+      this.adjuntoService.descargarWindowsJWT(id, nombre);
+    }else{
+      this.modalInformativo('No existe Archivo para descargar');
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from '../core/services';
 import { Observable } from 'rxjs';
@@ -94,6 +94,14 @@ export class ContratoService {
   aprobarPerfeccionamientosMasivo(request: any): Observable<any> {
     const urlEndpoint = `${this._path_serve}/api/contratos/acciones-masivas`;
     return this.http.post<any>(urlEndpoint, request);
+  }
+
+  obtenerPersonalPropuesto(id: any): Observable<any> {
+     const params = new HttpParams()
+      .set('descAprobacion', 'CONCLUIDO')
+      .set('descEvalDocIniServ', 'BORRADOR');
+    const urlEndpoint = `${this._path_serve}/api/externo/reemplazo/solicitud/obtener/`+id;
+    return this.http.get<any>(urlEndpoint, { params });
   }
 
 }

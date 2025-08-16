@@ -211,4 +211,42 @@ private isValidParam(value: any): boolean {
     
   }
 
+   vistoBueno(body:any){
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/visto`
+    return this.http.post<any>(urlEndpoint,body );
+    
+  }
+
+  finalizarVistoBueno(body:any){
+     const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/finalizar-visto`
+    return this.http.post<any>(urlEndpoint,body );
+    
+  }
+
+  rechazarVistoBueno(body:any){
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/firmar`
+    return this.http.put<any>(urlEndpoint,body );
+    
+  }
+
+   firmaDigital(body:any){
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/finalizar-firma`
+    return this.http.post<any>(urlEndpoint,body );
+    
+  }
+
+  finalizarFirma(body:any){
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/finalizar-firma`
+    return this.http.post<any>(urlEndpoint,body );
+    
+  }
+
+  rechazarFirma(body:any){
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/rechazar-visto`
+    return this.http.put<any>(urlEndpoint,body );
+    
+  }
+
+
+
 }

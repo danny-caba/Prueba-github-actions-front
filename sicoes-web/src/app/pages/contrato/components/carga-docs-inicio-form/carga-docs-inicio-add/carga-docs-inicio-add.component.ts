@@ -10,6 +10,7 @@ export class CargaDocsInicioAddComponent extends BaseComponent implements OnInit
 
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
+  @Input() data:any;
 
   itemSeccion: number = 0;
   isReview: boolean = false;

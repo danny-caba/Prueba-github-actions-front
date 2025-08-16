@@ -9,7 +9,6 @@ import { BaseComponent } from '../components/base.component';
 export class LayoutDocsAdicionalesCargaComponent extends BaseComponent implements OnInit {
 
   @Input() isReview: boolean;
-
   editable: boolean = true;
   contratoAlquilerRadio: 'si' | 'no' = 'si';
   seguroSoatRadio: 'si' | 'no' = 'no';

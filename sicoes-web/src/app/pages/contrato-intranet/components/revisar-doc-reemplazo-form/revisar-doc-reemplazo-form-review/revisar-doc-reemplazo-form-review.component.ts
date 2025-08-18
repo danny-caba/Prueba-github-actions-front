@@ -107,6 +107,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
         this.reemplazoService.listarDocsReemplazo(Number(this.idReemplazo)).subscribe({
           next: (response) => {
             this.listDocumentosReemplazo = response.content;
+            console.log("lista documentos - >", this.listDocumentosReemplazo);
             this.setAdjuntos();
             this.verificarSeccionesCompletadas();
           }
@@ -127,6 +128,8 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   setDatosInforme() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'INFORME');
+    const evaluacion = doc?.evaluacion?.find(ev => ev.rol?.idRol === 15);
+    
     if (doc) {
       this.existeDocInformeFlag = true;
     }
@@ -136,13 +139,15 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
         archivo: doc?.archivo
       }
     }
+    
     this.adjuntoInforme = informe;
-    this.observacionInforme = doc?.evaluacion?.observacion;
+    this.observacionInforme = evaluacion?.observacion;
     this.idInforme = doc?.idDocumento; 
   }
 
   setDatosDjNepotismo() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'DJ_PERSONAL_PROPUESTO');
+    const evaluacion = doc?.evaluacion?.find(ev => ev.rol?.idRol === 15);
 
     if (doc) {
       this.existeDocDjNepotismoFlag = true;
@@ -154,12 +159,13 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoDjNepotismo = djNepotismo;
-    this.observacionDjNepotismo = doc?.evaluacion?.observacion;
+    this.observacionDjNepotismo = evaluacion?.observacion;
     this.idDjNepotismo = doc?.idDocumento; 
   }
 
   setDatosDjImpedimento() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'DJ_IMPEDIMENTOS');
+    const evaluacion = doc?.evaluacion?.find(ev => ev.rol?.idRol === 15);
 
     if (doc) {
       this.existeDocDjImpedimentoFlag = true;
@@ -171,12 +177,13 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoDjImpedimento = djImpedimento;
-    this.observacionDjImpedimento = doc?.evaluacion?.observacion;
+    this.observacionDjImpedimento = evaluacion?.observacion;
     this.idDjImpedimento = doc?.idDocumento; 
   }
 
   setDatosDjNoVinculo() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'DJ_NO_VINCULO');
+    const evaluacion = doc?.evaluacion?.find(ev => ev.rol?.idRol === 15);
 
     if (doc) {
       this.existeDocNoVinculoFlag = true;
@@ -188,12 +195,13 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoDjNoVinculo = djNoVinculo;
-    this.observacionDjNoVinculo = doc?.evaluacion?.observacion;
+    this.observacionDjNoVinculo = evaluacion?.observacion;
     this.idDJNoVinculo = doc?.idDocumento; 
   }
 
   setDatosOtros() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'OTROS_DOCUMENTOS');
+    const evaluacion = doc?.evaluacion?.find(ev => ev.rol?.idRol === 15);
 
     if (doc) {
       this.existeDocOtrosFlag = true;
@@ -205,12 +213,13 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoOtros = otros;
-    this.observacionOtros = doc?.evaluacion?.observacion;
+    this.observacionOtros = evaluacion?.observacion;
     this.idOtros = doc?.idDocumento; 
   }
 
   setDatosSolicitudReemplazo() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'OFICIO_CARTA_SOLI_REEMPLAZO');
+    const evaluacion = doc?.evaluacion?.find(ev => ev.rol?.idRol === 15);
 
     if (doc) {
       this.existeDocSolReemplazoFlag = true;
@@ -222,12 +231,13 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoSolicitudReemplazo = solicitud;
-    this.observacionSolReemplazo = doc?.evaluacion?.observacion;
+    this.observacionSolReemplazo = evaluacion?.observacion;
     this.idSolicitudReemplazo = doc?.idDocumento; 
   }
 
   setDatosProyAdenda() {
     const doc = this.listDocumentosReemplazo.find(doc => doc.tipoDocumento.codigo === 'PROYECTO_ADENDA');
+    const evaluacion = doc?.evaluacion?.find(ev => ev.rol?.idRol === 15);
 
     if (doc) {
       this.existeDocProyAdendaFlag = true;
@@ -239,7 +249,7 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
       }
     }
     this.adjuntoProyAdenda = solicitud;
-    this.observacionProyAdenda = doc?.evaluacion?.observacion;
+    this.observacionProyAdenda = evaluacion?.observacion;
     this.idProyAdenda = doc?.idDocumento; 
   }
 

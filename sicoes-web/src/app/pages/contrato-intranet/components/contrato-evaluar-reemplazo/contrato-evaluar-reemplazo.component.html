@@ -47,25 +47,25 @@
                       <ng-container matColumnDef="estadoEvalDocReemp">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluar<br>Documentación<br>Personal<br>Reemplazo</th>
                           <td class="text-primary font-medium" mat-cell *matCellDef="let element">
-                            {{ element?.estadoEvalDoc?.descripcion }}</td>
+                            {{ element?.estadoEvalDoc?.nombre }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="estadoAprobInforme">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado<br>Aprobación<br>Informe</th>
                           <td class="text-primary font-medium" mat-cell *matCellDef="let element">
-                            {{ element?.estadoAprobacionInforme?.descripcion }}</td>
+                            {{ element?.estadoAprobacionInforme?.nombre }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="estadoAprobAdenda">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado<br>Aprobación<br>Adenda</th>
                           <td class="text-primary font-medium" mat-cell *matCellDef="let element">
-                            {{ element?.estadoAprobacionAdenda?.descripcion }}</td>
+                            {{ element?.estadoAprobacionAdenda?.nombre }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="estadoEvalDocIniServ">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluar<br>Documentos<br>inicio servicio</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">
-                            {{ element?.estadoEvalDocIniServ?.descripcion }}</td>
+                            {{ element?.estadoEvalDocIniServ?.nombre }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="actions">

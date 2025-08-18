@@ -30,10 +30,13 @@
                   (obsRegistrar) = "recibirListaObservaciones($event)"
                 #reemplazoPersFormEdit></vex-revisar-doc-reemplazo-form-review>
 
-                <vex-adenda-form-upload *ngIf="isCargaAdenda"
-                  [idSolicitud] = "idSolicitud"
-                  [uuidSolicitud] = "uuidSolicitud"
-                #adendaFormUpload></vex-adenda-form-upload >
+                <vex-adenda-form-upload
+                    *ngIf="isCargaAdenda"
+                    [idReemplazo]="idReemplazoPersonal"
+                    [idSolicitud]="idSolicitud"
+                    [uuidSolicitud]="uuidSolicitud"
+                    #adendaFormUpload
+                ></vex-adenda-form-upload>
 
                 <div class="py-4 border-t flex flex-row justify-end gap-x-4">
                     <button *ngIf="!isCargaAdenda" 

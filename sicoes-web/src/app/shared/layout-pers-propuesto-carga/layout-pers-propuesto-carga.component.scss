@@ -80,13 +80,13 @@
     }
 }
 
-::ng-deep {
+:host ::ng-deep {
     .fecha-field {
       min-height: 8px;
       width: 130px !important;
     }
 }
 
-::ng-deep .mat-divider {
+:host ::ng-deep .mat-divider {
     border-top-color: rgba(68, 67, 67, 0.38) !important;
 }

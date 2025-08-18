@@ -20,6 +20,12 @@
                     <mat-divider></mat-divider>
                     <vex-layout-pers-propuesto-carga
                         [isReview]="true"
+                        [adjContLaboral] = "adjContLaboral"
+                        [adjSctr] = "adjsSctr"
+                        [adjPoliza] = "adjsPoliza"
+                        [adjExMedico] = "adjExMedico"
+                        (allConforme) = "recibirConformidadPersonalPropuesto($event)"
+                        (seccionCompletada) = "seccionPersonalPropuestoCompletada($event)"
                     #layoutPersPropuestoCarga></vex-layout-pers-propuesto-carga>
                 </mat-expansion-panel>
                 <mat-divider></mat-divider>

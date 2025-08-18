@@ -75,7 +75,7 @@ export class RevisarDocReemplazoComponent extends BaseComponent implements OnIni
     this.personalReemplazoService
     .listarPersonalReemplazo(this.idSolicitud)
     .subscribe(response => {
-      this.listPersonalReemplazo = response.content.filter(item => !!item.estadoReemplazo);
+      this.listPersonalReemplazo = response.content.filter(item => item.estadoRevisarEval?.codigo === 'BORRADOR');
     });
   }
 

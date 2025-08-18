@@ -110,6 +110,7 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
   onAdendaAdjunta(valor: boolean) {
     this.adjuntoCargadoAdenda = valor;
     this.seccionCompletada.emit(valor);
+    this.allConforme.emit(valor);
   }
 
   emitirObservacion(){

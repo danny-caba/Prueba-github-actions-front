@@ -138,20 +138,22 @@ export class PersonalReemplazoService {
   }
 
   updateFechaDesvinculacion(idReemplazo: string, fecha: string): Observable<any> {
-     const fechaIso = new Date(fecha).toISOString();
-
     const params = new HttpParams()
       .set('id', Number(idReemplazo))
-      .set('fecha', "18/05/2025"); 
+      .set('fecha', fecha); 
     
     const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/propuesto/evalua/fecha`;
     
-    return this.http.get<any>(urlEndpoint, { params });
+    return this.http.put<any>(urlEndpoint, null, { params });
   }
 
-  registrarAprobacionRechazo(data: any): Observable<any> {
-    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/aprobacion`;
+  registrarAprobacionRechazo(accion: string, conforme: boolean, data: any): Observable<any> {
+    const params = new HttpParams()
+      .set('accion', accion)
+      .set('conforme', conforme); 
+
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/propuesto`;
     
-    return this.http.post<any>(urlEndpoint, data);
+    return this.http.put<any>(urlEndpoint, data, { params });
   }
 }

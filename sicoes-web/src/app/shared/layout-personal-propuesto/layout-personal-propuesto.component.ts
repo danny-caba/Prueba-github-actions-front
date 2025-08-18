@@ -73,15 +73,10 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   listPersonalAgregado: PersonalPropuesto[] = [];
   listDocumentosReemplazo: any[] = [];
 
-  secciones: Seccion[] = [];
-  listTipoContrato: any;
-  contrato: any;
-  solicitud: any;
   editable: boolean = true;
   evaluar: boolean;
   view: boolean;
   mostrarTemplates: boolean = true;
-  tipoContratoSeleccionado: number;
   codRolRevisorNum: number;
 
   adjuntoCargadoDjNepotismo: boolean = false;
@@ -115,8 +110,6 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
 
   constructor(
     private fb: FormBuilder,
-    private contratoService: ContratoService,
-    private solicitudService: SolicitudService,
     private reemplazoService: PersonalReemplazoService,
     private adjuntoService: AdjuntosService,
   ) {
@@ -134,7 +127,6 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
   ngOnInit(): void {
     if (!this.isReviewExt) {
       this.cargarCombo();
-      this.obtenerSolicitud();
     }
     this.editable = !this.isReviewExt;
   }
@@ -217,21 +209,6 @@ export class LayoutPersonalPropuestoComponent extends BaseComponent implements O
     if (changes['obsAdjuntoOtros'] && changes['obsAdjuntoOtros'].currentValue) {
       const nuevaObsAdjunto = changes['obsAdjuntoOtros'].currentValue;
       this.obsAdjuntoOtros = nuevaObsAdjunto;
-    }
-  }
-
-  obtenerSolicitud() {
-    let idSolicitudDecrypt = Number(this.decrypt(this.idSolicitud));
-
-    this.solicitudService.buscarSolicitudes(idSolicitudDecrypt).subscribe( resp => {
-    });
-    
-    
-    if (idSolicitudDecrypt) {
-      this.contratoService.obtenerSolicitudPorId(Number(idSolicitudDecrypt)).subscribe((response) => {
-        this.contrato = response;
-        this.tipoContratoSeleccionado = this.contrato.tipoContratacion.idListadoDetalle;
-      });
     }
   }
 

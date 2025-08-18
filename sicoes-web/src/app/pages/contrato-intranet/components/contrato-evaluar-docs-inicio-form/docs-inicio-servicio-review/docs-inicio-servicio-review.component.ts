@@ -34,14 +34,14 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
 
   adjContLaboral: any;
   adjsSctr: any[];
-  adjPoliza: any;
+  adjsPoliza: any;
   adjExMedico: any;
   adjContAlqCamioneta: any;
   adjSoat: any;
 
   existeDocContLaboralFlag: boolean = false;
   existenDocsSctrFlag: boolean = false;
-  existeDocPolizaFlag: boolean = false;
+  existenDocsPolizaFlag: boolean = false;
   existeDocExMedicoFlag: boolean = false;
   existeDocContAlqCamionetaFlag: boolean = false;
   existeDocSoatFlag: boolean = false;
@@ -129,21 +129,20 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
   }
 
   setDatosPoliza(){
-    const doc = this.listDocumentosReemplazo.find(
-      doc => doc.tipoDocumento.codigo === 'POLIZA');
-
-    if (doc) {
-      this.existeDocPolizaFlag = true;
+    const docs: any[] = this.listDocumentosReemplazo.filter(doc => doc.tipoDocumento.codigo === 'POLIZA');
+    
+    if (docs.length === 2) {
+      this.existenDocsPolizaFlag = true;
     }
     
-    this.adjPoliza = {
-      idDocumento: doc?.idDocumento,
-      fechaInicio: doc?.feFechaInicioValidez,
-      fechaFin: doc?.feFechaFinValidez,
-      adjunto: {
+    this.adjsPoliza = docs.map(doc => ({
+        idDocumento: doc?.idDocumento,
+        fechaInicio: doc?.feFechaInicioValidez,
+        fechaFin: doc?.feFechaFinValidez,
+        adjunto: {
         archivo: doc?.archivo
       }
-    };
+    }));
   }
 
   setDatosExMedico(){
@@ -205,6 +204,7 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
   }
 
   seccionPersonalPropuestoCompletada(completada: boolean): void {
+    console.log('seccion pers propuesto completa -> ', completada)
     this.seccionPersonalPropuestoCompletaFlag = completada;
     this.verificarSeccionesCompletadas();
   }
@@ -212,7 +212,7 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
   validarDocsSeccionPersonalPropuesto(){
     return !(this.existeDocContLaboralFlag 
       || this.existenDocsSctrFlag 
-      || this.existeDocPolizaFlag 
+      || this.existenDocsPolizaFlag 
       || this.existeDocExMedicoFlag);
   }
 
@@ -230,6 +230,9 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
     const todasCompletadas = (this.seccionPersonalPropuestoCompletaFlag || this.validarDocsSeccionPersonalPropuesto()) 
       && (this.seccionDocsAdicionalesFlag || this.validarDocsSeccionDocsAdicionales());
 
+    console.log("conforme pers propuesto -> ", this.allConformePersonalPropuesto)
+    console.log("conforme docs adicionales -> ", this.allConformeDocsAdicionales)
+
     const allConforme = this.allConformePersonalPropuesto 
       && this.allConformeDocsAdicionales;
 
@@ -239,6 +242,7 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
   }
 
   recibirConformidadPersonalPropuesto(allConforme: boolean){
+    console.log('conformidad recibida pers propuesto -> ', allConforme)
     this.allConformePersonalPropuesto = allConforme;
   }
 
@@ -256,9 +260,7 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
       'CONTRATO_LABORAL',
       'SCTR',
       'POLIZA',
-      'EXAMEN_MEDICO',
-      'CONTRATO_ALQUILER_CAMIONETA',
-      'SEGURO_SOAT'
+      'EXAMEN_MEDICO'
     ];
     return this.listDocumentosReemplazo.filter(
       doc => tiposDocsInicioServicio.includes(doc.tipoDocumento.codigo)).length;

@@ -157,4 +157,12 @@ export class PersonalReemplazoService {
     
     return this.http.put<any>(urlEndpoint, data, { params });
   }
+
+  obtenerSeccionAdenda(
+    idReemplazo: number | string,
+    seccion: string
+  ): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/documentosreemplazo/seccion?idReemplazo=${idReemplazo}&seccion=${seccion}`;
+    return this.http.get<any>(urlEndpoint);
+  }
 }

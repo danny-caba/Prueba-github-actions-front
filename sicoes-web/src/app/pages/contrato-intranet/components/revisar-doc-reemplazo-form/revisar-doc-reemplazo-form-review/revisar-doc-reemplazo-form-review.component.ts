@@ -283,17 +283,24 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   }
 
   private verificarSeccionesCompletadas(): void {
-
-    console.log("adenda completada", this.seccionProyAdendaCompletaFlag)
     const todasCompletadas = (this.seccionInformeCompletaFlag || this.validarDocsSeccionInforme()) 
       && (this.seccionPersonalPropuestoCompletaFlag || this.validarDocsSeccionPersonalPropuesto())
       && (this.seccionSolReemplazoCompletaFlag || this.validarDocsSeccionSolicitudReemplazo())
       && (this.seccionProyAdendaCompletaFlag);
 
+      console.log("conforme informe -> ", this.allConformeInforme )
+      console.log("conforme pers propuesto -> ", this.allConformePersonalPropuesto )
+      console.log("conforme sol reemplazo -> ", this.allConformeSolReemplazo )
+      console.log("conforme proy adenda -> ", this.allConformeProyAdenda )
+
+
     const allConforme = this.allConformeInforme 
       && this.allConformePersonalPropuesto 
       && this.allConformeSolReemplazo
       && this.allConformeProyAdenda;
+
+      console.log("secciones completadas -> ", todasCompletadas)
+      console.log("marcas conforme -> ", allConforme)
 
     this.seccionesCompletadas.emit(todasCompletadas);
     this.codigoRevisor.emit(this.codRolRevisor);
@@ -302,18 +309,22 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
 
   recibirConformidadInforme(allConforme: boolean){
     this.allConformeInforme = allConforme;
+    this.verificarSeccionesCompletadas();
   }
 
   recibirConformidadPersonalPropuesto(allConforme: boolean){
     this.allConformePersonalPropuesto = allConforme;
+    this.verificarSeccionesCompletadas();
   }
 
   recibirConformidadSolReemplazo(allConforme: boolean){
     this.allConformeSolReemplazo = allConforme;
+    this.verificarSeccionesCompletadas();
   }
 
   recibirConformidadProyAdenda(allConforme: boolean){
     this.allConformeProyAdenda = allConforme;
+    this.verificarSeccionesCompletadas();
   }
 
 

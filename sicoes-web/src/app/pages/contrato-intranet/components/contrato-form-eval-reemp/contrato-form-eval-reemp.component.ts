@@ -54,18 +54,17 @@ export class ContratoFormEvalReempComponent extends BaseComponent implements OnI
     this.idReemplazoPersonal = this.route.snapshot.paramMap.get('idReemplazo');
   }
 
-  aprobarRechazar(param: string): void {
+  aprobarRechazar(accion: string): void {
     const body = {
-        idReemplazo: Number(this.idReemplazoPersonal),
-        codRol: this.codRolRevisor
+        idReemplazo: Number(this.idReemplazoPersonal)
     }
 
-    const mensajeConfirmacion = this.obtenerMensajeConfirmacion(param);
+    const mensajeConfirmacion = this.obtenerMensajeConfirmacion(accion);
 
     functionsAlert.questionSiNo(mensajeConfirmacion).then((result) => {
         if (result.isConfirmed) {
           this.reemplazoPersonalService
-          .registrarAprobacionRechazo(body)
+          .registrarAprobacionRechazo(accion, this.allDocsConforme, body)
           .subscribe(response => {
             this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_ADD + '/' + this.idSolicitud]);
           });
@@ -96,7 +95,6 @@ export class ContratoFormEvalReempComponent extends BaseComponent implements OnI
   }
 
   recibirConformidades(allConforme: boolean){
-    console.log("todo conforme -> ", allConforme)
     this.allDocsConforme = allConforme;
   }
 }

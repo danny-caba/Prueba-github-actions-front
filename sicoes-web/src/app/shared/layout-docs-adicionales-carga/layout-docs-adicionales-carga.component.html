@@ -14,12 +14,11 @@
       <!-- Columna 2: Archivos o input -->
       <div class="col archivos">
         <ng-container *ngIf="isReview; else uploadContrato">
-          <span class="text-secondary mr-2">DocumentoMock.pdf</span>
-          <button matTooltip="Descargar"
-                  mat-icon-button type="button"
-                  class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="12px"></mat-icon>
-          </button>
+          <vex-form-adjuntos-no-title
+            class="ml-auto"
+            [adjuntoInput] = "adjAlqCamioneta"
+            [editable]="!isReview">
+          </vex-form-adjuntos-no-title>
         </ng-container>
         <ng-template #uploadContrato>
           <vex-form-adjuntos-no-title
@@ -32,10 +31,10 @@
   
       <!-- Columna 3: Radios -->
       <div class="col radios" *ngIf="isReview">
-        <mat-radio-group [(ngModel)]="contratoAlquilerRadio"
+        <mat-radio-group [(ngModel)]="marcacionContratoAlquiler"
                          class="flex items-center gap-2">
-          <mat-radio-button value="si">Sí</mat-radio-button>
-          <mat-radio-button value="no">No</mat-radio-button>
+          <mat-radio-button value="SI">Sí</mat-radio-button>
+          <mat-radio-button value="NO">No</mat-radio-button>
         </mat-radio-group>
       </div>
   
@@ -81,10 +80,10 @@
     
         <!-- Columna 3: Radios -->
         <div class="col radios" *ngIf="isReview">
-          <mat-radio-group [(ngModel)]="seguroSoatRadio"
+          <mat-radio-group [(ngModel)]="marcacionSeguroSoat"
                            class="flex items-center gap-2">
-            <mat-radio-button value="si">Sí</mat-radio-button>
-            <mat-radio-button value="no">No</mat-radio-button>
+            <mat-radio-button value="SI">Sí</mat-radio-button>
+            <mat-radio-button value="NO">No</mat-radio-button>
           </mat-radio-group>
         </div>
     

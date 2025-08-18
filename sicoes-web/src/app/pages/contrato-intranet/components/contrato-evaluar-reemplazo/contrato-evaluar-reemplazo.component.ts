@@ -29,19 +29,6 @@ export class ContratoEvaluarReemplazoComponent extends BaseComponent implements 
 
   private destroy$ = new Subject<void>();
 
-  dummyDataSource = [
-    {
-      tipoDocumento: "DNI",
-      numeroDocumento: '09856442',
-      nombreCompleto: 'CLAUDIA ROSA JIMENEZ PEREZ',
-      perfil: 'DB1_456',
-      fechaRegistro: '2023-10-01',
-      fechaInicioContractual: '2023-10-01',
-      estadoReemplazo: 'Preliminar',
-      estadoDocumento: ''
-    }
-  ];
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -80,7 +67,7 @@ export class ContratoEvaluarReemplazoComponent extends BaseComponent implements 
       this.personalReemplazoService
       .listarPersonalReemplazo(this.idSolicitud)
       .subscribe(response => {
-        this.listPersonalReemplazo = response.content.filter(item => !!item.estadoReemplazo);
+        this.listPersonalReemplazo = response.content.filter(item => item.estadoReemplazo?.codigo === 'EN_EVALUACION');
       });
     }
   

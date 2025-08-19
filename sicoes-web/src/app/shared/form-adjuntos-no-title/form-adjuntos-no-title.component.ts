@@ -40,6 +40,8 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
   @Input() deNombreDocumento: string;
   @Input() feFechaRegistro: string;
   @Input() archivoDescripcion: string;
+  @Input() fechaIn: string;
+  @Input() fechaFin: string;
 
   @Output() archivoAdjuntado = new EventEmitter<boolean>();
 
@@ -53,7 +55,7 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
     private reemplazoService: PersonalReemplazoService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   clickFile(adj) {
     this.adjuntoInput = adj;
@@ -97,6 +99,13 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
     formData.append("feFechaRegistro", this.feFechaRegistro);
     formData.append("archivo.descripcion", this.archivoDescripcion);
     formData.append("file", fileData, fileData.name);
+    if (this.fechaIn != null && this.fechaIn != "") {
+      formData.append("fechaIn", this.fechaIn);
+    }
+    if (this.fechaFin != null && this.fechaFin != "") {
+      formData.append("fechaFin", this.fechaFin);
+    }
+    
 
     if (this.nuevo) {
       itemAdjunto.inProgress = true;
@@ -104,8 +113,7 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
 
       this.adjuntoInput.idListadoDetalle = 1;
 
-      let upload$ = this.reemplazoService
-        .adjuntarArchivo(formData)
+      let upload$ = this.reemplazoService.adjuntarArchivo(formData)
         .pipe(
           map((event) => {
             switch (event.type) {
@@ -186,7 +194,7 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
     functionsAlert.questionSiNo('¿Seguro que desea eliminar adjunto?').then((result) => {
       if (result.isConfirmed) {
         this.adjuntoInput = {};
-        this.reemplazoService.eliminarAdjunto(adjunto?.adjunto.idDocumento).subscribe(res=>{
+        this.reemplazoService.eliminarAdjunto(adjunto?.adjunto.idDocumento).subscribe(res => {
         });
         this.archivoAdjuntado.emit(false);
       }

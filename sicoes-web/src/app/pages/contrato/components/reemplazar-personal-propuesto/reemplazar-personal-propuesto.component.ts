@@ -120,13 +120,14 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
 
     this.buscar();
   }
+
   private _filterContratistas(nombre: string): any[] {
     const filterValue = nombre.toLowerCase();
-    return this.listContratista.filter(option => option.nombre.toLowerCase().includes(filterValue));
+    return this.listContratista.filter(option => option.valor.toLowerCase().includes(filterValue));
   }
 
   displayContratista(obj: any): string {
-    return obj && obj.nombre ? obj.nombre : '';
+    return obj && obj.valor ? obj.valor : '';
   }
 
   cargarCombo() {
@@ -163,21 +164,24 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
       this.getValidNumber('nroExpediente')
     ).subscribe(resp => {
       this.dataSourceReemplazar.data = resp;
-      this.paginatorReemplazar.length=this.dataSourceReemplazar.data.length;
+      this.paginatorReemplazar.length = this.dataSourceReemplazar.data.length;
     });
   }
 
   getValidNumber(controlName: string): number | null {
-  const value = this.formGroup.get(controlName)?.value;
+    const value = this.formGroup.get(controlName)?.value;
 
-  // Si el valor es un objeto con la propiedad 'orden', usamos esa propiedad
-  if (value && typeof value === 'object' && 'orden' in value) {
-    return value.idListadoDetalle !== null && value.idListadoDetalle !== undefined && value.idListadoDetalle !== '' ? Number(value.idListadoDetalle) : null;
+    // Si el valor es un objeto con la propiedad 'orden', usamos esa propiedad
+    if (value && typeof value === 'object' && 'orden' in value) {
+      return value.idListadoDetalle !== null && value.idListadoDetalle !== undefined && value.idListadoDetalle !== '' ? Number(value.idListadoDetalle) : null;
+    }
+    if (controlName == 'contratista') {
+      return value.id !== null && value.id !== undefined && value.id !== '' ? Number(value.id) : null;
+    }
+
+    // Si no es objeto, validamos directamente
+    return value !== null && value !== undefined && value !== '' ? Number(value) : null;
   }
-
-  // Si no es objeto, validamos directamente
-  return value !== null && value !== undefined && value !== '' ? Number(value) : null;
-}
 
   limpiar() {
     this.formGroup.reset();
@@ -233,7 +237,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
         elementosSeleccionados: this.listaContratosSeleccionadosPerfeccionamiento,
       },
     }).afterClosed().subscribe(result => {
-      console.log(result);
+      console.log("result",result);
       if (result === 'OK') {
         this.flagContrato = false;
         this.buscar();
@@ -256,6 +260,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     const selectedItem: SelectedReemplazarItem = {
       estadoAprob: element.idEsAprob,
       idAprobacion: element.id,
+      idArchivo:element.idArchivo
     };
 
     console.log('selectedItem a añadir/eliminar:', selectedItem);
@@ -302,8 +307,13 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     })
   }
 
-  descargar(id:string,nombre:string){
-    console.log("entrando a descargar",id)
-    this.adjuntoService.descargarWindowsJWT(id,nombre);
+  descargar(id: string, nombre: string) {
+    console.log("entrando a descargar", id);
+    if (id != undefined && id != null) {
+      this.adjuntoService.descargarWindowsJWT(id, nombre);
+    }else{
+      this.modalInformativo('No existe Archivo para descargar');
+    }
+
   }
 }

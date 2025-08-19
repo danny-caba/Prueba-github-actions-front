@@ -273,6 +273,16 @@ export enum flagEnum {
   NO_VIGENTE = "0",
 }
 
+
+export class UsuariosRoles{
+   static GER_G2=4;
+   static GER_03=5;
+   static EVALUADOR=12;
+   static APROBADOR_G2=18;
+   static APROBADOR_G3=17;
+   static APROBADOR_G4=16;
+}
+
 export enum SeccionAdenda {
   INFORME = "INFORME",
   PERSONAL_PROPUESTO = "PERSONAL_PROPUESTO",
@@ -280,14 +290,7 @@ export enum SeccionAdenda {
   PROYECTO_ADENDA = "PROYECTO_ADENDA",
 }
 
-export class UsuariosRoles {
-  static GER_G2 = 5;
-  static GER_03 = 5;
-  static EVALUADOR = 12;
-  static APROBADOR_G2 = 18;
-  static APROBADOR_G3 = 17;
-  static APROBADOR_G4 = 16;
-}
+
 
 export class REQUERIMIENTO {
   static EVAL_INFO_APROB_G2_GER_DIV = "EVAL_INFO_APROB_G2_GER_DIV";

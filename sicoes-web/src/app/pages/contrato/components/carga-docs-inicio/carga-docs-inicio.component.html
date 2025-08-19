@@ -82,7 +82,7 @@
 
                 <div class="py-4 border-t flex flex-row justify-end gap-x-4">
                     <button color="primary" mat-raised-button type="button" (click)="toGoBandejaContratos()">
-                        Regresar
+                        Regresar44
                     </button>
                 </div>
             </div>
@@ -92,7 +92,7 @@
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
     <ng-template let-row="customer" matMenuContent>
-        <button mat-menu-item  (click)="toGoDocumentosInicioServicioForm()">
+        <button mat-menu-item  (click)="toGoDocumentosInicioServicioForm(row)">
             <mat-icon svgIcon="mat:upload_file"></mat-icon>
             <span>Documentación inicio<br>servicio</span>
         </button>

@@ -14,7 +14,7 @@
               <input type="text" matInput formControlName="contratista" [matAutocomplete]="autoContratista" />
               <mat-autocomplete #autoContratista="matAutocomplete" [displayWith]="displayContratista">
                 <mat-option *ngFor="let obj of filteredContratistas | async" [value]="obj">
-                  {{ obj.nombre }}
+                  {{ obj.valor }}
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>

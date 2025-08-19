@@ -120,6 +120,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
 
     this.buscar();
   }
+
   private _filterContratistas(nombre: string): any[] {
     const filterValue = nombre.toLowerCase();
     return this.listContratista.filter(option => option.valor.toLowerCase().includes(filterValue));
@@ -236,7 +237,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
         elementosSeleccionados: this.listaContratosSeleccionadosPerfeccionamiento,
       },
     }).afterClosed().subscribe(result => {
-      console.log(result);
+      console.log("result",result);
       if (result === 'OK') {
         this.flagContrato = false;
         this.buscar();

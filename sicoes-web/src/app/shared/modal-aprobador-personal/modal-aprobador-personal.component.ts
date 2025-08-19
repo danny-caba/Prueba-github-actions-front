@@ -87,6 +87,10 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     this.dialogRef.close('cancel');
   }
 
+  cerrar(): void {
+    this.dialogRef.close('OK');
+  }
+
   validarObservacion(): boolean {
     if (!this.observacion.valid) {
       this.observacion.markAsTouched();
@@ -107,9 +111,9 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     functionsAlert.questionSiNo(msj).then(async (result) => {
       if (result.isConfirmed) {
         let requerimiento = "";
-        if (this.accion.includes(this.roles.GER_G2)) {
+        /*if (this.accion.includes(this.roles.GER_G2)) {
           requerimiento = REQUERIMIENTO.EVAL_INF_APROB_TEC_G2
-        } else if (this.accion.includes(this.roles.APROBADOR_G3)) {
+        } else */if (this.accion.includes(this.roles.GER_03)) {
           requerimiento = REQUERIMIENTO.EVAL_INF_APROB_TEC_G3
         } else if (this.accion.includes(this.roles.EVALUADOR)) {
           requerimiento = REQUERIMIENTO.APROB_EVAL_CONTR
@@ -142,7 +146,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     this.solicitudService.aprobarReemplazo(json).subscribe(resp => {
       this.loadingAccion = false;
       console.log("respuesta", resp);
-      this.cancelar()
+      this.cerrar()
     })
   }
 
@@ -158,7 +162,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     this.solicitudService.aprobarReemplazo(json).subscribe(resp => {
       this.loadingAccion = false;
       console.log("respuesta", resp);
-      this.cancelar()
+      this.cerrar()
     })
 
   }

@@ -46,6 +46,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
   cookie: string = '';
   iframeUrl: SafeResourceUrl | null = null;
   vistoBueno: boolean;
+  nomUs:any;
   constructor(
     private dialogRef: MatDialogRef<ModalAprobadorPersonalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -75,7 +76,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     /* if (this.data.elementosSeleccionados.length === 0) {
        this.observacion.disable();
      }*/
-
+    this.nomUs=sessionStorage.getItem("NOMUS")
     if (typeof window !== 'undefined') {
       window.addEventListener(
         'message',
@@ -111,9 +112,9 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     functionsAlert.questionSiNo(msj).then(async (result) => {
       if (result.isConfirmed) {
         let requerimiento = "";
-        /*if (this.accion.includes(this.roles.GER_G2)) {
+        if (this.accion.includes(this.roles.GER_G2) && this.nomUs=='9125') {
           requerimiento = REQUERIMIENTO.EVAL_INF_APROB_TEC_G2
-        } else */if (this.accion.includes(this.roles.GER_03)) {
+        } else if (this.accion.includes(this.roles.GER_03)) {
           requerimiento = REQUERIMIENTO.EVAL_INF_APROB_TEC_G3
         } else if (this.accion.includes(this.roles.EVALUADOR)) {
           requerimiento = REQUERIMIENTO.APROB_EVAL_CONTR

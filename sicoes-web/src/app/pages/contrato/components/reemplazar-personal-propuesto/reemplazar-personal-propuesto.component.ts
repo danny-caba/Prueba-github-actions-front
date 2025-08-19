@@ -79,7 +79,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
 
   dataSourceReemplazar = new MatTableDataSource<any>();
   filteredContratistas!: Observable<any[]>;
-
+  nomUs:any;
   @ViewChild('paginatorReemplazar') paginatorReemplazar: MatPaginator;
 
   constructor(
@@ -100,6 +100,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     this.cargarCombo();
     this.dataSourceReemplazar.data = []
     //this.cargarTabla();
+
     this.filteredContratistas = this.formGroup.valueChanges.pipe(
       startWith(''),
       map(value => typeof value === 'string' ? value : value.contratista),
@@ -117,7 +118,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     this.usuario = JSON.parse(sessionStorage.getItem("rolesusuario") || "[]");
     this.idRoles = this.usuario.map(u => u.idRol);
     console.log("this.usuario", this.usuario);
-
+    this.nomUs=sessionStorage.getItem("NOMUS")
     this.buscar();
   }
 
@@ -149,7 +150,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   buscar() {
     this.paginator.pageIndex = 0;
     let requerimiento = "";
-    if (this.idRoles.includes(this.roles.GER_G2)) {
+    if (this.idRoles.includes(this.roles.GER_G2) && this.nomUs=='9125') {
       requerimiento = REQUERIMIENTO.EVAL_INFO_APROB_G2_GER_DIV;
     } else if (this.idRoles.includes(this.roles.GER_03)) {
       requerimiento = REQUERIMIENTO.EVAL_INFO_APROB_G3_GER_LIN;

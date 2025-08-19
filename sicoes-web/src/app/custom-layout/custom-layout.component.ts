@@ -59,8 +59,9 @@ export class CustomLayoutComponent implements OnInit {
       this.usuario = res;
 
       let itemsDupliados: NavigationItem[] = [];
-      console.log("this.usuario?.roles",this.usuario?.roles)
+      console.log("this.usuario",this.usuario)
       sessionStorage.setItem("rolesusuario", JSON.stringify(this.usuario?.roles));
+      sessionStorage.setItem("NOMUS", String(this.usuario?.idUsuario));
       this.usuario?.roles?.forEach(element => {
         //sessionStorage.setItem("roles", this.usuario?.roles);
         let menu: any = RolMenu.find(item => item.ROL.CODIGO === element.codigo);

@@ -233,9 +233,9 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
     let listaRegistrosAFirmar = this.listaSolicitudUuidSeleccionado.filter(item => item.requerimiento.accionFirmar) || [];
     
     // Si no hay elementos para firmar, intenta con todos los elementos exitosos
-    if (listaRegistrosAFirmar.length === 0) {
-      listaRegistrosAFirmar = this.listaSolicitudUuidSeleccionado;
-    }
+    // if (listaRegistrosAFirmar.length === 0) {
+    //   listaRegistrosAFirmar = this.listaSolicitudUuidSeleccionado;
+    // }
     
     const totalElementos = listaRegistrosAFirmar.length;
 

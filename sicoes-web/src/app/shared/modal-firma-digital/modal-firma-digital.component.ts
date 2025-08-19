@@ -63,7 +63,7 @@ export class ModalFirmaDigitalComponent implements OnInit {
     const win: Window = window;
     win.addEventListener(
       "message",
-      this.onReceiveResultCallbackOsifirma,
+      this.onReceiveResultCallbackOsifirma.bind(this),
       false
     );
   }
@@ -72,7 +72,6 @@ export class ModalFirmaDigitalComponent implements OnInit {
     if (e.origin != null && e.origin != "null") {
       try {
         var respuestaJSON = JSON.parse(e.data);
-
         if (respuestaJSON.resultado == -1) {
           //se trata de un error
           //this.dialogRef.close('OK');
@@ -105,6 +104,7 @@ export class ModalFirmaDigitalComponent implements OnInit {
           alert("Algo Inesperado");
         }
       } catch (err) {
+        console.error(err);
         //this.dialogRef.close('OK');
         alert(
           "Ocurrió un error inesperado en el proceso de firmado digital: " +

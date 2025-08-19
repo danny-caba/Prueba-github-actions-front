@@ -16,7 +16,7 @@
 
         <vex-form-adjuntos-no-title class="ml-6" *ngIf = "isReviewExt && allowedReviewProyAdenda"
             [adjuntoInput] = "adjuntoProyAdenda"
-            [editable]="adjuntoProyAdenda?.adjunto?.archivo != null">
+            [editable]="adjuntoProyAdenda?.adjunto?.archivo == null">
         </vex-form-adjuntos-no-title>
         
         <mat-radio-group
@@ -25,8 +25,8 @@
             [disabled] = "isCargaAdenda || adjuntoProyAdenda?.adjunto?.archivo == null"
             [(ngModel)]="marcacion"
             class="ml-12 flex items-center gap-4">
-            <mat-radio-button value="si">Sí</mat-radio-button>
-            <mat-radio-button value="no">No</mat-radio-button>
+            <mat-radio-button value="SI">Sí</mat-radio-button>
+            <mat-radio-button value="NO">No</mat-radio-button>
         </mat-radio-group>
         <span *ngIf="isEvalContratos" class="text-secondary ml-12">{{evaluadoPor || 'Evaluado por:'}}</span>
         <span *ngIf="isEvalContratos" class="text-secondary ml-12 fecha-col">{{fechaHora || 'Fecha y Hora'}}</span>

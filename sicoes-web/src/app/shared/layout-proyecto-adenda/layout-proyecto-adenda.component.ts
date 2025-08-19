@@ -77,6 +77,8 @@ export class LayoutProyectoAdendaComponent extends BaseComponent implements OnIn
 
         if ('12' === this.codRolRevisor){
           this.isEvalContratos = true;
+          this.editable = false;
+          console.log("isEvalContratos -> ", this.isEvalContratos)
         }
       }
 

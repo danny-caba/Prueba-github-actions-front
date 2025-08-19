@@ -6,8 +6,8 @@
     <div class="flex items-center w-full">
         <mat-checkbox color="primary" 
         [checked]="adjuntoCargadoSolicitud || adjuntoSolicitud?.adjunto?.archivo != null"
-        [disabled] = "isCargaAdenda || rolePermisoCheckBox?.hasPermission"
-        [vexOptionRoleCheck]="opcion.RAD_BTN_INFORME"
+        [disabled] = "isCargaAdenda || !rolePermisoCheckBox?.hasPermission"
+        [vexOptionRoleCheck]="opcion.CHECKBOX_SOL_REEMPLAZO"
         #rolePermisoCheckBox="vexOptionRoleCheck">
             <span>Oficio/Carta solicitando reemplazo del supervisor</span>
         </mat-checkbox>
@@ -51,11 +51,14 @@
             (archivoAdjuntado)="onSolicitudAdjunta($event)">
     </vex-form-adjuntos-no-title>
     </div>
-    <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT"> 
+    <div *vexOptionRoleReemplazo="opcion.VIEW_OBS_INPUT; extraCondition: mostrarObs"> 
         <mat-form-field class="w-full">
           <textarea matInput
                  placeholder="Observación"
-                 [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission"
+                 [(ngModel)]="observacion"
+                 [ngModel]="obsAdjunto ?? ''"
+                 (ngModelChange)="emitirObservacion()"
+                 [disabled] = "isCargaAdenda || !rolePermiso?.hasPermission || adjuntoSolicitud?.adjunto?.archivo == null"
                  [vexOptionRoleCheck]="opcion.EDIT_OBS_INPUT"
                  #rolePermiso="vexOptionRoleCheck"
                  rows="2"

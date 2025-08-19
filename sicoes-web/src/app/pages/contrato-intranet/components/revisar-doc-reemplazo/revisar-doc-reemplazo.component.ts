@@ -48,19 +48,15 @@ export class RevisarDocReemplazoComponent extends BaseComponent implements OnIni
     this.destroy$.complete();
   }
 
-  doNothing(): void {
-
-  }
-
   toGoRevisarReemplazoPersonalForm(row: PersonalReemplazo) {
     const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
     const idReemplazoPersonal = row.idReemplazo;
     this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_REVIEW_FORM + '/' + encryptedId + '/' + idReemplazoPersonal]);
   }
 
-  toGoCargarAdendaForm() {
+  toGoCargarAdendaForm(row: PersonalReemplazo) {
     const encryptedId = this.route.snapshot.paramMap.get('idSolicitud');
-    this.router.navigate(['/intranet/contratos/' + Link.CARGA_ADENDA_FORM + '/' + encryptedId]);
+    this.router.navigate(['/intranet/contratos/' + Link.CARGA_ADENDA_FORM + '/' + encryptedId + '/' + row.idReemplazo]);
 
   }
 
@@ -79,7 +75,7 @@ export class RevisarDocReemplazoComponent extends BaseComponent implements OnIni
     this.personalReemplazoService
     .listarPersonalReemplazo(this.idSolicitud)
     .subscribe(response => {
-      this.listPersonalReemplazo = response.content.filter(item => !!item.estadoReemplazo);
+      this.listPersonalReemplazo = response.content.filter(item => item.estadoRevisarEval?.codigo === 'BORRADOR');
     });
   }
 

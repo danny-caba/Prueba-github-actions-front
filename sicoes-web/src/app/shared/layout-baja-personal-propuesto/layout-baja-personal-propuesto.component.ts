@@ -41,7 +41,6 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   listPersonalBajaReview: PersonalReemplazo[] = [];
 
   contrato: any;
-  tipoContratoSeleccionado: number;
   idSolicitudDecrypt: number;
   perfilBaja: any = null;
 
@@ -124,6 +123,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
       next: () => {
         this.cargarTabla();
         this.seccionCompletada.emit(false);
+        this.perfilBajaEvent.emit(null);
       }
     });
   }
@@ -142,13 +142,9 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   cargarCombo(): void {
     let idSolicitudDecrypt = Number(this.decrypt(this.idSolicitud));
 
-    this.contratoService.obtenerSolicitudPorId(Number(idSolicitudDecrypt)).subscribe((response) => {
-        this.contrato = response;
-        this.reemplazoService.listarSupervisoraPerfil(this.contrato.propuesta.idPropuesta).subscribe((response) => {
-          this.listBajaPersonalPropuesto = response.content;
-        });
-        this.tipoContratoSeleccionado = this.contrato.tipoContratacion.idListadoDetalle;
-      });
+    this.reemplazoService.listarSupervisoraPerfil(idSolicitudDecrypt).subscribe((response) => {
+      this.listBajaPersonalPropuesto = response.content;
+    });
   }
 
   cargarTablaReview(personalReemplazo: PersonalReemplazo): void {

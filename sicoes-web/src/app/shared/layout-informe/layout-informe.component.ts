@@ -2,10 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { BaseComponent } from '../components/base.component';
 import { PersonalPropuesto } from 'src/app/interface/reemplazo-personal.model';
 import { FormBuilder, Validators } from '@angular/forms';
-import { functionsAlert } from 'src/helpers/functionsAlert';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
+import { functionsAlert } from 'src/helpers/functionsAlert';
 
 @Component({
   selector: 'vex-layout-informe',
@@ -19,24 +19,34 @@ import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.ser
 export class LayoutInformeComponent extends BaseComponent implements OnInit {
 
   @Input() isReviewExt: boolean;
+  @Input() isEvalDocReemplazo: boolean;
   @Input() isCargaAdenda?: boolean;
   @Input() fechaDesvinculacion: string;
+  @Input() fecDesvinculacionPrevia: string;
   @Input() adjuntoInforme: any;
   @Input() idDocumento: number;
   @Input() codRolRevisor: string;
+  @Input() obsAdjunto: string;
+  @Input() personalReemplazo: any;
 
   @Output() seccionCompletada = new EventEmitter<boolean>();
   @Output() allConforme = new EventEmitter<boolean>();
+  @Output() observacionChange = new EventEmitter<string>();
   
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaBaja', 'fechaDesvinculacion', 'actions'];
 
   listPersonalPropuesto: PersonalPropuesto[] = null;
   listPersonalAgregado: PersonalPropuesto[] = [];
+  adjuntoCargadoInforme: boolean = false;
+
   evaluadoPor: string = null;
   fechaHora: string = null;
 
   editable: boolean = false;
+  isValidFechaDesvinculacion: boolean = false;
+
   marcaInformeCarta: 'SI' | 'NO' | null = null;
+  observacion: string;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +62,33 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
 
 
   ngOnInit(): void {
+    const fechaControl = this.formGroup.get('fechaDesvinculacion');
+    let primeraVez = true;
+
+    fechaControl?.valueChanges.subscribe(value => {
+      if (primeraVez || !this.isEvalDocReemplazo) {
+        primeraVez = false;
+        this.isValidFechaDesvinculacion = true;
+        return;
+      }
+
+      if (!value) {
+        this.isValidFechaDesvinculacion = false;
+        fechaControl.setErrors({ required: true });
+        this.seccionCompletada.emit(this.adjuntoCargadoInforme && this.isValidFechaDesvinculacion);
+      } else {
+        this.isValidFechaDesvinculacion = true;
+        fechaControl.setErrors(null);
+        this.seccionCompletada.emit(this.adjuntoCargadoInforme && this.isValidFechaDesvinculacion);
+        functionsAlert.questionSiNo('¿Seguro(a) de modificar la Fecha Desvinculación?').then((result) => {
+          if (result.isConfirmed) {
+              this.reemplazoService
+                .updateFechaDesvinculacion(this.personalReemplazo?.idReemplazo, value)
+                .subscribe();
+            }
+          });
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -74,6 +111,16 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
       const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
       this.codRolRevisor = nuevoCodRolRevisor;
     }
+
+    if (changes['obsAdjunto'] && changes['obsAdjunto'].currentValue) {
+      const nuevaObsAdjunto = changes['obsAdjunto'].currentValue;
+      this.obsAdjunto = nuevaObsAdjunto;
+    }
+
+    if (changes['personalReemplazo'] && changes['personalReemplazo'].currentValue) {
+      const nuevoPersonalReemplazo= changes['personalReemplazo'].currentValue;
+      this.personalReemplazo = nuevoPersonalReemplazo;
+    }
   }
 
   setFechaDesvinculacion(fecha: string): void {
@@ -83,7 +130,9 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
     this.formGroup.patchValue({
       fechaDesvinculacion: fecha
     });
-    this.formGroup.get('fechaDesvinculacion')?.disable();
+    if (!this.isEvalDocReemplazo) {
+      this.formGroup.get('fechaDesvinculacion')?.disable();
+    }
   }
 
   onMarcaInformeCartaChange(valor: string) {
@@ -100,16 +149,21 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
             this.evaluadoPor = response.evaluador;
             this.fechaHora = response.fecEvaluacion;
             this.seccionCompletada.emit(true);
-            if ("SI" == valor){
-              this.allConforme.emit(true);
-            }
+            this.allConforme.emit(!this.adjuntoInforme.adjunto.archivo || ("SI" == valor));
           }
     });
+  }
 
-
+  emitirObservacion(){
+    this.observacionChange.emit(this.observacion);
   }
 
   setValueCheckedInforme(obj, even) {
     obj.flagInforme = even.value;
+  }
+
+  onInformeAdjunto(valor: boolean) {
+    this.adjuntoCargadoInforme = valor;
+    this.seccionCompletada.emit(this.adjuntoCargadoInforme && this.isValidFechaDesvinculacion);
   }
 }

@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BaseComponent } from '../components/base.component';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 
 @Component({
   selector: 'vex-layout-pers-propuesto-carga',
@@ -15,51 +16,144 @@ import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 export class LayoutPersPropuestoCargaComponent extends BaseComponent implements OnInit {
 
   @Input() isReview?: boolean;
+  @Input() adjContLaboral: any;
+  @Input() adjSctr: any[];
+  @Input() adjPoliza: any;
+  @Input() adjExMedico: any;
+
+  @Output() allConforme = new EventEmitter<any>();
+  @Output() seccionCompletada = new EventEmitter<any>();
 
   editable: boolean = true;
-  marcacionContratoLab: 'si' | 'no' | null = null;
-  marcacionScrt: 'si' | 'no' | null = null;
-  marcacionPoliza: 'si' | 'no' | null = null;
-  marcacionExMed: 'si' | 'no' | null = null;
+  marcacionContratoLab: 'SI' | 'NO' | null = null;
+  marcacionScrt: 'SI' | 'NO' | null = null;
+  marcacionPoliza: 'SI' | 'NO' | null = null;
+  marcacionExMed: 'SI' | 'NO' | null = null;
 
   templates = [
     {
       label: 'Contrato Laboral',
-      files: ['ContrMock.pdf'],
+      files: [null],
       fileCount: 1,
-      radioValue: this.marcacionContratoLab
+      radioValue: this.marcacionContratoLab,
+      fechaInicio: null,
+      fechaFin: null,
+      evaluadoPor: null,
+      fechaHora: null
     },
     {
       label: 'SCTR',
-      files: ['SCRT1Mock.pdf', 'SCRT2Mock.pdf'],
+      files: [null],
       fileCount: 2,
-      radioValue: this.marcacionScrt
+      radioValue: this.marcacionScrt,
+      fechaInicio: null,
+      fechaFin: null,
+      evaluadoPor: null,
+      fechaHora: null
     },
     {
       label: 'Póliza',
-      files: ['Pol1Mock.pdf', 'Pol2Mock.pdf'],
+      files: [null],
       fileCount: 2,
-      radioValue: this.marcacionPoliza
+      radioValue: this.marcacionPoliza,
+      fechaInicio: null,
+      fechaFin: null,
+      evaluadoPor: null,
+      fechaHora: null
     },
     {
       label: 'Examen Médico',
-      files: ['ExaMock.pdf'],
+      files: [null],
       fileCount: 1,
-      radioValue: this.marcacionExMed
+      radioValue: this.marcacionExMed,
+      fechaInicio: null,
+      fechaFin: null,
+      evaluadoPor: null,
+      fechaHora: null
     }
   ];
   
-
-  constructor() {
+  constructor(
+    private reemplazoService: PersonalReemplazoService
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.isReview =this.isReview ?? false;
-    console.log("isReview -> ", this.isReview);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['adjContLaboral'] && changes['adjContLaboral'].currentValue) {
+      const nuevoAdj = changes['adjContLaboral'].currentValue;
+      this.templates[0].files = Array.isArray(nuevoAdj) ? nuevoAdj : [nuevoAdj];
+      this.templates[0].fechaInicio = nuevoAdj?.fechaInicio;
+      this.templates[0].fechaFin = nuevoAdj?.fechaFin;
+    }
+
+    if (changes['adjSctr'] && changes['adjSctr'].currentValue) {
+      const nuevoAdj = changes['adjSctr'].currentValue;
+      if (nuevoAdj.length === 2) {
+        this.templates[1].files = nuevoAdj;
+        this.templates[1].fechaInicio = nuevoAdj[0].fechaInicio;
+        this.templates[1].fechaFin = nuevoAdj[0].fechaFin;
+      }
+    }
+
+    if (changes['adjPoliza'] && changes['adjPoliza'].currentValue) {
+      const nuevoAdj = changes['adjPoliza'].currentValue;
+      if (nuevoAdj.length === 2) {
+        this.templates[2].files = nuevoAdj;
+        this.templates[2].fechaInicio = nuevoAdj[0].fechaInicio;
+        this.templates[2].fechaFin = nuevoAdj[0].fechaFin;
+      }
+    }
+
+    if (changes['adjExMedico'] && changes['adjExMedico'].currentValue) {
+      const nuevoAdj = changes['adjExMedico'].currentValue;
+      this.templates[3].files = Array.isArray(nuevoAdj) ? nuevoAdj : [nuevoAdj];
+      this.templates[3].fechaInicio = nuevoAdj?.fechaInicio;
+      this.templates[3].fechaFin = nuevoAdj?.fechaFin;
+    }
   }
 
   setValueCheckedContratoLab(even) {
   }
+
+  validarExistenciaFiles(files: any[]): boolean {  
+    return !files.find(file => file != null && file?.adjunto?.archivo != null);
+  }
+
+  onMarcaChange(valor: string, template: any) {
+    let body = {
+      idDocumento: template?.files?.idDocumento,
+      conformidad: valor,
+      idRol: 12
+    }
+
+    this.reemplazoService.grabaConformidad(body).subscribe({
+          next: (response) => {
+            template.evaluadoPor = response.evaluador;
+            template.fechaHora = response.fecEvaluacion;
+            this.validarSeccionCompleta();
+            this.allConforme.emit(this.validarMarcas());
+          }
+    });
+  }
+
+  validarSeccionCompleta(){
+    const seccionesCompletadas = this.templates.filter(
+      template => !template.files.includes(null))
+      .every(template =>  template.radioValue != null);
+
+    this.seccionCompletada.emit(seccionesCompletadas);
+  }
+
+  validarMarcas(): boolean {
+    return this.templates
+    .filter(template => template.radioValue != null)
+    .every(template => template.radioValue === 'SI');
+  }
+
 
 }

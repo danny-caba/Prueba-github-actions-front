@@ -10,8 +10,10 @@
                         [isReviewExt] = "isReviewExt"
                         [idDocumento] = "idInforme"
                         [codRolRevisor] = "codRolRevisor"
+                        [obsAdjunto] = "observacionInforme"
                         (seccionCompletada)="seccionInformeCompletada($event)"
                         (allConforme) = "recibirConformidadInforme($event)"
+                        (observacionChange) = "recibirObservacionInforme($event)"
                     #layoutInforme></vex-layout-informe>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -42,8 +44,16 @@
                     [adjuntoDjNoVinculo] = "adjuntoDjNoVinculo"
                     [adjuntoOtros] = "adjuntoOtros"
                     [codRolRevisor] = "codRolRevisor"
+                    [obsAdjuntoDjNepotismo] = "observacionDjNepotismo"
+                    [obsAdjuntoDjImpedimento] = "observacionDjImpedimento"
+                    [obsAdjuntoDjNoVinculo] = "observacionDjNoVinculo"
+                    [obsAdjuntoOtros] = "observacionOtros"
                     (seccionCompletada)="seccionPersonalPropuestoCompletada($event)"
                     (allConforme) = "recibirConformidadPersonalPropuesto($event)"
+                    (observacionDjNepotismoChange) = "recibirObservacionDjNepotismo($event)"
+                    (observacionDjImpedimentoChange) = "recibirObservacionDjImpedimento($event)"
+                    (observacionDjNoVinculoChange) = "recibirObservacionDjNoVinculo($event)"
+                    (observacionOtrosChange) = "recibirObservacionOtros($event)"
                     #layoutPersPropuesto></vex-layout-personal-propuesto>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -55,8 +65,10 @@
                         [adjuntoSolicitud] = "adjuntoSolicitudReemplazo"
                         [idDocSolicitud] = "idSolicitudReemplazo"
                         [codRolRevisor] = "codRolRevisor"
+                        [obsAdjunto] = "observacionSolReemplazo"
                         (seccionCompletada)="seccionSolicitudReemplazoCompletada($event)"
                         (allConforme) = "recibirConformidadSolReemplazo($event)"
+                        (observacionChange) = "recibirObservacionSolReemplazo($event)"
                     #layoutSolReempSuperv></vex-layout-solicitud-reemplazo-supervisor>
                 </mat-expansion-panel>
                 <mat-expansion-panel class="mt-2" expanded="false">
@@ -66,7 +78,13 @@
                     <vex-layout-proyecto-adenda 
                         [isReviewExt]="isReviewExt"
                         [personalReemplazo] = "personalReemplazo"
+                        [adjuntoProyAdenda] = "adjuntoProyAdenda"
+                        [codRolRevisor] = "codRolRevisor"
+                        [idDocAdenda] = "idProyAdenda"
+                        [obsAdjunto] = "observacionProyAdenda"
                         (seccionCompletada)="seccionProyAdendaCompletada($event)"
+                        (allConforme) = "recibirConformidadProyAdenda($event)"
+                        (observacionChange) = "recibirObservacionProyAdenda($event)"
                     #layoutSolReempSuperv></vex-layout-proyecto-adenda>
                 </mat-expansion-panel>
             </mat-accordion>

@@ -16,17 +16,20 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   @Input() perfilBaja: any;
   @Input() adjuntoSolicitud: any;
   @Input() idDocSolicitud: number;
-   @Input() codRolRevisor: string;
+  @Input() codRolRevisor: string;
+  @Input() obsAdjunto: string;
+  @Input() mostrarObs: boolean = true;
 
   @Output() seccionCompletada = new EventEmitter<any>();
   @Output() allConforme = new EventEmitter<any>();
+  @Output() observacionChange = new EventEmitter<string>();
 
   editable: boolean = false;
   marcacion: 'SI' | 'NO' | null = null;
   adjuntoCargadoSolicitud: boolean = false;
   evaluadoPor: string = null;
   fechaHora: string = null;
-
+  observacion: string;
 
   constructor(
     private reemplazoService: PersonalReemplazoService
@@ -47,6 +50,16 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
       const nuevoIdInforme = changes['idDocSolicitud'].currentValue;
       this.idDocSolicitud = nuevoIdInforme;
     }
+
+    if (changes['codRolRevisor'] && changes['codRolRevisor'].currentValue) {
+      const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
+      this.codRolRevisor = nuevoCodRolRevisor;
+    }
+
+    if (changes['obsAdjunto'] && changes['obsAdjunto'].currentValue) {
+      const nuevaObsAdjunto = changes['obsAdjunto'].currentValue;
+      this.obsAdjunto = nuevaObsAdjunto;
+    }
   }
 
   onMarcaSolicitudChange(valor: string) {
@@ -64,9 +77,7 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
             this.evaluadoPor = response.evaluador;
             this.fechaHora = response.fecEvaluacion;
             this.seccionCompletada.emit(true);
-            if ("SI" == valor){
-              this.allConforme.emit(true);
-            }
+            this.allConforme.emit(!this.adjuntoSolicitud.adjunto.archivo || ("SI" == valor));
           }
     });
   }
@@ -77,6 +88,10 @@ export class LayoutSolicitudReemplazoSupervisorComponent extends BaseComponent i
   onSolicitudAdjunta(valor: boolean) {
     this.adjuntoCargadoSolicitud = valor;
     this.seccionCompletada.emit(valor);
+  }
+
+  emitirObservacion(){
+    this.observacionChange.emit(this.observacion);
   }
 
 }

@@ -47,25 +47,25 @@
                       <ng-container matColumnDef="estadoRevision">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Revisar<br>Documentacion<br>Personal<br>Reemplazo</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">
-                            {{ element?.estadoRevisarEval?.descripcion }}</td>
+                            {{ element?.estadoRevisarEval?.nombre }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="estadoAprobInforme">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado<br>Aprobación<br>Informe</th>
                           <td class="text-primary font-medium" mat-cell *matCellDef="let element    ">
-                            {{ element?.estadoAprobacionInforme?.descripcion }}</td>
+                            {{ element?.estadoAprobacionInforme?.nombre }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="estadoAprobAdenda">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado<br>Aprobación<br>Adenda</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element    ">
-                            {{ element?.estadoAprobacionAdenda?.descripcion }}</td>
+                            {{ element?.estadoAprobacionAdenda?.nombre }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="estadoEvaluarDocsInicio">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Evaluar<br>Documentos<br>inicio servicio</th>
                           <td class="text-primary font-medium" mat-cell *matCellDef="let element">
-                            {{ element?.estadoEvalDocIniServ?.descripcion }}</td>
+                            {{ element?.estadoEvalDocIniServ?.nombre }}</td>
                       </ng-container>
 
                       <!-- Action Column -->
@@ -109,7 +109,7 @@
             <mat-icon svgIcon="mat:edit"></mat-icon>
             <span>Revisar Documentos</span>
         </button>
-        <button mat-menu-item (click)="toGoCargarAdendaForm()" *vexOptionRoleReemplazo="opcion.BTN_CARGA_ADENDA_ACC">
+        <button mat-menu-item (click)="toGoCargarAdendaForm(row)" *vexOptionRoleReemplazo="opcion.BTN_CARGA_ADENDA_ACC">
             <mat-icon svgIcon="mat:upload_file"></mat-icon>
             <span>Cargar Adenda</span>
         </button>

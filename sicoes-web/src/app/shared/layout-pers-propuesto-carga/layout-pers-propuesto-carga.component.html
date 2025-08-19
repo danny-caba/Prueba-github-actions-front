@@ -8,12 +8,10 @@
     <div class="col archivos">
       <ng-container *ngIf="isReview; else uploadBlock">
         <ng-container *ngFor="let file of template.files">
-          <span class="text-secondary mr-2">{{ file }}</span>
-          <button matTooltip="Descargar"
-                  mat-icon-button type="button"
-                  class="text-primary hover:bg-hover">
-            <mat-icon svgIcon="mat:download" size="12px"></mat-icon>
-          </button>
+          <vex-form-adjuntos-no-title class="ml-auto"
+            [adjuntoInput] = "file"
+            [editable]="!isReview">
+          </vex-form-adjuntos-no-title>
         </ng-container>
       </ng-container>
       <ng-template #uploadBlock>
@@ -38,6 +36,7 @@
       <span class="text-secondary font-bold">FI:</span>
       <mat-form-field class="fecha-field ml-2 mt-3">
         <input type="date"
+              [value]="template.fechaInicio"
               [min]="dateHoy | date:'yyyy-MM-dd'"
               class="fecha-input"
               [disabled]="isReview"
@@ -50,6 +49,7 @@
       <span class="text-secondary font-bold">FF:</span>
       <mat-form-field class="fecha-field ml-2 mt-3">
         <input type="date"
+              [value]="template.fechaFin"
               [min]="dateHoy | date:'yyyy-MM-dd'"
               class="fecha-input"
               [disabled]="isReview"
@@ -60,9 +60,11 @@
     <!-- Columna 5: Radios -->
     <div class="col radios" *ngIf="isReview">
       <mat-radio-group [(ngModel)]="template.radioValue"
+                       [disabled] = "validarExistenciaFiles(template.files)"
+                       (change)="onMarcaChange($event.value, template)"
                        class="flex items-center gap-2">
-        <mat-radio-button value="si">Sí</mat-radio-button>
-        <mat-radio-button value="no">No</mat-radio-button>
+        <mat-radio-button value="SI">Sí</mat-radio-button>
+        <mat-radio-button value="NO">No</mat-radio-button>
       </mat-radio-group>
     </div>
   

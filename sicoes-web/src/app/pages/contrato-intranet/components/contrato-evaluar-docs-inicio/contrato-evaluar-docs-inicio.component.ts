@@ -1,10 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { PersonalReemplazo } from 'src/app/interface/reemplazo-personal.model';
+import { Supervisora } from 'src/app/interface/supervisora.model';
+import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
+import * as CryptoJS from 'crypto-js';
+
+const URL_DECRYPT = '3ncr1pt10nK3yuR1';
 
 @Component({
   selector: 'vex-contrato-evaluar-docs-inicio',
@@ -19,26 +26,36 @@ export class ContratoEvaluarDocsInicioComponent extends BaseComponent implements
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'estadoEvalDocReemp', 'estadoAprobInforme', 'estadoAprobAdenda', 'estadoEvalDocIniServ', 'actions'];
 
-  dummyDataSource = [
-    {
-      tipoDocumento: "DNI",
-      numeroDocumento: '09856442',
-      nombreCompleto: 'CLAUDIA ROSA JIMENEZ PEREZ',
-      perfil: 'DB1_456',
-      fechaRegistro: '2023-10-01',
-      fechaInicioContractual: '2023-10-01',
-      estadoReemplazo: 'Preliminar',
-      estadoDocumento: ''
-    }
-  ];
+  private destroy$ = new Subject<void>();
+  idSolicitud: number;
+  listPersonalReemplazo: PersonalReemplazo[] = [];
 
   constructor(
-    private router: Router
+    private route: ActivatedRoute,
+    private router: Router,
+    private personalReemplazoService: PersonalReemplazoService
   ) {
     super();
    }
 
   ngOnInit(): void {
+    this.cargarTabla();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  cargarTabla() {
+    const idSolicitudHashed = this.route.snapshot.paramMap.get('idSolicitud');
+    this.idSolicitud = Number(idSolicitudHashed);
+
+    this.personalReemplazoService
+    .listarPersonalReemplazo(this.idSolicitud)
+    .subscribe(response => {
+      this.listPersonalReemplazo = response.content.filter(item => !!item.estadoReemplazo);
+    });
   }
 
   goToBandejaSolicitudes() {
@@ -50,11 +67,19 @@ export class ContratoEvaluarDocsInicioComponent extends BaseComponent implements
   }
 
   goToEvaluarDocsInicioForm(row: any) {
-    this.router.navigate(['/intranet/contratos/' + Link.EVAL_DOCS_INICIO_FORM + '/' + row.idSolicitud]);
+    const idReemplazoPersonal = row.idReemplazo;
+    this.router.navigate(['/intranet/contratos/' + Link.EVAL_DOCS_INICIO_FORM + '/' + row.idSolicitud + '/' + idReemplazoPersonal]);
   }
 
-  doNothing(){
-
+  getNombreCompleto(persona: Supervisora): string {
+        if (!persona) return '';
+        return `${persona.nombres} ${persona.apellidoPaterno} ${persona.apellidoMaterno}`.trim();
+    }
+  
+    decrypt(encryptedData: string): string {
+          const bytes = CryptoJS.AES.decrypt(encryptedData, URL_DECRYPT);
+          const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+          return decrypted;
   }
 
 }

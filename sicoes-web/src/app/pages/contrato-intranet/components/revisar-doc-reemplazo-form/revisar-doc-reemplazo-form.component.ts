@@ -24,10 +24,12 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
   idReemplazoPersonal: string = '';
   uuidSolicitud: string= '';
   codRolRevisor: string = null;
+  listaObservaciones: any;
 
   isCargaAdenda: boolean = false;
   puedeRegistrar: boolean = false;
   allDocsConforme: boolean = false;
+  obsCompletas: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,13 +58,24 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
 
   getParams(): void {
     this.idSolicitud = this.route.snapshot.paramMap.get('idSolicitud');
-    this.uuidSolicitud = this.route.snapshot.paramMap.get('solicitudUuid');
     this.idReemplazoPersonal = this.route.snapshot.paramMap.get('idReemplazo');
   }
 
   registrarRevision(): void {
-    const body = {
-        idReemplazo: this.idReemplazoPersonal,
+    if ('15' === this.codRolRevisor) {
+      functionsAlert.questionSiNo('Seguro de registrar las observaciones de la revisión de documentos del personal propuesto de reemplazo')
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.reemplazoService
+          .registrarObservaciones(this.listaObservaciones)
+          .subscribe(response => {
+            this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_REVIEW, this.idSolicitud]);
+          });
+        }
+      });
+    } else {
+      const body = {
+        idReemplazo: Number(this.idReemplazoPersonal),
         codRol: this.codRolRevisor
       }
 
@@ -77,6 +90,7 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
           });
         }
       });
+    }
   }
 
   obtenerMensajeConfirmacion(){
@@ -97,6 +111,15 @@ export class RevisarDocReemplazoFormComponent extends BaseComponent implements O
 
   recibirConformidades(allConforme: boolean){
     this.allDocsConforme = allConforme;
+  }
+
+  recibirFlagObsCompletas(obsCompletas: boolean){
+    this.obsCompletas = obsCompletas;
+    this.puedeRegistrar = obsCompletas;
+  }
+
+  recibirListaObservaciones(listaObs: any){
+    this.listaObservaciones = listaObs;
   }
 
 }

@@ -49,7 +49,7 @@ const routes: VexRoutes = [{
       canActivate: [AuthGuardService, RoleGuardService],
       component: ContratoEvaluarReemplazoComponent
     }, {
-      path: Link.EVAL_REEMPLAZO_PERSONAL_FORM + '/:idSolicitud',
+      path: Link.EVAL_REEMPLAZO_PERSONAL_FORM + '/:idSolicitud' + '/:idReemplazo',
       component: ContratoFormEvalReempComponent,
       canActivate: [AuthGuardService, RoleGuardService]
     }, {
@@ -64,7 +64,7 @@ const routes: VexRoutes = [{
       component: RevisarDocReemplazoFormComponent,
       canActivate: [AuthGuardService, RoleGuardService]
     }, {
-      path: Link.CARGA_ADENDA_FORM + '/:idSolicitud',
+      path: Link.CARGA_ADENDA_FORM + '/:idSolicitud' + '/:idReemplazo',
       component: RevisarDocReemplazoFormComponent,
       canActivate: [AuthGuardService, RoleGuardService],
       data: { 
@@ -75,7 +75,7 @@ const routes: VexRoutes = [{
       component: ContratoEvaluarDocsInicioComponent,
       canActivate: [AuthGuardService, RoleGuardService]
     }, {
-      path: Link.EVAL_DOCS_INICIO_FORM + '/:idSolicitud',
+      path: Link.EVAL_DOCS_INICIO_FORM + '/:idSolicitud' + '/:idReemplazo',
       component: ContratoEvaluarDocsInicioFormComponent,
       canActivate: [AuthGuardService, RoleGuardService]
     },   

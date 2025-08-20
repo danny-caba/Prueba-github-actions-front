@@ -5,6 +5,8 @@
 <ng-template #templateOficio>
   <div class="flex items-center w-full">
     <mat-checkbox
+      [checked]="adjuntoCargado"
+      [disabled]="isCargaAdenda"
       color="primary"
       (change)="setValueCheckedCartaReemplazo($event)"
     >
@@ -50,6 +52,12 @@
       [titulo]="'Archivo (*.pdf)'"
       [editable]="editable"
       class="ml-4"
+      [idSeccion]="'1043'"
+      [idTipoDocumento]="'1060'"
+      [idReemplazoPersonal]="idReemplazo"
+      [deNombreDocumento]="'CARGA-ADENDA'"
+      [feFechaRegistro]="'21/07/2025'"
+      (archivoAdjuntado)="onAdjuntoSuccess($event)"
     >
     </vex-form-adjuntos-no-title>
   </div>

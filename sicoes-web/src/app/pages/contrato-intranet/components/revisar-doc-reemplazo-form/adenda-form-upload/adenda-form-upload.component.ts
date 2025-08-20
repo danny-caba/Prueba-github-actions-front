@@ -61,7 +61,6 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatosReemplazo();
-    this.cargarInforme();
     this.usuario$.subscribe((usu) => {
       this.setCodRolRevisor(usu);
     });
@@ -79,6 +78,7 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
             .listarDocsReemplazo(Number(this.idReemplazo))
             .subscribe({
               next: (response) => {
+                console.log("reessssssssssssss", response.content);
                 this.listDocumentosReemplazo = response.content;
                 this.setAdjuntos();
               },
@@ -202,21 +202,14 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
     this.idProyAdenda = doc?.idDocumento;
   }
 
+  onDjNepotismoAdjunta(valor: boolean) {
+    console.log("valor")
+  }
+
   setCodRolRevisor(user: AuthUser) {
     const codigosRevisores = ["02", "12", "15"];
     this.codRolRevisor = user?.roles.find((rol) =>
       codigosRevisores.includes(rol.codigo)
     )?.codigo;
-  }
-
-  private cargarInforme() {
-    this.personalReemplazoService
-      .obtenerSeccionAdenda(this.idReemplazo, SeccionAdenda.INFORME)
-      .subscribe({
-        next: (data) => {
-          console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>", data);
-        },
-        error: (err) => console.error("Error cargando informe", err),
-      });
   }
 }

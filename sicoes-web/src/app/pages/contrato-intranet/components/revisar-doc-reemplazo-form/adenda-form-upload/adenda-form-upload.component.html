@@ -22,7 +22,9 @@
       >
     </mat-expansion-panel-header>
     <vex-layout-baja-personal-propuesto
+      [isReviewExt]="isReviewExt"
       [isCargaAdenda]="isCargaAdenda"
+      [personalReemplazo]="personalReemplazo"
       #layoutBajaPersPropuesto
     ></vex-layout-baja-personal-propuesto>
   </mat-expansion-panel>
@@ -33,6 +35,7 @@
       >
     </mat-expansion-panel-header>
     <vex-layout-personal-propuesto
+      [isReviewExt]="isReviewExt"
       [isCargaAdenda]="isCargaAdenda"
       [idSolicitud]="idSolicitud"
       [uuidSolicitud]="uuidSolicitud"
@@ -50,6 +53,7 @@
       [obsAdjuntoDjImpedimento]="observacionDjImpedimento"
       [obsAdjuntoDjNoVinculo]="observacionDjNoVinculo"
       [obsAdjuntoOtros]="observacionOtros"
+      [isReviewExt]="isReviewExt"
       #layoutPersPropuesto
     ></vex-layout-personal-propuesto>
   </mat-expansion-panel>
@@ -61,6 +65,7 @@
       >
     </mat-expansion-panel-header>
     <vex-layout-solicitud-reemplazo-supervisor
+      [isReviewExt]="isReviewExt"
       [isCargaAdenda]="isCargaAdenda"
       [adjuntoSolicitud]="adjuntoSolicitudReemplazo"
       [idDocSolicitud]="idSolicitudReemplazo"
@@ -82,6 +87,7 @@
       [codRolRevisor]="codRolRevisor"
       [idDocAdenda]="idProyAdenda"
       [obsAdjunto]="observacionProyAdenda"
+      [isReviewExt]="isReviewExt"
       #layoutProyAdenda
     ></vex-layout-proyecto-adenda>
   </mat-expansion-panel>
@@ -93,6 +99,7 @@
     </mat-expansion-panel-header>
     <vex-layout-cargar-adenda
       [isCargaAdenda]="isCargaAdenda"
+      [idReemplazo]="idReemplazo"
       #layoutCargarAdenda
     ></vex-layout-cargar-adenda>
   </mat-expansion-panel>

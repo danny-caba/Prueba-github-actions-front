@@ -228,14 +228,8 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
   activarFirmaDigital(onComplete?: () => void) {
     let listaIdArchivosSiged = [];
     let contadorProcesados = 0;
-    
     // Filtrar elementos que requieren firma
-    let listaRegistrosAFirmar = this.listaSolicitudUuidSeleccionado.filter(item => item.requerimiento.accionFirmar) || [];
-    
-    // Si no hay elementos para firmar, intenta con todos los elementos exitosos
-    // if (listaRegistrosAFirmar.length === 0) {
-    //   listaRegistrosAFirmar = this.listaSolicitudUuidSeleccionado;
-    // }
+    let listaRegistrosAFirmar = this.listaSolicitudUuidSeleccionado.filter(item => item.accionFirmar) || [];
     
     const totalElementos = listaRegistrosAFirmar.length;
 

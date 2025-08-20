@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AuthFacade } from "src/app/auth/store/auth.facade";
 import { AuthUser } from "src/app/auth/store/auth.models";
 import { PersonalReemplazo } from "src/app/interface/reemplazo-personal.model";
 import { PersonalReemplazoService } from "src/app/service/personal-reemplazo.service";
 import { BaseComponent } from "src/app/shared/components/base.component";
-import { SeccionAdenda } from "src/helpers/constantes.components";
 
 @Component({
   selector: "vex-adenda-form-upload",
@@ -15,6 +14,9 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
   @Input() idReemplazo: string;
   @Input() idSolicitud: string;
   @Input() uuidSolicitud: string;
+
+  @Output() loadAdenda = new EventEmitter<boolean>();
+  @Output() adjuntoData = new EventEmitter<boolean>();
 
   usuario$ = this.authFacade.user$;
   codRolRevisor: string;
@@ -78,7 +80,6 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
             .listarDocsReemplazo(Number(this.idReemplazo))
             .subscribe({
               next: (response) => {
-                console.log("reessssssssssssss", response.content);
                 this.listDocumentosReemplazo = response.content;
                 this.setAdjuntos();
               },
@@ -202,14 +203,18 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
     this.idProyAdenda = doc?.idDocumento;
   }
 
-  onDjNepotismoAdjunta(valor: boolean) {
-    console.log("valor")
-  }
-
   setCodRolRevisor(user: AuthUser) {
     const codigosRevisores = ["02", "12", "15"];
     this.codRolRevisor = user?.roles.find((rol) =>
       codigosRevisores.includes(rol.codigo)
     )?.codigo;
+  }
+
+  onAdjuntoCargado(valor: boolean) {
+    this.loadAdenda.emit(valor);
+  }
+
+  onChangeUploadData(valor: any) {
+    this.adjuntoData.emit(valor);
   }
 }

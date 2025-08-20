@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { BaseComponent } from "../components/base.component";
 
 @Component({
@@ -13,6 +13,8 @@ export class LayoutCargarAdendaComponent
   @Input() isReviewExt: boolean;
   @Input() isCargaAdenda: boolean;
   @Input() idReemplazo: string;
+  @Output() adjuntoCargadoChange = new EventEmitter<boolean>();
+  @Output() adjuntoData = new EventEmitter<any>();
 
   editable: boolean = true;
   marcacion: "si" | "no" | null = null;
@@ -25,9 +27,13 @@ export class LayoutCargarAdendaComponent
   ngOnInit(): void {}
 
   setValueCheckedCartaReemplazo(even) {}
-  onAdjuntoSuccess(event);
 
   onAdjuntoSuccess(valor: boolean) {
     this.adjuntoCargado = valor;
+    this.adjuntoCargadoChange.emit(valor);
+  }
+
+  onDataChange(valor: any) {
+    this.adjuntoData.emit(valor);
   }
 }

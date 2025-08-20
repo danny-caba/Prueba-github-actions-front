@@ -71,7 +71,7 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
             }
             return requisito;
           });
-          this.isFinalized = this.requisitos.some(requisito => requisito.flagVistoBueno !== undefined && requisito.flagVistoBueno !== null);
+          this.isFinalized = this.requisitos.some(requisito => requisito.flagVistoBueno !== '0');
         }
         
         this.isLoading = false;

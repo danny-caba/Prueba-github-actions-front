@@ -127,6 +127,8 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
       distinctUntilChanged(),
       switchMap(value => this.solicitudService.buscarContratista(value))
     );
+
+    this.buscar();
   }
 
   private _filterContratistas(nombre: string): any[] {
@@ -144,7 +146,7 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
       ListadoEnum.RESULTADO_EVALUACION_TEC_ADM,
       ListadoEnum.TIPO_CONTRATO,
       ListadoEnum.TIPO_APROBACION,
-      ListadoEnum.ESTADO_APROBACION_REEMP
+      ListadoEnum.ESTADO_APROBACION
     ]).subscribe(listRes => {
       this.listTipoSolicitud = listRes[0];
       this.listEstadoRevision = listRes[1];
@@ -222,6 +224,7 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
   }
 
   flagContrato: boolean = true;
+  
   aprobarPersonal(action: string) {
     if (this.listaContratosSeleccionadosPerfeccionamiento.length == 0) {
       this.modalInformativo('Debe seleccionar al menos un contrato para Aprobar/Visto Bueno/Firmar.');
@@ -278,7 +281,8 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
     const selectedItem: SelectedReemplazarItem = {
       estadoAprob: element.idEsAprob,
       idAprobacion: element.id,
-      idArchivo:element.idArchivo
+      idArchivo:element.idArchivo,
+      idDocumento:element.idInforme
     };
 
     console.log('selectedItem a añadir/eliminar:', selectedItem);

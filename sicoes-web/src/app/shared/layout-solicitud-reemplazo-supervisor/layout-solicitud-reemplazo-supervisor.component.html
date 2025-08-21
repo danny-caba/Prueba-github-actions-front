@@ -64,7 +64,9 @@
                  rows="2"
                  cdkTextareaAutosize
                  cdkAutosizeMinRows="2"
-                 cdkAutosizeMaxRows="5"></textarea>
+                 cdkAutosizeMaxRows="5"
+                 maxlength="4000"></textarea>
+           <mat-hint align="end">{{ observacion?.length || 0 }} / 4000</mat-hint>
         </mat-form-field>
       </div>
 </ng-template>

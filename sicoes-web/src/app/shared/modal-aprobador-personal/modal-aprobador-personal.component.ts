@@ -116,7 +116,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
           requerimiento = REQUERIMIENTO.EVAL_INF_APROB_TEC_G2
         } else if (this.accion.includes(this.roles.GER_03)) {
           requerimiento = REQUERIMIENTO.EVAL_INF_APROB_TEC_G3
-        } else if (this.accion.includes(this.roles.EVALUADOR)) {
+        } else if (this.accion==='contrato') {
           requerimiento = REQUERIMIENTO.APROB_EVAL_CONTR
         }
         this.loadingAccion = true;
@@ -141,6 +141,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
       "estadoAprob": this.data.elementosSeleccionados[0].estadoAprob,
       "deObservacion": this.observacion.value,
       "requerimiento": requerimiento,
+      "idDocumento":this.data.elementosSeleccionados[0].idDocumento,
       "accion": "A",
       "conforme": true
     }

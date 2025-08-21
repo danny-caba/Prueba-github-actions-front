@@ -135,7 +135,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     this.parametriaService.obtenerMultipleListadoDetalle([
       ListadoEnum.TIPO_SOLICITUD,
       ListadoEnum.TIPO_APROBACION,
-      ListadoEnum.ESTADO_APROBACION_REEMP
+      ListadoEnum.ESTADO_APROBACION
     ]).subscribe(listRes => {
       this.listTipoSolicitud = listRes[0];
       this.listTipoAprobacionP = listRes[1];

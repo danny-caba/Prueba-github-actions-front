@@ -5,6 +5,7 @@ import { BaseComponent } from 'src/app/shared/components/base.component';
 import { Link } from 'src/helpers/internal-urls.components';
 import * as CryptoJS from 'crypto-js';
 import { functionsAlert } from 'src/helpers/functionsAlert';
+import { AdjuntosService } from 'src/app/service/adjuntos.service';
 
 const URL_DECRYPT = '3ncr1pt10nK3yuR1';
 @Component({
@@ -25,7 +26,8 @@ export class ReemplazoPersFormComponent extends BaseComponent implements OnInit 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private personalReemplazoService: PersonalReemplazoService
+    private personalReemplazoService: PersonalReemplazoService,
+    private adjunto:AdjuntosService
   ) {
     super();
   }
@@ -70,7 +72,12 @@ export class ReemplazoPersFormComponent extends BaseComponent implements OnInit 
           this.personalReemplazoService
           .registrarReemplazo(body)
           .subscribe(response => {
-            this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_ADD, this.idSolicitud]);  
+            console.log(response);
+            if(response.archivo!=undefined && response.archivo!=null){
+              this.adjunto.descargarWindowsJWT(response.archivo.codigo,response.archivo.nombreReal);
+              this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, Link.REEMPLAZO_PERSONAL_ADD, this.idSolicitud]);  
+            }
+            
           });
         }
       });

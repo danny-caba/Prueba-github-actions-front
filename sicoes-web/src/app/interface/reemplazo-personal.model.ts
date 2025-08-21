@@ -44,4 +44,5 @@ export interface SelectedReemplazarItem {
   idAprobacion: number;
   estadoAprob: number;
   idArchivo?:string;
+  idDocumento?:number;
 }

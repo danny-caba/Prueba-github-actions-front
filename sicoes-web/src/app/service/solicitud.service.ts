@@ -161,13 +161,14 @@ export class SolicitudService {
 
   buscarAprobaciones(
   requerimiento: string,
+  usuario:string,
   tipoaprob: number,
   estadoaprob: number,
   tiposolicitud: number,
   idcontratista: number,
   numexpediente: number
 ) {
-  const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/aprobaciones/${requerimiento}`;
+  const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/aprobaciones/${requerimiento}/${usuario}`;
   let params = new HttpParams();
 
   if (this.isValidParam(tipoaprob)) {

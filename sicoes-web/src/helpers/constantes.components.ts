@@ -275,12 +275,12 @@ export enum flagEnum {
 
 
 export class UsuariosRoles{
-   static GER_G2=4;
-   static GER_03=5;
-   static EVALUADOR=12;
-   static APROBADOR_G2=18;
-   static APROBADOR_G3=17;
-   static APROBADOR_G4=16;
+   static GER_G2='04';
+   static GER_03='05';
+   static EVALUADOR='12';
+   static APROBADOR_G2='18';
+   static APROBADOR_G3='17';
+   static APROBADOR_G4='16';
 }
 
 export enum SeccionAdenda {

@@ -105,7 +105,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   ];
 
   usuario:any[]=[];
-  idRoles: number[] = [];
+  idRoles: string[] = [];
   roles=UsuariosRoles;
   dataSourcePerfeccionamiento = new MatTableDataSource<any>();
 
@@ -127,7 +127,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   ngOnInit(): void {
     this.usuario = JSON.parse(sessionStorage.getItem("rolesusuario") || "[]");
-    this.idRoles = this.usuario.map(u => u.idRol);
+    this.idRoles = this.usuario.map(u => u.codigo);
     console.log("this.idRoles",this.idRoles)
     this.cargarCombo();
     this.cargarTabla();

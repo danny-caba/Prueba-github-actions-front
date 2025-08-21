@@ -87,9 +87,9 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
   ];
 
   dataSourceReemplazar = new MatTableDataSource<any>();
-  idRoles: number[] = [];
+  idRoles: string[] = [];
   roles = UsuariosRoles;
-
+  nomUs:any;
   @ViewChild('paginatorReemplazar') paginatorReemplazar: MatPaginator;
 
   constructor(
@@ -110,9 +110,9 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
     this.cargarCombo();
     this.dataSourceReemplazar.data = [];
     //this.cargarTabla();
-
+     this.nomUs=sessionStorage.getItem("NOMUS")
     this.usuario = JSON.parse(sessionStorage.getItem("rolesusuario") || "[]");
-    this.idRoles = this.usuario.map(u => u.idRol);
+    this.idRoles = this.usuario.map(u => u.codigo);
 
     this.filteredContratistas = this.formGroup.valueChanges.pipe(
       startWith(''),
@@ -168,19 +168,25 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
     this.paginator.pageIndex = 0;
     this.paginator.pageIndex = 0;
     let requerimiento = "";
+    let rol;
     if (this.idRoles.includes(this.roles.EVALUADOR)) {
+      rol=this.roles.EVALUADOR
       requerimiento = REQUERIMIENTO.APROB_EVAL_CONTR;
     } else if (this.idRoles.includes(this.roles.APROBADOR_G2)) {
+      rol=this.roles.APROBADOR_G2;
       requerimiento = REQUERIMIENTO.VB_APROB_G2_APROB_ADMIN;
     } else if (this.idRoles.includes(this.roles.APROBADOR_G3)) {
+      rol=this.roles.APROBADOR_G3;
       requerimiento = REQUERIMIENTO.FIRMA_APROB_G3_APROB_ADMIN;
     }
     else if (this.idRoles.includes(this.roles.APROBADOR_G4)) {
+      rol=this.roles.APROBADOR_G4;
       requerimiento = REQUERIMIENTO.APROB_ADMIN_G4_GAF;
     }
 
     this.solicitudService.buscarAprobaciones(
       requerimiento,
+      rol,
       this.getValidNumber('tipoAprobacion'),
       this.getValidNumber('estadoAprobacion'),
       this.getValidNumber('tipoSolicitud'),

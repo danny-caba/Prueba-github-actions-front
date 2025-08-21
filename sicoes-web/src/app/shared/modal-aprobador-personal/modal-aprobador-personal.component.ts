@@ -112,7 +112,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     functionsAlert.questionSiNo(msj).then(async (result) => {
       if (result.isConfirmed) {
         let requerimiento = "";
-        if (this.accion.includes(this.roles.GER_G2) && this.nomUs=='9125') {
+        if (this.accion.includes(this.roles.GER_G2) && this.nomUs=='RVERAC') {
           requerimiento = REQUERIMIENTO.EVAL_INF_APROB_TEC_G2
         } else if (this.accion.includes(this.roles.GER_03)) {
           requerimiento = REQUERIMIENTO.EVAL_INF_APROB_TEC_G3

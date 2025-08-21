@@ -28,4 +28,5 @@ export interface AuthUser {
   tipoPersona: ListadoDetalle
   roles: any
   nombreTipoNegocio: string
+  usuario?:string
 }

@@ -58,7 +58,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   listTipoSolicitud: any[];
   listTipoAprobacionP: any[];
   listEstadoAprobacionP: any[];
-  idRoles: number[] = [];
+  idRoles: string[] = [];
   roles = UsuariosRoles;
   listaContratosSeleccionadosPerfeccionamiento: SelectedReemplazarItem[] = [];
 
@@ -116,7 +116,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
     );
 
     this.usuario = JSON.parse(sessionStorage.getItem("rolesusuario") || "[]");
-    this.idRoles = this.usuario.map(u => u.idRol);
+    this.idRoles = this.usuario.map(u => u.codigo);
     console.log("this.usuario", this.usuario);
     this.nomUs=sessionStorage.getItem("NOMUS")
     this.buscar();
@@ -150,14 +150,17 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   buscar() {
     this.paginator.pageIndex = 0;
     let requerimiento = "";
-    if (this.idRoles.includes(this.roles.GER_G2) && this.nomUs=='9125') {
+    let rol;
+    if (this.idRoles.includes(this.roles.GER_G2) && this.nomUs=='RVERAC') {
+      rol=this.roles.GER_G2
       requerimiento = REQUERIMIENTO.EVAL_INFO_APROB_G2_GER_DIV;
     } else if (this.idRoles.includes(this.roles.GER_03)) {
+      rol=this.roles.GER_03
       requerimiento = REQUERIMIENTO.EVAL_INFO_APROB_G3_GER_LIN;
     }
-
     this.solicitudService.buscarAprobaciones(
       requerimiento,
+      rol,
       this.getValidNumber('tipoAprobacion'),
       this.getValidNumber('estadoAprobacion'),
       this.getValidNumber('tipoSolicitud'),

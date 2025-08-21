@@ -9,7 +9,7 @@
 
             <ng-container *ngFor="let requisito of requisitos">
                 <vex-documento-pn-detalle [evaluate]="evaluate" [requisito]="requisito"
-                    [rutaEvaluarDetalle]="rutaEvaluarDetalle" [isReview]="isReview"></vex-documento-pn-detalle>
+                    [rutaEvaluarDetalle]="rutaEvaluarDetalle" [isReview]="isReview" [isFinalized]="isFinalized"></vex-documento-pn-detalle>
             </ng-container>
 
             <vex-skeleton-loader *ngIf="isLoading" [count]="4" type="list"></vex-skeleton-loader>

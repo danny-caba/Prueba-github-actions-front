@@ -206,7 +206,6 @@ export class RequerimientoEditarContratoComponent implements OnInit {
     );
     this.contratoForm.markAllAsTouched();
     this.attachmentsInvalid = !this.hasAttachments;
-
     if (this.contratoForm.invalid || this.attachmentsInvalid) {
       this.snackBar.open(
         "Completa los campos obligatorios y adjunta al menos un archivo.",
@@ -238,8 +237,9 @@ export class RequerimientoEditarContratoComponent implements OnInit {
                 functionsAlert.success("Contrato actualizado correctamente.");
                 this.regresar();
               },
-              error: () =>
-                functionsAlert.error("Error al actualizar el contrato."),
+              error: (err) => {
+                console.error('Error al actualizar el contrato:', err);
+              }
             });
         }
       });

@@ -73,8 +73,6 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
   }
 
   ngOnInit(): void {
-    this.cargarTabla();
-
     this.initializeComponent();
   }
 
@@ -96,8 +94,9 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
         if(requerimiento) {
           this.requerimiento = requerimiento;
           this.listarSupervisoresPorPerfil();
+          this.cargarTabla();
         } else {
-          this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST]);
+          this.regresar();
         }
       });
 
@@ -139,7 +138,9 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
   }
 
   obtenerFiltro() {
-    let filtro: any = {}
+    let filtro: any = {
+      requerimientoUuid: this.requerimiento.requerimientoUuid
+    }
     return filtro;
   }
 
@@ -233,22 +234,43 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
 
       this.requerimientoService.enviarInvitacion(requerimientoInvitacion).subscribe(respuesta => {
         if(respuesta) {
-          // functionsAlert.vigente('Invitación enviada correctamente', 'La invitación se ha enviado correctamente').then((result) => {
-          //   this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST]);
-          // });
           functionsAlert.success('La invitación se ha enviado correctamente').then((result) => {
-            this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST]);
+            this.regresar();
           });
         } else {
           functionsAlert.error('Ocurrió un error al enviar la invitación').then((result) => {
-            this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST]);
+            this.regresar();
           });
         }
       });
     }
   }
 
+  habilitarAccion(row: RequerimientoInvitacion) {
+    return row.estado.codigo === 'INVITADO';
+  }
+
   regresar() {
-    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST]);
+    this.router.navigate([Link.INTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_LIST_ATENCION]);
+  }
+
+  eliminarInvitacion(row: RequerimientoInvitacion) {
+    functionsAlert.questionSiNo(`¿Eliminar la invitación al supervisor persona natural ${row.supervisora.nombreCompleto}?`).then((result) => {
+      if(result.isConfirmed) {
+        this.requerimientoService.eliminarInvitacion(row.requerimientoInvitacionUuid).subscribe({
+          next: (respuesta) => {
+            console.log('respuesta', respuesta);
+            this.buscar();
+            // Actualizar mi dataSource sin cargar la tabla nuevamente (actualizando el dataSource con los nuevos datos del objeto eliminado)
+            // this.dataSourceSupervisor.data = this.dataSourceSupervisor.data.filter(item => item.invitacionUuid !== row.invitacionUuid);
+            // this.dataSourceSupervisor.data = [...this.dataSourceSupervisor.data];
+            // this.buscar();
+          },
+          error: (error) => {
+            console.error('Error al eliminar la invitación:', error);
+          }
+        });
+      }
+    });
   }
 }

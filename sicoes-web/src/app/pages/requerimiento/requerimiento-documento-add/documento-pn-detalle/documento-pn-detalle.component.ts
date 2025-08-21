@@ -16,7 +16,7 @@ export class DocumentoPnDetalleComponent {
   @Input() requisito: RequerimientoDocumentoDetalle;
   @Input() rutaEvaluarDetalle: string[];
   @Input() isReview: boolean = false;
-
+  @Input() isFinalized: boolean = false;
   constructor(
     private dialog: MatDialog,
   ) {
@@ -39,9 +39,10 @@ export class DocumentoPnDetalleComponent {
         this.requisito.evaluacion?.codigo == evaluacion.CUMPLE ||
         this.requisito.evaluacion?.codigo == evaluacion.OBSERVADO);
     }
-    // if (this.isReview) {
-    //   return this.requisito.evaluacion?.codigo == evaluacion.CUMPLE;
-    // }
+
+    if (this.isReview && this.isFinalized) {
+      return this.requisito.flagVistoBueno === '1';
+    }
 
     return false;
   }

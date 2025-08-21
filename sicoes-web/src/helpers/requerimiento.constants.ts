@@ -51,7 +51,11 @@ export const REQUERIMIENTO_CONSTANTS = {
 
   MESSAGES: {
     DOCUMENTO_CONFIRMATION: '¿Seguro de Registrar la carga de documentos. Cualquier notificación sobre la solicitud se realizará a través del sistema de notificaciones electrónica?',
-    EVALUAR_CONFIRMATION: '¿Está seguro de querer finalizar la revisión de documentos? [Si] [No]", se muestra "¿Seguro de Registrar la carga de documentos. Cualquier notificación sobre la solicitud se realizará a través del sistema de notificaciones electrónica?',
+    EVALUAR_CONFIRMATION: '¿Está seguro de querer finalizar la revisión de documentos?',
+    REVISAR_CONFIRMATION: '¿Está seguro de querer revisar el documento?',
+    REVISAR_NO_COORDINADOR_CONFIRMATION: '¿Está seguro de notificar al coordinador de gestión para revisión del informe?',
+    REVISAR_NO_SUPERVISOR_CONFIRMATION: '¿Está seguro de notificar al supervisor persona natural para subsanar el documento?',
+    EVALUAR_NO_CONFIRMATION: '¿Está seguro de notificar al supervisor persona natural para subsanar el documento?',
   },
 
   // Validaciones de estado de requerimiento

@@ -50,6 +50,7 @@ export class Supervisora {
     pais: Partial<ListadoDetalle>
     fechaIngreso: string
     estado: string
+    nombreCompleto?: string
 }
 export class ProfesionalPerfil {
     perfil: string

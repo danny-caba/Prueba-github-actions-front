@@ -90,6 +90,11 @@ export class RequerimientoService {
     );
   }
 
+  eliminarInvitacion(invitacionUuid: string): Observable<RequerimientoInvitacion> {
+    const url = `${this._path_serve}/api/invitaciones/${invitacionUuid}/eliminar`;
+    return this.http.delete<RequerimientoInvitacion>(url);
+  }
+
   listarRequerimientosAprobaciones(filtro) {
     let urlEndpoint = `${this._path_serve}/api/aprobaciones`;
     let params = functions.obtenerParams(filtro);

@@ -27,6 +27,8 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
   titulo = 'Evaluar Documentos';
   isReview: boolean = false;
   isFinalized: boolean = false;
+  isCorrectEvaluate: boolean;
+  isNotificarCoordinador: boolean = false;
 
   constructor(
     private router: Router,
@@ -92,13 +94,24 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
 
   async finalizarEvaluacion(): Promise<void> {
     try {
-      // Confirmación del usuario
+      this.isCorrectEvaluate = false;
+      if(this.evaluate) {
+        this.isCorrectEvaluate = this.requisitos.every(requisito => requisito.evaluacion?.codigo === 'CUMPLE');
+      }
+
+      if(this.isReview) {
+        this.isCorrectEvaluate = this.requisitos.every(requisito => requisito.flagVistoBueno === '1');
+        this.isNotificarCoordinador = this.requisitos.some(requisito => {
+          return requisito.origenRequisito.codigo === 'REQUERIMIENTO'
+          && requisito.flagVistoBueno === '0';
+        });
+      }
+
       const isConfirmed = await this.confirmEnvio();
       if (!isConfirmed) {
         return;
       }
 
-      // Envío del documento
       await this.sendDocumento();
 
     } catch (error) {
@@ -108,7 +121,29 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
   }
 
   private async confirmEnvio(): Promise<boolean> {
-    const result = !this.evaluate ? await functionsAlert.questionSiNo(REQUERIMIENTO_CONSTANTS.MESSAGES.DOCUMENTO_CONFIRMATION) : await functionsAlert.questionSiNo(REQUERIMIENTO_CONSTANTS.MESSAGES.EVALUAR_CONFIRMATION);
+    let mensajeConfirmacion: string;
+    
+    if (!this.evaluate && !this.isReview) {
+      // Carga Documentos
+      mensajeConfirmacion = REQUERIMIENTO_CONSTANTS.MESSAGES.DOCUMENTO_CONFIRMATION;
+    } else if (this.isReview && this.isCorrectEvaluate) {
+      // Revision
+      mensajeConfirmacion = REQUERIMIENTO_CONSTANTS.MESSAGES.REVISAR_CONFIRMATION;
+    } else if (this.isReview && !this.isCorrectEvaluate && this.isNotificarCoordinador) {
+      // Revision con errores - notificar para subsanar al coordinador
+      mensajeConfirmacion = REQUERIMIENTO_CONSTANTS.MESSAGES.REVISAR_NO_COORDINADOR_CONFIRMATION;
+    } else if (this.isReview && !this.isCorrectEvaluate && !this.isNotificarCoordinador) {
+      // Revision con errores - notificar para subsanar al supervisor persona natural
+      mensajeConfirmacion = REQUERIMIENTO_CONSTANTS.MESSAGES.REVISAR_NO_SUPERVISOR_CONFIRMATION;
+    } else if (this.evaluate && this.isCorrectEvaluate) {
+      // Evaluación exitosa - finalizar
+      mensajeConfirmacion = REQUERIMIENTO_CONSTANTS.MESSAGES.EVALUAR_CONFIRMATION;
+    } else if (this.evaluate && !this.isCorrectEvaluate) {
+      // Evaluación con errores - notificar para subsanar
+      mensajeConfirmacion = REQUERIMIENTO_CONSTANTS.MESSAGES.EVALUAR_NO_CONFIRMATION;
+    }
+
+    const result = await functionsAlert.questionSiNo(mensajeConfirmacion);
     return result.isConfirmed;
   }
 

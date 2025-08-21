@@ -4,7 +4,7 @@
   <div class="flex gap-x-2 w-5/12 leading-[18px] text-justify">
     <mat-checkbox 
       color="primary" 
-      [disabled]="!isReview"
+      [disabled]="!isReview || isFinalized"
       (change)="onChangeCheckbox($event, requisito)"
       [checked]="validarCheck()"
     ></mat-checkbox>

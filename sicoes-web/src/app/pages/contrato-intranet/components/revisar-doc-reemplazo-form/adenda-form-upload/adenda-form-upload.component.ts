@@ -54,6 +54,29 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
   idSolicitudReemplazo: number;
   idProyAdenda: number;
 
+  nombreEvaluador: string = null;
+  fechaEvaluacion: string = null;
+  nombreEvaluadorDjNepotismo: string = null;
+  fechaEvaluacionDjNepotismo: string = null;
+  nombreEvaluadorDjImpedimento: string = null;
+  fechaEvaluacionDjImpedimento: string = null;
+  nombreEvaluadorDjNoVinculo: string = null;
+  fechaEvaluacionDjNoVinculo: string = null;
+  nombreEvaluadorOtros: string = null;
+  fechaEvaluacionOtros: string = null;
+  nombreEvaluadorSolReemplazo: string = null;
+  fechaEvaluacionSolReemplazo: string = null;
+  nombreEvaluadorProyAdenda: string = null;
+  fechaEvaluacionProyAdenda: string = null;
+
+  marcaInforme: "SI" | "NO" | null = null;
+  marcaDjNepotismo: "SI" | "NO" | null = null;
+  marcaDjImpedimento: "SI" | "NO" | null = null;
+  marcaDjNoVinculo: "SI" | "NO" | null = null;
+  marcaOtros: "SI" | "NO" | null = null;
+  marcaSolReemplazo: "SI" | "NO" | null = null;
+  marcaProyAdenda: "SI" | "NO" | null = null;
+
   constructor(
     private authFacade: AuthFacade,
     private personalReemplazoService: PersonalReemplazoService
@@ -102,6 +125,8 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
     const doc = this.listDocumentosReemplazo.find(
       (doc) => doc.tipoDocumento.codigo === "INFORME"
     );
+    const evaluacion = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 15);
+    const evalContratos = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 12);
 
     let informe = {
       adjunto: {
@@ -109,14 +134,19 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
       },
     };
     this.adjuntoInforme = informe;
-    this.observacionInforme = doc?.evaluacion?.observacion;
+    this.observacionInforme = evaluacion?.observacion;
     this.idInforme = doc?.idDocumento;
+    this.nombreEvaluador = evalContratos?.evaluadoPor?.usuario;
+    this.fechaEvaluacion = evalContratos?.fechaEvaluacion;
+    this.marcaInforme = evalContratos?.conforme;
   }
 
   setDatosDjNepotismo() {
     const doc = this.listDocumentosReemplazo.find(
       (doc) => doc.tipoDocumento.codigo === "DJ_PERSONAL_PROPUESTO"
     );
+    const evaluacion = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 15);
+    const evalContratos = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 12);
 
     let djNepotismo = {
       adjunto: {
@@ -124,14 +154,19 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
       },
     };
     this.adjuntoDjNepotismo = djNepotismo;
-    this.observacionDjNepotismo = doc?.evaluacion?.observacion;
+    this.observacionDjNepotismo = evaluacion?.observacion;
     this.idDjNepotismo = doc?.idDocumento;
+    this.nombreEvaluadorDjNepotismo = evalContratos?.evaluadoPor?.usuario;
+    this.fechaEvaluacionDjNepotismo = evalContratos?.fechaEvaluacion;
+    this.marcaDjNepotismo = evalContratos?.conforme;
   }
 
   setDatosDjImpedimento() {
     const doc = this.listDocumentosReemplazo.find(
       (doc) => doc.tipoDocumento.codigo === "DJ_IMPEDIMENTOS"
     );
+    const evaluacion = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 15);
+    const evalContratos = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 12);
 
     let djImpedimento = {
       adjunto: {
@@ -139,14 +174,19 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
       },
     };
     this.adjuntoDjImpedimento = djImpedimento;
-    this.observacionDjImpedimento = doc?.evaluacion?.observacion;
+    this.observacionDjImpedimento = evaluacion?.observacion;
     this.idDjImpedimento = doc?.idDocumento;
+    this.nombreEvaluadorDjImpedimento = evalContratos?.evaluadoPor?.usuario;
+    this.fechaEvaluacionDjImpedimento = evalContratos?.fechaEvaluacion;
+    this.marcaDjImpedimento = evalContratos?.conforme;
   }
 
   setDatosDjNoVinculo() {
     const doc = this.listDocumentosReemplazo.find(
       (doc) => doc.tipoDocumento.codigo === "DJ_NO_VINCULO"
     );
+    const evaluacion = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 15);
+    const evalContratos = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 12);
 
     let djNoVinculo = {
       adjunto: {
@@ -154,14 +194,19 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
       },
     };
     this.adjuntoDjNoVinculo = djNoVinculo;
-    this.observacionDjNoVinculo = doc?.evaluacion?.observacion;
+    this.observacionDjNoVinculo = evaluacion?.observacion;
     this.idDJNoVinculo = doc?.idDocumento;
+    this.nombreEvaluadorDjNoVinculo = evalContratos?.evaluadoPor?.usuario;
+    this.fechaEvaluacionDjNoVinculo = evalContratos?.fechaEvaluacion;
+    this.marcaDjNoVinculo = evalContratos?.conforme;
   }
 
   setDatosOtros() {
     const doc = this.listDocumentosReemplazo.find(
       (doc) => doc.tipoDocumento.codigo === "OTROS_DOCUMENTOS"
     );
+    const evaluacion = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 15);
+    const evalContratos = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 12);
 
     let otros = {
       adjunto: {
@@ -169,14 +214,19 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
       },
     };
     this.adjuntoOtros = otros;
-    this.observacionOtros = doc?.evaluacion?.observacion;
+    this.observacionOtros = evaluacion?.observacion;
     this.idOtros = doc?.idDocumento;
+    this.nombreEvaluadorOtros = evalContratos?.evaluadoPor?.usuario;
+    this.fechaEvaluacionOtros = evalContratos?.fechaEvaluacion;
+    this.marcaOtros = evalContratos?.conforme;
   }
 
   setDatosSolicitudReemplazo() {
     const doc = this.listDocumentosReemplazo.find(
       (doc) => doc.tipoDocumento.codigo === "OFICIO_CARTA_SOLI_REEMPLAZO"
     );
+    const evaluacion = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 15);
+    const evalContratos = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 12);
 
     let solicitud = {
       adjunto: {
@@ -184,14 +234,19 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
       },
     };
     this.adjuntoSolicitudReemplazo = solicitud;
-    this.observacionSolReemplazo = doc?.evaluacion?.observacion;
+    this.observacionSolReemplazo = evaluacion?.observacion;
     this.idSolicitudReemplazo = doc?.idDocumento;
+    this.nombreEvaluadorSolReemplazo = evalContratos?.evaluadoPor?.usuario;
+    this.fechaEvaluacionSolReemplazo = evalContratos?.fechaEvaluacion;
+    this.marcaSolReemplazo = evalContratos?.conforme;
   }
 
   setDatosProyAdenda() {
     const doc = this.listDocumentosReemplazo.find(
       (doc) => doc.tipoDocumento.codigo === "PROYECTO_ADENDA"
     );
+    const evaluacion = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 15);
+    const evalContratos = doc?.evaluacion?.find((ev) => ev.rol?.idRol === 12);
 
     let solicitud = {
       adjunto: {
@@ -199,8 +254,11 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
       },
     };
     this.adjuntoProyAdenda = solicitud;
-    this.observacionProyAdenda = doc?.evaluacion?.observacion;
+    this.observacionProyAdenda = evaluacion?.observacion;
     this.idProyAdenda = doc?.idDocumento;
+    this.nombreEvaluadorProyAdenda = evalContratos?.evaluadoPor?.usuario;
+    this.fechaEvaluacionProyAdenda = evalContratos?.fechaEvaluacion;
+    this.marcaProyAdenda = evalContratos?.conforme;
   }
 
   setCodRolRevisor(user: AuthUser) {

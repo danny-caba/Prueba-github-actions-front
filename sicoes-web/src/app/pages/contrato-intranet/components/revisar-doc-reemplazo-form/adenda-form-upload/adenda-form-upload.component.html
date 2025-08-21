@@ -12,6 +12,10 @@
       [adjuntoInforme]="adjuntoInforme"
       [isReviewExt]="isReviewExt"
       [idDocumento]="idInforme"
+      [obsAdjunto]="observacionInforme"
+      [marcaInformeCarta]="marcaInforme"
+      [evaluadoPor]="nombreEvaluador"
+      [fechaHora]="fechaEvaluacion"
       #layoutInforme
     ></vex-layout-informe>
   </mat-expansion-panel>
@@ -54,6 +58,18 @@
       [obsAdjuntoDjNoVinculo]="observacionDjNoVinculo"
       [obsAdjuntoOtros]="observacionOtros"
       [isReviewExt]="isReviewExt"
+      [djNepotismoEvaluadoPor]="nombreEvaluadorDjNepotismo"
+      [djNepotismoFechaHora]="fechaEvaluacionDjNepotismo"
+      [djImpedimentoEvaluadoPor]="nombreEvaluadorDjImpedimento"
+      [djImpedimentoFechaHora]="fechaEvaluacionDjImpedimento"
+      [djNoVinculoEvaluadoPor]="nombreEvaluadorDjNoVinculo"
+      [djNoVinculoFechaHora]="fechaEvaluacionDjNoVinculo"
+      [otrosEvaluadoPor]="nombreEvaluadorOtros"
+      [otrosFechaHora]="fechaEvaluacionOtros"
+      [marcaDjNepotismo]="marcaDjNepotismo"
+      [marcaDjImpedimento]="marcaDjImpedimento"
+      [marcaDjNoVinculo]="marcaDjNoVinculo"
+      [marcaOtros]="marcaOtros"
       #layoutPersPropuesto
     ></vex-layout-personal-propuesto>
   </mat-expansion-panel>
@@ -70,6 +86,10 @@
       [adjuntoSolicitud]="adjuntoSolicitudReemplazo"
       [idDocSolicitud]="idSolicitudReemplazo"
       [codRolRevisor]="codRolRevisor"
+      [obsAdjunto]="observacionSolReemplazo"
+      [marcacion]="marcaSolReemplazo"
+      [evaluadoPor]="nombreEvaluadorSolReemplazo"
+      [fechaHora]="fechaEvaluacionSolReemplazo"
       [obsAdjunto]="observacionSolReemplazo"
       #layoutSolReempSuperv
     ></vex-layout-solicitud-reemplazo-supervisor>
@@ -88,6 +108,10 @@
       [idDocAdenda]="idProyAdenda"
       [obsAdjunto]="observacionProyAdenda"
       [isReviewExt]="isReviewExt"
+      [marcacion]="marcaProyAdenda"
+      [evaluadoPor]="nombreEvaluadorProyAdenda"
+      [fechaHora]="fechaEvaluacionProyAdenda"
+      [obsAdjunto]="observacionProyAdenda"
       #layoutProyAdenda
     ></vex-layout-proyecto-adenda>
   </mat-expansion-panel>

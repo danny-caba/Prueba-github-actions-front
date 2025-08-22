@@ -37,8 +37,11 @@
   
       <!-- Columna 3: Radios -->
       <div class="col radios" *ngIf="isReview">
-        <mat-radio-group [(ngModel)]="marcacionContratoAlquiler"
-                         class="flex items-center gap-2">
+        <mat-radio-group 
+          [(ngModel)]="marcacionContratoAlquiler"
+          [disabled] = "adjAlqCamioneta?.adjunto?.archivo == null"
+          (change)="onMarcaAlqCamionetaChange($event.value)"
+          class="flex items-center gap-2">
           <mat-radio-button value="SI">Sí</mat-radio-button>
           <mat-radio-button value="NO">No</mat-radio-button>
         </mat-radio-group>
@@ -46,12 +49,12 @@
   
       <!-- Columna 4: Evaluado por -->
       <div class="col evaluado-por text-secondary text-sm" *ngIf="isReview">
-        Evaluado por:
+        {{docAlqCamionetaEvaluadoPor || 'Evaluado por:'}}
       </div>
   
       <!-- Columna 5: Fecha y Hora -->
       <div class="col fecha-hora text-secondary text-sm" *ngIf="isReview">
-        Fecha y Hora:
+        {{docAlqCamionetaFechaHora || 'Fecha y Hora'}}
       </div>
   
     </div>
@@ -68,12 +71,11 @@
         <!-- Columna 2: Archivos o input -->
         <div class="col archivos">
           <ng-container *ngIf="isReview; else uploadContrato">
-            <span class="text-secondary mr-2">DocumentoMock.pdf</span>
-            <button matTooltip="Descargar"
-                    mat-icon-button type="button"
-                    class="text-primary hover:bg-hover">
-              <mat-icon svgIcon="mat:download" size="12px"></mat-icon>
-            </button>
+            <vex-form-adjuntos-no-title
+            class="ml-auto"
+            [adjuntoInput] = "adjSeguroSoat"
+            [editable]="!isReview">
+          </vex-form-adjuntos-no-title>
           </ng-container>
           <ng-template #uploadContrato>
             <vex-form-adjuntos-no-title
@@ -92,8 +94,11 @@
     
         <!-- Columna 3: Radios -->
         <div class="col radios" *ngIf="isReview">
-          <mat-radio-group [(ngModel)]="marcacionSeguroSoat"
-                           class="flex items-center gap-2">
+          <mat-radio-group 
+            [(ngModel)]="marcacionSeguroSoat"
+            [disabled] = "adjSeguroSoat?.adjunto?.archivo == null"
+            (change)="onMarcaSeguroSoatChange($event.value)"
+            class="flex items-center gap-2">
             <mat-radio-button value="SI">Sí</mat-radio-button>
             <mat-radio-button value="NO">No</mat-radio-button>
           </mat-radio-group>
@@ -101,12 +106,12 @@
     
         <!-- Columna 4: Evaluado por -->
         <div class="col evaluado-por text-secondary text-sm" *ngIf="isReview">
-          Evaluado por:
+          {{docSeguroSoatEvaluadoPor || 'Fecha y Hora'}}
         </div>
     
         <!-- Columna 5: Fecha y Hora -->
         <div class="col fecha-hora text-secondary text-sm" *ngIf="isReview">
-          Fecha y Hora:
+          {{docSeguroSoatFechaHora || 'Fecha y Hora'}}
         </div>
     
       </div>

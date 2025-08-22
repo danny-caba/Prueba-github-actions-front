@@ -54,7 +54,11 @@ export class ContratoEvaluarDocsInicioComponent extends BaseComponent implements
     this.personalReemplazoService
     .listarPersonalReemplazo(this.idSolicitud)
     .subscribe(response => {
-      this.listPersonalReemplazo = response.content.filter(item => !!item.estadoReemplazo);
+      this.listPersonalReemplazo = response.content.filter(
+          (item) =>
+            item.estadoEvalDocIniServ?.codigo === "BORRADOR" &&
+            item.estadoDocIniServ?.codigo === "EN_EVALUACION"
+        );
     });
   }
 

@@ -37,6 +37,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import {OverlayModule} from '@angular/cdk/overlay';
 import { ScrollbarModule } from 'src/@vex/components/scrollbar/scrollbar.module';
+import { DialogModule } from '@angular/cdk/dialog';
 
 @NgModule({
   exports: [

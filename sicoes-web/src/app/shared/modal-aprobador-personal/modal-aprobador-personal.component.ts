@@ -14,6 +14,7 @@ import { SelectedReemplazarItem } from 'src/app/interface/reemplazo-personal.mod
 import { ModalFirmaDigitalComponent } from '../modal-firma-digital/modal-firma-digital.component';
 import { EvaluadorService } from 'src/app/service/evaluador.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DialogFirmasComponent } from '../modal-dialog-firmas/modal-dialog-firmas.component';
 
 interface ArchivoFirmado {
   firmaExitosa: string;
@@ -37,7 +38,6 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
   progreso: number = 0;
   loadingAccion: boolean = false;
   errores: string[] = [];
-
   usuario$: any;
   usuario: AuthUser;
   accion: any;
@@ -48,6 +48,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
   vistoBueno: boolean;
   nomUs:any;
   codUsuario:any;
+  mostrarPopup:boolean=false;
   constructor(
     private dialogRef: MatDialogRef<ModalAprobadorPersonalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -180,11 +181,13 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
       "firmaJefe": true,
       "firmaGerente": false
     }
-    this.solicitudService.firmaDigital(body).subscribe({
+ this.solicitudService.firmaDigital(body).subscribe({
       next: (resp) => {
         this.cookie = resp.cookie;
         const html = this.injectScripts(resp.html);
         this.iframeUrl = this.createIframeUrl(html);
+        this.mostrarPopup=true;
+        this.mostrarPop();
       },
       error: (err) => {
         console.error('[Firma Error]', err);
@@ -201,17 +204,103 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     let body = {
       "idAdenda": this.data.elementosSeleccionados[0].idAdenda,
       "observacion": this.observacion.value,
-      "cookie": "ABC123XYZ",
       "visto": true,
       "firmaJefe": false,
       "firmaGerente": false
 
     }
-    this.solicitudService.vistoBueno(body).subscribe({
+
+    this.cookie = '2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662!1756135884462';
+    const htm=`<!DOCTYPE html>
+ 
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>OSIFIRMA</title>
+<link type="text/css" rel="stylesheet" href="/osifirma/stylesheets/app/osifirma.css;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"/>
+ 
+<link type="image/x-icon" href="/osifirma/images/osinergmin.ico;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662" rel="shortcut icon" id="favicon"/>
+ 
+<script type="text/javascript" src="/osifirma/javascript/third-party/jquery-3.3.1.min.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/third-party/jquery-ui-1.12.1.custom.min.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/third-party/json.min.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662 "></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/third-party/jquery.form.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/third-party/json2.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/third-party/array2.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/third-party/hashmap.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/app/Osinergmin.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/app/Osinergmin.ui.utils.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/app/Osinergmin.ui.validations.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/app/Osinergmin.browser.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+ 
+<script type="text/javascript" src="/osifirma/javascript/app/Osinergmin.loading.js;jsessionid=2irh2waufqi1_dZN7ZLzZeNPdpN7VgODVDQjeTcfR5Kf1Z6dryrI!1404084662"></script>
+<script type="text/javascript" src="/osifirma/javascript/firmaDigital/firma.js"></script>
+</head>
+<body>
+<div id="mensajeProcesamientoPostfirma" class="mensaje hidden">Realizando las acciones finales del firmado digital...</div>
+<div>
+<form>
+<input type="hidden" id="codigoSi" value="S" />
+<input type="hidden" id="codigoNo" value="N" />
+<input type="hidden" id="autenticado" value="N" />
+<input type="hidden" id="huboError" value="" />
+<input type="hidden" id="error" value="Sus credenciales no son válidas para realizar el firmado digital" />
+<input type="hidden" id="mensajeErrorGenericoSignNet" value="Ocurrió un error inesperado en el proceso de firmado digital" />
+<input type="hidden" id="mensajeErrorGenericoPostFirma" value="Ocurrió un error inesperado al intentar ejecutar el proceso postfirma" />
+</form>
+</div>
+<div>
+<form method="post" id="ssoForm" name="ssoForm" target="iframeFirmaSignNet" action='' accept-charset="ISO-8859-1">
+<input type="hidden" name="rutaOrigen" value='' />
+<input type="hidden" name="rutaDestino" value='' />
+<input type="hidden" name="nombreArchivos" value='' />
+<input type="hidden" name="invisible" value='' />
+<input type="hidden" name="estiloFirma" value='' />
+<input type="hidden" name="rutaImagen" value='' />
+<input type="hidden" name="imagen" value='' />
+<input type="hidden" name="aplicarImagen" value='' />
+<input type="hidden" name="posicionFirma" value='' />
+<input type="hidden" name="nombreTag" value='' />
+<input type="hidden" name="ubicacionPagina" value='' />
+<input type="hidden" name="usarPersonalizado" value='' />
+<input type="hidden" name="tamanoFuente" value='' />
+<input type="hidden" name="tipoFirma" value='' />
+<input type="hidden" name="aplicarTsa" value='' />
+<input type="hidden" name="urlTsa" value='' />
+<input type="hidden" id="hayMotivo" value='' />
+<input type="hidden" name="altoRubrica" value="80" />												
+<input type="hidden" name="anchoRubrica" value="70" />	        		
+</form>
+</div>
+<div>
+<iframe id="iframeFirmaSignNet" name="iframeFirmaSignNet" frameborder="0" width="550px" height="320px"></iframe>
+</div>
+<div id="overlayNormal" class="overlayNormal hidden"></div>
+<div id="overlayIE" class="overlayIE hidden"></div>
+</body>
+</html>`;
+
+       const html = this.injectScripts(htm);
+        this.iframeUrl = this.createIframeUrl(html);
+        this.mostrarPopup=true;
+        this.mostrarPop();
+    /* this.solicitudService.vistoBueno(body).subscribe({
       next: (resp) => {
         this.cookie = resp.cookie;
         const html = this.injectScripts(resp.html);
         this.iframeUrl = this.createIframeUrl(html);
+        this.mostrarPopup=true;
+        this.mostrarPop();
       },
       error: (err) => {
         console.error('[Visto Bueno Error]', err);
@@ -221,7 +310,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
         }
         this.showError(mensaje);
       }
-    });
+    });*/
   }
 
   private injectScripts(html: string): string {
@@ -388,16 +477,27 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     if (this.dialog) {
       this.dialog.closeAll();
     }
+    this.mostrarPopup=false;
   }
 
   showError(msg: string): void {
     alert(msg);
     this.iframeUrl = null;
+    this.mostrarPopup=false;
     if (this.dialog) {
       this.dialog.closeAll();
     }
   }
 
+mostrarPop(): void {
+    this.dialog.open(DialogFirmasComponent, {
+      width: '60vw',
+      height: '80vh',
+      panelClass: 'custom-dialog',
+      disableClose: true, // Hace que el diálogo sea modal (como [modal]="true")
+      data: { iframeUrl: this.iframeUrl }
+    });
+  }
 
 
 }

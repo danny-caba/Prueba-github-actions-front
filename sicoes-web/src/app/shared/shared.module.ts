@@ -110,6 +110,7 @@ import { FormAdjuntosNoTitleComponent } from './form-adjuntos-no-title/form-adju
 import { LayoutActaInicioComponent } from './layout-acta-inicio/layout-acta-inicio.component';
 import { OptionRoleReemplazoDirective } from '../auth/interceptors/option-role-reemplazo.directive';
 import { OptionRoleCheckDirective } from '../auth/interceptors/option-role-check.directive';
+import { DialogFirmasComponent } from './modal-dialog-firmas/modal-dialog-firmas.component';
 
 const sharedComponents = [
 
@@ -223,7 +224,8 @@ const sharedComponents = [
     ModalAprobadorContratoComponent,
     ModalAprobadorHistorialContratoComponent,
     ModalAprobadorPersonalComponent,
-    ModalInformativoComponent
+    ModalInformativoComponent,
+    DialogFirmasComponent
   ];
 
 @NgModule({

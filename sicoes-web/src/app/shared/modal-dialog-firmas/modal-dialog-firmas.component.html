@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>FIRMAS DIGITALES</h2>
+<mat-dialog-content class="no-padding">
+  <iframe
+    *ngIf="data.iframeUrl"
+    [src]="data.iframeUrl"
+    width="100%"
+    height="100%"
+    frameborder="0"
+  ></iframe>
+</mat-dialog-content>

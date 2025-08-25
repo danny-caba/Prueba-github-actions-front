@@ -41,10 +41,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   SOLICITUD: any;
   tipousuario = "GL"
 
-  ACC_HISTORIAL = 'ACC_HISTORIAL';
-  ACC_REGISTRAR = 'ACC_REGISTRAR';
-  ACC_EDITAR = 'ACC_EDITAR';
-  ACC_VER = 'ACC_VER';
+  
 
   formGroup = this.fb.group({
     nroExpediente: [''],
@@ -80,6 +77,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   dataSourceReemplazar = new MatTableDataSource<any>();
   filteredContratistas!: Observable<any[]>;
   nomUs:any;
+  rol:any
   @ViewChild('paginatorReemplazar') paginatorReemplazar: MatPaginator;
 
   constructor(
@@ -150,17 +148,16 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   buscar() {
     this.paginator.pageIndex = 0;
     let requerimiento = "";
-    let rol;
-    if (this.idRoles.includes(this.roles.GER_G2) && this.nomUs=='RVERAC') {
-      rol=this.roles.GER_G2
+    if (this.idRoles.includes(this.roles.GER_03) && this.nomUs=='RVERAC') {
+      this.rol=this.roles.GER_03
       requerimiento = REQUERIMIENTO.EVAL_INFO_APROB_G2_GER_DIV;
     } else if (this.idRoles.includes(this.roles.GER_03)) {
-      rol=this.roles.GER_03
+      this.rol=this.roles.GER_03
       requerimiento = REQUERIMIENTO.EVAL_INFO_APROB_G3_GER_LIN;
     }
     this.solicitudService.buscarAprobaciones(
       requerimiento,
-      rol,
+      this.rol,
       this.getValidNumber('tipoAprobacion'),
       this.getValidNumber('estadoAprobacion'),
       this.getValidNumber('tipoSolicitud'),
@@ -211,15 +208,6 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
 
 
 
-  descargarItem(item: any) {
-    this.adjuntoService.descargarWindowsJWT(item.codigo, item.nombreReal);
-  }
-
-
-  aprobar_firmar(sol: Solicitud) {
-    this.router.navigate([Link.INTRANET, Link.SOLICITUDES_LIST, Link.SOLICITUDES_APROBAR, sol.solicitudUuid]);
-  }
-
   flagContrato: boolean = true;
   aprobarPersonal(action: string) {
     if (this.listaContratosSeleccionadosPerfeccionamiento.length == 0) {
@@ -237,7 +225,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
       maxHeight: '100%',
       data: {
         tipo: this.idRoles,
-        accion: action,
+        accion: this.rol,
         elementosSeleccionados: this.listaContratosSeleccionadosPerfeccionamiento,
       },
     }).afterClosed().subscribe(result => {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
+import { AdjuntosService } from 'src/app/service/adjuntos.service';
 import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
@@ -32,7 +33,8 @@ export class ContratoFormEvalReempComponent extends BaseComponent implements OnI
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private reemplazoPersonalService: PersonalReemplazoService
+    private reemplazoPersonalService: PersonalReemplazoService,
+    private adjunto:AdjuntosService
   ) {
     super();
   }
@@ -66,7 +68,12 @@ export class ContratoFormEvalReempComponent extends BaseComponent implements OnI
           this.reemplazoPersonalService
           .registrarAprobacionRechazo(accion, this.allDocsConforme, body)
           .subscribe(response => {
-            this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_ADD + '/' + this.idSolicitud]);
+            console.log("response",response)
+            if(response.archivo!=undefined && response.archivo!=null){
+              this.adjunto.descargarWindowsJWT(response.archivo.codigo,response.archivo.nombreReal);
+              
+            }
+            this.router.navigate(['/intranet/contratos/' + Link.REEMPLAZO_PERSONAL_ADD + '/' + this.idSolicitud]); 
           });
         }
       });

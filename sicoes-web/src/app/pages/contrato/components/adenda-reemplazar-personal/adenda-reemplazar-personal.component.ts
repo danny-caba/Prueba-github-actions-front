@@ -39,12 +39,8 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
   user$ = this.authFacade.user$;
   SOLICITUD: any;
   tipousuario = UsuariosRoles;
-
-  ACC_HISTORIAL = 'ACC_HISTORIAL';
-  ACC_REGISTRAR = 'ACC_REGISTRAR';
-  ACC_EDITAR = 'ACC_EDITAR';
-  ACC_VER = 'ACC_VER';
-
+  rol:any
+  
   formGroup = this.fb.group({
     nroExpediente: [''],
     contratista: [''],
@@ -168,25 +164,24 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
     this.paginator.pageIndex = 0;
     this.paginator.pageIndex = 0;
     let requerimiento = "";
-    let rol;
     if (this.idRoles.includes(this.roles.EVALUADOR)) {
-      rol=this.roles.EVALUADOR
+      this.rol=this.roles.EVALUADOR
       requerimiento = REQUERIMIENTO.APROB_EVAL_CONTR;
     } else if (this.idRoles.includes(this.roles.APROBADOR_G2)) {
-      rol=this.roles.APROBADOR_G2;
+      this.rol=this.roles.APROBADOR_G2;
       requerimiento = REQUERIMIENTO.VB_APROB_G2_APROB_ADMIN;
     } else if (this.idRoles.includes(this.roles.APROBADOR_G3)) {
-      rol=this.roles.APROBADOR_G3;
+      this.rol=this.roles.APROBADOR_G3;
       requerimiento = REQUERIMIENTO.FIRMA_APROB_G3_APROB_ADMIN;
     }
     else if (this.idRoles.includes(this.roles.APROBADOR_G4)) {
-      rol=this.roles.APROBADOR_G4;
+      this.rol=this.roles.APROBADOR_G4;
       requerimiento = REQUERIMIENTO.APROB_ADMIN_G4_GAF;
     }
 
     this.solicitudService.buscarAprobaciones(
       requerimiento,
-      rol,
+      this.rol,
       this.getValidNumber('tipoAprobacion'),
       this.getValidNumber('estadoAprobacion'),
       this.getValidNumber('tipoSolicitud'),
@@ -247,7 +242,7 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
       maxHeight: '100%',
       data: {
         tipo: 'contrato',
-        accion: action,
+        accion: this.rol,
         elementosSeleccionados: this.listaContratosSeleccionadosPerfeccionamiento,
       },
     }).afterClosed().subscribe(result => {
@@ -288,7 +283,8 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
       estadoAprob: element.idEsAprob,
       idAprobacion: element.id,
       idArchivo:element.idArchivo,
-      idDocumento:element.idInforme
+      idDocumento:element.idInforme,
+      idAdenda:element.idAdenda
     };
 
     console.log('selectedItem a añadir/eliminar:', selectedItem);

@@ -47,6 +47,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
   iframeUrl: SafeResourceUrl | null = null;
   vistoBueno: boolean;
   nomUs:any;
+  codUsuario:any;
   constructor(
     private dialogRef: MatDialogRef<ModalAprobadorPersonalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -68,6 +69,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
   ngOnInit(): void {
     console.log("dataaaaa", this.data);
     this.accion = this.data.tipo;
+    this.codUsuario=this.data.accion;
     this.usuario$ = this.authFacade.user$;
     this.usuario$.subscribe(usu => {
       this.usuario = usu;
@@ -116,7 +118,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
           requerimiento = REQUERIMIENTO.EVAL_INF_APROB_TEC_G2
         } else if (this.accion.includes(this.roles.GER_03)) {
           requerimiento = REQUERIMIENTO.EVAL_INF_APROB_TEC_G3
-        } else if (this.accion==='contrato') {
+        } else if (this.codUsuario===UsuariosRoles.EVALUADOR) {
           requerimiento = REQUERIMIENTO.APROB_EVAL_CONTR
         }
         this.loadingAccion = true;
@@ -171,7 +173,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
 
   private firmarArchivo(): void {
     let body = {
-      "idAdenda": this.data.elementosSeleccionados[0].idAprobacion,
+      "idAdenda": this.data.elementosSeleccionados[0].idAdenda,
       "observacion": this.observacion.value,
       "cookie": "ABC123XYZ",
       "visto": true,
@@ -197,13 +199,13 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
 
   private firmarVistoBueno(): void {
     let body = {
-      "idAdenda": this.data.elementosSeleccionados[0].idAprobacion,
+      "idAdenda": this.data.elementosSeleccionados[0].idAdenda,
       "observacion": this.observacion.value,
       "cookie": "ABC123XYZ",
       "visto": true,
       "firmaJefe": false,
       "firmaGerente": false
-    
+
     }
     this.solicitudService.vistoBueno(body).subscribe({
       next: (resp) => {

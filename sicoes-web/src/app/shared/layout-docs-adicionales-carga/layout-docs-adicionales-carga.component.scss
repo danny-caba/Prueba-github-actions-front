@@ -56,7 +56,7 @@
 }
 
 
-::ng-deep .mat-form-field {
+:host ::ng-deep .mat-form-field {
   .fecha-input {
     font-size: 12px;
     text-align: center;
@@ -69,13 +69,13 @@
   }
 }
 
-::ng-deep {
+:host ::ng-deep {
   .fecha-field {
     min-height: 12px;
     width: 130px !important;
   }
 }
 
-::ng-deep .mat-divider {
+:host ::ng-deep .mat-divider {
   border-top-color: rgba(68, 67, 67, 0.38) !important;
 }

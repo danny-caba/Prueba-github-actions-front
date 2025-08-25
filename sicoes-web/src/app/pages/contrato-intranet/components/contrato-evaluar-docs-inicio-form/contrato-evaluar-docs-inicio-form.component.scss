@@ -50,7 +50,7 @@ mat-form-field.mat-form-field.mat-form-field-appearance-outline > div.mat-form-f
     color: white;
 }
 
-::ng-deep .mat-tooltip-default {
+:host ::ng-deep .mat-tooltip-default {
     display: none;
 }
 

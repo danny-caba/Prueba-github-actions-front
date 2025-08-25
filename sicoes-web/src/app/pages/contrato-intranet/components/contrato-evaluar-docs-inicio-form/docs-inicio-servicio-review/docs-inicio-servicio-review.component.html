@@ -48,5 +48,8 @@
                     </div>
                 </div>
                 <vex-layout-acta-inicio
+                    [personalReemplazo] = "personalReemplazo"
+                    (seccionCompletada) = "seccionActaInicioCompletada($event)"
+                    (fechaInicio) = "recibirFechaInicio($event)"
                 #layoutDocsAdicionalesCarga></vex-layout-acta-inicio>
             </mat-accordion>

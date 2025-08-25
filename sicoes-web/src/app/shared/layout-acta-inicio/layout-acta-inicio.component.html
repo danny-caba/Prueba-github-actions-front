@@ -18,8 +18,9 @@
           <input type="date"
                 [min]="dateHoy | date:'yyyy-MM-dd'"
                 class="fecha-input"
+                (change)="onFechaChange($event)"
                 [disabled]="isReview"
-                matInput>
+                matInput onkeydown="return false">
         </mat-form-field>
       </div>
     </div>
@@ -45,9 +46,15 @@
           </ng-container>
           <ng-template #uploadContrato>
             <vex-form-adjuntos-no-title
-              [titulo]="'Archivo (*.pdf)'"
+              class="ml-auto"
+              [idSeccion]="'1036'"
+              [idTipoDocumento]="'1036'"
+              [idReemplazoPersonal]="personalReemplazo?.idReemplazo"
+              [deNombreDocumento]="'ACTA_INICIO'"
+              [feFechaRegistro]="'21/07/2025'"
+              [archivoDescripcion]="'Acta de inicio'"
               [editable]="editable"
-              class="ml-4">
+              (archivoAdjuntado)="onActaInicioAdjunto($event)">
             </vex-form-adjuntos-no-title>
           </ng-template>
       </div>

@@ -25,9 +25,11 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
   @Output() seccionesCompletadas = new EventEmitter<boolean>();
   @Output() codigoRevisor = new EventEmitter<string>();
   @Output() allMarcasConforme = new EventEmitter<boolean>();
+  @Output() fechaInicioOut = new EventEmitter<string>();
 
   usuario$ = this.authFacade.user$;
   codRolRevisor: string
+  fechaInicioContrato: string = null;
 
   personalReemplazo: PersonalReemplazo;
   listDocumentosReemplazo: any[] = [];
@@ -48,6 +50,7 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
 
   seccionPersonalPropuestoCompletaFlag: boolean = false;
   seccionDocsAdicionalesFlag: boolean = false;
+  seccionActaInicioFlag: boolean = false;
 
   allConformePersonalPropuesto: boolean = false;
   allConformeDocsAdicionales: boolean = false;
@@ -200,7 +203,7 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
   }
 
   setCodRolRevisor(user: AuthUser){
-    this.codRolRevisor = user?.roles.find(rol => '02' === rol.codigo);
+    this.codRolRevisor = user?.roles.find(rol => '02' === rol.codigo)?.codigo;
   }
 
   seccionPersonalPropuestoCompletada(completada: boolean): void {
@@ -226,19 +229,26 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
       || this.existeDocSoatFlag);
   }
 
+  seccionActaInicioCompletada(completada: boolean): void {
+    this.seccionActaInicioFlag = completada;
+    this.verificarSeccionesCompletadas();
+  }
+
   private verificarSeccionesCompletadas(): void {
+    const allConforme = (this.validarDocsSeccionPersonalPropuesto() || this.allConformePersonalPropuesto)
+      && (this.validarDocsSeccionDocsAdicionales() || this.allConformeDocsAdicionales);
+
+    console.log("conforme pers propuesto -> ", this.validarDocsSeccionPersonalPropuesto() || this.allConformePersonalPropuesto);
+    console.log("conforme docs adicionales -> ", this.validarDocsSeccionDocsAdicionales() || this.allConformeDocsAdicionales);    
+
+    this.allMarcasConforme.emit(allConforme)
+    
     const todasCompletadas = (this.seccionPersonalPropuestoCompletaFlag || this.validarDocsSeccionPersonalPropuesto()) 
-      && (this.seccionDocsAdicionalesFlag || this.validarDocsSeccionDocsAdicionales());
-
-    console.log("conforme pers propuesto -> ", this.allConformePersonalPropuesto)
-    console.log("conforme docs adicionales -> ", this.allConformeDocsAdicionales)
-
-    const allConforme = this.allConformePersonalPropuesto 
-      && this.allConformeDocsAdicionales;
+      && (this.seccionDocsAdicionalesFlag || this.validarDocsSeccionDocsAdicionales())
+      && (!allConforme || this.seccionActaInicioFlag);
 
     this.seccionesCompletadas.emit(todasCompletadas);
     this.codigoRevisor.emit(this.codRolRevisor);
-    this.allMarcasConforme.emit(allConforme)
   }
 
   recibirConformidadPersonalPropuesto(allConforme: boolean){
@@ -248,6 +258,12 @@ export class DocsInicioServicioReviewComponent extends BaseComponent implements 
 
   recibirConformidadDocsAdicionales(allConforme: boolean){
     this.allConformeDocsAdicionales = allConforme;
+  }
+
+  recibirFechaInicio(fechaInicio: string) {
+    this.fechaInicioContrato = fechaInicio;
+    this.fechaInicioOut.emit(this.fechaInicioContrato);
+    console.log("fecha inicio recibida -> ", this.fechaInicioContrato);
   }
 
   getNombreCompleto(persona: Supervisora): string {

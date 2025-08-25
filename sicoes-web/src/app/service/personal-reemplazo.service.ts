@@ -177,4 +177,15 @@ export class PersonalReemplazoService {
     const urlEndpoint = `${this._path_serve}/api/reemplazo/solicitud/registra/propuesto/adenda`;
     return this.http.post<any>(urlEndpoint, data);
   }
+
+  registrarActaInicio(conforme: boolean, data: any): Observable<any> {
+    const params = new HttpParams()
+      .set('conforme', conforme); 
+
+    const urlEndpoint = `${this._path_serve}/api/interno/reemplazo/solicitud/registra/inicio-servicio`;
+    return this.http.put<any>(urlEndpoint, data, { params });
+  }
+
+
+
 }

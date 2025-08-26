@@ -152,7 +152,7 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
           this.mostrarMensajeFinal(exitosos.length, fallidos);
 
           // Si hay al menos un éxito, activar firma digital
-          if (exitosos.length > 0) {
+          if (exitosos.length > 0 && tipo === accion.APROBADO) {
             this.activarFirmaDigital(() => {
               this.dialogRef.close(true);
             });

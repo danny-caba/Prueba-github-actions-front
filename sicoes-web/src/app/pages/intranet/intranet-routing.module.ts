@@ -45,6 +45,10 @@ const routes: VexRoutes = [{
   path: Link.BANDEJA_CONTRATOS_LIST,
   component: CustomLayoutComponent,
   loadChildren: () => import('../../pages/bandeja-contratos/bandeja-contratos-intranet.module').then(m => m.BandejaContratosIntranetModule),
+}, {
+  path: Link.REQUERIMIENTO_RENOVACION_LIST,
+  component: CustomLayoutComponent,
+  loadChildren: () => import('../../pages/requerimiento-renovacion/requerimiento-renovacion.module').then(m => m.RequerimientoRenovacionModule),
 }];
 
 @NgModule({

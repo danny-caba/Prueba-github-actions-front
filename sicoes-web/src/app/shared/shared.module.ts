@@ -96,6 +96,7 @@ import { ModalAgregarRepresentanteComponent } from './modal-agregar-representant
 import { ModalAprobadorContratoComponent } from './modal-aprobador-contrato/modal-aprobador-contrato.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalAprobadorHistorialContratoComponent } from './modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
+import { ModalRequerimientoRenovacionCrearComponent } from '../pages/requerimiento-renovacion/components/modal-requerimiento-renovacion-crear/modal-requerimiento-renovacion-crear.component';
 
 const sharedComponents = [
 
@@ -105,7 +106,7 @@ const sharedComponents = [
     CmpAprobadorComponent,
     CmpPerfilComponent,
     CmpItemPerfilComponent,
-    
+
     CmpFechaEtapaComponent,
     CmpMiembroComponent,
 
@@ -195,7 +196,8 @@ const sharedComponents = [
     ModalConfigurarPaceComponent,
     ModalAgregarRepresentanteComponent,
     ModalAprobadorContratoComponent,
-    ModalAprobadorHistorialContratoComponent
+    ModalAprobadorHistorialContratoComponent,
+    ModalRequerimientoRenovacionCrearComponent
   ];
 
 @NgModule({

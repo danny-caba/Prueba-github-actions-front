@@ -241,6 +241,14 @@ export enum estadosPerfCont {
     ARCHIVADO = 'Archivado'
 }
 
+export enum estadosRequerimientoContrato {
+    PRELIMINAR = 'Preliminar',
+    EN_APROBACION = 'En Aprobación',
+    EN_PROCESO = 'En Proceso',
+    CONCLUIDO = 'Concluído',
+    ARCHIVADO = 'Archivado'
+}
+
 export enum tipoSolicitudPerfCont {
     INSCRIPCION = '1',
     SUBSANACION = '2'

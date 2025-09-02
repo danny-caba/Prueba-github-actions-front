@@ -98,6 +98,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ModalAprobadorHistorialContratoComponent } from './modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
 import { ModalAprobadorInformeRenovacionComponent } from './modal-aprobador-informe-renovacion/modal-aprobador-informe-renovacion.component';
 import { ModalFirmaDigitalEnhancedComponent } from './modal-firma-digital-enhanced/modal-firma-digital-enhanced.component';
+import { ModalRequerimientoRenovacionCrearComponent } from '../pages/requerimiento-renovacion/components/modal-requerimiento-renovacion-crear/modal-requerimiento-renovacion-crear.component';
 
 const sharedComponents = [
 
@@ -107,7 +108,7 @@ const sharedComponents = [
     CmpAprobadorComponent,
     CmpPerfilComponent,
     CmpItemPerfilComponent,
-    
+
     CmpFechaEtapaComponent,
     CmpMiembroComponent,
 
@@ -199,9 +200,9 @@ const sharedComponents = [
     ModalAprobadorContratoComponent,
     ModalAprobadorHistorialContratoComponent,
     ModalAprobadorInformeRenovacionComponent,
-    ModalFirmaDigitalEnhancedComponent
+    ModalFirmaDigitalEnhancedComponent,
+    ModalRequerimientoRenovacionCrearComponent
   ];
-
 @NgModule({
   imports:      [ CommonModule, MaterialModule,FormsModule, ReactiveFormsModule, InputMaskModule, MatDialogModule],
   declarations: [ ...sharedComponents, OptionRoleDirective ],

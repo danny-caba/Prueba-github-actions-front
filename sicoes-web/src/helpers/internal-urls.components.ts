@@ -38,6 +38,10 @@ export enum Link {
     BANDEJA_CONTRATOS_LIST = 'bandeja-contratos',
     CONTRATO_SOLICITUD_EVALUAR = 'evaluar',
     
+    REQUERIMIENTO_RENOVACION_LIST = 'requerimiento-renovacion',
+    REQUERIMIENTO_RENOVACION_INFORME = 'informe',
+
+    
     INVITACIONES_LIST = 'invitaciones',
 
     FORMULACION_CONSULTAS = 'formulacion-consultas',

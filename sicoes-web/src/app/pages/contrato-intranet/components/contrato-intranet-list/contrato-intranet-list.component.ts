@@ -33,7 +33,7 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
     estadoProcesoSolicitud: ['2'],
     tipoSolicitud: [''],
   });
-  
+
   constructor(
     private router: Router,
     private contratoService: ContratoService,
@@ -79,6 +79,14 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
     });
   }
 
+  goToFormRequerimientoRenovacion(contrato: any, accion: string) {
+    this.router.navigate([
+      Link.INTRANET,
+      Link.REQUERIMIENTO_RENOVACION_LIST,
+      contrato.idSolicitud
+    ]);
+  }
+
   limpiar() {
     this.formGroup.reset();
     this.buscar();
@@ -119,5 +127,9 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
 
   evaluarDocsInicio(row: any) {
     this.router.navigate(['/intranet/contratos/evaluar-documentos-inicio/' + row.idSolicitud]);
+  }
+
+  formRequerimientoRenovacion(solicitud: any){
+    return solicitud.estadoProcesoSolicitud === '4';
   }
 }

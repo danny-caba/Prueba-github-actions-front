@@ -79,16 +79,34 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
         let informesProcesados = 0;
 
         for (const informe of this.data.elementosSeleccionados) {
-          const requestPayload = {
-            idInformeRenovacion: informe.idInformeRenovacion,
-            accion: tipoAccion,
-            observacion: this.observacionControl.value || ''
-          };
+          let requestPayload: any;
+          
+          if (tipoAccion === 'APROBAR') {
+            requestPayload = {
+              idInformeRenovacion: informe.idInformeRenovacion,
+              idUsuario: this.usuario?.idUsuario,
+              observacion: this.observacionControl.value || ''
+            };
+          } else if (tipoAccion === 'RECHAZAR') {
+            requestPayload = {
+              idInformeRenovacion: informe.idInformeRenovacion,
+              motivoRechazo: this.observacionControl.value || '',
+              idUsuario: this.usuario?.idUsuario,
+              observaciones: this.observacionControl.value || '',
+              idGrupoAprobador: 3 // Grupo 3 as specified
+            };
+          }
 
           try {
-            await firstValueFrom(
-              this.informeRenovacionService.aprobarInformeRenovacion(requestPayload)
-            );
+            if (tipoAccion === 'APROBAR') {
+              await firstValueFrom(
+                this.informeRenovacionService.aprobarInformeRenovacion(requestPayload)
+              );
+            } else if (tipoAccion === 'RECHAZAR') {
+              await firstValueFrom(
+                this.informeRenovacionService.rechazarInformeRenovacion(requestPayload)
+              );
+            }
 
           } catch (error) {
             console.error(`Error al procesar el informe ${informe.numeroExpedienteR}:`, error);

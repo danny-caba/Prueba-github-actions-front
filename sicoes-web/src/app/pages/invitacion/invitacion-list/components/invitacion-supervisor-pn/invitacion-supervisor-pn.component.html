@@ -23,7 +23,7 @@
                 <mat-option [value]="null">Todos</mat-option>
                 <mat-option
                   *ngFor="let estado of estadosInvitacion"
-                  [value]="estado.valor"
+                  [value]="estado.idListadoDetalle"
                 >
                   {{ estado.label }}
                 </mat-option>
@@ -40,6 +40,7 @@
                 min="1900-01-01"
                 max="{{ dateHoy | date : 'yyyy-MM-dd' }}"
                 matInput
+                formControlName="fechaDesde"
               />
             </mat-form-field>
           </div>
@@ -53,6 +54,7 @@
                 min="1900-01-01"
                 max="{{ dateHoy | date : 'yyyy-MM-dd' }}"
                 matInput
+                formControlName="fechaHasta"
               />
             </mat-form-field>
           </div>
@@ -62,6 +64,7 @@
               mat-stroked-button
               type="button"
               class="flex-auto"
+              (click)="limpiar()"
             >
               Limpiar
             </button>
@@ -70,6 +73,7 @@
               mat-raised-button
               type="button"
               class="flex-auto"
+              (click)="buscar()"
             >
               Buscar
             </button>
@@ -143,7 +147,7 @@
             Saldo<br />Contrato
           </th>
           <td mat-cell *matCellDef="let e" class="text-primary font-medium">
-            {{ e.saldoContrato }}
+            {{ e.descripcionSaldoContrato }}
           </td>
         </ng-container>
 

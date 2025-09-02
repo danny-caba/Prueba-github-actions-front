@@ -14,14 +14,14 @@ export const environment = {
     siteKey: '6LcRBOwqAAAAAHISxc6xUVacKBhcYNKb2M8o2ocT'
   },
 
-  // pathServe: 'http://localhost:8080/sicoes-api',
-  // apiOauth: 'http://localhost:8080/sicoes-api',
-  // apiUrl: 'http://localhost:8080/sicoes-api',
+  pathServe: 'http://localhost:8080/sicoes-api',
+  apiOauth: 'http://localhost:8080/sicoes-api',
+  apiUrl: 'http://localhost:8080/sicoes-api',
 
 
-  pathServe: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes3-api',
-  apiOauth: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes3-api',
-  apiUrl: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes3-api',
+  // pathServe: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes3-api',
+  // apiOauth: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes3-api',
+  // apiUrl: 'https://srvdesasicoes.osinergmin.gob.pe/sicoes3-api',
 
 
 /*

@@ -71,23 +71,7 @@ export class InvitacionService {
   listarInvitaciones(filtro: any) {
     const url = `${this._path_serve}/api/invitaciones`;
     let params = functions.obtenerParams(filtro);
-  
-    return this.http.get<any>(url, { params }).pipe(
-      map(respuesta => {
-        if (respuesta && Array.isArray(respuesta.content)) {
-          respuesta.content.forEach(item => {
-            const saldo = item.saldoContrato;
-            if (typeof saldo === 'number' && !isNaN(saldo)) {
-              const anios = Math.floor(saldo / 365);
-              const meses = Math.floor((saldo % 365) / 30.44);
-              const dias = Math.floor(saldo % 30.44);
-              item.saldoContrato = `${anios} años ${meses} meses ${dias} días`;
-            }
-          });
-        }
-        return respuesta;
-      })
-    );
+    return this.http.get<any>(url, { params });
   }
 
   evaluarInvitacion(

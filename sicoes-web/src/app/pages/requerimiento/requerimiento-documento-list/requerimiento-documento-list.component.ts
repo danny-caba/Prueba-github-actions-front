@@ -186,13 +186,27 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
 
   // Acciones
   cargarDocumento(doc: RequerimientoDocumento) {
-    this.router.navigate([Link.EXTRANET, Link.REQUERIMIENTOS_LIST,
-    Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_ADD, doc.requerimientoDocumentoUuid]);
+    this.requerimientoService.validarFechaPlazoEntrega(doc.requerimientoDocumentoUuid).subscribe({
+      next: (res) => {
+        this.router.navigate([Link.EXTRANET, Link.REQUERIMIENTOS_LIST,
+          Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_ADD, doc.requerimientoDocumentoUuid]);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   subsanarDocumento(doc: RequerimientoDocumento) {
-    this.router.navigate([Link.EXTRANET, Link.REQUERIMIENTOS_LIST,
-    Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_SUBSANAR, doc.requerimientoDocumentoUuid]);
+    this.requerimientoService.validarFechaPlazoEntrega(doc.requerimientoDocumentoUuid).subscribe({
+      next: (res) => {
+        this.router.navigate([Link.EXTRANET, Link.REQUERIMIENTOS_LIST,
+          Link.REQUERIMIENTOS_DOCUMENTO, Link.DOCUMENTO_SUBSANAR, doc.requerimientoDocumentoUuid]);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
 }

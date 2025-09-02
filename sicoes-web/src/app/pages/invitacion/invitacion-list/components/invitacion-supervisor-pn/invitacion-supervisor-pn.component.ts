@@ -18,7 +18,6 @@ import { Link } from "src/helpers/internal-urls.components";
 @Component({
   selector: "vex-invitacion-supervisor-pn",
   templateUrl: "./invitacion-supervisor-pn.component.html",
-  styleUrls: ["./invitacion-supervisor-pn.component.scss"],
   animations: [fadeInUp400ms, stagger80ms],
 })
 export class InvitacionSupervisorPnComponent
@@ -29,7 +28,7 @@ export class InvitacionSupervisorPnComponent
 
   dateHoy = new Date();
   formGroup: FormGroup;
-  estadosInvitacion: { label: string; valor: string }[] = [];
+  estadosInvitacion: { label: string; valor: string; idListadoDetalle: number; codigo: string }[] = [];
 
   /***borrar luego */
 
@@ -84,12 +83,12 @@ export class InvitacionSupervisorPnComponent
     const form = this.formGroup;
 
     const filtro = {
-      estadoInvitacion: form.controls.estadoInvitacion.value,
-      fechaDesde: this.datePipe.transform(
+      idEstado: form.controls.estadoInvitacion.value,
+      fechaInicioInvitacion: this.datePipe.transform(
         form.controls.fechaDesde.value,
         "dd/MM/yyyy"
       ),
-      fechaHasta: this.datePipe.transform(
+      fechaFinInvitacion: this.datePipe.transform(
         form.controls.fechaHasta.value,
         "dd/MM/yyyy"
       ),
@@ -100,10 +99,12 @@ export class InvitacionSupervisorPnComponent
 
   private mapEstados(
     list: ListadoDetalle[]
-  ): { label: string; valor: string }[] {
+  ): { label: string; valor: string; idListadoDetalle: number; codigo: string }[] {
     return list.map((item) => ({
       label: item.descripcion,
       valor: item.valor,
+      idListadoDetalle: item.idListadoDetalle,
+      codigo: item.codigo,
     }));
   }
 
@@ -116,4 +117,15 @@ export class InvitacionSupervisorPnComponent
       invitacion.requerimientoInvitacionUuid,
     ]);
   }
+
+  buscar() {
+    this.paginator.pageIndex = 0;
+    this.cargarTabla();
+  }
+
+  limpiar() {
+    this.formGroup.reset();
+    this.buscar();
+  }
+
 }

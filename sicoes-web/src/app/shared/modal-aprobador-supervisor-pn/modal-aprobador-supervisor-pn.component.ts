@@ -25,6 +25,7 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
   errores: { uuid: string; error: any }[] = [];
   estadosAprobacion: ListadoDetalle[] = [];
   someResponsableSIAF = false;
+  someAprobacionFirma = false;
 
   formGroup = this.fb.group({
     observacion: [null],
@@ -50,6 +51,8 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
       this.formGroup.get('nuSiaf')?.setValidators([Validators.required]);
       this.formGroup.get('nuSiaf')?.updateValueAndValidity();
     }
+
+    this.someAprobacionFirma = this.listaSolicitudUuidSeleccionado.some(item => item.accionFirmar);
   }
 
   ngOnInit(): void {

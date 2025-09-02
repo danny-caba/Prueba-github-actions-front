@@ -15,7 +15,7 @@
         </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-        <button mat-raised-button color="primary" (click)="guardar(AprobadorAccion.APROBADO)">Aprobar</button>
+        <button mat-raised-button color="primary" (click)="guardar(AprobadorAccion.APROBADO)">{{someAprobacionFirma ? 'Firmar' : 'Aprobar'}}</button>
         <button mat-raised-button color="primary" (click)="guardar(AprobadorAccion.RECHAZADO)">Rechazar</button>
         <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
     </mat-dialog-actions>

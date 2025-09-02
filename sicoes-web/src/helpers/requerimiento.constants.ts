@@ -5,6 +5,7 @@ export const REQUERIMIENTO_INFORME_CONSTANTS = {
   MESSAGES: {
     CONFIRMATION: '¿Seguro de Enviar el Informe para firmas?',
     SUCCESS: 'El informe ha sido registrado exitosamente',
+    SUCCESS_EVALUAR: 'El documento ha sido evaluado exitosamente',
     ERROR_NO_REQUERIMIENTO: 'Error: No se encontró el requerimiento',
     ERROR_NO_DATA: 'Error: No se pudieron obtener los datos del informe',
     ERROR_UNEXPECTED: 'Error inesperado durante el envío del informe',
@@ -87,12 +88,12 @@ export const REQUERIMIENTO_CONSTANTS = {
 
   ESTADO_VALIDACIONES_DOCUMENTO: {
     [EstadoReqDocumentoEnum.SOLICITUD_PRELIMINAR]: (reqDoc: any) => reqDoc.estado?.codigo === EstadoReqDocumentoEnum.SOLICITUD_PRELIMINAR,
-    [EstadoReqDocumentoEnum.EN_PROCESO]: (reqDoc: any) => reqDoc.estado?.codigo === EstadoReqDocumentoEnum.EN_PROCESO
+    // [EstadoReqDocumentoEnum.EN_PROCESO]: (reqDoc: any) => reqDoc.estado?.codigo === EstadoReqDocumentoEnum.EN_PROCESO
   },
 
   ESTADOS_CON_ACCIONES_DOCUMENTO: [
     EstadoReqDocumentoEnum.SOLICITUD_PRELIMINAR,
-    EstadoReqDocumentoEnum.EN_PROCESO
+    // EstadoReqDocumentoEnum.EN_PROCESO
   ],
 
   // Columnas de lista de requerimientos documentos

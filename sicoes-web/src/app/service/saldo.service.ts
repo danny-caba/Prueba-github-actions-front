@@ -27,8 +27,8 @@ export class SaldoService {
         if (respuesta !== null) {
           // Transformamos cantidad(dias) a formato legible
           const anios = Math.floor(respuesta.cantidad / 365);
-          const meses = Math.floor((respuesta.cantidad % 365) / 30.44);
-          const dias = Math.floor(respuesta.cantidad % 30.44);
+          const meses = Math.floor((respuesta.cantidad % 365) / 30);
+          const dias = Math.floor(respuesta.cantidad % 30);
           respuesta.saldoContrato = `${anios} años ${meses} meses ${dias} días`;
         }
         return respuesta;

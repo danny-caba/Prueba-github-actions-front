@@ -193,4 +193,9 @@ export class RequerimientoService {
     );
   }
 
+  validarFechaPlazoEntrega(requerimientoDocumentoUuid: string) {
+    const url = `${this._path_serve}/api/requerimientos/documentos/${requerimientoDocumentoUuid}/validar-fecha-plazo-entrega`;
+    return this.http.get<any>(url);
+  }
+
 }

@@ -64,6 +64,7 @@ export enum Opcion {
 
   //CONTRATO
   CONTRATO_EVALUACION = 'CONTRATO_EVALUACION',
+  BANDEJA_PERFECCIONAMIENTO_CONTRATO = 'BANDEJA_PERFECCIONAMIENTO_CONTRATO',
 
   //REQUERIMIENTO
   BANDEJA_REQUERIMIENTO = 'BANDEJA_REQUERIMIENTO',
@@ -186,7 +187,9 @@ export const OpcionPorRol = [{
 
     Opcion.BTN_DOC_EXP_EDITAR_ARCH,
 
-    Opcion.VIEW_EVALUACION_EXT
+    Opcion.VIEW_EVALUACION_EXT,
+
+    Opcion.BANDEJA_PERFECCIONAMIENTO_CONTRATO
   ]
 }, {
   rol: RolEnum.RES_ADMIN,
@@ -484,7 +487,7 @@ export const RolMenu = [
     'intranet/empresa-supervisoras/ver/',
     'intranet/empresa-supervisoras/suspender/',
     'intranet/empresa-supervisoras/cancelar/',
-    'intranet/empresa-supervisoras/susp-canc/ver'
+    'intranet/empresa-supervisoras/susp-canc/ver',
   ]},
   { ROL: { CODIGO: RolEnum.RES_TECNI }, MENU: [menu02, menu04, menu06, menu07,menu18], path: [
     'intranet/solicitudes',
@@ -509,12 +512,13 @@ export const RolMenu = [
     'intranet/solicitudes/aprobacion',
     'intranet/procesos/aprobacionPaces',
     'intranet/procesos/aprobacionPacesGerencia',
-            
+    'intranet/solicitudes/historial'
   ]},
   { ROL: { CODIGO: RolEnum.APROB_ADM }, MENU: [menu05], path: [
     'intranet/solicitudes/ver/',
     'intranet/solicitudes/aprobar/',
-    'intranet/solicitudes/aprobacion'
+    'intranet/solicitudes/aprobacion',
+    'intranet/solicitudes/historial'
   ]},
   { ROL: { CODIGO: RolEnum.ADM_PROCE }, MENU: [menu08], path: [
     'intranet/procesos',
@@ -541,18 +545,6 @@ export const RolMenu = [
 
   ]},
   { ROL: { CODIGO: RolEnum.APROB_GSE }, MENU: [], path: [
-
-  ]},
-  { ROL: { CODIGO: RolEnum.INVITADO }, MENU: [], path: [
-
-  ]},
-  { ROL: { CODIGO: RolEnum.APROB_GAF }, MENU: [], path: [
-
-  ]},
-  { ROL: { CODIGO: RolEnum.JEFE_ULO }, MENU: [], path: [
-
-  ]},
-  { ROL: { CODIGO: RolEnum.ABOGADA_G2 }, MENU: [], path: [
 
   ]}
 ]

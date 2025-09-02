@@ -60,11 +60,11 @@ export class ExtranetComponent implements OnInit {
     //window.open('https://certosiservicioslinea.osinergmin.gob.pe/osiservicioslinea/pages/inicio')
     //window.open('https://api-seguridad.sunat.gob.pe/v1/clientessol/dcdb35ac-3e61-4a90-aa82-58191e49af2a/oauth2/login?originalUrl=https://osiservicioslinea.osinergmin.gob.pe/osiservicioslinea/pages/login.jsp&state=s')
   }
-
+  
   listUsuarioIntranet = [{
     username: 'KSILVAP',
     codigo: 'RESP_ADM//EVA_ADM',
-    xxyyxxx: 'fuARzUzp8xG3lgf5ZwXxJfbQA5nWTYLpAbc+CjANBZUZKP9icd9CcljJNz7Q9AaKL4N+yNlTxW4t0ROC1ZLejaQkI6EqE1td+YNpVexaZWP0LgHHOHfgnXo4ZzGAXX2uReaXkRHCWURyBnEaDwdi2S/2QQ+btvRkFwCjU4Dykxo='
+    xxyyxxx: 'fuARzUzp8xG3lgf5ZwXxJQJQAFY+ttAnE6SLXC1n6ifpvDtGgRwiPbNaqsSJUFGCl9mg7xWtw1s5CwUL1hFGeuY9imHKXsmnThUJ0oD3SD8/f5+K5pQ5L6H8kesRJVeCkJSDYTMcOTnLFtTkVTJPKG8IA2HRa6DyB073lnnzpDpvp/zOOAd8Xuhyp2wxySk5'
   }, {
     username: 'RZEGARRA',
     codigo: 'RESP_TEC//EVA_TEC',

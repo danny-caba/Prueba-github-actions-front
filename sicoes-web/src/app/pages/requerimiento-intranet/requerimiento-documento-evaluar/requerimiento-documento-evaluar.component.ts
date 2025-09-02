@@ -164,7 +164,7 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
 
 
   private async handleSuccess(): Promise<void> {
-    await functionsAlert.success(REQUERIMIENTO_INFORME_CONSTANTS.MESSAGES.SUCCESS);
+    await functionsAlert.success(REQUERIMIENTO_INFORME_CONSTANTS.MESSAGES.SUCCESS_EVALUAR);
     this.regresar();
   }
 

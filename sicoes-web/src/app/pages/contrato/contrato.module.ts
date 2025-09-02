@@ -36,6 +36,8 @@ import { FielCumplimientoComponent } from './components/fiel-cumplimiento/fiel-c
 import { MontoDiferencialComponent } from './components/monto-diferencial/monto-diferencial.component';
 import { CmpEvaluacionContratoComponent } from './components/cmp-evaluacion-contrato/cmp-evaluacion-contrato.component';
 import { ContratoDocumentosComponent } from './components/contrato-documentos/contrato-documentos.component';
+import { ContratoPerfeccionamientoComponent } from './components/contrato-perfeccionamiento/contrato-perfeccionamiento.component';
+import { ContratoSupervisorPnComponent } from './components/contrato-supervisor-pn/contrato-supervisor-pn.component';
 import { RequerimientoModule } from '../requerimiento/requerimiento.module';
 
 @NgModule({
@@ -48,7 +50,9 @@ import { RequerimientoModule } from '../requerimiento/requerimiento.module';
     FielCumplimientoComponent,
     MontoDiferencialComponent,
     CmpEvaluacionContratoComponent,
-    ContratoDocumentosComponent
+    ContratoDocumentosComponent,
+    ContratoPerfeccionamientoComponent,
+    ContratoSupervisorPnComponent
   ],
   imports: [
     CommonModule,

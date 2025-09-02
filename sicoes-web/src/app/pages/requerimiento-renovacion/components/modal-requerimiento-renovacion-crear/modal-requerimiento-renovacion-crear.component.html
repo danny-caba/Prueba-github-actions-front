@@ -1,0 +1,37 @@
+<form>
+    <vex-modal-title [titulo]="'Crear Requerimiento de Renovación'"></vex-modal-title>
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content class="flex flex-col">
+    <div class="flex flex-col mt-4">
+        <mat-label class="text-primary text-sm font-medium">Sector</mat-label>
+        <mat-form-field  class="mat-input-wrapper">
+            <input matInput [value]="requerimientoRenovacion?.sector.nombre" />
+        </mat-form-field>
+    </div>
+    <div class="flex flex-col">
+        <mat-label class="text-primary text-sm font-medium">Sub-Sector</mat-label>
+        <mat-form-field  class="mat-input-wrapper ">
+            <input matInput [value]="requerimientoRenovacion?.subSector?.nombre" />
+        </mat-form-field>
+    </div>
+    <div class="flex flex-col">
+        <mat-label class="text-primary text-sm font-medium">Item</mat-label>
+        <mat-form-field  class="mat-input-wrapper ">
+            <input matInput [value]="requerimientoRenovacion?.noItem" />
+        </mat-form-field>
+    </div>
+    <div class="flex flex-col">
+        <mat-label class="text-primary text-sm font-medium">Resultado</mat-label>
+        <mat-form-field  class="mt-6 flex-auto">
+            <textarea #observacionDescripcion rows="4" cdkTextareaAutosize matNativeControl [formControl]="formGroup.controls.observacion" maxlength="5000" [disabled]="true"></textarea>
+            <!--mat-error *ngIf="formGroup.get('observaciones').hasError('required')">Ingrese motivo</mat-error-->
+            <mat-hint align="end">{{observacionDescripcion.value.length}} / 5000</mat-hint>           
+        </mat-form-field>
+    </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+        <!--button mat-raised-button color="primary" *ngIf="booleanEdit" (click)="actualizar()">Actualizar</button-->
+        <button mat-raised-button color="primary" (click)="closeModal()">Cancelar</button>
+    </mat-dialog-actions>
+</form>

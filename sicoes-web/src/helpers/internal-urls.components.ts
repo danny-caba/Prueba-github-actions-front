@@ -38,6 +38,10 @@ export enum Link {
     BANDEJA_CONTRATOS_LIST = 'bandeja-contratos',
     CONTRATO_SOLICITUD_EVALUAR = 'evaluar',
     
+    REQUERIMIENTO_RENOVACION_LIST = 'requerimiento-renovacion',
+    REQUERIMIENTO_RENOVACION_INFORME = 'informe',
+
+    
     INVITACIONES_LIST = 'invitaciones',
 
     FORMULACION_CONSULTAS = 'formulacion-consultas',
@@ -74,6 +78,9 @@ export enum Link {
 
     CONTRATO_SOLICITUD_ADD = 'registro',
     CONTRATO_SOLICITUD_VIEW = 'ver',
+    
+    INFORME_RENOVACION_LIST = 'informe-renovacion',
+    INFORME_RENOVACION_VIEW = 'ver',
 }
 
 export enum Apis {

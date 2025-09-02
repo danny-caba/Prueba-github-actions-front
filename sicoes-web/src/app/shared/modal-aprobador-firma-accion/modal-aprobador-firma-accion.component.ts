@@ -13,6 +13,7 @@ import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { AuthUser } from 'src/app/auth/store/auth.models';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalFirmaDigitalComponent } from 'src/app/shared/modal-firma-digital/modal-firma-digital.component';
+import { FirmaDigitalService } from 'src/app/service/firma-digital.service';
 
 @Component({
   selector: 'vex-modal-aprobador-firma-accion',
@@ -51,7 +52,8 @@ export class ModalAprobadorFirmaAccionComponent extends BaseComponent implements
     private fb: FormBuilder,
     private evaluadorService: EvaluadorService,
     private authFacade: AuthFacade,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private firmaDigitalService: FirmaDigitalService
   ) {
     super();
     this.solicitud = data?.solicitud;
@@ -166,7 +168,7 @@ export class ModalAprobadorFirmaAccionComponent extends BaseComponent implements
                       } else {
                         functionsAlert.success('Guardado').then((result) => {
                           if (tipo == 'APROBADO') {
-                            this.activarFirmaDigital();
+                            this.activarFirmaDigitalEnhanced();
                           }
                         });
                       }
@@ -181,6 +183,31 @@ export class ModalAprobadorFirmaAccionComponent extends BaseComponent implements
     });
   }
 
+  async activarFirmaDigitalEnhanced(): Promise<void> {
+    try {
+      const result = await this.firmaDigitalService.firmarExpedientes(
+        this.listaNroExpedienteSeleccionado
+      );
+      
+      result.subscribe({
+        next: (resultado) => {
+          if (resultado === 'success') {
+            console.log('Firma digital completada exitosamente');
+          }
+          // El modal se cierra independientemente del resultado de la firma
+        },
+        error: (error) => {
+          console.error('Error en firma digital:', error);
+          functionsAlert.info('La aprobación se completó, pero hubo un problema con la firma digital.');
+        }
+      });
+    } catch (error) {
+      console.error('Error iniciando firma digital:', error);
+      functionsAlert.info('La aprobación se completó, pero no se pudo iniciar la firma digital: ' + error.message);
+    }
+  }
+
+  // Método original mantenido para compatibilidad
   activarFirmaDigital() {
     
     let listaIdArchivos = [];

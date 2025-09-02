@@ -1,0 +1,101 @@
+<vex-page-layout mode="card">
+    <vex-page-layout-header class="h-6"></vex-page-layout-header>
+    <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
+      <div class="card overflow-auto -mt-16">
+        <!--TITULO-->
+        <div class="px-6 py-4 border-b flex items-center">
+          <h2 class="title m-0">Elaborar Informe</h2>
+          <span class="flex-1"></span>
+        </div>
+        <form [formGroup]="formGroup">
+            <mat-accordion multi="true">
+            <mat-expansion-panel class="mt-2" expanded="false">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="font-bold">1.- Objeto</mat-panel-title>
+              </mat-expansion-panel-header>
+              <ng-template matExpansionPanelContent>
+                <mat-form-field class="mat-input-wrapper w-full">
+                  <input matInput formControlName="objeto" placeholder="Ingrese objeto" />
+                </mat-form-field>
+              </ng-template>
+            </mat-expansion-panel>
+          
+            <mat-expansion-panel class="mt-2" expanded="false">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="font-bold">2.- Base Legal</mat-panel-title>
+              </mat-expansion-panel-header>
+              <ng-template matExpansionPanelContent>
+                <mat-form-field class="mat-input-wrapper w-full">
+                  <input matInput formControlName="baseLegal" placeholder="Ingrese base legal" />
+                </mat-form-field>
+              </ng-template>
+            </mat-expansion-panel>
+          
+            <mat-expansion-panel class="mt-2" expanded="false">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="font-bold">3.- Antecedentes</mat-panel-title>
+              </mat-expansion-panel-header>
+              <ng-template matExpansionPanelContent>
+                <mat-form-field class="mat-input-wrapper w-full">
+                  <textarea matInput rows="3" formControlName="antecedentes" placeholder="Ingrese antecedentes"></textarea>
+                </mat-form-field>
+              </ng-template>
+            </mat-expansion-panel>
+          
+            <mat-expansion-panel class="mt-2" expanded="false">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="font-bold">4.- Análisis</mat-panel-title>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
+                    <!-- Justificación -->
+                    <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">4.1.- Justificación</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <mat-form-field class="mat-input-wrapper w-full">
+                        <textarea matInput rows="3" formControlName="justificacion" placeholder="Ingrese justificación"></textarea>
+                        </mat-form-field>
+                    </ng-template>
+                    </mat-expansion-panel>
+                
+                    <!-- Necesidad -->
+                    <mat-expansion-panel class="mt-2" expanded="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-bold">4.2.- Necesidad</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <mat-form-field class="mat-input-wrapper w-full">
+                        <textarea matInput rows="3" formControlName="necesidad" placeholder="Ingrese necesidad"></textarea>
+                        </mat-form-field>
+                    </ng-template>
+                    </mat-expansion-panel>
+                </ng-template>
+            </mat-expansion-panel>
+          
+            <!-- Conclusiones -->
+            <mat-expansion-panel class="mt-2" expanded="false">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="font-bold">5.- Conclusiones</mat-panel-title>
+              </mat-expansion-panel-header>
+              <ng-template matExpansionPanelContent>
+                <mat-form-field class="mat-input-wrapper w-full">
+                  <textarea matInput rows="3" formControlName="conclusiones" placeholder="Ingrese conclusiones"></textarea>
+                </mat-form-field>
+              </ng-template>
+            </mat-expansion-panel>
+            </mat-accordion>
+          
+            <div class="px-6 py-4 flex flex-col sm:flex-row gap-2 items-center justify-end">
+                <button color="primary" mat-raised-button type="button" class="hover-class" (click)="cancelar()" >
+                  Regresar
+                </button>
+                <button color="primary" mat-raised-button type="button" class="hover-class" (click)="registrar()">
+                    Registrar
+                </button>
+            </div>
+        </form>
+      </div>
+    </vex-page-layout-content>
+  </vex-page-layout>
+  

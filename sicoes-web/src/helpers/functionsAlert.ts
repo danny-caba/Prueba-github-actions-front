@@ -91,9 +91,9 @@ export class functionsAlert{
         })
     }
 
-    static questionSiNoEval(html: string): any{
+    static questionSiNoEval(html: string,title:string='Finalizar Evaluación'): any{
         return Swal.fire({
-            title: 'Finalizar Evaluación',
+            title: title,
             html:html,
             showCancelButton: true,
             confirmButtonText: 'Sí',

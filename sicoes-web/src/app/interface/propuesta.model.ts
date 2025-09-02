@@ -9,8 +9,16 @@ export class Propuesta {
     fechaPresentacion: Date
     estado: ListadoDetalle
     supervisora: Supervisora
+    procesoItem: ProcesoItem
 }
-
+export class ProcesoItem{
+    proceso:Proceso
+}
+export class Proceso{
+    codigoArea:string
+    sector:ListadoDetalle
+    subsector: ListadoDetalle
+}
 export class PropuestaProfesional{
     idPropuestaProfesional:number
     propuesta:Propuesta

@@ -204,6 +204,8 @@ export enum ListadoEnum {
 
     TIPO_APROBACION_PERFECCIONAMIENTO = "TIPO_APROBACION_PERFECCIONAMIENTO",
     ESTADO_APROBACION_PERFECCIONAMIENTO = "ESTADO_APROBACION_PERFECCIONAMIENTO",
+    TIPO_INFORME_RENOVACION = "TIPO_INFORME_RENOVACION",
+    ESTADO_EVALUACION_RENOVACION = "ESTADO_EVALUACION_RENOVACION",
 
     ENTRADA_DATO = 'ENTRADA_DATO',
     ADJUDICACION_SIMPLIFICADA = 'ADJUDICACION_SIMPLIFICADA',
@@ -237,6 +239,14 @@ export enum estadosPerfCont {
     PRELIMINAR = 'Preliminar',
     EN_PROCESO = 'En Proceso',
     OBSERVADO = 'Observado',
+    CONCLUIDO = 'Concluído',
+    ARCHIVADO = 'Archivado'
+}
+
+export enum estadosRequerimientoContrato {
+    PRELIMINAR = 'Preliminar',
+    EN_APROBACION = 'En Aprobación',
+    EN_PROCESO = 'En Proceso',
     CONCLUIDO = 'Concluído',
     ARCHIVADO = 'Archivado'
 }

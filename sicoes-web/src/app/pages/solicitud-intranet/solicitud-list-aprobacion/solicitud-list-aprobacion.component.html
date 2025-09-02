@@ -300,6 +300,133 @@
             <mat-paginator #paginatorPerfeccionamiento class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChangePerfeccionamiento($event)" showFirstLastButtons></mat-paginator>
             </div>
         </mat-tab>
+        <mat-tab label="Informe de Renovación">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div @fadeInUp class="flex-auto">
+              <mat-divider class="-mr-6 -ml-6"></mat-divider>
+              <div class="py-4 flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                  <mat-form-field class="flex-auto">
+                    <mat-label>N° de Expediente</mat-label>
+                    <input [formControl]="formGroupInformeRenovacion.controls.nroExpedienteR" matInput maxlength="15" />
+                  </mat-form-field>
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Empresa Supervisora</mat-label>
+                    <input [formControl]="formGroupInformeRenovacion.controls.empresaSupervisoraR" matInput maxlength="100" />
+                  </mat-form-field>
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Estado de Evaluación</mat-label>
+                    <mat-select [formControl]="formGroupInformeRenovacion.controls.estadoEvaluacionR" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listEstadoEvaluacionRenovacion" [value]="obj">
+                        {{ obj.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Tipo de Informe</mat-label>
+                    <mat-select [formControl]="formGroupInformeRenovacion.controls.tipoInformeR" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listTipoInformeRenovacion" [value]="obj">
+                        {{ obj.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <div class="flex-auto"></div>
+                  <div class="flex-auto"></div>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
+                  <button color="primary" style="margin-right: auto;" mat-raised-button type="button" (click)="aprobarVistoBuenoFirmarInformeRenovacion('add')">
+                    Aprobar/Visto Bueno/Firmar
+                  </button>
+                  <button color="primary" mat-raised-button type="button" (click)="buscarInformeRenovacion()">
+                    Buscar
+                  </button>
+                  <button color="primary" mat-raised-button type="button" (click)="limpiarInformeRenovacion()">
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="overflow-auto shadow-2xl rounded">
+            <table class="w-full border" mat-table matSort [dataSource]="dataSourceInformeRenovacion">
+              <ng-container matColumnDef="selectRenovacion">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-checkbox
+                    color="primary"
+                    (change)="actualizarListaExpedienteInformeRenovacion($event, element)">
+                  </mat-checkbox>                
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="numeroExpedienteR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Número Expediente</th>
+                <td mat-cell *matCellDef="let element">{{ element.numeroExpediente }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="empresaSupervisoraR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa Supervisora</th>
+                <td mat-cell *matCellDef="let element">{{ element.empresaSupervisora }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="tipoInformeR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Informe</th>
+                <td mat-cell *matCellDef="let element">{{ element.tipoInforme?.nombre }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="fechaPresentacionR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Presentación</th>
+                <td mat-cell *matCellDef="let element">{{ element.fechaPresentacion }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="fechaLimiteEvaluacionR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite<br>de Evaluación</th>
+                <td mat-cell *matCellDef="let element">{{ element.fechaLimiteEvaluacion }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoEvaluacionR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado de Evaluación</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoEvaluacion?.nombre }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoAprobacionTecnicaR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación<br>Técnica</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionTecnica?.nombre || ' ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estadoVbGerenciaR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado VB<br>Gerencia</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoVbGerencia?.nombre || ' ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="actionsInformeRenovacion">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+                <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                  <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ row: row }" [matMenuTriggerFor]="actionsMenuInformeRenovacion" mat-icon-button type="button">
+                    <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsInformeRenovacion"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsInformeRenovacion"></tr>
+
+              <ng-container matColumnDef="loadingInformeRenovacion">
+                <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center">Cargando Datos...</td>
+              </ng-container>
+
+              <ng-container matColumnDef="vacioInformeRenovacion">
+                <td mat-footer-cell *matFooterCellDef colspan="9" class="text-center text-primary">No se
+                  encuentran resultados para los filtros seleccionados</td>
+              </ng-container>
+
+              <tr mat-footer-row *matFooterRowDef="['vacioInformeRenovacion']" [ngClass]="{ hide: !(dataSourceInformeRenovacion.data.length === 0) }"></tr>
+            </table>
+            <mat-paginator #paginatorInformeRenovacion class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChangeInformeRenovacion($event)" showFirstLastButtons></mat-paginator>
+          </div>
+        </mat-tab>
         </mat-tab-group>
     </div>
   </vex-page-layout-content>
@@ -325,6 +452,19 @@
       <span>Ver</span>
     </button>
     <button mat-menu-item (click)="historyApproveAndSignPerfeccionamiento(row)">
+      <mat-icon svgIcon="mat:history"></mat-icon>
+      <span>Historial Aprobar y firmar</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+<mat-menu #actionsMenuInformeRenovacion="matMenu" xPosition="before" yPosition="below">
+  <ng-template let-row="row" matMenuContent>
+    <button mat-menu-item (click)="verInformeRenovacion(row)">
+      <mat-icon svgIcon="mat:preview"></mat-icon>
+      <span>Ver</span>
+    </button>
+    <button mat-menu-item (click)="historyApproveAndSignInformeRenovacion(row)">
       <mat-icon svgIcon="mat:history"></mat-icon>
       <span>Historial Aprobar y firmar</span>
     </button>

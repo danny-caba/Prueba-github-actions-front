@@ -501,6 +501,7 @@ export const RolMenu = [
   ]},
   { ROL: { CODIGO: RolEnum.EVA_CONTRA }, MENU: [menu16, menu17], path: [
     'intranet/contratos',
-    'intranet/bandeja-contratos'
+    'intranet/bandeja-contratos',
+    'intranet/requerimiento-renovacion'
   ]},
 ]

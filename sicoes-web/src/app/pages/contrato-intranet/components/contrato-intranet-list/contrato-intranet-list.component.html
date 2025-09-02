@@ -166,5 +166,9 @@
             <mat-icon svgIcon="mat:preview"></mat-icon>
             <span>Evaluar Documentos</span>
         </button>
+      <button mat-menu-item (click)="goToFormRequerimientoRenovacion(row, ACCION_VER)" *ngIf="formRequerimientoRenovacion(row)">
+        <mat-icon svgIcon="mat:new_label"></mat-icon>
+        <span>Req. Renovación</span>
+      </button>
     </ng-template>
 </mat-menu>

@@ -20,6 +20,7 @@ import { ModalAprobadorFirmaAccionComponent } from 'src/app/shared/modal-aprobad
 import { LayoutAprobacionHistorialComponent } from 'src/app/shared/layout-aprobacion-historial/layout-aprobacion-historial.component';
 import { takeUntil } from 'rxjs/operators'; 
 import { ModalAprobadorContratoComponent } from 'src/app/shared/modal-aprobador-contrato/modal-aprobador-contrato.component';
+import { ModalAprobadorInformeRenovacionComponent } from 'src/app/shared/modal-aprobador-informe-renovacion/modal-aprobador-informe-renovacion.component';
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
 
 @Component({
@@ -60,6 +61,13 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     estadoAprobacionP: [null]
   });
 
+  formGroupInformeRenovacion = this.fb.group({
+    nroExpedienteR: [''],
+    empresaSupervisoraR: [''],
+    tipoInformeR: [null],
+    estadoEvaluacionR: [null]
+  });
+
   listTipoSolicitud: any[];
   listEstadoRevision: any[];
   listEstadoEvaluacionTecnica: any[];
@@ -70,10 +78,15 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   listTipoAprobacionP: any[];
   listEstadoAprobacionP: any[];
 
+  listTipoInformeRenovacion: any[];
+  listEstadoEvaluacionRenovacion: any[];
+
   listaNroExpedienteSeleccionado: string[] = [];
   listaSolicitudUuidSeleccionado: string[] = [];
 
   listaContratosSeleccionadosPerfeccionamiento: SelectedPerfeccionamientoItem[] = [];
+  
+  listaInformesRenovacionSeleccionados: any[] = [];
 
   displayedColumns: string[] = [
     'nroExpediente',
@@ -104,9 +117,24 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     'actionsPerfeccionamiento'
   ];
 
+  displayedColumnsInformeRenovacion: string[] = [
+    'selectRenovacion',
+    'numeroExpedienteR',
+    'empresaSupervisoraR',
+    'tipoInformeR',
+    'fechaPresentacionR',
+    'fechaLimiteEvaluacionR',
+    'estadoEvaluacionR',
+    'estadoAprobacionTecnicaR',
+    'estadoVbGerenciaR',
+    'actionsInformeRenovacion'
+  ];
+
   dataSourcePerfeccionamiento = new MatTableDataSource<any>();
+  dataSourceInformeRenovacion = new MatTableDataSource<any>();
 
   @ViewChild('paginatorPerfeccionamiento') paginatorPerfeccionamiento: MatPaginator;
+  @ViewChild('paginatorInformeRenovacion') paginatorInformeRenovacion: MatPaginator;
 
   constructor(
     private authFacade: AuthFacade,
@@ -126,6 +154,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     this.cargarCombo();
     this.cargarTabla();
     this.cargarTablaPerfeccionamiento();
+    this.cargarTablaInformeRenovacion();
   }
 
   cargarCombo() {
@@ -135,7 +164,9 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       ListadoEnum.RESULTADO_EVALUACION_TEC_ADM,
       ListadoEnum.TIPO_CONTRATO,
       ListadoEnum.TIPO_APROBACION_PERFECCIONAMIENTO,
-      ListadoEnum.ESTADO_APROBACION_PERFECCIONAMIENTO
+      ListadoEnum.ESTADO_APROBACION_PERFECCIONAMIENTO,
+      ListadoEnum.TIPO_INFORME_RENOVACION,
+      ListadoEnum.ESTADO_EVALUACION_RENOVACION
     ]).subscribe(listRes => {
       this.listTipoSolicitud = listRes[0];
       this.listEstadoRevision = listRes[1];
@@ -145,6 +176,9 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       this.listTipoContrato = listRes[3];
       this.listTipoAprobacionP = listRes[4];
       this.listEstadoAprobacionP = listRes[5];
+      
+      this.listTipoInformeRenovacion = listRes[6];
+      this.listEstadoEvaluacionRenovacion = listRes[7];
     });
   }
 
@@ -154,6 +188,10 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   serviceTablePerfeccionamiento(filtroPerfeccionamiento: any) {
     return this.solicitudService.buscarSolicitudesAprobadorPerfeccionamiento(filtroPerfeccionamiento);
+  }
+
+  serviceTableInformeRenovacion(filtroInformeRenovacion: any) {
+    return this.solicitudService.buscarInformesRenovacionAprobador(filtroInformeRenovacion);
   }
 
   buscar() {
@@ -171,6 +209,14 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     this.listaContratosSeleccionadosPerfeccionamiento = [];
   }
 
+  buscarInformeRenovacion() {
+    if (this.paginatorInformeRenovacion) {
+      this.paginatorInformeRenovacion.pageIndex = 0;
+    }
+    this.cargarTablaInformeRenovacion();
+    this.listaInformesRenovacionSeleccionados = [];
+  }
+
   limpiar() {
     this.formGroup.reset();
     this.buscar();
@@ -180,6 +226,12 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     this.formGroupPerfeccionamiento.reset();
     this.listaContratosSeleccionadosPerfeccionamiento = [];
     this.buscarPerfeccionamiento();
+  }
+
+  limpiarInformeRenovacion() {
+    this.formGroupInformeRenovacion.reset();
+    this.listaInformesRenovacionSeleccionados = [];
+    this.buscarInformeRenovacion();
   }
 
   obtenerFiltro() {
@@ -205,6 +257,18 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       size: this.paginatorPerfeccionamiento?.pageSize ?? 10,
     };
     return filtroPerfeccionamiento;
+  }
+
+  obtenerFiltroInformeRenovacion() {
+    let filtroInformeRenovacion: any = {
+      nroExpediente: this.formGroupInformeRenovacion.controls.nroExpedienteR.value,
+      empresaSupervisora: this.formGroupInformeRenovacion.controls.empresaSupervisoraR.value,
+      idTipoInforme: this.formGroupInformeRenovacion.controls.tipoInformeR.value?.idListadoDetalle,
+      idEstadoEvaluacion: this.formGroupInformeRenovacion.controls.estadoEvaluacionR.value?.idListadoDetalle,
+      page: this.paginatorInformeRenovacion?.pageIndex ?? 0,
+      size: this.paginatorInformeRenovacion?.pageSize ?? 10,
+    };
+    return filtroInformeRenovacion;
   }
 
   cargarTablaPerfeccionamiento() {
@@ -234,8 +298,33 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     );
 }
 
+  cargarTablaInformeRenovacion() {
+    const filtro = this.obtenerFiltroInformeRenovacion();
+    this.dataSourceInformeRenovacion.data = [];
+    this.isLoading = true;
+
+    this.serviceTableInformeRenovacion(filtro)
+      .subscribe(
+        (data) => {
+          this.dataSourceInformeRenovacion.data = data.content || [];
+          if (this.paginatorInformeRenovacion) {
+            this.paginatorInformeRenovacion.length = data.totalElements || 0;
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error al cargar datos de informe de renovación:', error);
+          this.isLoading = false;
+        }
+      );
+  }
+
   pageChangePerfeccionamiento(event: any) {
     this.cargarTablaPerfeccionamiento();
+  }
+
+  pageChangeInformeRenovacion(event: any) {
+    this.cargarTablaInformeRenovacion();
   }
 
   compareSelecIdListadoDetalle(o1: ListadoDetalle | null, o2: ListadoDetalle | null): boolean {
@@ -248,6 +337,10 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   verPerfeccionamiento(contrato: any) {
     this.router.navigate([Link.INTRANET, Link.PERFECCIONAMIENTO_LIST, Link.PERFECCIONAMIENTO_VIEW, contrato.idContrato]);
+  }
+
+  verInformeRenovacion(informe: any) {
+    this.router.navigate([Link.INTRANET, Link.INFORME_RENOVACION_LIST, Link.INFORME_RENOVACION_VIEW, informe.idInformeRenovacion]);
   }
 
   mostrarOpcion(accion: string) {
@@ -378,12 +471,68 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   console.log('Selección Perfeccionamiento Final:', this.listaContratosSeleccionadosPerfeccionamiento);
 }
 
+  actualizarListaExpedienteInformeRenovacion(event: any, element: any) {
+    console.log('Evento de selección informe renovación:', event.checked);
+    console.log('Elemento seleccionado:', element);
+
+    if (event.checked) {
+      if (!this.listaInformesRenovacionSeleccionados.some(item => item.idInformeRenovacion === element.idInformeRenovacion)) {
+        this.listaInformesRenovacionSeleccionados.push(element);
+        console.log('Añadido informe renovación. Lista actual:', this.listaInformesRenovacionSeleccionados);
+      }
+    } else {
+      const index = this.listaInformesRenovacionSeleccionados.findIndex(item => item.idInformeRenovacion === element.idInformeRenovacion);
+      if (index > -1) {
+        this.listaInformesRenovacionSeleccionados.splice(index, 1);
+        console.log('Eliminado informe renovación. Lista actual:', this.listaInformesRenovacionSeleccionados);
+      }
+    }
+    console.log('Selección Informe Renovación Final:', this.listaInformesRenovacionSeleccionados);
+  }
+
 historyApproveAndSignPerfeccionamiento(row: any) {
     this.dialog.open(ModalAprobadorHistorialContratoComponent, {
       width: '1200px',
       maxHeight: '100%',
       data: {
         idContrato: row.idContrato
+      }
+    });
+  }
+
+  flagInformeRenovacion: boolean = true;
+  aprobarVistoBuenoFirmarInformeRenovacion(action: string) {
+    if (this.listaInformesRenovacionSeleccionados.length === 0) {
+      alert('Debe seleccionar al menos un informe de renovación para Aprobar/Visto Bueno/Firmar.');
+      return;
+    }
+
+    this.dialog.open(ModalAprobadorInformeRenovacionComponent, {
+      width: '1200px',
+      maxHeight: '100%',
+      data: {
+        tipo: 'informeRenovacion',
+        accion: action,
+        elementosSeleccionados: this.listaInformesRenovacionSeleccionados,
+      },
+    }).afterClosed().subscribe(result => {
+      if (result === 'OK') { 
+        this.flagInformeRenovacion = false;
+        this.buscarInformeRenovacion(); 
+        this.listaInformesRenovacionSeleccionados = []; 
+      } else {
+        this.flagInformeRenovacion = true;
+        console.log('Proceso de aprobación/firma masiva de informes de renovación cancelado o no completado.');
+      }
+    });
+  }
+
+  historyApproveAndSignInformeRenovacion(row: any) {
+    this.dialog.open(ModalAprobadorHistorialContratoComponent, {
+      width: '1200px',
+      maxHeight: '100%',
+      data: {
+        idInformeRenovacion: row.idInformeRenovacion
       }
     });
   }

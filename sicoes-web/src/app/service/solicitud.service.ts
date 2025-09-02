@@ -152,5 +152,11 @@ export class SolicitudService {
     return this.http.put<Solicitud>(urlEndpoint, null);
   }
 
+  buscarInformesRenovacionAprobador(filtroInformeRenovacion): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/informes-renovacion/aprobador`
+    let params = functions.obtenerParams(filtroInformeRenovacion);
+    return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
+  }
+
 
 }

@@ -80,8 +80,8 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
   puedeCrearRequerimiento(): boolean {
     
     // Validar que no existan requerimientos activos
-    const sinRequerimientosActivos = this.dataSource.data.length === 0 || 
-        this.dataSource.data.every(req => 
+    const sinRequerimientosActivos = this.dataSource?.data?.length === 0 || 
+        this.dataSource?.data?.every(req => 
             req.estadoReqRenovacion?.codigo === 'CONCLUIDO' || 
             req.estadoReqRenovacion?.codigo === 'ARCHIVADO'
         );
@@ -106,7 +106,7 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
   }
 
   serviceTable(filtro: any) {
-    return this.requerimientoRenovacionService.obtenerSolicitudesInterno(filtro);
+    return this.requerimientoRenovacionService.obtenerRequerimientos(filtro);
   }
 
   onChangeSector(obj) {
@@ -132,12 +132,14 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
     this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST]);
   }
 
-  goToFormRequerimientoRenovacion(contrato: any, accion: string) {
+  goToFormInformeRenovacion(requerimiento: any, accion: string) {
+    console.log(requerimiento)
     this.router.navigate([
       Link.INTRANET, 
-      Link.CONTRATOS_LIST, 
-      Link.CONTRATO_SOLICITUD_EVALUAR, 
-      contrato.idSolicitud]);
+      Link.REQUERIMIENTO_RENOVACION_LIST, 
+      requerimiento.nuExpediente,
+      Link.REQUERIMIENTO_RENOVACION_INFORME, 
+      'new']);
   }
 
   limpiar() {
@@ -167,11 +169,12 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
     this.cargarTabla();
   }
 
-  formRequisitos(solicitud: any){
-    return solicitud.estadoProcesoSolicitud === '2'
-  }
-
-  formRequerimientoRenovacion(solicitud: any){
-    return solicitud.estadoProcesoSolicitud === '4';
+  formElaborarInforme(solicitud: any){
+  
+    return ! this.itemsTable.every(
+      (item: RequerimientoRenovacion) =>
+        item.estadoReqRenovacion?.codigo === 'CONCLUIDO' ||
+        item.estadoReqRenovacion?.codigo === 'ARCHIVADO'
+    );
   }
 }

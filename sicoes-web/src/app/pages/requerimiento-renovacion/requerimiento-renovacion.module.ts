@@ -28,11 +28,13 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ScrollbarModule } from 'src/@vex/components/scrollbar/scrollbar.module';
 import { RequerimientoRenovacionListComponent } from './components/requerimiento-renovacion-list/requerimiento-renovacion-list.component';
+import { RequerimientoRenovacionInformeComponent } from './components/requerimiento-renovacion-informe/requerimiento-renovacion-informe.component';
 
 
 @NgModule({
   declarations: [
     RequerimientoRenovacionListComponent,
+    RequerimientoRenovacionInformeComponent,
   ],
   imports: [
     CommonModule,

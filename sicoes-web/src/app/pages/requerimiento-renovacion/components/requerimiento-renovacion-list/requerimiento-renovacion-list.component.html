@@ -139,9 +139,9 @@
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
     <ng-template let-row="customer" matMenuContent>
-        <button mat-menu-item (click)="goToFormRequerimientoRenovacion(row, 'ACCION_VER')" *ngIf="formRequerimientoRenovacion(row)"> 
+        <button mat-menu-item (click)="goToFormInformeRenovacion(row, 'ACCION_VER')" *ngIf="formElaborarInforme(row)"> 
             <mat-icon svgIcon="mat:new_label"></mat-icon>
-            <span>Req. Renovación</span>
+            <span>Elaborar Informe</span>
         </button>
     </ng-template>
 </mat-menu>

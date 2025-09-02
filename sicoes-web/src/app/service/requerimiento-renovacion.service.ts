@@ -7,6 +7,7 @@ import { Pageable } from '../interface/pageable.model';
 import { tap, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Propuesta } from '../interface/propuesta.model';
+import { RequerimientoRenovacion } from '../interface/requerimiento-renovacion.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,19 +23,12 @@ export class RequerimientoRenovacionService {
     this._path_serve = this.configService.getAPIUrl();
   }
 
-
   obtenerSolicitudPorId(idSolicitud: number) {
     let urlEndpoint = `${this._path_serve}/api/requerimiento/${idSolicitud}/proceso`
     return this.http.get<any>(urlEndpoint);
   }
 
-  obtenerSolicitudesExterno(filtro): Observable<any> {
-    const urlEndpoint = `${this._path_serve}/api/solicitudes/presentacion`
-    let params = functions.obtenerParams(filtro);
-    return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
-  }
-
-  obtenerSolicitudesInterno(filtro): Observable<any> {
+  obtenerRequerimientos(filtro): Observable<any> {
     const urlEndpoint = `${this._path_serve}/api/renovaciones/requerimientos`
     let params = functions.obtenerParams(filtro);
     return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
@@ -51,7 +45,17 @@ export class RequerimientoRenovacionService {
     return this.http.get<Propuesta>(urlEndpoint);
   }
 
+  obtenerPorNumeroExpediente(nuExpediente): Observable<RequerimientoRenovacion> {
+    const urlEndpoint = `${this._path_serve}/api/renovaciones/requerimientoPorNuExpediente/${nuExpediente}`
+    return this.http.get<RequerimientoRenovacion>(urlEndpoint);
+  }
+
   registrarRequerimientoRenovacion(request: any){
+    let urlEndpoint = `${this._path_serve}/api/renovaciones/requerimiento`
+    return this.http.post<any>(urlEndpoint,request);
+  }
+
+  obtenerRequerimientoRenovacion(request: any){
     let urlEndpoint = `${this._path_serve}/api/renovaciones/requerimiento`
     return this.http.post<any>(urlEndpoint,request);
   }

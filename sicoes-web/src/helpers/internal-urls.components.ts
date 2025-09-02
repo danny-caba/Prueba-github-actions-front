@@ -39,6 +39,7 @@ export enum Link {
     CONTRATO_SOLICITUD_EVALUAR = 'evaluar',
     
     REQUERIMIENTO_RENOVACION_LIST = 'requerimiento-renovacion',
+    REQUERIMIENTO_RENOVACION_INFORME = 'informe',
 
     
     INVITACIONES_LIST = 'invitaciones',

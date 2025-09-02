@@ -9,4 +9,5 @@ export class RequerimientoRenovacion {
   feRegistro: string
   estadoReqRenovacion: any
   esRegistro: string
+  solicitudPerfil:any
 }

@@ -41,7 +41,6 @@ export class ModalFirmaDigitalComponent implements OnInit {
     passwordUsuario.value = this.passwordUsuario;
     //archivosFirmar.value = this.archivosFirmar;
     archivosFirmar.remove();
-
     this.listaIdArchivo = this.archivosFirmar.split(',')
     
     for (let i = 0; i < this.listaIdArchivo.length; i++) {
@@ -56,7 +55,7 @@ export class ModalFirmaDigitalComponent implements OnInit {
     formulario.submit();
 
     const win: Window = window;
-    win.addEventListener('message', this.onReceiveResultCallbackOsifirma, false);
+    win.addEventListener('message', this.onReceiveResultCallbackOsifirma.bind(this), false);
   }
 
   onReceiveResultCallbackOsifirma(e) {
@@ -65,7 +64,7 @@ export class ModalFirmaDigitalComponent implements OnInit {
 
       try {
         var respuestaJSON = JSON.parse(e.data);
-
+        console.log("respuestaJSON",respuestaJSON);
         if(respuestaJSON.resultado == -1) {
           //se trata de un error
           //this.dialogRef.close('OK');
@@ -73,10 +72,11 @@ export class ModalFirmaDigitalComponent implements OnInit {
         }
         else if(respuestaJSON.resultado == 1) {
           //se trata de una cancelación
-          //this.dialogRef.close('OK');
+          this.dialogRef.close('C');
           alert(respuestaJSON.mensaje);
         }
         else if(respuestaJSON.resultado == 0) {
+          console.log("resultado000",respuestaJSON.resultado)
           //se trata de un éxito          
           let mensaje = '';
           let i = 1;
@@ -86,8 +86,8 @@ export class ModalFirmaDigitalComponent implements OnInit {
             i++;
           });
 
-          //this.dialogRef.close('OK');
           alert(mensaje);
+          this.dialogRef.close('OK');
         }
         else {
           //se trata de una situación inesperada

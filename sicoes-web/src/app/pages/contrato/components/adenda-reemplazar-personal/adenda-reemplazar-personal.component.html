@@ -195,8 +195,8 @@
     showFirstLastButtons></mat-paginator>
 </div>
 
-<mat-menu #actionsPersonal="matMenu" xPosition="before" yPosition="below">
-  <ng-template let-row="row" matMenuContent>
+<mat-menu #actionsPersonal="matMenu" xPosition="before" yPosition="below" > 
+  <ng-template let-row="row" matMenuContent *ngIf="rol===roles.APROBADOR_G4">
     <!--button mat-menu-item (click)="verPersonal(row)">
       <mat-icon svgIcon="mat:preview"></mat-icon>
       <span>Ver</span>

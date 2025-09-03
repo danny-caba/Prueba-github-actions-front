@@ -212,9 +212,9 @@ private isValidParam(value: any): boolean {
     
   }
 
-   vistoBueno(body:any){
-    const urlEndpoint = `${this._path_serve}/api/reemplazo/solicitud/visto/`
-    return this.http.post<any>(urlEndpoint,body );
+   vistoBuenoFirma(body:any){
+    const urlEndpoint = `${this._path_serve}/api/reemplazo/solicitud/visto-firma/`
+    return this.http.post<any>(urlEndpoint,body);
     
   }
 

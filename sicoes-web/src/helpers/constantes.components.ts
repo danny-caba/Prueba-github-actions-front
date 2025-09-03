@@ -41,7 +41,7 @@ export enum RolEnum {
   ADM_BLOQU = "09",
   ADM_CONFIG = "11",
   EVA_CONTRA = "12",
-
+  GSE = "14",
   INVITADO = "15",
   APROBADOR_G2 = "18",
   APROBADOR_G3 = "17",

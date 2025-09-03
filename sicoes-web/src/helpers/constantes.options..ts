@@ -580,4 +580,7 @@ export const RolMenu = [
   { ROL: { CODIGO: RolEnum.APROBADOR_G4 }, MENU: [menu05], path: [
     'intranet/solicitudes/aprobacion'
   ]},
+  { ROL: { CODIGO: RolEnum.GSE }, MENU: [menu05], path: [
+    'intranet/solicitudes/aprobacion'
+  ]},
 ]

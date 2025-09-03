@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { fadeInRight400ms } from "src/@vex/animations/fade-in-right.animation";
 import { stagger80ms } from "src/@vex/animations/stagger.animation";
+import { AdjuntosService } from "src/app/service/adjuntos.service";
 import { PersonalReemplazoService } from "src/app/service/personal-reemplazo.service";
 import { BaseComponent } from "src/app/shared/components/base.component";
 import { functionsAlert } from "src/helpers/functionsAlert";
@@ -15,8 +16,7 @@ import { Link } from "src/helpers/internal-urls.components";
 })
 export class RevisarDocReemplazoFormComponent
   extends BaseComponent
-  implements OnInit
-{
+  implements OnInit {
   btnRegister: string = "Registrar";
   btnGuardarAdenda: string = "Guardar Adenda";
   idSolicitud: string = "";
@@ -36,7 +36,8 @@ export class RevisarDocReemplazoFormComponent
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private reemplazoService: PersonalReemplazoService
+    private reemplazoService: PersonalReemplazoService,
+    private adjunto: AdjuntosService
   ) {
     super();
   }
@@ -83,6 +84,10 @@ export class RevisarDocReemplazoFormComponent
             this.reemplazoService
               .registrarObservaciones(this.listaObservaciones)
               .subscribe((response) => {
+                if (response.archivo != undefined && response.archivo != null) {
+                  this.adjunto.descargarWindowsJWT(response.archivo.codigo, response.archivo.nombreReal);
+
+                }
                 this.router.navigate([
                   Link.INTRANET,
                   Link.CONTRATOS_LIST,
@@ -105,6 +110,10 @@ export class RevisarDocReemplazoFormComponent
           this.reemplazoService
             .guardarRevDocumentos(body)
             .subscribe((response) => {
+              if (response.archivo != undefined && response.archivo != null) {
+                this.adjunto.descargarWindowsJWT(response.archivo.codigo, response.archivo.nombreReal);
+
+              }
               this.router.navigate([
                 Link.INTRANET,
                 Link.CONTRATOS_LIST,
@@ -120,7 +129,7 @@ export class RevisarDocReemplazoFormComponent
   registrarAdenda(): void {
     functionsAlert
       .questionSiNo(
-        "¿Seguro de registrar la revisión de documentos del personal propuesto de reemplazo?"
+        "¿Seguro de guardar la adenda para el reemplazo del personal propuesto?"
       )
       .then((result) => {
         if (result.isConfirmed) {

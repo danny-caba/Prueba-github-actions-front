@@ -4,6 +4,7 @@ import { Observable, forkJoin, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { ConfigService } from '../core/services';
 import { EvaluadorService } from './evaluador.service';
+import { InformeRenovacionService } from './informe-renovacion.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalFirmaDigitalEnhancedComponent, ParametrosFirma, ArchivoFirma } from '../shared/modal-firma-digital-enhanced/modal-firma-digital-enhanced.component';
 
@@ -24,6 +25,7 @@ export class FirmaDigitalService {
     private http: HttpClient,
     private configService: ConfigService,
     private evaluadorService: EvaluadorService,
+    private informeRenovacionService: InformeRenovacionService,
     private dialog: MatDialog
   ) {
     this._path_serve = this.configService.getAPIUrl();
@@ -61,8 +63,8 @@ export class FirmaDigitalService {
    */
   async firmarInformesRenovacion(informes: any[]): Promise<Observable<any>> {
     try {
-      // 1. Obtener parámetros de firma digital
-      const parametros = await this.obtenerParametrosFirma();
+      // 1. Obtener parámetros de firma digital generales
+      const parametros = await this.obtenerParametrosFirmaGeneral();
       
       // 2. Obtener IDs de archivos para cada informe
       const archivos = await this.obtenerArchivosInformesRenovacion(informes);
@@ -87,6 +89,30 @@ export class FirmaDigitalService {
    * Obtiene los parámetros necesarios para la firma digital
    */
   private async obtenerParametrosFirma(): Promise<ParametrosFirma> {
+    const token = {
+      usuario: sessionStorage.getItem("USUARIO")
+    };
+    
+    return new Promise((resolve, reject) => {
+      this.evaluadorService.obtenerParametrosfirmaDigital(token).subscribe({
+        next: (parametros) => {
+          if (parametros && parametros.action) {
+            resolve(parametros);
+          } else {
+            reject(new Error('No se pudieron obtener los parámetros de firma digital'));
+          }
+        },
+        error: (error) => {
+          reject(new Error('Error al obtener parámetros de firma digital: ' + error.message));
+        }
+      });
+    });
+  }
+
+  /**
+   * Obtiene los parámetros generales para firma digital usando el endpoint de asignaciones
+   */
+  private async obtenerParametrosFirmaGeneral(): Promise<ParametrosFirma> {
     const token = {
       usuario: sessionStorage.getItem("USUARIO")
     };
@@ -136,25 +162,28 @@ export class FirmaDigitalService {
    * Obtiene los IDs de archivos para los informes de renovación dados
    */
   private async obtenerArchivosInformesRenovacion(informes: any[]): Promise<ArchivoFirma[]> {
-    // Esta función necesitará implementarse según la lógica específica para informes de renovación
-    // Por ahora, simular la obtención de IDs de archivo
-    const archivos: ArchivoFirma[] = [];
-    
-    for (const informe of informes) {
-      try {
-        // Aquí debería ir la lógica específica para obtener el ID del archivo del informe
-        // Por ejemplo: this.informeRenovacionService.obtenerIdArchivo(informe.idInformeRenovacion)
-        
-        archivos.push({
-          id: informe.idInformeRenovacion.toString(), // Placeholder
+    const observables = informes.map(informe => 
+      this.informeRenovacionService.obtenerParametrosFirmaDigital(informe.idInformeRenovacion).pipe(
+        map(response => ({
+          id: response.data?.[0]?.firmaDigital?.idArchivo?.toString() || informe.idInformeRenovacion.toString(),
           nombre: `Informe ${informe.numeroExpedienteR || informe.empresaSupervisoraR}`
-        });
-      } catch (error) {
-        console.error(`Error obteniendo archivo para informe ${informe.idInformeRenovacion}:`, error);
-      }
-    }
-    
-    return archivos;
+        })),
+        catchError(error => {
+          console.error(`Error obteniendo parámetros de firma para informe ${informe.idInformeRenovacion}:`, error);
+          return of({ 
+            id: informe.idInformeRenovacion.toString(), 
+            nombre: `Informe ${informe.numeroExpedienteR || informe.empresaSupervisoraR}` 
+          });
+        })
+      )
+    );
+
+    return new Promise((resolve, reject) => {
+      forkJoin(observables).subscribe({
+        next: (archivos) => resolve(archivos),
+        error: (error) => reject(error)
+      });
+    });
   }
 
   /**

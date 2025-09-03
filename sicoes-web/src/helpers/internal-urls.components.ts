@@ -78,6 +78,9 @@ export enum Link {
 
     CONTRATO_SOLICITUD_ADD = 'registro',
     CONTRATO_SOLICITUD_VIEW = 'ver',
+    
+    INFORME_RENOVACION_LIST = 'informe-renovacion',
+    INFORME_RENOVACION_VIEW = 'ver',
 }
 
 export enum Apis {

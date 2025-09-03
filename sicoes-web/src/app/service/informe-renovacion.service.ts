@@ -20,10 +20,42 @@ export class InformeRenovacionService {
   ) {
     this._path_serve = this.configService.getAPIUrl();
   }
-  
-  registrar(request: InformeRenovacion){
-    let urlEndpoint = `${this._path_serve}/api/renovacion/informes`
-    return this.http.post<InformeRenovacion>(urlEndpoint,request);
+
+  aprobarInformeRenovacion(request: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/informe/renovacion/aprobar`;
+    return this.http.post<any>(urlEndpoint, request);
   }
 
+  rechazarInformeRenovacion(request: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/informe/renovacion/rechazar`;
+    return this.http.post<any>(urlEndpoint, request);
+  }
+
+  registrar(request: InformeRenovacion): Observable<InformeRenovacion> {
+    const urlEndpoint = `${this._path_serve}/api/renovacion/informes`;
+    return this.http.post<InformeRenovacion>(urlEndpoint, request);
+  }
+
+  listarInformes(tipoAprobador: string, numeroExpediente?: string, estado?: number, idContratista?: number, pageable?: any): Observable<any> {
+    let params = new URLSearchParams();
+    params.append('tipoAprobador', tipoAprobador);
+    
+    if (numeroExpediente) params.append('numeroExpediente', numeroExpediente);
+    if (estado !== undefined) params.append('estado', estado.toString());
+    if (idContratista !== undefined) params.append('idContratista', idContratista.toString());
+    if (pageable) {
+      if (pageable.page !== undefined) params.append('page', pageable.page.toString());
+      if (pageable.size !== undefined) params.append('size', pageable.size.toString());
+      if (pageable.sort) params.append('sort', pageable.sort);
+    }
+
+    const urlEndpoint = `${this._path_serve}/api/renovacion/informes?${params.toString()}`;
+    return this.http.get<any>(urlEndpoint);
+  }
+
+  obtenerParametrosFirmaDigital(idInformeRenovacion: number): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/informe/renovacion/firma-digital/obtenerParametros`;
+    const requestBody = { idInformeRenovacion: idInformeRenovacion };
+    return this.http.post<any>(urlEndpoint, requestBody);
+  }
 }

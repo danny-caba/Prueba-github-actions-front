@@ -152,5 +152,21 @@ export class SolicitudService {
     return this.http.put<Solicitud>(urlEndpoint, null);
   }
 
+  buscarInformesRenovacionAprobador(filtroInformeRenovacion): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/renovacion/informes`
+    let params = functions.obtenerParams(filtroInformeRenovacion);
+    params = params.set('tipoAprobador', 'GRUPO_3');
+    if (filtroInformeRenovacion.nroExpediente) {
+      params = params.set('numeroExpediente', filtroInformeRenovacion.nroExpediente);
+    }
+    if (filtroInformeRenovacion.idEstadoEvaluacion) {
+      params = params.set('estado', filtroInformeRenovacion.idEstadoEvaluacion.toString());
+    }
+    if (filtroInformeRenovacion.idContratista) {
+      params = params.set('idContratista', filtroInformeRenovacion.idContratista.toString());
+    }
+    return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
+  }
+
 
 }

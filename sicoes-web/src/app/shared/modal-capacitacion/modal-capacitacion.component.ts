@@ -13,6 +13,8 @@ import { Capacitacion } from 'src/app/interface/capacitación.model';
 import { functions } from 'src/helpers/functions';
 import { FormAdjuntosBtnComponent } from '../form-adjuntos-btn/form-adjuntos-btn.component';
 import { CmpOpcionEvaluadorComponent } from '../cmp-opcion/cmp-opcion-evaluador/cmp-opcion-evaluador.component';
+import { PerfilService } from 'src/app/service/perfil.service';
+import { PerfilInscripcion } from 'src/app/interface/perfil-insripcion.model';
 
 @Component({
   selector: 'vex-modal-capacitacion',
@@ -37,6 +39,8 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
   flagOtroCapacitacion: boolean = false;
   cmpTipoRevisionEdit: boolean = false;
   booleanEditFile = false;
+  flagPEU: boolean = false;
+  flagEgreso: boolean = false;
 
   formGroup = this.fb.group({
     tipo: ['', Validators.required],
@@ -46,7 +50,7 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
     hora: ['', Validators.required],
     fechaVigencia: ['', Validators.required],
     fechaInicio: ['', Validators.required],
-    fechaFin: ['', Validators.required]
+    fechaFin: ['', Validators.required],
   });
 
   listTipo: ListadoDetalle[]
@@ -57,7 +61,8 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
     @Inject(MAT_DIALOG_DATA) data,
     private parametriaService: ParametriaService,
     private capacitacionService: CapacitacionService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private perfilService: PerfilService
   ) {
     super();
 
@@ -79,10 +84,46 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
     this.cargarCombo();
   }
 
+  todosTipos: ListadoDetalle[] = [];
+  perfilesSeleccionados: PerfilInscripcion[] = [];
+
   cargarCombo() {
     this.parametriaService.obtenerMultipleListadoDetalle([ListadoEnum.TIPO_CAPACITACION]).subscribe(listRes => {
-      this.listTipo = listRes[0];
+      const listaCompleta = listRes[0];
+      this.todosTipos = listaCompleta;
+
+      // Filtra inicialmente quitando "PEU"
+      this.listTipo = listaCompleta.filter(x => x.codigo !== 'PEU');
+
+      this.validarMostrarPEU();
     })
+  }
+
+  validarMostrarPEU() {
+    this.perfilService.buscarPerfiles({ solicitudUuid: this.solicitud.solicitudUuid }).subscribe(resp => {
+      this.perfilesSeleccionados = resp.content;
+
+      const hayPerfilS4 = this.perfilesSeleccionados.some(p =>
+        p.perfil?.nombre?.toUpperCase().includes('S4')
+      );
+
+      const toggleOpcion = (codigo: string) => {
+        const tieneOpcion = this.listTipo.some(x => x.codigo === codigo);
+        const opcion = this.todosTipos.find(x => x.codigo === codigo);
+
+        if (hayPerfilS4 && opcion && !tieneOpcion) {
+          this.listTipo.push(opcion);
+          this.listTipo.sort((a, b) => Number(a.orden) - Number(b.orden));
+        }
+
+        if (!hayPerfilS4 && tieneOpcion) {
+          this.listTipo = this.listTipo.filter(x => x.codigo !== codigo);
+        }
+      };
+
+      toggleOpcion('PEU');
+      toggleOpcion('EGRESO');
+    });
   }
 
   closeModal() {
@@ -123,6 +164,18 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
       this.formGroup.controls['detalleTipo'].updateValueAndValidity
       this.formGroup.controls['detalleTipo'].reset()
       this.flagOtroCapacitacion = false
+    }
+
+    if (tipo.codigo === 'PEU') {
+      this.flagPEU = true;
+    } else {
+      this.flagPEU = false;
+    }
+
+    if (tipo.codigo === 'EGRESO') {
+      this.flagEgreso = true;
+    } else {
+      this.flagEgreso = false;
     }
   }
 
@@ -196,6 +249,17 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
       },
       ...this.formGroup.getRawValue()
     };
+    if ((this.flagPEU && capacitacion.fechaVigencia) || (this.flagEgreso && capacitacion.fechaVigencia)) {
+      const hoy = new Date();
+      const fechaEgresoDate = new Date(capacitacion.fechaVigencia);
+      const fechaLimite = new Date();
+      fechaLimite.setFullYear(hoy.getFullYear() - 4);
+
+      if (fechaEgresoDate < fechaLimite) {
+        functionsAlert.error('La Fecha de Egreso no puede ser mayor a 4 años de antigüedad.');
+        return;
+      }
+    }
 
     capacitacion.archivos = [];
     let archivoTA09 = this.formAdjuntoBtnTA09?.obtenerAdjuntos();
@@ -223,6 +287,17 @@ export class ModalCapacitacionComponent extends BaseComponent implements OnInit 
       },
       ...this.formGroup.getRawValue()
     };
+    if ((this.flagPEU && capacitacion.fechaVigencia) || (this.flagEgreso && capacitacion.fechaVigencia)) {
+      const hoy = new Date();
+      const fechaEgresoDate = new Date(capacitacion.fechaVigencia);
+      const fechaLimite = new Date();
+      fechaLimite.setFullYear(hoy.getFullYear() - 4);
+
+      if (fechaEgresoDate < fechaLimite) {
+        functionsAlert.error('La Fecha de Egreso no puede ser mayor a 4 años de antigüedad.');
+        return;
+      }
+    }
 
     capacitacion.archivos = [];
     let archivoTA09 = this.formAdjuntoBtnTA09?.obtenerAdjuntos();

@@ -40,13 +40,20 @@
                 <input [formControl]="formGroup.controls.hora" matInput (keypress)="numberOnly($event)">
                 <mat-error *ngIf="formGroup.get('hora').hasError('required')">Ingrese Nro de Horas</mat-error>
             </mat-form-field>
-            <mat-form-field  class="flex-auto">
-                <mat-label>Fecha de Expedición/Vigencia</mat-label>
+            <mat-form-field class="flex-auto">
+                <mat-label>Fecha de Expedición/Vigencia/Egreso</mat-label>
                 <input [formControl]="formGroup.controls.fechaVigencia" type="date" max="{{dateHoy | date:'yyyy-MM-dd'}}" matInput>
                 <mat-error *ngIf="formGroup.get('fechaVigencia').hasError('required')">Ingrese Fecha de
-                    Expedición/Vigencia
+                    Expedición/Vigencia/Egreso
                 </mat-error>
             </mat-form-field>
+        <!--<mat-form-field *ngIf="flagPEU" class="flex-auto">
+                <mat-label>Fecha de Egreso</mat-label>
+                <input [formControl]="formGroup.controls.fechaEgreso" type="date" max="{{ dateHoy | date: 'yyyy-MM-dd' }}" matInput >
+                <mat-error *ngIf="formGroup.get('fechaEgreso').hasError('required')">
+                    Ingrese Fecha de Egreso
+                </mat-error>
+            </mat-form-field>-->
         </div>
         <div class="flex flex-col sm:flex-row sm:gap-4">
             <mat-form-field  class="flex-auto">

@@ -52,4 +52,10 @@ export class InformeRenovacionService {
     const urlEndpoint = `${this._path_serve}/api/renovacion/informes?${params.toString()}`;
     return this.http.get<any>(urlEndpoint);
   }
+
+  obtenerParametrosFirmaDigital(idInformeRenovacion: number): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/informe/renovacion/firma-digital/obtenerParametros`;
+    const requestBody = { idInformeRenovacion: idInformeRenovacion };
+    return this.http.post<any>(urlEndpoint, requestBody);
+  }
 }

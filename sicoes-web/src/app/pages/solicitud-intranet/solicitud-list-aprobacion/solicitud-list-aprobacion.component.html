@@ -435,19 +435,19 @@
                 <div class="flex flex-col sm:flex-row sm:gap-4">
                   <mat-form-field  class="flex-auto">
                     <mat-label >N°. Expediente</mat-label>
-                      <input matInput [formControl]="formGroupInformeRenovacion.controls.nuExpediente" maxlength="50" placeholder="N°. Expediente" />
-                  </mat-form-field>
+                    <!--  <input matInput [formControl]="formGroupInformeRenovacion.controls.nuExpediente" maxlength="50" placeholder="N°. Expediente" />
+                  --></mat-form-field>
                   <mat-form-field class="flex-auto">
                     <mat-label>Contratista</mat-label>
-                    <input [formControl]="formGroupInformeRenovacion.controls.contratistaP" matInput />
+                  <!--  <input [formControl]="formGroupInformeRenovacion.controls.contratistaP" matInput />-->
                   </mat-form-field>
                   <mat-form-field class="flex-auto">
                     <mat-label>Estado de Aprobacion</mat-label>
-                    <mat-select [formControl]="formGroupInformeRenovacion.controls.estadoAprobacion" [compareWith]="compareSelecIdListadoDetalle">
+                  <!--  <mat-select [formControl]="formGroupInformeRenovacion.controls.estadoAprobacion" [compareWith]="compareSelecIdListadoDetalle">
                       <mat-option *ngFor="let obj of listEstadoRevision" [value]="obj">
                         {{ obj.nombre }}
                       </mat-option>
-                    </mat-select>
+                    </mat-select>-->
                   </mat-form-field>
                 </div>
               </div>
@@ -479,6 +479,19 @@
       <span>Ver</span>
     </button>
     <button mat-menu-item (click)="historyApproveAndSignPerfeccionamiento(row)">
+      <mat-icon svgIcon="mat:history"></mat-icon>
+      <span>Historial Aprobar y firmar</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+<mat-menu #actionsMenuInformeRenovacion="matMenu" xPosition="before" yPosition="below">
+  <ng-template let-row="row" matMenuContent>
+    <button mat-menu-item (click)="verInformeRenovacion(row)">
+      <mat-icon svgIcon="mat:preview"></mat-icon>
+      <span>Ver</span>
+    </button>
+    <button mat-menu-item (click)="historyApproveAndSignInformeRenovacion(row)">
       <mat-icon svgIcon="mat:history"></mat-icon>
       <span>Historial Aprobar y firmar</span>
     </button>

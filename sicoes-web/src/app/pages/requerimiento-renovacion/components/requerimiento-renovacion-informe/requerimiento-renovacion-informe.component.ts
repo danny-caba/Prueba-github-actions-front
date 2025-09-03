@@ -68,22 +68,25 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
   }
 
   registrar() {
-    if (this.formGroup.valid) {
-      const informe = this.formGroup.value;
-      this.requerimiento.solicitudPerfil = {idSolicitud:this.requerimiento.idSoliPerfCont}
-      informe.requerimiento = this.requerimiento;
-      this.informeRenovacionService.registrar(informe).subscribe({
-        next: () => {
-          functionsAlert.success('Informe registrado correctamente');
-          this.router.navigate([Link.INTRANET, Link.SOLICITUDES_LIST]);
-        },
-        error: () => {
-          functionsAlert.error('Ocurrio un error al registrar el informe');
-        }
-      });
-    } else {
-      
-    }
+    if (this.validarForm()) return;
+    functionsAlert.questionSiNoEval('¿Seguro de enviar el informe para las firmas?',"Informe...").then((result) => {
+        if(result.isConfirmed){
+        const informe = this.formGroup.value;
+        this.requerimiento.solicitudPerfil = {idSolicitud:this.requerimiento.idSoliPerfCont}
+        informe.requerimiento = this.requerimiento;
+        this.informeRenovacionService.registrar(informe).subscribe({
+          next: () => {
+            functionsAlert.success('Informe registrado correctamente');
+            this.router.navigate([Link.INTRANET, Link.REQUERIMIENTO_RENOVACION_LIST,this.requerimiento.idSoliPerfCont]);
+          },
+          error: () => {
+            functionsAlert.error('Ocurrio un error al registrar el informe');
+          }
+        });
+      } else {
+      }
+    });
+        
   }  
 
   cancelar(){
@@ -94,6 +97,12 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
     this.solicitudService.clearSolicitud();
   }
 
-  
+  validarForm() {
+    if (!this.formGroup.valid) {
+      this.formGroup.markAllAsTouched()
+      return true;
+    }
+    return false;
+  }  
 
 }

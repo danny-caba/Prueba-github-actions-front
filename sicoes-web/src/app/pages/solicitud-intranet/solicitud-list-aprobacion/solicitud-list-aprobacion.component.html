@@ -208,7 +208,7 @@
                   <mat-checkbox
                     color="primary"
                     (change)="actualizarListaExpedientePerfeccionamiento($event, element)">
-                  </mat-checkbox>                
+                  </mat-checkbox>
                 </td>
               </ng-container>
 
@@ -357,7 +357,7 @@
                   <mat-checkbox
                     color="primary"
                     (change)="actualizarListaExpedienteInformeRenovacion($event, element)">
-                  </mat-checkbox>                
+                  </mat-checkbox>
                 </td>
               </ng-container>
 
@@ -425,6 +425,33 @@
               <tr mat-footer-row *matFooterRowDef="['vacioInformeRenovacion']" [ngClass]="{ hide: !(dataSourceInformeRenovacion.data.length === 0) }"></tr>
             </table>
             <mat-paginator #paginatorInformeRenovacion class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChangeInformeRenovacion($event)" showFirstLastButtons></mat-paginator>
+          </div>
+        </mat-tab>
+        <mat-tab label="Informe de Renovación">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div @fadeInUp class="flex-auto">
+              <mat-divider class="-mr-6 -ml-6"></mat-divider>
+              <div class="py-4 flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:gap-4">
+                  <mat-form-field  class="flex-auto">
+                    <mat-label >N°. Expediente</mat-label>
+                    <!--  <input matInput [formControl]="formGroupInformeRenovacion.controls.nuExpediente" maxlength="50" placeholder="N°. Expediente" />
+                  --></mat-form-field>
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Contratista</mat-label>
+                  <!--  <input [formControl]="formGroupInformeRenovacion.controls.contratistaP" matInput />-->
+                  </mat-form-field>
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Estado de Aprobacion</mat-label>
+                  <!--  <mat-select [formControl]="formGroupInformeRenovacion.controls.estadoAprobacion" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listEstadoRevision" [value]="obj">
+                        {{ obj.nombre }}
+                      </mat-option>
+                    </mat-select>-->
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
           </div>
         </mat-tab>
         </mat-tab-group>

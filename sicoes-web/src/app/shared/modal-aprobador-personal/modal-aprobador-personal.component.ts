@@ -169,7 +169,9 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     this.solicitudService.aprobarReemplazo(json).subscribe(resp => {
       this.loadingAccion = false;
       console.log("respuesta", resp);
-      this.cerrar()
+      functionsAlert.success('Guardado [OK]');
+      this.cerrar();
+      
     })
 
   }

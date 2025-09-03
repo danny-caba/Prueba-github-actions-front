@@ -24,6 +24,7 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
 
   usuario$: any;
   usuario: AuthUser;
+  archivoSeleccionado: File | null = null;
 
   constructor(
     private dialogRef: MatDialogRef<ModalAprobadorInformeRenovacionComponent>,
@@ -60,6 +61,25 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
       return true;
     }
     return false;
+  }
+  async adjuntarArchivo (): Promise<void> {
+
+    console.log("adjuntarArchivo");
+  }
+
+  onFileSelectedPersonal(ev: any): void {
+    const file = ev.target.files[0];
+    if (!file) return;
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('tipoRequisito', 'name');
+
+  }
+  descargar(): void {
+    console.log('Descargando archivo:');
+  }
+  eliminarPersonalDoc(): void {
+    console.log('Eliminando archivo:');
   }
 
   async realizarAccion(tipoAccion: string): Promise<void> {

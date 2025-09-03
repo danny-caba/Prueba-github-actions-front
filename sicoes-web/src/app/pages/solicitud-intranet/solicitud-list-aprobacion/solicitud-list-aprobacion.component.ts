@@ -60,8 +60,15 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     estadoAprobacionP: [null]
   });
 
+  formGroupInformeRenovacion = this.fb.group({
+    nuExpediente: [''],
+    contratistaP: [''],
+    estadoAprobacion: [null]
+  });
+
   listTipoSolicitud: any[];
   listEstadoRevision: any[];
+  listEstadoAprobacionInforme: any[];
   listEstadoEvaluacionTecnica: any[];
   listEstadoEvaluacionAdminis: any[];
   listEstadoAprobacion: any[];

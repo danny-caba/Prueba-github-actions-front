@@ -89,21 +89,20 @@ export class LayoutFechaEtapaComponent extends BasePageComponent<any> implements
 
   cargarTabla() {
     const filtro = this.obtenerFiltro();
-    
+
     // Obtenemos los datos del servicio
     this.serviceTable(filtro).subscribe(data => {
       const items = data.content; // Extraemos el array de datos (content)
-  
+
       // Ordenamos los elementos por 'idListadoDetalle' de la propiedad 'etapa'
-      items.sort((a, b) => {
-        const idA = Number(a.etapa?.idListadoDetalle) || 0;
-        const idB = Number(b.etapa?.idListadoDetalle) || 0;
-        return idA - idB;
-      });
-  
+      const itemsWithProceso = items.map(item => ({
+        ...item,
+        proceso: this.PROCESO
+      }));
+
       // Asignamos los elementos ordenados a 'MatTableDataSource'
-      this.dataSource = new MatTableDataSource(items);
-  
+      this.dataSource = new MatTableDataSource(itemsWithProceso);
+
       // Si usas paginación, asegúrate de asignarla
       this.dataSource.paginator = this.paginator;
       this.paginator.length = data.totalElements; // Total de elementos para la paginación

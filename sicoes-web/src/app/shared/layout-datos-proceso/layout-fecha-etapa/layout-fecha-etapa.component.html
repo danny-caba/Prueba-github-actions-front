@@ -39,7 +39,7 @@
                             <mat-icon svgIcon="mat:edit"></mat-icon>
                         </button>
 
-                        <button (click)="descargarXlsConsultas()" matTooltip="Descargar consultas" *ngIf="bView == true && row.etapa?.nombre == FORMULACION_CONSULTAS && evaluarFechaPorEtapa(row.fechaInicio, row.fechaFin) == 'Concluído'">
+                        <button (click)="descargarXlsConsultas()" matTooltip="Descargar consultas" *ngIf="bView == true && row.etapa?.nombre == FORMULACION_CONSULTAS && evaluarFechaPorEtapa(row.fechaInicio, row.fechaFin) == 'Concluído' && row.proceso?.estado?.codigo !== 'EN_ELABORACION'">
                             <img class="w-6" src="assets/img/icons/logos/excel-icon.png" alt="Logo Excel">
                         </button>
                     </td>

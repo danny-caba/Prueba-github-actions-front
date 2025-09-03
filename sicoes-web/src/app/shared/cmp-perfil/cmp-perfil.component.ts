@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { map, Observable, startWith } from 'rxjs';
+import { map, Observable, of, startWith } from 'rxjs';
 import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { ParametriaService } from 'src/app/service/parametria.service';
 import { BaseComponent } from '../components/base.component';
@@ -36,9 +36,15 @@ export class CmpPerfilComponent extends BaseComponent implements OnInit {
   idDivisionSeleccionada: number;
   isProfesionDivisionDefinidos: boolean;
 
+  grupoPerfilSeleccionado: string = null;
+  filteredPerfiles$: Observable<any[]>;
+  listaPerfiles: any;
+
   formGroup = this.fb.group({
     aprobador: [null as any, Validators.required]
   });
+  
+  
 
   constructor(
     private fb: FormBuilder,
@@ -50,15 +56,18 @@ export class CmpPerfilComponent extends BaseComponent implements OnInit {
     super();
     
     this.listarProfesiones()
-    //this.listarPerfiles();
   }
 
   ngOnInit() {
+    this.formGroup = this.fb.group({
+      aprobador: [null, Validators.required]
+    });
+
     this.isProfesionDivisionDefinidos = false;
     functionsAlert.info('La solicitud del Registro de Precalificación es a nivel de "División", por lo que tiene la posibilidad de poder postular las veces que sean necesarias, considerando la selección de perfiles que no han sido elegidos en sus postulaciones anteriores.').then((result) => {
     });
 
-    this.inicializarDatos();
+    this.cargarGrupoDesdeBackend();
   }
 
   listarPerfiles() {
@@ -74,9 +83,16 @@ export class CmpPerfilComponent extends BaseComponent implements OnInit {
     })
   }
 
-  filterStatesTec(nombreUsuario: string) {
+  filterStatesTec2(nombreUsuario: string) {
     return this.listAprobadoresALL.filter(state =>
       state.detalle?.toLowerCase().indexOf(nombreUsuario?.toLowerCase()) >= 0);
+  }
+
+  filterStatesTec(nombreUsuario: string): any[] {
+    const texto = nombreUsuario?.toLowerCase() || '';
+    return this.listAprobadoresALL.filter(p =>
+      p.detalle?.toLowerCase().includes(texto)
+    );
   }
 
   blurEvaluadorTecnico() {
@@ -101,32 +117,70 @@ export class CmpPerfilComponent extends BaseComponent implements OnInit {
   }
 
   guardar() {
-    if (this.validarForm()) return;
-    
-    let perfil: any = {
-      solicitud: {
-        solicitudUuid: this.solicitud.solicitudUuid,
-      },
-      ...this.formGroup.controls.aprobador.getRawValue()
+    if (this.formGroup.invalid) return;
+
+    const perfilSeleccionado = this.formGroup.controls.aprobador.value;
+
+    const perfilObjeto = typeof perfilSeleccionado === 'string'
+      ? this.listAprobadoresALL.find(p => p.detalle === perfilSeleccionado)
+      : perfilSeleccionado;
+
+    const nombrePerfil = perfilObjeto?.perfil?.nombre;
+    if (!nombrePerfil) {
+      this.snackbar.open('Debe seleccionar un perfil válido.', 'Cerrar', { duration: 3000 });
+      return;
+    }
+
+    const grupoActual = this.obtenerGrupoPerfil(nombrePerfil);
+
+    if (this.grupoPerfilSeleccionado && grupoActual !== this.grupoPerfilSeleccionado) {
+      this.snackbar.open('El perfil seleccionado no corresponde al grupo permitido.', 'Cerrar', { duration: 3000 });
+      return;
+    }
+
+    if (!this.grupoPerfilSeleccionado) {
+      this.grupoPerfilSeleccionado = grupoActual;
+
+      this.listAprobadoresALL = this.listAprobadoresALL.filter(p => {
+        const grupo = this.obtenerGrupoPerfil(p.perfil?.nombre);
+        return grupo === grupoActual;
+      });
+
+      this.filteredStatesTecnico$ = this.formGroup.controls.aprobador.valueChanges.pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value?.detalle),
+        map(name => this.filterStatesTec(name))
+      );
+    }
+
+    const payload: any = {
+      solicitud: { solicitudUuid: this.solicitud.solicitudUuid },
+      ...perfilObjeto
     };
 
-    this.perfilService.registrar(perfil).subscribe(res => {
-      functionsAlert.success('Registrado').then((result) => {
+    this.perfilService.registrar(payload).subscribe(res => {
+      functionsAlert.success('Registrado').then(() => {
         this.formGroup.controls.aprobador.reset();
-        this.actualizarTabla.emit(result);
+        this.actualizarTabla.emit(res);
 
         if (!this.isProfesionDivisionDefinidos) {
-          let formValues = this.obtenerDatos();
-
-          this.solicitudService.actualizarBorradorPN(formValues).subscribe(obj => {
-            functionsAlert.success('Datos Actualizados').then((result) => {
-            });
-          });
+          const formValues = this.obtenerDatos();
+          this.solicitudService.actualizarBorradorPN(formValues).subscribe();
         }
 
         this.isProfesionDivisionDefinidos = true;
       });
-    })
+    });
+  }
+
+  private _filterPerfiles(value: string): any[] {
+    const filterValue = value?.toLowerCase() || '';
+    return this.listaPerfiles
+      .filter(p => {
+        const grupo = this.grupoPerfilSeleccionado ? this.obtenerGrupoPerfil(p.nombre) : null;
+        const coincideGrupo = !this.grupoPerfilSeleccionado || grupo === this.grupoPerfilSeleccionado;
+        return coincideGrupo && p.detalle.toLowerCase().includes(filterValue);
+      });
   }
 
   obtenerDatos() {
@@ -154,13 +208,24 @@ export class CmpPerfilComponent extends BaseComponent implements OnInit {
         this.idDivisionSeleccionada = this.solicitud.division?.idDivision;
         this.parametriaService.listarPerfilesPorProfesionDivision(this.idProfesionSeleccionada, this.idDivisionSeleccionada).subscribe(listRes => {
           this.isProfesionDivisionDefinidos = true;
-          this.listAprobadoresALL = listRes;
+
+          const perfiles = listRes || [];
+
+          if (this.grupoPerfilSeleccionado) {
+            this.listAprobadoresALL = perfiles.filter(p => {
+              const grupo = this.obtenerGrupoPerfil(p.perfil?.nombre);
+              return grupo === this.grupoPerfilSeleccionado;
+            });
+          } else {
+            this.listAprobadoresALL = perfiles;
+          }
+
           this.filteredStatesTecnico$ = this.formGroup.controls.aprobador.valueChanges.pipe(
             startWith(''),
             map(value => typeof value === 'string' ? value : value?.detalle),
             map(state => state ? this.filterStatesTec(state) : this.listAprobadoresALL.slice())
           );
-        })
+        });
       })
     }
   }
@@ -181,15 +246,80 @@ export class CmpPerfilComponent extends BaseComponent implements OnInit {
   }
 
   listarPerfilesPorProfesionDivision(event) {
-    this.parametriaService.listarPerfilesPorProfesionDivision(this.idProfesionSeleccionada, event.value).subscribe(listRes => {
-      this.listAprobadoresALL = listRes;
+    const idDivision = event.value;
 
-      this.filteredStatesTecnico$ = this.formGroup.controls.aprobador.valueChanges.pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value?.detalle),
-        map(state => state ? this.filterStatesTec(state) : this.listAprobadoresALL.slice())
-      );
-    })
+    this.parametriaService.listarPerfilesPorProfesionDivision(this.idProfesionSeleccionada, idDivision)
+      .subscribe(listRes => {
+        const perfiles = listRes || [];
+
+        const perfilActual = this.formGroup.controls.aprobador.value;
+        const grupoActual = perfilActual?.perfil?.nombre ? this.obtenerGrupoPerfil(perfilActual.perfil.nombre) : null;
+
+        const grupoFiltrar = this.grupoPerfilSeleccionado || grupoActual;
+
+        if (grupoFiltrar) {
+          this.grupoPerfilSeleccionado = grupoFiltrar;
+
+          this.listAprobadoresALL = perfiles.filter(p => {
+            const grupo = this.obtenerGrupoPerfil(p.perfil?.nombre);
+            return grupo === grupoFiltrar;
+          });
+
+          if (this.listAprobadoresALL.length === 0) {
+            this.snackbar.open('No hay perfiles de este grupo en la división seleccionada.', 'Cerrar', { duration: 3000 });
+          }
+        } else {
+          this.listAprobadoresALL = perfiles;
+        }
+
+        this.filteredStatesTecnico$ = this.formGroup.controls.aprobador.valueChanges.pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value?.detalle),
+          map(name => this.filterStatesTec(name))
+        );
+      });
+  }
+
+  obtenerGrupoPerfil(nombrePerfil: string): string | null {
+    if (!nombrePerfil) return null;
+
+    if (nombrePerfil.includes('S4A') || nombrePerfil.includes('S4B')) return 'S4';
+    if (nombrePerfil.includes('S1') || nombrePerfil.includes('S2') || nombrePerfil.includes('S3')) return 'S1-S3';
+
+    return null;
+  }
+
+  cargarGrupoDesdeBackend() {
+    const filtro = { solicitudUuid: this.solicitud.solicitudUuid };
+
+    this.perfilService.buscarPerfiles(filtro).subscribe(response => {
+      const perfilesSeleccionados = response.content || [];
+
+      if (perfilesSeleccionados.length > 0) {
+        const grupos = new Set(perfilesSeleccionados.map(p => this.obtenerGrupoPerfil(p.perfil?.nombre)));
+        if (grupos.size === 1) {
+          this.grupoPerfilSeleccionado = grupos.values().next().value;
+
+        } else {
+          console.warn('Perfiles con distintos grupos, no se puede aplicar un filtro único.');
+          this.grupoPerfilSeleccionado = null;
+        }
+      }
+
+      this.inicializarDatos();
+    });
+  }
+
+  recargarFiltros() {
+    this.grupoPerfilSeleccionado = null;
+    this.formGroup.controls.aprobador.reset();
+    this.idDivisionSeleccionada = null;
+    this.idProfesionSeleccionada = null;
+    this.listaDivisiones = [];
+    this.filteredStatesTecnico$ = of([]);
+    this.isProfesionDivisionDefinidos = false;
+
+    this.cargarGrupoDesdeBackend(); 
   }
 
 }

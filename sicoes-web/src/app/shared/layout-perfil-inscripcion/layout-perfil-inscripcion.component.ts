@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { Solicitud } from 'src/app/interface/solicitud.model';
 import { PerfilService } from 'src/app/service/perfil.service';
@@ -10,6 +10,7 @@ import { BasePageComponent } from '../components/base-page.component';
 import { ModalPerfilComponent } from '../modal-perfil/modal-perfil.component';
 import { ModalPerfilAsignacionComponent } from '../modal-perfil-asignacion/modal-perfil-asignacion.component';
 import { UsuarioService } from 'src/app/service/usuario.service';
+import { CmpPerfilComponent } from '../cmp-perfil/cmp-perfil.component';
 
 @Component({
   selector: 'vex-layout-perfil-inscripcion',
@@ -25,6 +26,7 @@ export class LayoutPerfilInscripcionComponent extends BasePageComponent<any> imp
   solitidud: Partial<Solicitud>
   sector: any
   @Input() ES_PERS_NAT: boolean = true
+  @ViewChild(CmpPerfilComponent) cmpPerfil: CmpPerfilComponent;
 
   displayedColumns: string[] = [];
 
@@ -158,10 +160,35 @@ export class LayoutPerfilInscripcionComponent extends BasePageComponent<any> imp
         this.perfilService.eliminar(obj.idOtroRequisito).subscribe(sol => {
           functionsAlert.success('Registro Eliminado').then((result) => {
             this.cargarTabla();
+    setTimeout(() => {
+      const hayPerfiles = this.itemsTable?.length > 0;
+      const quedanDelGrupo = this.itemsTable?.some(p => p.grupo === obj.grupo);
+
+      if (!hayPerfiles || !quedanDelGrupo) {
+        this.cmpPerfil?.recargarFiltros(); 
+      }
+      if(!hayPerfiles){
+                const formValues = this.obtenerDatos();
+                this.solicitudService.actualizarBorradorPN(formValues).subscribe();
+              this.cmpPerfil?.recargarFiltros();
+              }
+    }, 800); 
           });
         });
       }
     });
+  }
+
+  obtenerDatos() {
+    let profesion = null
+    let division = null
+    let formValues: any = {
+    ...this.solitidud,
+      profesion: profesion,
+      division: division,
+    }
+
+    return formValues;
   }
 
   asignarPerfil(obj) {

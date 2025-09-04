@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator'; 
+import { MatPaginator } from '@angular/material/paginator';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
 import { ListadoEnum } from 'src/helpers/constantes.components';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
-import { SolicitudService } from 'src/app/service/solicitud.service'; 
+import { SolicitudService } from 'src/app/service/solicitud.service';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { ParametriaService } from 'src/app/service/parametria.service';
@@ -18,7 +18,7 @@ import { AdjuntosService } from 'src/app/service/adjuntos.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalAprobadorFirmaAccionComponent } from 'src/app/shared/modal-aprobador-firma-accion/modal-aprobador-firma-accion.component';
 import { LayoutAprobacionHistorialComponent } from 'src/app/shared/layout-aprobacion-historial/layout-aprobacion-historial.component';
-import { takeUntil } from 'rxjs/operators'; 
+import { takeUntil } from 'rxjs/operators';
 import { ModalAprobadorContratoComponent } from 'src/app/shared/modal-aprobador-contrato/modal-aprobador-contrato.component';
 import { ModalAprobadorInformeRenovacionComponent } from 'src/app/shared/modal-aprobador-informe-renovacion/modal-aprobador-informe-renovacion.component';
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
@@ -70,6 +70,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   listTipoSolicitud: any[];
   listEstadoRevision: any[];
+  listEstadoAprobacionInforme: any[];
   listEstadoEvaluacionTecnica: any[];
   listEstadoEvaluacionAdminis: any[];
   listEstadoAprobacion: any[];
@@ -85,7 +86,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   listaSolicitudUuidSeleccionado: string[] = [];
 
   listaContratosSeleccionadosPerfeccionamiento: SelectedPerfeccionamientoItem[] = [];
-  
+
   listaInformesRenovacionSeleccionados: any[] = [];
 
   displayedColumns: string[] = [
@@ -176,7 +177,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       this.listTipoContrato = listRes[3];
       this.listTipoAprobacionP = listRes[4];
       this.listEstadoAprobacionP = listRes[5];
-      
+
       this.listTipoInformeRenovacion = listRes[6];
       this.listEstadoEvaluacionRenovacion = listRes[7];
     });
@@ -416,10 +417,10 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
         elementosSeleccionados: this.listaContratosSeleccionadosPerfeccionamiento,
       },
     }).afterClosed().subscribe(result => {
-      if (result === 'OK') { 
+      if (result === 'OK') {
         this.flagContrato = false;
-        this.buscarPerfeccionamiento(); 
-        this.listaContratosSeleccionadosPerfeccionamiento = []; 
+        this.buscarPerfeccionamiento();
+        this.listaContratosSeleccionadosPerfeccionamiento = [];
       } else {
         this.flagContrato = true;
         console.log('Proceso de aprobación/firma masiva de contratos cancelado o no completado.');
@@ -516,10 +517,10 @@ historyApproveAndSignPerfeccionamiento(row: any) {
         elementosSeleccionados: this.listaInformesRenovacionSeleccionados,
       },
     }).afterClosed().subscribe(result => {
-      if (result === 'OK') { 
+      if (result === 'OK') {
         this.flagInformeRenovacion = false;
-        this.buscarInformeRenovacion(); 
-        this.listaInformesRenovacionSeleccionados = []; 
+        this.buscarInformeRenovacion();
+        this.listaInformesRenovacionSeleccionados = [];
       } else {
         this.flagInformeRenovacion = true;
         console.log('Proceso de aprobación/firma masiva de informes de renovación cancelado o no completado.');

@@ -64,8 +64,8 @@ export class ModalRequerimientoRenovacionCrearComponent extends BaseComponent im
   guardar() {
     if (this.validarForm()) return;
     this.requerimientoRenovacion.evaluacion = this.formGroup.controls.observacion.getRawValue();
-      functionsAlert.questionSiNoEval('¿Está seguro de crear requerimiento de renovación?',"Requerimiento renovación").then((result) => {
-        if(result.isConfirmed){
+    functionsAlert.questionSiNoEval('¿Está seguro de crear requerimiento de renovación?',"Requerimiento renovación").then((result) => {
+      if(result.isConfirmed){
           this.requerimientoRenovacion.tipoSector=this.requerimientoRenovacion.sector.codigo
           this.requerimientoRenovacion.tipoSubSector=this.requerimientoRenovacion.sector.codigo
           this.requerimientoRenovacion.deObservacion = this.formGroup.controls.observacion.value
@@ -78,7 +78,7 @@ export class ModalRequerimientoRenovacionCrearComponent extends BaseComponent im
           });
         } else {
         }
-      });
+    });
   }
 
 }

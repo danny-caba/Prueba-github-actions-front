@@ -142,6 +142,16 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
       'new']);
   }
 
+  goToFormEnviarInvitacion(requerimiento: any, accion: string) {
+    console.log(requerimiento)
+    this.router.navigate([
+      Link.INTRANET, 
+      Link.REQUERIMIENTO_RENOVACION_LIST, 
+      requerimiento.nuExpediente,
+      Link.REQUERIMIENTO_RENOVACION_INVITACION, 
+      'new']);
+  }
+
   limpiar() {
     this.formGroup.reset();
     this.buscar();
@@ -174,6 +184,15 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
     return ! this.itemsTable.every(
       (item: RequerimientoRenovacion) =>
         item.estadoReqRenovacion?.codigo === 'CONCLUIDO' ||
+        item.estadoReqRenovacion?.codigo === 'ARCHIVADO'
+    );
+  }
+
+  formEnviarInvitacion(solicitud: any){
+  
+    return ! this.itemsTable.every(
+      (item: RequerimientoRenovacion) =>
+        item.estadoReqRenovacion?.codigo === 'EN_PROCESO' ||
         item.estadoReqRenovacion?.codigo === 'ARCHIVADO'
     );
   }

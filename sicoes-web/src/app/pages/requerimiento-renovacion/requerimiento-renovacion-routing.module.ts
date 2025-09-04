@@ -6,6 +6,7 @@ import { RoleGuardService } from 'src/app/auth/guards/role-guard.service';
 import { Link } from 'src/helpers/internal-urls.components';
 import { RequerimientoRenovacionListComponent } from './components/requerimiento-renovacion-list/requerimiento-renovacion-list.component';
 import { RequerimientoRenovacionInformeComponent } from './components/requerimiento-renovacion-informe/requerimiento-renovacion-informe.component';
+import { RequerimientoRenovacionInvitacionComponent } from './components/requerimiento-renovacion-invitacion/requerimiento-renovacion-invitacion.component';
 
 const routes: VexRoutes = [{ 
   path: '',
@@ -26,6 +27,11 @@ const routes: VexRoutes = [{
       path: ':idRequerimiento/informe/:idInforme',
       canActivate: [AuthGuardService, RoleGuardService],
       component: RequerimientoRenovacionInformeComponent
+    },
+    {
+      path: ':idRequerimiento/invitacion/:idInforme',
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: RequerimientoRenovacionInvitacionComponent
     }
   ]
   }];

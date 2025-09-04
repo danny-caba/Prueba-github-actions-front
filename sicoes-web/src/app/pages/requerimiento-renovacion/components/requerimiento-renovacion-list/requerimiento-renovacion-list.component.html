@@ -143,5 +143,9 @@
             <mat-icon svgIcon="mat:new_label"></mat-icon>
             <span>Elaborar Informe</span>
         </button>
+        <button mat-menu-item (click)="goToFormEnviarInvitacion(row, 'ACCION_VER')" *ngIf="formEnviarInvitacion(row)"> 
+            <mat-icon svgIcon="mat:send"></mat-icon>
+            <span>Enviar Invitación</span>
+        </button>
     </ng-template>
 </mat-menu>

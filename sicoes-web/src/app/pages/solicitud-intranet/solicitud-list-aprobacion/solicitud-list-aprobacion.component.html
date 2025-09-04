@@ -1,8 +1,8 @@
 <vex-page-layout mode="card">
   <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
   <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
-    <div class="card px-6 py-4">
-      <mat-tab-group>
+    <div *ngIf="mostrarCards" class="card px-6 py-4">
+      <mat-tab-group  [(selectedIndex)]="selectedTabIndex">
         <mat-tab label="Bandeja de Solicitudes de Aprobaciones">
           <div class="flex flex-col sm:flex-row gap-4">
             <div @fadeInUp class="flex-auto">
@@ -426,9 +426,68 @@
             </table>
             <mat-paginator #paginatorInformeRenovacion class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChangeInformeRenovacion($event)" showFirstLastButtons></mat-paginator>
           </div>
+
+          <div class="flex flex-row justify-end gap-4 mt-4">
+
+            <button mat-stroked-button color="primary" (click)="historialAprobaciones()">
+              Historial de aprobaciones
+            </button>
+          </div>
         </mat-tab>
         </mat-tab-group>
     </div>
+
+  <!-- Historial debajo de la tabla -->
+  <div *ngIf="mostrarHistorial" class="overflow-auto shadow-2xl rounded mt-4">
+    <table mat-table [dataSource]="dataSourceHistorial" class="w-full border">
+      <ng-container matColumnDef="tipoSector">
+        <th mat-header-cell *matHeaderCellDef>Tipo</th>
+        <td mat-cell *matCellDef="let element">{{ element.tipoSector }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="grupoSector">
+        <th mat-header-cell *matHeaderCellDef>Grupo</th>
+        <td mat-cell *matCellDef="let element">{{ element.grupo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaDesde">
+        <th mat-header-cell *matHeaderCellDef>Fecha Hora designación</th>
+        <td mat-cell *matCellDef="let element">{{ element.fechaDesde }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="grupoAprobador">
+        <th mat-header-cell *matHeaderCellDef>Aprobador</th>
+        <td mat-cell *matCellDef="let element">{{ element.grupoAprobador  }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaHasta">
+        <th mat-header-cell *matHeaderCellDef>Fecha Hora Aprobación</th>
+        <td mat-cell *matCellDef="let element">{{ element.fechaHasta }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="estadoFinal">
+        <th mat-header-cell *matHeaderCellDef>Resultado</th>
+        <td mat-cell *matCellDef="let element">{{ element.estadoFinal }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreItem">
+        <th mat-header-cell *matHeaderCellDef>Observación</th>
+        <td mat-cell *matCellDef="let element">{{ element.nombreItem }}</td>
+      </ng-container>
+
+
+
+      <tr mat-header-row *matHeaderRowDef="['tipoSector','grupoSector','fechaDesde','grupoAprobador','fechaHasta','estadoFinal','nombreItem']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['tipoSector','grupoSector','fechaDesde','grupoAprobador','fechaHasta','estadoFinal','nombreItem'];"></tr>
+    </table>
+
+    <div class="flex flex-row justify-end gap-4 mt-4">
+
+      <button mat-stroked-button color="primary" (click)="returnTabView()">
+        regresar
+      </button>
+    </div>
+  </div>
   </vex-page-layout-content>
 </vex-page-layout>
 

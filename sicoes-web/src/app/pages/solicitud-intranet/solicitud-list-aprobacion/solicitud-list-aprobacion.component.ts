@@ -22,6 +22,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ModalAprobadorContratoComponent } from 'src/app/shared/modal-aprobador-contrato/modal-aprobador-contrato.component';
 import { ModalAprobadorInformeRenovacionComponent } from 'src/app/shared/modal-aprobador-informe-renovacion/modal-aprobador-informe-renovacion.component';
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
+import { HistorialAprobacion } from 'src/app/interface/historial-aprobacion-renovacion';
 
 @Component({
   selector: 'vex-solicitud-list-aprobacion',
@@ -42,6 +43,54 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   ACC_REGISTRAR = 'ACC_REGISTRAR';
   ACC_EDITAR = 'ACC_EDITAR';
   ACC_VER = 'ACC_VER';
+  mostrarHistorial=false;
+  mostrarCards=true;
+  selectedTabIndex=0;
+
+  dataSourceHistorial: HistorialAprobacion[] = [
+    {
+      numeroExpediente: "EXP-2025-001",
+      tipoSector: "Energía",
+      tipoSubSector: "Eléctrico",
+      nombreItem: "Proyecto Central Hidroeléctrica",
+      razSocialSupervisora: "Supervisa SAC",
+      estadoFinal: "Aprobado",
+      tipoAccion: "Revisión",
+      grupoAprobador: "Gerencia Técnica",
+      idUsuarioAccion: "USR123",
+      fechaDesde: "2025-08-01",
+      fechaHasta: "2025-08-02",
+      soloAprobados: true
+    },
+    {
+      numeroExpediente: "EXP-2025-002",
+      tipoSector: "Hidrocarburos",
+      tipoSubSector: "Gas Natural",
+      nombreItem: "Planta de Procesamiento",
+      razSocialSupervisora: "Supervisión Perú",
+      estadoFinal: "Rechazado",
+      tipoAccion: "Validación",
+      grupoAprobador: "Gerencia Legal",
+      idUsuarioAccion: "USR456",
+      fechaDesde: "2025-08-05",
+      fechaHasta: "2025-08-06",
+      soloRechazados: true
+    },
+    {
+      numeroExpediente: "EXP-2025-003",
+      tipoSector: "Minería",
+      tipoSubSector: "Cobre",
+      nombreItem: "Mina Cerro Verde",
+      razSocialSupervisora: "Auditorías Mineras SAC",
+      estadoFinal: "Pendiente",
+      tipoAccion: "Firma",
+      grupoAprobador: "Gerencia General",
+      idUsuarioAccion: "USR789",
+      fechaDesde: "2025-08-10",
+      fechaHasta: "2025-08-12",
+      soloMisAcciones: true
+    }
+  ];
 
   formGroup = this.fb.group({
     nroExpediente: [''],
@@ -540,5 +589,18 @@ historyApproveAndSignPerfeccionamiento(row: any) {
 
   redireccionAProbarPaces() {
     this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.SOLICITUDES_LIST_APROBACION_PACES]);
+  }
+
+  historialAprobaciones(){
+    this.mostrarHistorial = !this.mostrarHistorial;
+    this.mostrarCards = !this.mostrarCards;
+  }
+
+  returnTabView(){
+    this.mostrarHistorial = !this.mostrarHistorial;
+    this.mostrarCards = !this.mostrarCards;
+  }
+  irAInformeRenovacion() {
+    this.selectedTabIndex = 2; 
   }
 }

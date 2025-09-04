@@ -166,8 +166,7 @@
     <ng-container matColumnDef="actionsPersonal">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
       <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-        <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ row: row }"
-          [matMenuTriggerFor]="actionsPersonal" mat-icon-button type="button">
+        <button mat-icon-button type="button">
           <mat-icon svgIcon="mat:more_horiz"></mat-icon>
         </button>
       </td>

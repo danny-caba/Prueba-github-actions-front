@@ -166,11 +166,19 @@
       <td mat-cell *matCellDef="let element">{{ element.estadoFirmaGerencia }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="actionsPersonal">
+    <ng-container matColumnDef="actionsPersonal" *ngIf="rol===roles.APROBADOR_G4">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
       <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
         <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ row: row }"
           [matMenuTriggerFor]="actionsPersonal" mat-icon-button type="button">
+          <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actionsPersonal" *ngIf="rol!==roles.APROBADOR_G4">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
+      <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+        <button  mat-icon-button type="button">
           <mat-icon svgIcon="mat:more_horiz"></mat-icon>
         </button>
       </td>
@@ -196,7 +204,7 @@
 </div>
 
 <mat-menu #actionsPersonal="matMenu" xPosition="before" yPosition="below" > 
-  <ng-template let-row="row" matMenuContent *ngIf="rol===roles.APROBADOR_G4">
+  <ng-template let-row="row" matMenuContent >
     <!--button mat-menu-item (click)="verPersonal(row)">
       <mat-icon svgIcon="mat:preview"></mat-icon>
       <span>Ver</span>

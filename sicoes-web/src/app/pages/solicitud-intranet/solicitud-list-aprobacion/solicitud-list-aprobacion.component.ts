@@ -47,51 +47,6 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   mostrarCards=true;
   selectedTabIndex=0;
 
-  dataSourceHistorial: HistorialAprobacion[] = [
-    {
-      numeroExpediente: "EXP-2025-001",
-      tipoSector: "Energía",
-      tipoSubSector: "Eléctrico",
-      nombreItem: "Proyecto Central Hidroeléctrica",
-      razSocialSupervisora: "Supervisa SAC",
-      estadoFinal: "Aprobado",
-      tipoAccion: "Revisión",
-      grupoAprobador: "Gerencia Técnica",
-      idUsuarioAccion: "USR123",
-      fechaDesde: "2025-08-01",
-      fechaHasta: "2025-08-02",
-      soloAprobados: true
-    },
-    {
-      numeroExpediente: "EXP-2025-002",
-      tipoSector: "Hidrocarburos",
-      tipoSubSector: "Gas Natural",
-      nombreItem: "Planta de Procesamiento",
-      razSocialSupervisora: "Supervisión Perú",
-      estadoFinal: "Rechazado",
-      tipoAccion: "Validación",
-      grupoAprobador: "Gerencia Legal",
-      idUsuarioAccion: "USR456",
-      fechaDesde: "2025-08-05",
-      fechaHasta: "2025-08-06",
-      soloRechazados: true
-    },
-    {
-      numeroExpediente: "EXP-2025-003",
-      tipoSector: "Minería",
-      tipoSubSector: "Cobre",
-      nombreItem: "Mina Cerro Verde",
-      razSocialSupervisora: "Auditorías Mineras SAC",
-      estadoFinal: "Pendiente",
-      tipoAccion: "Firma",
-      grupoAprobador: "Gerencia General",
-      idUsuarioAccion: "USR789",
-      fechaDesde: "2025-08-10",
-      fechaHasta: "2025-08-12",
-      soloMisAcciones: true
-    }
-  ];
-
   formGroup = this.fb.group({
     nroExpediente: [''],
     solicitante: [''],
@@ -182,9 +137,11 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   dataSourcePerfeccionamiento = new MatTableDataSource<any>();
   dataSourceInformeRenovacion = new MatTableDataSource<any>();
+  dataSourceHistorial = new MatTableDataSource<any>();
 
   @ViewChild('paginatorPerfeccionamiento') paginatorPerfeccionamiento: MatPaginator;
   @ViewChild('paginatorInformeRenovacion') paginatorInformeRenovacion: MatPaginator;
+  @ViewChild('paginatorHistoriaInformeRenovacion') paginatorHistoriaInformeRenovacion: MatPaginator;
 
   constructor(
     private authFacade: AuthFacade,
@@ -324,6 +281,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   cargarTablaPerfeccionamiento() {
   const filtro = this.obtenerFiltroPerfeccionamiento();
   this.dataSourcePerfeccionamiento.data = [];
+  this.dataSourceInformeRenovacion
+  this.dataSourceHistorial.data = [];
   this.isLoading = true;
 
   this.serviceTablePerfeccionamiento(filtro)
@@ -591,9 +550,66 @@ historyApproveAndSignPerfeccionamiento(row: any) {
     this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.SOLICITUDES_LIST_APROBACION_PACES]);
   }
 
+  getRangoMensual(): { fecha_desde: string, fecha_hasta: string } {
+    const ahora = new Date();
+    const primerDia = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+    const ultimoDia = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0);
+    
+    return {
+      fecha_desde: this.formatDate(primerDia),
+      fecha_hasta: this.formatDate(ultimoDia)
+    };
+  }
+  
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  }
+
+  obtenerFiltroHistorialInformeRenovacion() {
+    let filtroInformeRenovacion: any = {
+      ...this.getRangoMensual(),
+      resultado: null,
+      documento_id:null ,
+      grupo: null,
+      page: this.paginatorHistoriaInformeRenovacion?.pageIndex ?? 0,
+      size: this.paginatorHistoriaInformeRenovacion?.pageSize ?? 10,
+    };
+    return filtroInformeRenovacion;
+  }
+
+  pageChangeHistorialInformeRenovacion(event: any) {
+    this.historialAprobaciones();
+  }
+
   historialAprobaciones(){
     this.mostrarHistorial = !this.mostrarHistorial;
     this.mostrarCards = !this.mostrarCards;
+
+    const filtro = this.obtenerFiltroHistorialInformeRenovacion();
+    console.log('historialAprobaciones', filtro);
+
+    this.dataSourceHistorial.data = [];
+    this.isLoading = true;
+
+    this.solicitudService.buscarHistorialAprobacionesInformesRenovacion(filtro)
+      .subscribe(
+        (data) => {
+          console.log('historialAprobaciones', JSON.stringify(data));
+          this.dataSourceHistorial.data = data.historial_aprobaciones || [];
+          if (this.paginatorHistoriaInformeRenovacion) {
+            this.paginatorHistoriaInformeRenovacion.length = data.total_registros || 0;
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error al cargar historial de aprobaciones de informe de renovación:', error);
+          this.isLoading = false;
+        }
+      );
   }
 
   returnTabView(){

@@ -168,5 +168,13 @@ export class SolicitudService {
     return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
   }
 
+  buscarHistorialAprobacionesInformesRenovacion(filtroInformeRenovacion): Observable<any> {
+
+    const urlEndpoint = `${this._path_serve}/api/informe/renovacion/historial-aprobaciones`
+    let params = functions.obtenerParams(filtroInformeRenovacion);
+
+    return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
+  }
+
 
 }

@@ -22,9 +22,16 @@ export class InvitacionRenovacionService {
   }
 
   listar(filtro): Observable<any> {
-    const urlEndpoint = `${this._path_serve}/api/invitaciones/listar`
+    const urlEndpoint = `${this._path_serve}/api/renovaciones/invitaciones`
     let params = functions.obtenerParams(filtro);
     return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
   }
+
+  enviar(request: any){
+    let urlEndpoint = `${this._path_serve}/api/invitaciones/registrar`
+    return this.http.post<any>(urlEndpoint,request);
+  }
+
+
 
 }

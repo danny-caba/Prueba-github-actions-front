@@ -36,9 +36,11 @@ import { FielCumplimientoComponent } from './components/fiel-cumplimiento/fiel-c
 import { MontoDiferencialComponent } from './components/monto-diferencial/monto-diferencial.component';
 import { CmpEvaluacionContratoComponent } from './components/cmp-evaluacion-contrato/cmp-evaluacion-contrato.component';
 import { ContratoDocumentosComponent } from './components/contrato-documentos/contrato-documentos.component';
+import { EvaluarInvitacionListComponent } from './components/evaluar-invitacion-list/evaluar-invitacion-list.component';
 
 @NgModule({
   declarations: [
+    EvaluarInvitacionListComponent,
     ContratoListComponent,
     ContratoFormComponent,
     ContratoSeccionComponent,

@@ -11,7 +11,6 @@ import { functionsAlert } from 'src/helpers/functionsAlert';
 import { EstadoEvaluacionAdministrativa, EstadoEvaluacionTecnica, EvaluadorRol, ListadoEnum, TipoPersonaEnum } from 'src/helpers/constantes.components';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthUser } from 'src/app/auth/store/auth.models';
 import { FormBuilder } from '@angular/forms';
 import { InformeRenovacionService } from 'src/app/service/informe-renovacion.service';
 import { RequerimientoRenovacionService } from 'src/app/service/requerimiento-renovacion.service';
@@ -50,6 +49,7 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
   EstadoEvaluacionTecnica = EstadoEvaluacionTecnica
   nuExpediente: string
   requerimiento: RequerimientoRenovacion;
+  invitacion: any ={}
 
   constructor(
     private dialog: MatDialog,
@@ -58,7 +58,6 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
     private location: Location,
     private parametriaService: ParametriaService,
     private solicitudService: SolicitudService,
-    private informeRenovacionService: InformeRenovacionService,
     private requerimientoRenovacionService: RequerimientoRenovacionService,
     private invitacionRenovacionService: InvitacionRenovacionService,
     private authFacade: AuthFacade,
@@ -72,7 +71,11 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
     this.listar();
     this.formGroup.get('sector').valueChanges.subscribe(value => {
       this.onChangeSector(value)
-    })
+    });
+    this.nuExpediente = this.activatedRoute.snapshot.paramMap.get('idRequerimiento');
+    this.requerimientoRenovacionService.obtenerPorNumeroExpediente(this.nuExpediente).subscribe(d=>{
+      this.requerimiento = d;
+    });
   }
 
   cargarCombo() {
@@ -84,12 +87,25 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
   }
 
   listar() {
-    //TODO: cargar invitaciones por requerimiento renovacion
     this.cargarTabla();
   }
 
-  registrar() {
-  //TODO: registrar invitacion      
+  enviarInvitacion() {
+    functionsAlert.questionSiNoEval('¿Está seguro de que desea enviar la invitación?',"Invitación").then((result) => {
+      if(result.isConfirmed){
+        console.log(this.requerimiento)
+          this.invitacion.idReqRenovacion=this.requerimiento?.idReqRenovacion;
+          console.log(this.invitacion)
+          this.invitacionRenovacionService.enviar(this.invitacion).subscribe(res => {
+            functionsAlert.success('Requerimiento de evaluacion Creado').then((result) => {
+              this.invitacion = res;
+              console.log(res)
+              //this.returnValue = res;
+            });
+          });
+        } else {
+        }
+    });
   }  
 
   cancelar(){

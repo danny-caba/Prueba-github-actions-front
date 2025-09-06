@@ -63,7 +63,6 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
     this.nuExpediente = this.activatedRoute.snapshot.paramMap.get('idRequerimiento');
     this.requerimientoRenovacionService.obtenerPorNumeroExpediente(this.nuExpediente).subscribe(d=>{
       this.requerimiento = d;
-      console.log(this.requerimiento)
     });
   }
 

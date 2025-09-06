@@ -4,7 +4,7 @@
         <div class="card px-8 py-6">
             <div class="flex flex-col sm:flex-row gap-x8">
                 <div @fadeInUp class="flex-auto">
-                    <h2 class="text-lg font-bold">Solicitudes de Perfeccionamiento de Contrato</h2>
+                    <h2 class="text-lg font-bold">Solicitudes de Perfeccionamiento de Contrato....</h2>
                     <mat-divider></mat-divider>
 
                     <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
@@ -152,6 +152,10 @@
         <button *ngIf="row.idDocInicio" mat-menu-item (click)="irACargaDocInicio(row)">
             <mat-icon svgIcon="mat:preview"></mat-icon>
             <span>Inicio de Servicio</span>
+        </button>
+        <button mat-menu-item (click)="evaluarInvitacion(row)">
+            <mat-icon svgIcon="mat:preview"></mat-icon>
+            <span>Evaluar Invitación</span>
         </button>
     </ng-template>
 </mat-menu>

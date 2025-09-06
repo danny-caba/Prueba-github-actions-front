@@ -22,6 +22,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ModalAprobadorContratoComponent } from 'src/app/shared/modal-aprobador-contrato/modal-aprobador-contrato.component';
 import { ModalAprobadorInformeRenovacionComponent } from 'src/app/shared/modal-aprobador-informe-renovacion/modal-aprobador-informe-renovacion.component';
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
+import { HistorialAprobacion } from 'src/app/interface/historial-aprobacion-renovacion';
 
 @Component({
   selector: 'vex-solicitud-list-aprobacion',
@@ -42,6 +43,9 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   ACC_REGISTRAR = 'ACC_REGISTRAR';
   ACC_EDITAR = 'ACC_EDITAR';
   ACC_VER = 'ACC_VER';
+  mostrarHistorial=false;
+  mostrarCards=true;
+  selectedTabIndex=0;
 
   formGroup = this.fb.group({
     nroExpediente: [''],
@@ -133,9 +137,11 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   dataSourcePerfeccionamiento = new MatTableDataSource<any>();
   dataSourceInformeRenovacion = new MatTableDataSource<any>();
+  dataSourceHistorial = new MatTableDataSource<any>();
 
   @ViewChild('paginatorPerfeccionamiento') paginatorPerfeccionamiento: MatPaginator;
   @ViewChild('paginatorInformeRenovacion') paginatorInformeRenovacion: MatPaginator;
+  @ViewChild('paginatorHistoriaInformeRenovacion') paginatorHistoriaInformeRenovacion: MatPaginator;
 
   constructor(
     private authFacade: AuthFacade,
@@ -275,6 +281,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   cargarTablaPerfeccionamiento() {
   const filtro = this.obtenerFiltroPerfeccionamiento();
   this.dataSourcePerfeccionamiento.data = [];
+  this.dataSourceInformeRenovacion
+  this.dataSourceHistorial.data = [];
   this.isLoading = true;
 
   this.serviceTablePerfeccionamiento(filtro)
@@ -540,5 +548,75 @@ historyApproveAndSignPerfeccionamiento(row: any) {
 
   redireccionAProbarPaces() {
     this.router.navigate([Link.INTRANET, Link.PROCESOS_LIST, Link.SOLICITUDES_LIST_APROBACION_PACES]);
+  }
+
+  getRangoMensual(): { fecha_desde: string, fecha_hasta: string } {
+    const ahora = new Date();
+    const primerDia = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+    const ultimoDia = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0);
+    
+    return {
+      fecha_desde: this.formatDate(primerDia),
+      fecha_hasta: this.formatDate(ultimoDia)
+    };
+  }
+  
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  }
+
+  obtenerFiltroHistorialInformeRenovacion() {
+    let filtroInformeRenovacion: any = {
+      ...this.getRangoMensual(),
+      resultado: null,
+      documento_id:null ,
+      grupo: null,
+      page: this.paginatorHistoriaInformeRenovacion?.pageIndex ?? 0,
+      size: this.paginatorHistoriaInformeRenovacion?.pageSize ?? 10,
+    };
+    return filtroInformeRenovacion;
+  }
+
+  pageChangeHistorialInformeRenovacion(event: any) {
+    this.historialAprobaciones();
+  }
+
+  historialAprobaciones(){
+    this.mostrarHistorial = !this.mostrarHistorial;
+    this.mostrarCards = !this.mostrarCards;
+
+    const filtro = this.obtenerFiltroHistorialInformeRenovacion();
+    console.log('historialAprobaciones', filtro);
+
+    this.dataSourceHistorial.data = [];
+    this.isLoading = true;
+
+    this.solicitudService.buscarHistorialAprobacionesInformesRenovacion(filtro)
+      .subscribe(
+        (data) => {
+          console.log('historialAprobaciones', JSON.stringify(data));
+          this.dataSourceHistorial.data = data.historial_aprobaciones || [];
+          if (this.paginatorHistoriaInformeRenovacion) {
+            this.paginatorHistoriaInformeRenovacion.length = data.total_registros || 0;
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error al cargar historial de aprobaciones de informe de renovación:', error);
+          this.isLoading = false;
+        }
+      );
+  }
+
+  returnTabView(){
+    this.mostrarHistorial = !this.mostrarHistorial;
+    this.mostrarCards = !this.mostrarCards;
+  }
+  irAInformeRenovacion() {
+    this.selectedTabIndex = 2; 
   }
 }

@@ -58,4 +58,20 @@ export class InformeRenovacionService {
     const requestBody = { idInformeRenovacion: idInformeRenovacion };
     return this.http.post<any>(urlEndpoint, requestBody);
   }
+
+  buscarInformesAprobacion(numeroExpediente?: string, contratista?: string, estadoAprobacion?: string, pageable?: any): Observable<any> {
+    let params = new URLSearchParams();
+    
+    if (numeroExpediente) params.append('numeroExpediente', numeroExpediente);
+    if (contratista) params.append('contratista', contratista);
+    if (estadoAprobacion) params.append('estadoAprobacion', estadoAprobacion);
+    if (pageable) {
+      if (pageable.page !== undefined) params.append('page', pageable.page.toString());
+      if (pageable.size !== undefined) params.append('size', pageable.size.toString());
+      if (pageable.sort) params.append('sort', pageable.sort);
+    }
+
+    const urlEndpoint = `${this._path_serve}/api/informe/renovacion/aprobar/buscar?${params.toString()}`;
+    return this.http.get<any>(urlEndpoint);
+  }
 }

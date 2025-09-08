@@ -16,8 +16,7 @@ import { RequerimientoService } from 'src/app/service/requerimiento.service';
 
 @Component({
   selector: 'vex-modal-aprobador-supervisor-pn',
-  templateUrl: './modal-aprobador-supervisor-pn.component.html',
-  styleUrls: ['./modal-aprobador-supervisor-pn.component.scss']
+  templateUrl: './modal-aprobador-supervisor-pn.component.html'
 })
 export class ModalAprobadorSupervisorPnComponent extends BaseComponent implements OnInit {
   AprobadorAccion = AprobadorAccion
@@ -33,14 +32,14 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
   });
 
   constructor(
-    private dialogRef: MatDialogRef<ModalAprobadorSupervisorPnComponent>,
+    private readonly dialogRef: MatDialogRef<ModalAprobadorSupervisorPnComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private fb: FormBuilder,
-    private evaluadorService: EvaluadorService,
-    private authFacade: AuthFacade,
-    private dialog: MatDialog,
-    private parametriaService: ParametriaService,
-    private requerimientoService: RequerimientoService
+    private readonly fb: FormBuilder,
+    private readonly evaluadorService: EvaluadorService,
+    private readonly authFacade: AuthFacade,
+    private readonly dialog: MatDialog,
+    private readonly parametriaService: ParametriaService,
+    private readonly requerimientoService: RequerimientoService
   ) {
     super();
     this.listaSolicitudUuidSeleccionado = data.listaSolicitudUuidSeleccionado;
@@ -133,7 +132,7 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
                 success: false, 
                 uuid: item.requerimiento.requerimientoUuid,
                 expediente: item.requerimiento.nuExpediente,
-                error: error?.message || error 
+                error: error?.message ?? error 
               });
             })
           );
@@ -148,7 +147,7 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
           // Actualizar array de errores
           this.errores = fallidos.map(f => ({
             uuid: f.uuid,
-            error: (f as any).error
+            error: 'error' in f ? f.error : 'Error desconocido'
           }));
 
           // Mostrar mensaje final con resumen
@@ -256,10 +255,8 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
           if (contadorProcesados === totalElementos) {
             if (listaIdArchivosSiged.length > 0) {
               this.abrirModalFirmaDigital(listaIdArchivosSiged, onComplete);
-            } else {
-              if (onComplete) {
-                onComplete();
-              }
+            } else if (onComplete) {
+              onComplete();
             }
           }
         },
@@ -270,10 +267,8 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
           if (contadorProcesados === totalElementos) {
             if (listaIdArchivosSiged.length > 0) {
               this.abrirModalFirmaDigital(listaIdArchivosSiged, onComplete);
-            } else {
-              if (onComplete) {
-                onComplete();
-              }
+            } else if (onComplete) {
+              onComplete();
             }
           }
         }
@@ -298,10 +293,6 @@ export class ModalAprobadorSupervisorPnComponent extends BaseComponent implement
       });
 
       modalRef.afterClosed().subscribe(result => {
-        if (result == 'OK') {
-        } else {
-        }
-        
         // Ejecutar callback sin importar el resultado de la firma
         if (onComplete) {
           onComplete();

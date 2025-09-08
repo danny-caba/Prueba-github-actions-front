@@ -1,9 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { AuthFacade } from 'src/app/auth/store/auth.facade';
-import { EvaluadorService } from 'src/app/service/evaluador.service';
 import { AprobadorAccion } from 'src/helpers/constantes.components';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { BaseComponent } from '../components/base.component';
@@ -12,8 +10,7 @@ import { Requerimiento } from 'src/app/interface/requerimiento.model';
 
 @Component({
   selector: 'vex-modal-numero-contrato',
-  templateUrl: './modal-numero-contrato.component.html',
-  styleUrls: ['./modal-numero-contrato.component.scss']
+  templateUrl: './modal-numero-contrato.component.html'
 })
 export class ModalNumeroContratoComponent extends BaseComponent {
   AprobadorAccion = AprobadorAccion
@@ -27,10 +24,10 @@ export class ModalNumeroContratoComponent extends BaseComponent {
   });
 
   constructor(
-    private dialogRef: MatDialogRef<ModalNumeroContratoComponent>,
+    private readonly dialogRef: MatDialogRef<ModalNumeroContratoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { requerimiento: Requerimiento },
-    private fb: FormBuilder,
-    private requerimientoService: RequerimientoService,
+    private readonly fb: FormBuilder,
+    private readonly requerimientoService: RequerimientoService,
   ) {
     super();
     this.requerimiento = data.requerimiento;

@@ -1,10 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, map, Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { functions } from "src/helpers/functions";
 import { ConfigService } from "../core/services";
 import { Pageable } from "../interface/pageable.model";
-import { Solicitud, SolicitudListado } from "../interface/solicitud.model";
+import { SolicitudListado } from "../interface/solicitud.model";
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +13,7 @@ export class InvitacionService {
   private invitacionSubject = new BehaviorSubject<Partial<any>>(null);
   private _path_serve: String;
 
-  constructor(private http: HttpClient, private configService: ConfigService) {
+  constructor(private readonly http: HttpClient, private readonly configService: ConfigService) {
     this._path_serve = this.configService.getAPIUrl();
   }
 

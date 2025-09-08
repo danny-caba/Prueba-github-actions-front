@@ -47,12 +47,12 @@ export class RequerimientoEditarContratoComponent implements OnInit {
   attachmentsInvalid = false;
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private fb: FormBuilder,
-    private adjuntoService: AdjuntosService,
-    private requerimientoService: RequerimientoService,
-    private snackBar: MatSnackBar
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly fb: FormBuilder,
+    private readonly adjuntoService: AdjuntosService,
+    private readonly requerimientoService: RequerimientoService,
+    private readonly snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -83,7 +83,6 @@ export class RequerimientoEditarContratoComponent implements OnInit {
     );
   }
 
-  descargarContrato(): void {}
   adjuntarArchivo(): void {
     this.fileInput.nativeElement.click();
   }
@@ -91,7 +90,6 @@ export class RequerimientoEditarContratoComponent implements OnInit {
     const file = (event.target as HTMLInputElement).files[0];
 
     if (file) {
-      const tipoRequisito = this.contratoForm.get("tipoRequisito")?.value;
 
       const exts = ["pdf", "doc", "docx", "xls", "xlsx"];
       const fileName = file.name;
@@ -141,7 +139,7 @@ export class RequerimientoEditarContratoComponent implements OnInit {
             if (event.type === HttpEventType.Response) {
               const tipoRequisitoSeleccionado =
                 this.contratoForm.get("tipoRequisito")?.value;
-              const requisitoTexto = tipoRequisitoSeleccionado?.viewValue || "";
+              const requisitoTexto = tipoRequisitoSeleccionado?.viewValue ?? "";
               const body = (event as HttpResponse<any>).body;
 
               const newAttachment = {
@@ -253,7 +251,7 @@ export class RequerimientoEditarContratoComponent implements OnInit {
   }
 
   get hasAttachments(): boolean {
-    return (this.archivosAdjuntosDataSource?.data?.length || 0) > 0;
+    return (this.archivosAdjuntosDataSource?.data?.length ?? 0) > 0;
   }
 
   regresar(): void {

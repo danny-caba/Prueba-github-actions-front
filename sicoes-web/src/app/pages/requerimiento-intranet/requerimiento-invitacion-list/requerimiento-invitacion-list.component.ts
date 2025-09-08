@@ -15,7 +15,6 @@ import { SaldoService } from 'src/app/service/saldo.service';
 import { Requerimiento } from 'src/app/interface/requerimiento.model';
 import { RequerimientoService } from 'src/app/service/requerimiento.service';
 import { RequerimientoInvitacion } from 'src/app/interface/requerimientoInvitacion.model';
-import { Supervisora } from 'src/app/interface/supervisora.model';
 
 @Component({
   selector: 'vex-requerimiento-invitacion-list',
@@ -60,14 +59,14 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
   ];
 
   constructor(
-    private authFacade: AuthFacade,
-    private activeRoute: ActivatedRoute,
-    private router: Router,
-    private fb: FormBuilder,
-    private supervisoraService: SupervisoraService,
-    private personaService: PersonaService,
-    private saldoService: SaldoService,
-    private requerimientoService: RequerimientoService
+    private readonly authFacade: AuthFacade,
+    private readonly activeRoute: ActivatedRoute,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly supervisoraService: SupervisoraService,
+    private readonly personaService: PersonaService,
+    private readonly saldoService: SaldoService,
+    private readonly requerimientoService: RequerimientoService
   ) {
     super();
   }
@@ -85,7 +84,7 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
     this.activeRoute.data
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
-        this.send = data.send || false;
+        this.send = data.send ?? false;
       });
 
     this.requerimientoService.requerimiento$
@@ -145,7 +144,6 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
   }
 
   mostrarOpcion(opt, requerimiento: Requerimiento) {
-    // if(opt == this.ACC_MODIFICAR && this.isUpdatable(requerimiento)) return true;
     return false;
   }
 
@@ -183,7 +181,7 @@ export class RequerimientoInvitacionListComponent extends BasePageComponent<Requ
     setTimeout(() => supervisoraInput.blur(), 0);
     this.formGroup.get('saldoContrato').setValue(null);
     this.formGroup.get('cantidad').setValue(null);
-    if (supervisora && supervisora.numeroDocumento) {
+    if (supervisora?.numeroDocumento) {
       this.personaService.validarVinculoLaboral(supervisora.numeroDocumento).subscribe({
         next: (response: any) => {
           if (response.respuesta == '1') {

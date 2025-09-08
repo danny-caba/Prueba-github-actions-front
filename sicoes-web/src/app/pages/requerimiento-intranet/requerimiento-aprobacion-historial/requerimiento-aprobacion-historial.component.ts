@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { fadeInUp400ms } from "src/@vex/animations/fade-in-up.animation";
 import { stagger80ms } from "src/@vex/animations/stagger.animation";
 import { RequerimientoService } from "src/app/service/requerimiento.service";
-import { BasePageComponent } from "src/app/shared/components/base-page.component";
 import { Link } from "src/helpers/internal-urls.components";
 
 @Component({
@@ -31,9 +30,9 @@ export class RequerimientoAprobacionHistorialComponent implements OnInit {
   ];
 
   constructor(
-    private requerimientoService: RequerimientoService,
-    private route: ActivatedRoute,
-    private router: Router,
+    private readonly requerimientoService: RequerimientoService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
   ) { }
 
   ngOnInit(): void {

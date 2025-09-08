@@ -16,7 +16,6 @@ import { AdjuntosService } from "src/app/service/adjuntos.service";
 @Component({
   selector: "vex-requerimiento-aprobacion-supervisor-pn",
   templateUrl: "./requerimiento-aprobacion-supervisor-pn.component.html",
-  styleUrls: ["./requerimiento-aprobacion-supervisor-pn.component.scss"],
   animations: [fadeInUp400ms, stagger80ms],
 })
 export class RequerimientoAprobacionSupervisorPnComponent
@@ -46,12 +45,12 @@ export class RequerimientoAprobacionSupervisorPnComponent
   ];
 
   constructor(
-    private requerimientoService: RequerimientoService,
-    private fb: FormBuilder,
-    private parametriaService: ParametriaService,
-    private router: Router,
-    private dialog: MatDialog,
-    private adjuntoService: AdjuntosService,
+    private readonly requerimientoService: RequerimientoService,
+    private readonly fb: FormBuilder,
+    private readonly parametriaService: ParametriaService,
+    private readonly router: Router,
+    private readonly dialog: MatDialog,
+    private readonly adjuntoService: AdjuntosService,
   ) {
     super();
   }
@@ -84,7 +83,7 @@ export class RequerimientoAprobacionSupervisorPnComponent
 
   private obtenerDivisiones() {
     this.parametriaService.listarDivisiones().subscribe((response) => {
-      this.listDivision = response || [];
+      this.listDivision = response ?? [];
     });
   }
 
@@ -103,7 +102,7 @@ export class RequerimientoAprobacionSupervisorPnComponent
 
   private obtenerDivisionesPorUsuario(idPerfil: any) {
     this.parametriaService.listarAprobadores(idPerfil).subscribe((response) => {
-      this.listDivisionesUsuario = response || [];
+      this.listDivisionesUsuario = response ?? [];
     });
   }
 

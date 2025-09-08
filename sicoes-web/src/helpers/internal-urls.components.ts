@@ -83,7 +83,6 @@ export enum Link {
     INFORME_ADD = 'add',
 
     // REQUERIMIENTOS INVITACION
-    REQUERIMIENTOS_INVITACION = 'invitaciones',
     INVITACION_SEND = 'send',
 
     // REQUERIMIENTOS APROBACIONES

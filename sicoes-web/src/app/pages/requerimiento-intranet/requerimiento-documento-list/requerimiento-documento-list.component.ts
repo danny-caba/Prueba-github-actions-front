@@ -32,7 +32,7 @@ import { ModalNumeroContratoComponent } from 'src/app/shared/modal-numero-contra
 export class RequerimientoDocumentoListComponent extends BasePageComponent<Requerimiento> implements OnInit, OnDestroy {
 
   @Input() tabActivo$: Observable<boolean>;
-  private tabSubscription: Subscription;
+  private readonly tabSubscription: Subscription;
 
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
@@ -66,14 +66,14 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
   listSupervisoresFiltradosPorPerfil: any[] = [];
 
   constructor(
-    private authFacade: AuthFacade,
-    private router: Router,
-    private fb: FormBuilder,
-    private parametriaService: ParametriaService,
-    private requerimientoService: RequerimientoService,
-    private gestionUsuarioService: GestionUsuarioService,
-    private supervisoraService: SupervisoraService,
-    private dialog: MatDialog,
+    private readonly authFacade: AuthFacade,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly parametriaService: ParametriaService,
+    private readonly requerimientoService: RequerimientoService,
+    private readonly gestionUsuarioService: GestionUsuarioService,
+    private readonly supervisoraService: SupervisoraService,
+    private readonly dialog: MatDialog,
   ) {
     super();
   }
@@ -169,11 +169,11 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
   }
 
   displayFn(codi: any): string {
-    return codi && codi.dePerfil ? codi.dePerfil : '';
+    return codi?.dePerfil ?? '';
   }
 
   displayFnSupervisor(supervisor: any): string {
-    return supervisor && supervisor.nombre ? supervisor.nombre : '';
+    return supervisor?.nombre ?? '';
   }
 
   blurEvaluadorTecnico() {
@@ -198,7 +198,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
     // Limpiamos el perfil seleccionado
     this.formGroup.get('perfil').setValue('');
 
-    if (!event.value || !event.value.idDivision) {
+    if (!event.value?.idDivision) {
       // Si no hay división seleccionada, limpiamos la lista de perfiles
       this.setListPerfilesDetalle([]);
       return;
@@ -261,23 +261,19 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
 
   // Obtener la fecha mínima para fechaFin basada en fechaInicio
   getFechaMinima() {
-    const fechaInicio = this.formGroup.controls.fechaInicio.value;
-    return fechaInicio ? fechaInicio : '1900-01-01';
+    return this.formGroup.controls.fechaInicio.value ?? '1900-01-01';
   }
 
   // Validaciones de estado de requerimiento
   preliminarEnabled(reqDoc: RequerimientoDocumento) {
-    // return req.estado?.codigo == EstadoRequerimientoEnum.PRELIMINAR;
     return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[EstadoRequerimientoEnum.PRELIMINAR](reqDoc);
   }
 
   enProcesoEnabled(req: Requerimiento) {
-    // return req.estado?.codigo == EstadoRequerimientoEnum.EN_PROCESO;
     return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[EstadoRequerimientoEnum.EN_PROCESO](req);
   }
 
   concluidoEnabled(req: Requerimiento) {
-    // return req.estado?.codigo == EstadoRequerimientoEnum.CONCLUIDO;
     return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[EstadoRequerimientoEnum.CONCLUIDO](req);
   }
 
@@ -306,7 +302,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
     this.formGroup.get('supervisor').setValue('');
 
     const perfilSeleccionado = this.formGroup.controls.perfil.value;
-    if (!perfilSeleccionado || !perfilSeleccionado.idListadoDetalle) {
+    if (!perfilSeleccionado?.idListadoDetalle) {
       // Si no hay perfil seleccionado o no tiene idListadoDetalle, limpiar la lista de supervisores
       this.setListSupervisores([]);
       return;

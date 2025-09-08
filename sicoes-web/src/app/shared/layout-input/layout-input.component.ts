@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 
@@ -21,11 +21,11 @@ export class LayoutInputComponent {
 
 
   constructor(
-    private fb: FormBuilder
+    private readonly fb: FormBuilder
   ) { }
 
   obtenerContenidoInput(): string {
-    return this.formGroup.get('ctrlInput')?.value || '';
+    return this.formGroup.get('ctrlInput')?.value ?? '';
   }
 
 }

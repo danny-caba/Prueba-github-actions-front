@@ -40,11 +40,11 @@ export class ModalCrearRequerimientoComponent extends BaseComponent implements O
 
 
   constructor(
-    private dialogRef: MatDialogRef<ModalCrearRequerimientoComponent>,
+    private readonly dialogRef: MatDialogRef<ModalCrearRequerimientoComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private fb: FormBuilder,
-    private parametriaService: ParametriaService,
-    private requerimientoService: RequerimientoService
+    private readonly fb: FormBuilder,
+    private readonly parametriaService: ParametriaService,
+    private readonly requerimientoService: RequerimientoService
   ) {
     super();
 
@@ -84,8 +84,6 @@ export class ModalCrearRequerimientoComponent extends BaseComponent implements O
             this.registrarRequerimiento(requerimiento);
           }
         });
-      } else {
-        // this.actualizarRequerimiento(requerimiento);
       }
       
     } else {
@@ -130,7 +128,7 @@ export class ModalCrearRequerimientoComponent extends BaseComponent implements O
     // Limpiamos el perfil seleccionado
     this.formGroup.get('perfil').setValue('');
     
-    if (!event.value || !event.value.idDivision) {
+    if (!event.value?.idDivision) {
       // Si no hay división seleccionada, limpiamos la lista de perfiles
       this.setListPerfilesDetalle([]);
       return;

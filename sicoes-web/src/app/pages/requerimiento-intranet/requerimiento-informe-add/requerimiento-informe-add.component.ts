@@ -30,10 +30,10 @@ export class RequerimientoInformeAddComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   constructor(
-    private router: Router,
-    private activeRoute: ActivatedRoute,
-    private requerimientoInformeService: RequerimientoInformeService,
-    private authFacade: AuthFacade
+    private readonly router: Router,
+    private readonly activeRoute: ActivatedRoute,
+    private readonly requerimientoInformeService: RequerimientoInformeService,
+    private readonly authFacade: AuthFacade
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +49,7 @@ export class RequerimientoInformeAddComponent implements OnInit, OnDestroy {
     this.activeRoute.data
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
-        this.add = data.add || false;
+        this.add = data.add ?? false;
       });
 
     this.activeRoute.params

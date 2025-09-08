@@ -15,12 +15,12 @@ export class LayoutAdjuntosComponent {
   @Input() rutaEvaluarDetalle: string[];
 
   constructor(
-    private adjuntoService: AdjuntosService,
-    private router: Router,
+    private readonly adjuntoService: AdjuntosService,
+    private readonly router: Router,
   ) { }
 
   descargar(adj) {
-    let nombreAdjunto = adj.nombre != null ? adj.nombre : adj.nombreReal
+    let nombreAdjunto = adj.nombre ?? adj.nombreReal
     this.adjuntoService.descargarWindowsJWT(adj.codigo, nombreAdjunto);
   }
 

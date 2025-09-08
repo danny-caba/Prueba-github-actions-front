@@ -1,14 +1,13 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { forkJoin, Subject, switchMap, takeUntil } from "rxjs";
 import { ListadoDetalle } from "src/app/interface/listado.model";
-import { RequerimientoDocumentoDetalle } from "src/app/interface/requerimiento.model";
 import { AdjuntosService } from "src/app/service/adjuntos.service";
 import { ArchivoService } from "src/app/service/archivo.service";
 import { ParametriaService } from "src/app/service/parametria.service";
 import { RequerimientoService } from "src/app/service/requerimiento.service";
-import { EstadoReqDocDetalleEvalEnum, ListadoEnum, TipoDocumentoEnum } from "src/helpers/constantes.components";
+import { ListadoEnum } from "src/helpers/constantes.components";
 import { BaseComponent } from "src/app/shared/components/base.component";
 
 @Component({
@@ -36,13 +35,13 @@ export class LayoutEvaluarAdjuntoComponent extends BaseComponent implements OnIn
   });
 
   constructor(
-    private fb: FormBuilder,
-    private adjuntosService: AdjuntosService,
-    private activeRoute: ActivatedRoute,
-    private archivoService: ArchivoService,
-    private parametriaService: ParametriaService,
-    private router: Router,
-    private requerimientoService: RequerimientoService
+    private readonly fb: FormBuilder,
+    private readonly adjuntosService: AdjuntosService,
+    private readonly activeRoute: ActivatedRoute,
+    private readonly archivoService: ArchivoService,
+    private readonly parametriaService: ParametriaService,
+    private readonly router: Router,
+    private readonly requerimientoService: RequerimientoService
   ) {
     super();
   }

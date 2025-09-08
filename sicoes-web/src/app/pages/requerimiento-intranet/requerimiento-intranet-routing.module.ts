@@ -29,7 +29,7 @@ const routes: VexRoutes = [
       },
       {
         path:
-          Link.REQUERIMIENTOS_INVITACION +
+          Link.INVITACIONES_LIST +
           "/" +
           Link.INVITACION_SEND +
           "/:requerimientoUuid",

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, ViewChildren, QueryList } from '@angular/core';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { RequerimientoInformeDetalle } from 'src/app/interface/requerimiento.model';
@@ -14,27 +14,17 @@ import seccionesData from 'src/assets/data/req-secciones-informe.json';
     stagger80ms
   ]
 })
-export class RequerimientoInformePnAddComponent implements OnInit, OnDestroy {
+export class RequerimientoInformePnAddComponent {
 
   @ViewChildren(LayoutInformeSeccionPNComponent) seccionesComponents: QueryList<LayoutInformeSeccionPNComponent>;
 
   secciones: any[] = seccionesData;
 
-  constructor(
-  ) {
-  }
-
-  ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
-  }
-
   obtenerDatosInforme(): RequerimientoInformeDetalle {
     const datosInforme: RequerimientoInformeDetalle = new RequerimientoInformeDetalle();
     
     this.seccionesComponents?.forEach((seccionComponent, index) => {
-      datosInforme[this.secciones[index].codigo] = seccionComponent.obtenerContenidoSeccion?.() || '';
+      datosInforme[this.secciones[index].codigo] = seccionComponent.obtenerContenidoSeccion?.() ?? '';
     });
 
     return datosInforme;

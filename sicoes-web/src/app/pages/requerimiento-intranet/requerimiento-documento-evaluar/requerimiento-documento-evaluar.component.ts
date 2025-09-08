@@ -31,10 +31,10 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
   isNotificarCoordinador: boolean = false;
 
   constructor(
-    private router: Router,
-    private activeRoute: ActivatedRoute,
-    private authFacade: AuthFacade,
-    private requerimientoService: RequerimientoService,
+    private readonly router: Router,
+    private readonly activeRoute: ActivatedRoute,
+    private readonly authFacade: AuthFacade,
+    private readonly requerimientoService: RequerimientoService,
   ) { }
 
   ngOnInit(): void {
@@ -68,9 +68,7 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
 
         if (this.isReview) {
           this.requisitos = this.requisitos.map(requisito => {
-            if (requisito.flagVistoBueno === undefined || requisito.flagVistoBueno === null) {
-              requisito.flagVistoBueno = '0';
-            }
+            requisito.flagVistoBueno ??= '0';
             return requisito;
           });
           this.isFinalized = this.requisitos.some(requisito => requisito.flagVistoBueno !== '0');
@@ -82,8 +80,8 @@ export class RequerimientoDocumentoEvaluarComponent implements OnInit, OnDestroy
     this.activeRoute.data
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
-        this.evaluate = data.evaluate || false;
-        this.isReview = data.review || false;
+        this.evaluate = data.evaluate ?? false;
+        this.isReview = data.review ?? false;
       });
 
   }

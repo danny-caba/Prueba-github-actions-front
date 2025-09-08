@@ -57,13 +57,13 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
   displayedColumns: string[] = [...REQUERIMIENTO_CONSTANTS.COLUMNAS_LISTA_REQUERIMIENTOS];
 
   constructor(
-    private authFacade: AuthFacade,
-    private router: Router,
-    private fb: FormBuilder,
-    private parametriaService: ParametriaService,
-    private gestionUsuarioService: GestionUsuarioService,
-    private dialog: MatDialog,
-    private requerimientoService: RequerimientoService
+    private readonly authFacade: AuthFacade,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly parametriaService: ParametriaService,
+    private readonly gestionUsuarioService: GestionUsuarioService,
+    private readonly dialog: MatDialog,
+    private readonly requerimientoService: RequerimientoService
   ) {
     super();
   }
@@ -72,9 +72,6 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
     this.cargarCombo();
     this.cargarTabla();
     this.setupFechaValidators();
-  }
-
-  ngOnDestroy(): void {
   }
 
   cargarCombo() {
@@ -192,7 +189,7 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
   }
 
   displayFn(codi: any): string {
-    return codi && codi.dePerfil ? codi.dePerfil : '';
+    return codi?.dePerfil ?? '';
   }
 
   blurEvaluadorTecnico() {
@@ -208,7 +205,7 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
     // Limpiamos el perfil seleccionado
     this.formGroup.get('perfil').setValue('');
     
-    if (!event.value || !event.value.idDivision) {
+    if (!event.value?.idDivision) {
       // Si no hay división seleccionada, limpiamos la lista de perfiles
       this.setListPerfilesDetalle([]);
       return;
@@ -216,7 +213,7 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
     
     // Filtramos los perfiles por la división seleccionada
     const perfilesPorDivision = this.listAllPerfilesDetalle.filter(perfil => 
-      perfil.idDivision === event.value.idDivision
+      perfil.idDivision === event.value?.idDivision
     );
     
     // Actualizamos la lista filtrada y configuramos el observable
@@ -271,18 +268,15 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
   
   // Obtener la fecha mínima para fechaFin basada en fechaInicio
   getFechaMinima() {
-    const fechaInicio = this.formGroup.controls.fechaInicio.value;
-    return fechaInicio ? fechaInicio : '1900-01-01';
+    return this.formGroup.controls.fechaInicio.value ?? '1900-01-01';
   }
 
   // Validaciones de estado de requerimiento
   preliminarEnabled(req: Requerimiento) {
-    // return req.estado?.codigo == EstadoRequerimientoEnum.PRELIMINAR;
     return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[EstadoRequerimientoEnum.PRELIMINAR](req);
   }
 
   enProcesoEnabled(req: Requerimiento) {
-    // return req.estado?.codigo == EstadoRequerimientoEnum.EN_PROCESO;
     return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[EstadoRequerimientoEnum.EN_PROCESO](req);
   }
 
@@ -299,7 +293,7 @@ export class RequerimientoListComponent extends BasePageComponent<Requerimiento>
 
   enviarInvitacion(req: Requerimiento) {
     this.requerimientoService.setRequerimiento(req);
-    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST, Link.REQUERIMIENTOS_INVITACION, Link.INVITACION_SEND, req.requerimientoUuid]);
+    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTOS_LIST, Link.INVITACIONES_LIST, Link.INVITACION_SEND, req.requerimientoUuid]);
   }
 
 }

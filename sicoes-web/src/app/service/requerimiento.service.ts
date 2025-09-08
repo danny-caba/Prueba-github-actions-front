@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from '../core/services';
-import { EditarContratoRequest, RegistrarContratoRequest, Requerimiento, RequerimientoDocumento, RequerimientoDocumentoDetalle, RequerimientoInformeDetalle } from '../interface/requerimiento.model';
+import { RegistrarContratoRequest, Requerimiento, RequerimientoDocumento, RequerimientoDocumentoDetalle, RequerimientoInformeDetalle } from '../interface/requerimiento.model';
 import { Pageable } from '../interface/pageable.model';
 import { functions } from 'src/helpers/functions';
 import { BehaviorSubject, map, Observable } from 'rxjs';
@@ -13,13 +13,13 @@ import { asignarNombresApellidos } from 'src/helpers/requerimiento.helper';
 })
 export class RequerimientoService {
 
-  private _path_serve: string;
-  private requerimientoSubject = new BehaviorSubject<Requerimiento | null>(null);
+  private readonly _path_serve: string;
+  private readonly requerimientoSubject = new BehaviorSubject<Requerimiento | null>(null);
   public requerimiento$ = this.requerimientoSubject.asObservable();
 
   constructor(
-    private http: HttpClient,
-    private configService: ConfigService
+    private readonly http: HttpClient,
+    private readonly configService: ConfigService
   ) {
     this._path_serve = this.configService.getAPIUrl();
   }

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -15,7 +15,7 @@ import { RequerimientoService } from 'src/app/service/requerimiento.service';
     stagger80ms
   ]
 })
-export class ModalArchivarRequerimientoComponent extends BaseComponent implements OnInit {
+export class ModalArchivarRequerimientoComponent extends BaseComponent {
 
   title: string;
   requerimientoUuid: string;
@@ -26,17 +26,14 @@ export class ModalArchivarRequerimientoComponent extends BaseComponent implement
 
 
   constructor(
-    private dialogRef: MatDialogRef<ModalArchivarRequerimientoComponent>,
+    private readonly dialogRef: MatDialogRef<ModalArchivarRequerimientoComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private fb: FormBuilder,
-    private requerimientoService: RequerimientoService
+    private readonly fb: FormBuilder,
+    private readonly requerimientoService: RequerimientoService
   ) {
     super();
     this.title = data?.accion;
     this.requerimientoUuid = data?.uuid;
-  }
-
-  ngOnInit(): void {
   }
 
   closeModal() {

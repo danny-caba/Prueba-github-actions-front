@@ -30,10 +30,10 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   constructor(
-    private router: Router,
-    private activeRoute: ActivatedRoute,
-    private authFacade: AuthFacade,
-    private requerimientoService: RequerimientoService
+    private readonly router: Router,
+    private readonly activeRoute: ActivatedRoute,
+    private readonly authFacade: AuthFacade,
+    private readonly requerimientoService: RequerimientoService
   ) {}
 
   ngOnInit(): void {
@@ -70,8 +70,8 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
       });
 
     this.activeRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      this.add = data.add || false;
-      this.subsanar = data.subsanar || false;
+      this.add = data.add ?? false;
+      this.subsanar = data.subsanar ?? false;
     });
   }
 
@@ -134,7 +134,6 @@ export class RequerimientoDocumentoAddComponent implements OnInit, OnDestroy {
   }
 
   changeToView(): void {
-    //this.router.navigate([...REQUERIMIENTO_CONSTANTS.ROUTES.VIEW, this.requerimientoDocumentoUuid], { replaceUrl: true });
     this.router.navigate([...REQUERIMIENTO_CONSTANTS.ROUTES.SUCCESS]);
   }
 

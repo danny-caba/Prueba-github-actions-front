@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -13,7 +13,7 @@ import { BaseComponent } from '../components/base.component';
     stagger80ms
   ]
 })
-export class ModalReqDocumentoObservacionComponent extends BaseComponent implements OnInit, OnDestroy {
+export class ModalReqDocumentoObservacionComponent extends BaseComponent {
 
   observacion: string;
   booleanView: boolean = false
@@ -23,9 +23,9 @@ export class ModalReqDocumentoObservacionComponent extends BaseComponent impleme
   });
 
   constructor(
-    private dialogRef: MatDialogRef<ModalReqDocumentoObservacionComponent>,
+    private readonly dialogRef: MatDialogRef<ModalReqDocumentoObservacionComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private fb: FormBuilder,
+    private readonly fb: FormBuilder,
   ) {
     super();
     this.booleanView = data.accion == 'view';
@@ -36,14 +36,6 @@ export class ModalReqDocumentoObservacionComponent extends BaseComponent impleme
     }
 
     this.formGroup.controls.observacion.setValue(this.observacion || '');
-
-  }
-
-  ngOnInit() {
-
-  }
-
-  ngOnDestroy() {
 
   }
 

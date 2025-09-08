@@ -2,13 +2,11 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InvitacionService } from "src/app/service/invitacion.service";
 import { functionsAlert } from "src/helpers/functionsAlert";
-import { functionsAlertMod2 } from "src/helpers/funtionsAlertMod2";
 import { Link } from "src/helpers/internal-urls.components";
 
 @Component({
   selector: "vex-invitacion-detalle",
-  templateUrl: "./invitacion-detalle.component.html",
-  styleUrls: ["./invitacion-detalle.component.scss"],
+  templateUrl: "./invitacion-detalle.component.html"
 })
 export class InvitacionDetalleComponent implements OnInit {
   ESTADO_PROCESO_ITEM: string;
@@ -18,9 +16,9 @@ export class InvitacionDetalleComponent implements OnInit {
   ESTADO_RECHAZADO = "RECHAZADO";
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private invitacionService: InvitacionService
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly invitacionService: InvitacionService
   ) {}
 
   ngOnInit(): void {

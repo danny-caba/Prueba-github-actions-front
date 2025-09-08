@@ -1,4 +1,3 @@
-import { RequerimientoDocumento } from "src/app/interface/requerimiento.model";
 
 export function asignarNombresApellidos(req: any): any {
   const supervisora = req.requerimiento?.supervisora;
@@ -11,7 +10,7 @@ export function asignarNombresApellidos(req: any): any {
       supervisora?.apellidoMaterno
     ].filter(Boolean).join(' ');
   } else if (tipoDoc === 'RUC') {
-    req.nombresApellidos = supervisora?.nombreRazonSocial || '';
+    req.nombresApellidos = supervisora?.nombreRazonSocial ?? '';
   } else {
     req.nombresApellidos = '';
   }

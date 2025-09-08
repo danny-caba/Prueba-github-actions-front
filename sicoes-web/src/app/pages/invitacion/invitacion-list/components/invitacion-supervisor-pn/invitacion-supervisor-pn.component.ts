@@ -6,7 +6,7 @@ import {
   OnInit,
   SimpleChanges,
 } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { fadeInUp400ms } from "src/@vex/animations/fade-in-up.animation";
 import { stagger80ms } from "src/@vex/animations/stagger.animation";
@@ -30,8 +30,6 @@ export class InvitacionSupervisorPnComponent
   formGroup: FormGroup;
   estadosInvitacion: { label: string; valor: string; idListadoDetalle: number; codigo: string }[] = [];
 
-  /***borrar luego */
-
   displayedColumnsHard = [
     "fechaInvitacion",
     "fechaAceptacion",
@@ -45,10 +43,10 @@ export class InvitacionSupervisorPnComponent
   ];
 
   constructor(
-    private invitacionService: InvitacionService,
-    private router: Router,
-    private fb: FormBuilder,
-    private datePipe: DatePipe
+    private readonly invitacionService: InvitacionService,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly datePipe: DatePipe
   ) {
     super();
   }
@@ -71,7 +69,7 @@ export class InvitacionSupervisorPnComponent
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["listInvitacion"] && changes["listInvitacion"].currentValue) {
+    if (changes["listInvitacion"]?.currentValue) {
       this.estadosInvitacion = this.mapEstados(
         changes["listInvitacion"].currentValue
       );

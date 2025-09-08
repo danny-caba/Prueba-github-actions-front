@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'vex-skeleton-loader',
-  templateUrl: './skeleton-loader.component.html',
-  styleUrls: ['./skeleton-loader.component.scss']
+  templateUrl: './skeleton-loader.component.html'
 })
 export class SkeletonLoaderComponent {
   @Input() count: number = 1;

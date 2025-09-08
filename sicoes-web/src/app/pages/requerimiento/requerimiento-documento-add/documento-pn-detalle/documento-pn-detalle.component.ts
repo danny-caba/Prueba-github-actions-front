@@ -18,7 +18,7 @@ export class DocumentoPnDetalleComponent {
   @Input() isReview: boolean = false;
   @Input() isFinalized: boolean = false;
   constructor(
-    private dialog: MatDialog,
+    private readonly dialog: MatDialog,
   ) {
   }
 

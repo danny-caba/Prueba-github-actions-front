@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { RequerimientoService } from './requerimiento.service';
-import { Requerimiento, RequerimientoInformeDetalle } from '../interface/requerimiento.model';
-import { RequerimientoInforme } from '../interface/requerimiento.model';
+import { Requerimiento, RequerimientoInformeDetalle, RequerimientoInforme } from '../interface/requerimiento.model';
 
 export interface InformeValidationResult {
   isValid: boolean;
@@ -15,7 +14,7 @@ export interface InformeValidationResult {
 })
 export class RequerimientoInformeService {
 
-  constructor(private requerimientoService: RequerimientoService) {}
+  constructor(private readonly requerimientoService: RequerimientoService) {}
 
   /**
    * Valida los datos del informe antes del envío

@@ -5,8 +5,7 @@ import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-solicitud-list-requerimientos', 
-  templateUrl: './solicitud-list-requerimientos.component.html',
-  styleUrls: ['./solicitud-list-requerimientos.component.scss']
+  templateUrl: './solicitud-list-requerimientos.component.html'
 })
 export class SolicitudListRequerimientosComponent implements OnInit {
   dataSourceRequerimientos = new MatTableDataSource<any>([]);

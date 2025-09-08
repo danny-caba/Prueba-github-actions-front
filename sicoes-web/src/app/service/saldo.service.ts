@@ -9,11 +9,11 @@ import { map } from 'rxjs/operators';
 })
 export class SaldoService {
 
-  private _path_serve: string;
+  private readonly _path_serve: string;
 
   constructor(
-    private http: HttpClient,
-    private configService: ConfigService
+    private readonly http: HttpClient,
+    private readonly configService: ConfigService
   ) {
     this._path_serve = this.configService.getAPIUrl();
   }

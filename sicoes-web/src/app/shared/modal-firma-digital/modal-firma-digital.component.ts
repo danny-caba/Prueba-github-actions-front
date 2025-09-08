@@ -30,16 +30,16 @@ export class ModalFirmaDigitalComponent implements OnInit {
   }
 
   firmaDigital() {
-    const formulario = document.querySelector("#formulario") as HTMLFormElement;
-    const loginUsuario = document.querySelector(
+    const formulario = document.querySelector<HTMLFormElement>("#formulario");
+    const loginUsuario = document.querySelector<HTMLInputElement>(
       "#loginUsuario"
-    ) as HTMLInputElement;
-    const passwordUsuario = document.querySelector(
+    );
+    const passwordUsuario = document.querySelector<HTMLInputElement>(
       "#passwordUsuario"
-    ) as HTMLInputElement;
-    const archivosFirmar = document.querySelector(
+    );
+    const archivosFirmar = document.querySelector<HTMLInputElement>(
       "#archivosFirmar"
-    ) as HTMLInputElement;
+    );
 
     formulario.setAttribute("action", this.action);
     loginUsuario.value = this.loginUsuario;

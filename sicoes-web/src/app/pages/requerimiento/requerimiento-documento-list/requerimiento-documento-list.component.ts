@@ -26,7 +26,7 @@ import { Observable, Subscription } from 'rxjs';
 export class RequerimientoDocumentoListComponent extends BasePageComponent<Requerimiento> implements OnInit, OnDestroy {
 
   @Input() tabActivo$: Observable<boolean>;
-  private tabSubscription: Subscription;
+  private readonly tabSubscription: Subscription;
 
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
@@ -44,11 +44,11 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
   displayedColumns: string[] = [...REQUERIMIENTO_CONSTANTS.COLUMNAS_LISTA_REQUERIMIENTOS_DOCUMENTOS];
 
   constructor(
-    private authFacade: AuthFacade,
-    private router: Router,
-    private fb: FormBuilder,
-    private parametriaService: ParametriaService,
-    private requerimientoService: RequerimientoService
+    private readonly authFacade: AuthFacade,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly parametriaService: ParametriaService,
+    private readonly requerimientoService: RequerimientoService
   ) {
     super();
   }
@@ -110,7 +110,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
   }
 
   displayFn(codi: any): string {
-    return codi && codi.dePerfil ? codi.dePerfil : '';
+    return codi?.dePerfil ?? '';
   }
 
   // Validador personalizado para fechaHasta
@@ -161,8 +161,7 @@ export class RequerimientoDocumentoListComponent extends BasePageComponent<Reque
 
   // Obtener la fecha mínima para fechaFin basada en fechaInicio
   getFechaMinima() {
-    const fechaInicio = this.formGroup.controls.fechaInicio.value;
-    return fechaInicio ? fechaInicio : '1900-01-01';
+    return this.formGroup.controls.fechaInicio.value ?? '1900-01-01';
   }
 
   // Validaciones de estado de requerimiento

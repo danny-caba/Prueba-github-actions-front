@@ -17,9 +17,9 @@ export class OptionRoleRequerimientoDirective implements OnInit, OnChanges, OnDe
   usuario: AuthUser
 
   constructor(
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    private authFacade: AuthFacade
+    private readonly templateRef: TemplateRef<any>,
+    private readonly viewContainer: ViewContainerRef,
+    private readonly authFacade: AuthFacade
   ) {
     this.suscriptionUsuario = this.usuario$.subscribe(usu => {
       this.usuario = usu;

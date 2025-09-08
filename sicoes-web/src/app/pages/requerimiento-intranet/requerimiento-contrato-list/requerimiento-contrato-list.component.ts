@@ -1,10 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import {
-  FormBuilder,
-  ValidatorFn,
-  AbstractControl,
-  ValidationErrors,
+  FormBuilder
 } from "@angular/forms";
 import { fadeInUp400ms } from "src/@vex/animations/fade-in-up.animation";
 import { stagger80ms } from "src/@vex/animations/stagger.animation";
@@ -29,7 +26,6 @@ import { MatTableDataSource } from "@angular/material/table";
 import { GestionUsuarioService } from "src/app/service/gestion-usuarios.service";
 import { SupervisoraService } from "src/app/service/supervisora.service";
 import { MatDialog } from "@angular/material/dialog";
-import { ModalNumeroContratoComponent } from "src/app/shared/modal-numero-contrato/modal-numero-contrato.component";
 
 @Component({
   selector: "vex-requerimiento-contrato-list",
@@ -42,7 +38,7 @@ export class RequerimientoContratoListComponent
   implements OnInit, OnDestroy
 {
   @Input() tabActivo$: Observable<boolean>;
-  private tabSubscription: Subscription;
+  private readonly tabSubscription: Subscription;
 
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
@@ -77,14 +73,13 @@ export class RequerimientoContratoListComponent
   listSupervisoresFiltradosPorPerfil: any[] = [];
 
   constructor(
-    private authFacade: AuthFacade,
-    private router: Router,
-    private fb: FormBuilder,
-    private parametriaService: ParametriaService,
-    private requerimientoService: RequerimientoService,
-    private gestionUsuarioService: GestionUsuarioService,
-    private supervisoraService: SupervisoraService,
-    private dialog: MatDialog
+    private readonly authFacade: AuthFacade,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly parametriaService: ParametriaService,
+    private readonly requerimientoService: RequerimientoService,
+    private readonly gestionUsuarioService: GestionUsuarioService,
+    private readonly supervisoraService: SupervisoraService,
   ) {
     super();
   }
@@ -190,11 +185,11 @@ export class RequerimientoContratoListComponent
   }
 
   displayFn(codi: any): string {
-    return codi && codi.dePerfil ? codi.dePerfil : "";
+    return codi?.dePerfil ?? "";
   }
 
   displayFnSupervisor(supervisor: any): string {
-    return supervisor && supervisor.nombre ? supervisor.nombre : "";
+    return supervisor?.nombre ?? "";
   }
 
   blurEvaluadorTecnico() {
@@ -219,7 +214,7 @@ export class RequerimientoContratoListComponent
     // Limpiamos el perfil seleccionado
     this.formGroup.get("perfil").setValue("");
 
-    if (!event.value || !event.value.idDivision) {
+    if (!event.value?.idDivision) {
       // Si no hay división seleccionada, limpiamos la lista de perfiles
       this.setListPerfilesDetalle([]);
       return;
@@ -236,21 +231,18 @@ export class RequerimientoContratoListComponent
 
   // Validaciones de estado de requerimiento
   preliminarEnabled(reqDoc: RequerimientoDocumento) {
-    // return req.estado?.codigo == EstadoRequerimientoEnum.PRELIMINAR;
     return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[
       EstadoRequerimientoEnum.PRELIMINAR
     ](reqDoc);
   }
 
   enProcesoEnabled(req: Requerimiento) {
-    // return req.estado?.codigo == EstadoRequerimientoEnum.EN_PROCESO;
     return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[
       EstadoRequerimientoEnum.EN_PROCESO
     ](req);
   }
 
   concluidoEnabled(req: Requerimiento) {
-    // return req.estado?.codigo == EstadoRequerimientoEnum.CONCLUIDO;
     return REQUERIMIENTO_CONSTANTS.ESTADO_VALIDACIONES[
       EstadoRequerimientoEnum.CONCLUIDO
     ](req);
@@ -292,7 +284,7 @@ export class RequerimientoContratoListComponent
     this.formGroup.get("supervisor").setValue("");
 
     const perfilSeleccionado = this.formGroup.controls.perfil.value;
-    if (!perfilSeleccionado || !perfilSeleccionado.idListadoDetalle) {
+    if (!perfilSeleccionado?.idListadoDetalle) {
       // Si no hay perfil seleccionado o no tiene idListadoDetalle, limpiar la lista de supervisores
       this.setListSupervisores([]);
       return;

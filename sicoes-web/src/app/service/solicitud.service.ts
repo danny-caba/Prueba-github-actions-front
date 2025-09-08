@@ -5,6 +5,7 @@ import { functions } from 'src/helpers/functions';
 import { ConfigService } from '../core/services';
 import { Pageable } from '../interface/pageable.model';
 import { Solicitud, SolicitudListado } from '../interface/solicitud.model';
+import { InformeAprobacionResponse } from '../interface/informe-aprobacion.model';
 
 @Injectable({
   providedIn: 'root'
@@ -174,6 +175,26 @@ export class SolicitudService {
     let params = functions.obtenerParams(filtroInformeRenovacion);
 
     return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
+  }
+
+  buscarInformesRenovacionParaAprobar(filtroInformeRenovacion): Observable<Pageable<InformeAprobacionResponse>> {
+    const urlEndpoint = `${this._path_serve}/api/informe/renovacion/aprobar/buscar`
+    let params = functions.obtenerParams(filtroInformeRenovacion);
+    
+    if (filtroInformeRenovacion.nroExpediente) {
+      params = params.set('numeroExpediente', filtroInformeRenovacion.nroExpediente);
+    }
+    if (filtroInformeRenovacion.empresaSupervisora) {
+      params = params.set('razSocialSupervisora', filtroInformeRenovacion.empresaSupervisora);
+    }
+    if (filtroInformeRenovacion.idTipoInforme) {
+      params = params.set('nombreItem', filtroInformeRenovacion.idTipoInforme.toString());
+    }
+    if (filtroInformeRenovacion.idEstadoEvaluacion) {
+      params = params.set('estadoInforme', filtroInformeRenovacion.idEstadoEvaluacion.toString());
+    }
+    
+    return this.http.get<Pageable<InformeAprobacionResponse>>(urlEndpoint, { params: params });
   }
 
 

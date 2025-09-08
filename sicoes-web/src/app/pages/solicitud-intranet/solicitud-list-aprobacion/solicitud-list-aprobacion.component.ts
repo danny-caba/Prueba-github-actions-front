@@ -23,6 +23,7 @@ import { ModalAprobadorContratoComponent } from 'src/app/shared/modal-aprobador-
 import { ModalAprobadorInformeRenovacionComponent } from 'src/app/shared/modal-aprobador-informe-renovacion/modal-aprobador-informe-renovacion.component';
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
 import { HistorialAprobacion } from 'src/app/interface/historial-aprobacion-renovacion';
+import { InformeAprobacionResponse } from 'src/app/interface/informe-aprobacion.model';
 
 @Component({
   selector: 'vex-solicitud-list-aprobacion',
@@ -201,6 +202,10 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     return this.solicitudService.buscarInformesRenovacionAprobador(filtroInformeRenovacion);
   }
 
+  serviceTableInformeRenovacionParaAprobar(filtroInformeRenovacion: any) {
+    return this.solicitudService.buscarInformesRenovacionParaAprobar(filtroInformeRenovacion);
+  }
+
   buscar() {
     this.paginator.pageIndex = 0;
     this.cargarTabla();
@@ -221,6 +226,14 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       this.paginatorInformeRenovacion.pageIndex = 0;
     }
     this.cargarTablaInformeRenovacion();
+    this.listaInformesRenovacionSeleccionados = [];
+  }
+
+  buscarInformeRenovacionParaAprobar() {
+    if (this.paginatorInformeRenovacion) {
+      this.paginatorInformeRenovacion.pageIndex = 0;
+    }
+    this.cargarTablaInformeRenovacionParaAprobar();
     this.listaInformesRenovacionSeleccionados = [];
   }
 
@@ -323,6 +336,27 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
         },
         (error) => {
           console.error('Error al cargar datos de informe de renovación:', error);
+          this.isLoading = false;
+        }
+      );
+  }
+
+  cargarTablaInformeRenovacionParaAprobar() {
+    const filtro = this.obtenerFiltroInformeRenovacion();
+    this.dataSourceInformeRenovacion.data = [];
+    this.isLoading = true;
+
+    this.serviceTableInformeRenovacionParaAprobar(filtro)
+      .subscribe(
+        (data) => {
+          this.dataSourceInformeRenovacion.data = data.content || [];
+          if (this.paginatorInformeRenovacion) {
+            this.paginatorInformeRenovacion.length = data.totalElements || 0;
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error al cargar datos de informe de renovación para aprobar:', error);
           this.isLoading = false;
         }
       );

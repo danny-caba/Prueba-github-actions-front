@@ -83,6 +83,21 @@
 
 <mat-dialog-actions align="end">
   <button mat-button color="warn" (click)="cancelar()" [disabled]="loadingAccion">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="realizarAccion('APROBAR')" [disabled]="loadingAccion">Aprobar</button>
-  <button mat-raised-button color="accent" (click)="realizarAccion('RECHAZAR')" [disabled]="loadingAccion">Rechazar</button>
+  <button mat-raised-button color="primary" (click)="realizarAccion('APROBAR')" [disabled]="loadingAccion">
+    <mat-icon *ngIf="!loadingAccion">check_circle</mat-icon>
+    <mat-icon *ngIf="loadingAccion">refresh</mat-icon>
+    Aprobar
+  </button>
+  <button mat-raised-button color="accent" (click)="realizarAccion('RECHAZAR')" [disabled]="loadingAccion">
+    <mat-icon *ngIf="!loadingAccion">cancel</mat-icon>
+    <mat-icon *ngIf="loadingAccion">refresh</mat-icon>
+    Rechazar
+  </button>
+  <button mat-raised-button color="warn" (click)="solicitarPerfeccionamientoContrato()" 
+          [disabled]="loadingAccion || data.elementosSeleccionados.length === 0"
+          matTooltip="Generar solicitud de perfeccionamiento de contrato">
+    <mat-icon *ngIf="!loadingAccion">description</mat-icon>
+    <mat-icon *ngIf="loadingAccion">refresh</mat-icon>
+    Solicitar Perfeccionamiento
+  </button>
 </mat-dialog-actions>

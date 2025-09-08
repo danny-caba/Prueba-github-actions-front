@@ -78,7 +78,7 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Invitación</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estado?.nombre || 'Otro' }}</td>
                     </ng-container>
-                    
+
                     <!-- Action Column -->
                     <ng-container matColumnDef="actions">
                         <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
@@ -122,9 +122,27 @@
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
     <ng-template let-row="customer" matMenuContent>
-      <button mat-menu-item> 
+      <button mat-menu-item>
         <mat-icon svgIcon="mat:delete"></mat-icon>
         <span>Eliminar</span>
       </button>
     </ng-template>
+
+  <ng-template let-row="customer" matMenuContent>
+    <button
+      mat-menu-item
+      *ngIf="puedeEvaluarInvitacion(row)"
+      (click)="evaluarInvitacion(row)">
+      <mat-icon svgIcon="mat:rate_review"></mat-icon>
+      <span>Evaluar Invitación</span>
+    </button>
+
+    <button
+      mat-menu-item
+      *ngIf="!puedeEvaluarInvitacion(row)"
+      disabled>
+      <mat-icon svgIcon="mat:info"></mat-icon>
+      <span>Ya evaluada</span>
+    </button>
+  </ng-template>
 </mat-menu>

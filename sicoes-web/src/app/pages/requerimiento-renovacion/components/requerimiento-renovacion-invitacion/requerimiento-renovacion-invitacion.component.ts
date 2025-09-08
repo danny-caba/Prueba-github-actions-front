@@ -19,6 +19,7 @@ import { ParametriaService } from 'src/app/service/parametria.service';
 import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { InvitacionRenovacionService } from 'src/app/service/invitacion-renovacion.service';
 import { InvitacionRenovacion } from 'src/app/interface/invitacion-renovacion.model';
+import { ModalAprobarRechazarInvitacionComponent } from 'src/app/shared/modal-aprobar-rechazar-invitacion/modal-aprobar-rechazar-invitacion.component';
 
 @Component({
   selector: 'vex-requerimiento-renovacion-invitacion',
@@ -147,6 +148,32 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
 
   goToBandejaSolicitudes() {
     this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST]);
+  }
+
+  evaluarInvitacion(invitacion: any) {
+    const dialogRef = this.dialog.open(ModalAprobarRechazarInvitacionComponent, {
+      width: '700px',
+      disableClose: true,
+      data: {
+        invitacion: invitacion
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'OK') {
+        // Recargar la tabla después de evaluar la invitación
+        this.cargarTabla();
+        functionsAlert.success('Invitación evaluada exitosamente');
+      }
+    });
+  }
+
+  puedeEvaluarInvitacion(invitacion: any): boolean {
+    // Verificar si la invitación está en un estado que permite evaluación
+    // Por ejemplo, estado "PENDIENTE" o similar
+    return invitacion?.estadoInvitacion?.codigo === 'PENDIENTE' || 
+           invitacion?.estadoInvitacion?.codigo === 'ENVIADA' ||
+           !invitacion?.feAceptacion; // Si no tiene fecha de aceptación aún
   }
 
 }

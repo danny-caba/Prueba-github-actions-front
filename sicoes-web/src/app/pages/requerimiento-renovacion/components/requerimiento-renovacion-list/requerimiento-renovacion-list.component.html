@@ -81,6 +81,10 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Registro</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.feRegistro }}</td>
                     </ng-container>
+                    <ng-container matColumnDef="estado"> 
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Requerimiento Renovación</th>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ estadoSolicitud(element) }}</td>
+                    </ng-container>
                     <ng-container matColumnDef="estadoAprobacionInforme">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación Informe</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoAprobacionInforme }}</td>
@@ -93,10 +97,7 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación GSE</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoAprobacionGSE }}</td>
                     </ng-container>
-                    <ng-container matColumnDef="estado">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ estadoSolicitud(element) }}</td>
-                    </ng-container>
+                    
                     
                     <!-- Action Column -->
                     <ng-container matColumnDef="actions">

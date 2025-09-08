@@ -148,7 +148,13 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
               } else {
                 functionsAlert.success('Acción completada con éxito.').then(() => {
                   if (tipoAccion === 'APROBAR') {
+                    // Enviar notificación después de aprobar
+                    this.enviarNotificacion(1); // ID para aprobación
                     this.activarFirmaDigital();
+                  } else if (tipoAccion === 'RECHAZAR') {
+                    // Enviar notificación después de rechazar
+                    this.enviarNotificacion(2); // ID para rechazo
+                    this.dialogRef.close('OK');
                   } else {
                     this.dialogRef.close('OK');
                   }
@@ -185,5 +191,63 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
       functionsAlert.info('La aprobación se completó, pero no se pudo iniciar la firma digital: ' + error.message);
       this.dialogRef.close('OK');
     }
+  }
+
+  private enviarNotificacion(idTipoNotifica: number): void {
+    this.informeRenovacionService.notificarRenovacionInforme(idTipoNotifica).subscribe({
+      next: (response) => {
+        console.log('Notificación enviada exitosamente:', response);
+      },
+      error: (error) => {
+        console.error('Error al enviar notificación:', error);
+        // No mostramos error al usuario ya que es un proceso secundario
+      }
+    });
+  }
+
+  async solicitarPerfeccionamientoContrato(): Promise<void> {
+    if (this.data.elementosSeleccionados.length === 0) {
+      functionsAlert.info('Debe seleccionar al menos un informe para procesar la solicitud.');
+      return;
+    }
+
+    const mensajeConfirmacion = '¿Está seguro de que desea generar la solicitud de perfeccionamiento de contrato?';
+
+    functionsAlert.questionSiNo(mensajeConfirmacion).then(async (result) => {
+      if (result.isConfirmed) {
+        this.loadingAccion = true;
+
+        try {
+          const requestPayload = {
+            informesIds: this.data.elementosSeleccionados.map(informe => informe.idInformeRenovacion),
+            idUsuario: this.usuario?.idUsuario,
+            observacion: this.observacionControl.value || '',
+            fechaSolicitud: new Date().toISOString()
+          };
+
+          await firstValueFrom(
+            this.informeRenovacionService.solicitudPerfeccionamientoContrato(requestPayload)
+          );
+
+          this.loadingAccion = false;
+          functionsAlert.success('Solicitud de perfeccionamiento de contrato generada exitosamente.').then(() => {
+            // Enviar notificación específica para perfeccionamiento de contrato
+            this.enviarNotificacion(3); // ID para perfeccionamiento de contrato
+            this.dialogRef.close('OK');
+          });
+
+        } catch (error) {
+          this.loadingAccion = false;
+          console.error('Error al generar solicitud de perfeccionamiento:', error);
+          
+          let mensajeError = 'Error al generar la solicitud de perfeccionamiento de contrato.';
+          if (error?.error?.message) {
+            mensajeError = error.error.message;
+          }
+          
+          functionsAlert.error(mensajeError);
+        }
+      }
+    });
   }
 }

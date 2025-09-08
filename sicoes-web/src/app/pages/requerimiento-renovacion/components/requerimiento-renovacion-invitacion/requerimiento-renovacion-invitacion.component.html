@@ -113,6 +113,20 @@
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
     <ng-template let-row="customer" matMenuContent>
+        <button 
+            mat-menu-item 
+            *ngIf="puedeEvaluarInvitacion(row)"
+            (click)="evaluarInvitacion(row)">
+            <mat-icon svgIcon="mat:rate_review"></mat-icon>
+            <span>Evaluar Invitación</span>
+        </button>
         
+        <button 
+            mat-menu-item 
+            *ngIf="!puedeEvaluarInvitacion(row)"
+            disabled>
+            <mat-icon svgIcon="mat:info"></mat-icon>
+            <span>Ya evaluada</span>
+        </button>
     </ng-template>
 </mat-menu>

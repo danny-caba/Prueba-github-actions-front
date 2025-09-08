@@ -27,4 +27,19 @@ export class InvitacionRenovacionService {
     return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
   }
 
+  aceptarInvitacion(invitacionData: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/renovaciones/invitacion/aceptar`;
+    return this.http.post<any>(urlEndpoint, invitacionData);
+  }
+
+  rechazarInvitacion(invitacionData: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/renovaciones/invitacion/rechazar`;
+    return this.http.post<any>(urlEndpoint, invitacionData);
+  }
+
+  notificarRenovacion(idTipoNotifica: number): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/informe/renovacion/notifica/${idTipoNotifica}`;
+    return this.http.post<any>(urlEndpoint, {});
+  }
+
 }

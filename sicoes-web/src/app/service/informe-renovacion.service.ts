@@ -22,12 +22,22 @@ export class InformeRenovacionService {
   }
 
   aprobarInformeRenovacion(request: any): Observable<any> {
-    const urlEndpoint = `${this._path_serve}/api/informe/renovacion/aprobar`;
+    const urlEndpoint = `${this._path_serve}/informe/renovacion/aprobar`;
     return this.http.post<any>(urlEndpoint, request);
   }
 
   rechazarInformeRenovacion(request: any): Observable<any> {
-    const urlEndpoint = `${this._path_serve}/api/informe/renovacion/rechazar`;
+    const urlEndpoint = `${this._path_serve}/informe/renovacion/rechazar`;
+    return this.http.post<any>(urlEndpoint, request);
+  }
+
+  notificarRenovacionInforme(idTipoNotifica: number): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/informe/renovacion/notifica/${idTipoNotifica}`;
+    return this.http.post<any>(urlEndpoint, {});
+  }
+
+  solicitudPerfeccionamientoContrato(request: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/informe/renovacion/solicitud-perfeccionamiento-contrato`;
     return this.http.post<any>(urlEndpoint, request);
   }
 

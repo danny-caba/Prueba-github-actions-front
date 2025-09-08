@@ -312,7 +312,20 @@
                   </mat-form-field>
                   <mat-form-field class="flex-auto">
                     <mat-label>Empresa Supervisora</mat-label>
-                    <input [formControl]="formGroupInformeRenovacion.controls.empresaSupervisoraR" matInput maxlength="100" />
+                    <input 
+                      [formControl]="formGroupInformeRenovacion.controls.empresaSupervisoraR" 
+                      matInput 
+                      maxlength="100"
+                      [matAutocomplete]="autoSupervisoras"
+                      (input)="onEmpresaSupervisoraChange($any($event.target).value)" />
+                    <mat-autocomplete #autoSupervisoras="matAutocomplete" [displayWith]="displaySupervisoraFn">
+                      <mat-option *ngIf="isLoadingSupervisoras" disabled>
+                        <span>Cargando...</span>
+                      </mat-option>
+                      <mat-option *ngFor="let supervisora of listaSupervisorasAutocomplete" [value]="supervisora">
+                        {{ supervisora.nombreRazonSocial || supervisora.nombre }}
+                      </mat-option>
+                    </mat-autocomplete>
                   </mat-form-field>
                   <mat-form-field class="flex-auto">
                     <mat-label>Estado de Evaluación</mat-label>
@@ -344,6 +357,9 @@
                   </button>
                   <button color="accent" mat-raised-button type="button" (click)="buscarInformeRenovacionParaAprobar()">
                     Buscar para Aprobar
+                  </button>
+                  <button color="warn" mat-raised-button type="button" (click)="buscarInformeRenovacionNuevoEndpoint()">
+                    Buscar Informes API
                   </button>
                   <button color="primary" mat-raised-button type="button" (click)="limpiarInformeRenovacion()">
                     Limpiar

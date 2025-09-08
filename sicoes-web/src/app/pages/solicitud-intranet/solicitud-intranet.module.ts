@@ -21,6 +21,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { SolicitudIntranetRoutingModule } from './solicitud-intranet-routing.module';
@@ -64,6 +65,7 @@ import { SolicitudListAprobacionComponent } from './solicitud-list-aprobacion/so
     MatExpansionModule,
     MatMenuModule,
     MatDatepickerModule,
+    MatAutocompleteModule,
     SharedModule,
 
     SolicitudModule

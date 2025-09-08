@@ -9,6 +9,7 @@ import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
 import { ListadoEnum } from 'src/helpers/constantes.components';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
 import { SolicitudService } from 'src/app/service/solicitud.service';
+import { SupervisoraService } from 'src/app/service/supervisora.service';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { ParametriaService } from 'src/app/service/parametria.service';
@@ -94,6 +95,9 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   listaInformesRenovacionSeleccionados: any[] = [];
 
+  listaSupervisorasAutocomplete: any[] = [];
+  isLoadingSupervisoras = false;
+
   displayedColumns: string[] = [
     'nroExpediente',
     'solicitante',
@@ -151,6 +155,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     private intUrls: InternalUrls,
     private parametriaService: ParametriaService,
     private solicitudService: SolicitudService,
+    private supervisoraService: SupervisoraService,
     private adjuntoService: AdjuntosService,
     private dialog: MatDialog,
   ) {
@@ -206,6 +211,10 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     return this.solicitudService.buscarInformesRenovacionParaAprobar(filtroInformeRenovacion);
   }
 
+  serviceTableInformeRenovacionNuevoEndpoint(filtroInformeRenovacion: any) {
+    return this.solicitudService.buscarInformesRenovacionNuevoEndpoint(filtroInformeRenovacion);
+  }
+
   buscar() {
     this.paginator.pageIndex = 0;
     this.cargarTabla();
@@ -235,6 +244,38 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     }
     this.cargarTablaInformeRenovacionParaAprobar();
     this.listaInformesRenovacionSeleccionados = [];
+  }
+
+  buscarInformeRenovacionNuevoEndpoint() {
+    if (this.paginatorInformeRenovacion) {
+      this.paginatorInformeRenovacion.pageIndex = 0;
+    }
+    this.cargarTablaInformeRenovacionNuevoEndpoint();
+    this.listaInformesRenovacionSeleccionados = [];
+  }
+
+  onEmpresaSupervisoraChange(value: string) {
+    if (value && value.length >= 3) {
+      this.isLoadingSupervisoras = true;
+      this.supervisoraService.autocompleteEmpresaSupervisora(value)
+        .subscribe(
+          (data) => {
+            this.listaSupervisorasAutocomplete = data || [];
+            this.isLoadingSupervisoras = false;
+          },
+          (error) => {
+            console.error('Error al buscar supervisoras:', error);
+            this.listaSupervisorasAutocomplete = [];
+            this.isLoadingSupervisoras = false;
+          }
+        );
+    } else {
+      this.listaSupervisorasAutocomplete = [];
+    }
+  }
+
+  displaySupervisoraFn = (supervisora: any) => {
+    return supervisora ? (supervisora.nombreRazonSocial || supervisora.nombre || supervisora) : '';
   }
 
   limpiar() {
@@ -357,6 +398,27 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
         },
         (error) => {
           console.error('Error al cargar datos de informe de renovación para aprobar:', error);
+          this.isLoading = false;
+        }
+      );
+  }
+
+  cargarTablaInformeRenovacionNuevoEndpoint() {
+    const filtro = this.obtenerFiltroInformeRenovacion();
+    this.dataSourceInformeRenovacion.data = [];
+    this.isLoading = true;
+
+    this.serviceTableInformeRenovacionNuevoEndpoint(filtro)
+      .subscribe(
+        (data) => {
+          this.dataSourceInformeRenovacion.data = data.content || [];
+          if (this.paginatorInformeRenovacion) {
+            this.paginatorInformeRenovacion.length = data.totalElements || 0;
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error al cargar datos con nuevo endpoint de informe de renovación:', error);
           this.isLoading = false;
         }
       );

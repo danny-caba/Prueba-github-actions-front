@@ -197,5 +197,25 @@ export class SolicitudService {
     return this.http.get<Pageable<InformeAprobacionResponse>>(urlEndpoint, { params: params });
   }
 
+  buscarInformesRenovacionNuevoEndpoint(filtroInformeRenovacion): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/informe/renovacion/informes`
+    let params = functions.obtenerParams(filtroInformeRenovacion);
+    
+    if (filtroInformeRenovacion.nroExpediente) {
+      params = params.set('numeroExpediente', filtroInformeRenovacion.nroExpediente);
+    }
+    if (filtroInformeRenovacion.empresaSupervisora) {
+      params = params.set('empresaSupervisora', filtroInformeRenovacion.empresaSupervisora);
+    }
+    if (filtroInformeRenovacion.idTipoInforme) {
+      params = params.set('tipoInforme', filtroInformeRenovacion.idTipoInforme.toString());
+    }
+    if (filtroInformeRenovacion.idEstadoEvaluacion) {
+      params = params.set('estadoEvaluacion', filtroInformeRenovacion.idEstadoEvaluacion.toString());
+    }
+    
+    return this.http.get<any>(urlEndpoint, { params: params });
+  }
+
 
 }

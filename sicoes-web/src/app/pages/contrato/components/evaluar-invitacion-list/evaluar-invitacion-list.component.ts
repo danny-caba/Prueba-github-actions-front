@@ -14,25 +14,29 @@ import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AuthFacade } from '../../../../auth/store/auth.facade';
 import * as CryptoJS from 'crypto-js';
+import { InvitacionRenovacion } from 'src/app/interface/invitacion-renovacion.model';
+import { RequerimientoRenovacionService } from 'src/app/service/requerimiento-renovacion.service';
+import { InvitacionRenovacionService } from 'src/app/service/invitacion-renovacion.service';
 
 const URL_ENCRIPT = '3ncr1pt10nK3yuR1';
 
 @Component({
-  selector: 'vex-contrato-list',
-  templateUrl: './contrato-list.component.html',
-  styleUrls: ['./contrato-list.component.scss'],
+  selector: 'vex-evaluar-invitacion-list',
+  templateUrl: './evaluar-invitacion-list.component.html',
+  styleUrls: ['./evaluar-invitacion-list.component.scss'],
   animations: [
     fadeInUp400ms,
     stagger80ms
   ]
 })
 
-export class ContratoListComponent extends BasePageComponent<Contrato> implements OnInit, OnDestroy {
+export class EvaluarInvitacionListComponent extends BasePageComponent<InvitacionRenovacion> implements OnInit, OnDestroy {
 
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
 
-  displayedColumns: string[] = ['concurso', 'convocatoria', 'item', 'fechaPresentacion', 'fechaSubsanacion', 'estado', 'estadoDocInicioServicio', 'tipo', 'actions'];
+  displayedColumns: string[] = ['feInvitacion', 'fePlazoConfirmacion', 'feAceptacionInvitacion', 'tiSector', 
+    'tiSubSector', 'noItem','estadoInvitacion', 'actions'];
   ACCION_VER: string = solicitudContrato.ACCION_VER;
   ACCION_EDITAR: string = solicitudContrato.ACCION_EDITAR;
   private destroy$ = new Subject<void>();
@@ -48,7 +52,8 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   constructor(
     private authFacade: AuthFacade,
     private router: Router,
-    private contratoService: ContratoService,
+    private requerimientoRenovacionService: RequerimientoRenovacionService,
+    private invitacionRenovacionService: InvitacionRenovacionService,
     private fb: FormBuilder
   ) {
     super();
@@ -64,49 +69,17 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   }
 
   serviceTable(filtro: any) {
-    return this.contratoService.obtenerSolicitudesExterno(filtro);
+    return this.invitacionRenovacionService.listar(filtro);
   }
 
   obtenerFiltro() {
     let filtro: any = {
-      nroConcurso: this.formGroup.get('nroConcurso').value,
-      item: this.formGroup.get('item').value,
-      convocatoria: this.formGroup.get('convocatoria').value ? `%${this.formGroup.get('convocatoria').value.trim()}%` : null,
-      estado: this.formGroup.get('estadoProcesoSolicitud').value,
-      tipoSolicitud: this.formGroup.get('tipoSolicitud').value
     };
     return filtro;
   }
 
   goToBandejaSolicitudes() {
     this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST]);
-  }
-
-  goToFormContrato(contrato: any, accion: string) {
-    this.contratoService.validarSancionVigenteV2(contrato.supervisora.numeroDocumento)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(res =>{
-      if(res.resultado === '1'){
-        this.contratoService.enviarCorreoSancion(contrato.idSolicitud, res)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((response) => {
-          functionsAlert.vigente('No es posible realizar su registro.', 'Mantiene una sancion por parte del OSCE.').then((result) => {
-          });
-        });
-      }else{
-
-        let encodedId = this.encrypt(contrato.idSolicitud.toString());
-        this.contratoService.validarFechaPresentacion(contrato.idSolicitud)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((response) => {
-          if (response) {
-            this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST, accion === this.ACCION_VER ? Link.CONTRATO_SOLICITUD_VIEW : Link.CONTRATO_SOLICITUD_ADD, encodedId]);
-          } else {
-            functionsAlert.error('La fecha límite de presentación ha expirado.');
-          }
-        }); 
-      }
-    });
   }
 
   limpiar() {
@@ -160,7 +133,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   }
 
   evaluarInvitacion(contrato: Contrato): void {
-    this.router.navigate(['/', Link.EXTRANET, Link.CONTRATOS_LIST,contrato.idSolicitud, Link.REQUERIMIENTO_RENOVACION_EVALUAR_INVITACION]);
+    this.router.navigate(['/', Link.EXTRANET, Link.REQUERIMIENTO_RENOVACION_EVALUAR_INVITACION, contrato.idSolicitud]);
   }
 
 }

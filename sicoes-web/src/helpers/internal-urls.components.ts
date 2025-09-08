@@ -41,6 +41,7 @@ export enum Link {
     REQUERIMIENTO_RENOVACION_LIST = 'requerimiento-renovacion',
     REQUERIMIENTO_RENOVACION_INFORME = 'informe',
     REQUERIMIENTO_RENOVACION_INVITACION = 'invitacion',
+    REQUERIMIENTO_RENOVACION_EVALUAR_INVITACION = 'evaluar-invitacion',
 
     
     INVITACIONES_LIST = 'invitaciones',

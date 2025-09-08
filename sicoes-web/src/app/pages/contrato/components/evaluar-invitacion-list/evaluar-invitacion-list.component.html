@@ -5,48 +5,9 @@
         <div class="flex flex-col sm:flex-row gap-x8">
           <div @fadeInUp class="flex-auto">
             <!--TITULO-->
-            <h2 class="text-lg font-bold">Invitaciones</h2>
+            <h2 class="text-lg font-bold">Evaluar Invitación</h2>
             <mat-divider></mat-divider>
-
-            <!-- Filter -->
-            <div class="py-4 grid sm:grid-cols-2 md:grid-cols-3 gap-x-8">
-              <!-- Sector -->
-              <div class="flex flex-col">
-                  <mat-label class="text-primary text-sm font-medium">Sector</mat-label>
-                  <mat-form-field  class="flex-auto">
-                      <mat-select [formControl]="formGroup.controls.sector" [compareWith]="compareSelecIdListadoDetalle" placeholder="Ingresar sector">
-                          <mat-option *ngFor="let obj of listSector" [value]="obj">
-                              {{ obj.nombre }}
-                          </mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="formGroup.get('sector').hasError('required')">Ingrese Sector</mat-error>
-                  </mat-form-field>
-              </div>
-              <!-- SubSector -->
-              <div class="flex flex-col">
-                  <mat-label class="text-primary text-sm font-medium">Sub sector</mat-label>
-                  <mat-form-field  class="flex-auto">
-                      <mat-select [formControl]="formGroup.controls.subsector" [compareWith]="compareSelecIdListadoDetalle" placeholder="Ingresar sub sector">
-                          <mat-option *ngFor="let obj of listSubSector" [value]="obj">
-                              {{ obj.nombre }}
-                          </mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="formGroup.get('sector').hasError('required')">Ingrese Sector</mat-error>
-                  </mat-form-field>
-              </div>
-              <div class="flex flex-col">
-                <mat-label class="text-primary text-sm font-medium">Item</mat-label>
-                <mat-form-field  class="flex-auto">
-                    <input matInput [formControl]="formGroup.controls.noItem" maxlength="200" placeholder="Item" type="number" />
-                </mat-form-field>
-              </div>
-              <!--BOTONES-->
-              <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
-                <button color="primary" mat-raised-button type="button" (click)="enviarInvitacion()" >Enviar</button>
-              </div>
-            </div>
-
-              <div class="overflow-auto shadow-2xl rounded">
+              <div class="overflow-auto shadow-2xl rounded mt-2">
                 <!-- tabla -->
                 <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
                     <ng-container matColumnDef="feInvitacion">
@@ -78,7 +39,7 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Invitación</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estado?.nombre || 'Otro' }}</td>
                     </ng-container>
-
+                    
                     <!-- Action Column -->
                     <ng-container matColumnDef="actions">
                         <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
@@ -122,27 +83,9 @@
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
     <ng-template let-row="customer" matMenuContent>
-      <button mat-menu-item>
-        <mat-icon svgIcon="mat:delete"></mat-icon>
-        <span>Eliminar</span>
+      <button mat-menu-item> 
+        <mat-icon svgIcon="mat:eye"></mat-icon>
+        <span>Ver</span>
       </button>
     </ng-template>
-
-  <ng-template let-row="customer" matMenuContent>
-    <button
-      mat-menu-item
-      *ngIf="puedeEvaluarInvitacion(row)"
-      (click)="evaluarInvitacion(row)">
-      <mat-icon svgIcon="mat:rate_review"></mat-icon>
-      <span>Evaluar Invitación</span>
-    </button>
-
-    <button
-      mat-menu-item
-      *ngIf="!puedeEvaluarInvitacion(row)"
-      disabled>
-      <mat-icon svgIcon="mat:info"></mat-icon>
-      <span>Ya evaluada</span>
-    </button>
-  </ng-template>
 </mat-menu>

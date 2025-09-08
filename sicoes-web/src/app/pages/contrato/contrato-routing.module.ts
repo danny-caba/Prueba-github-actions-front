@@ -7,6 +7,7 @@ import { Link } from 'src/helpers/internal-urls.components';
 import { ContratoListComponent } from './components/contrato-list/contrato-list.component';
 import { ContratoFormComponent } from './components/contrato-form/contrato-form.component';
 import { ContratoDocumentosComponent } from './components/contrato-documentos/contrato-documentos.component';
+import { EvaluarInvitacionListComponent } from './components/evaluar-invitacion-list/evaluar-invitacion-list.component';
 
 
 
@@ -31,7 +32,16 @@ const routes: VexRoutes = [{
       data: {
         editable: false
       }
-    }, {
+    },
+    {
+      path: ':idSolicitud/'+Link.REQUERIMIENTO_RENOVACION_EVALUAR_INVITACION,
+      canActivate: [AuthGuardService, RoleGuardService],
+      component: EvaluarInvitacionListComponent,
+      data: {
+        editable: false
+      }
+    }, 
+    {
       path: 'cargar-documentacion-inicio/:id',
       component: ContratoDocumentosComponent
     },

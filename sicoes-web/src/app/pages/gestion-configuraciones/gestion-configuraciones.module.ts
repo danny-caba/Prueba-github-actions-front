@@ -25,6 +25,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { SeccionComponent } from './components/seccion/seccion.component';
 import { RequisitoComponent } from './components/requisito/requisito.component';
+import { PlazoConfirmacionComponent } from './components/plazo-confirmacion/plazo-confirmacion.component';
 
 
 
@@ -32,7 +33,8 @@ import { RequisitoComponent } from './components/requisito/requisito.component';
   declarations: [
     BandejaConfiguracionesComponent,
     SeccionComponent,
-    RequisitoComponent
+    RequisitoComponent,
+    PlazoConfirmacionComponent
   ],
   imports: [
     CommonModule,

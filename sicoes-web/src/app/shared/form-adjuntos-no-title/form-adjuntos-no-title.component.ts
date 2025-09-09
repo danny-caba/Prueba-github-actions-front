@@ -166,7 +166,7 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
   }
 
   descargar(adj) {
-    let nombreAdjunto = adj.nombre != null ? adj.nombre : adj.nombreReal;
+    let nombreAdjunto = adj.archivo.nombre != null ? adj.archivo.nombre : adj.archivo.nombreReal;
     this.adjuntoService.descargarWindowsJWT(adj.archivo.codigo, nombreAdjunto);
   }
 

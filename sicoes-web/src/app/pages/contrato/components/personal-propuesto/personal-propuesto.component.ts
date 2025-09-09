@@ -139,6 +139,7 @@ export class PersonalPropuestoComponent extends BasePageComponent<any> implement
   }
 
   descargar(adj) {
+    console.log("adj",adj)
     let nombreAdjunto = adj.nombreReal;
     let codigoAdjunto = adj.codigo;
     this.adjuntoService.descargarWindowsJWT(codigoAdjunto, nombreAdjunto);

@@ -69,11 +69,11 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
 
   ngOnInit(): void {
     this.cargarCombo();
+    this.nuExpediente = this.activatedRoute.snapshot.paramMap.get('idRequerimiento');
     this.listar();
     this.formGroup.get('sector').valueChanges.subscribe(value => {
       this.onChangeSector(value)
     });
-    this.nuExpediente = this.activatedRoute.snapshot.paramMap.get('idRequerimiento');
     this.requerimientoRenovacionService.obtenerPorNumeroExpediente(this.nuExpediente).subscribe(d=>{
       this.requerimiento = d;
     });
@@ -136,6 +136,7 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
 
   obtenerFiltro() {
     let filtro: any = {
+      numeroExpediente:this.nuExpediente,
       sector: this.formGroup.controls.sector.value?.codigo,
       subSector: this.formGroup.controls.subsector.value?.codigo,
     }

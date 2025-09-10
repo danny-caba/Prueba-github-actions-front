@@ -58,7 +58,6 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
       justificacion: [''],
       necesidad: [''],
       conclusiones: [''],
-      vigente: [false],
       registro: [''],
       completado: [''],
       estadoAprobacionInforme: [null],
@@ -84,7 +83,6 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
         justificacion: informe.deJustificacion || '',
         necesidad: informe.deNecesidad || '',
         conclusiones: informe.deConclusiones || '',
-        vigente: informe.vigente || false,
         registro: informe.registro || '',
         completado: informe.completado || '',
         estadoAprobacionInforme: informe.estadoAprobacionInforme || null

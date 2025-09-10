@@ -231,6 +231,10 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     return this.solicitudService.buscarInformesRenovacionNuevoEndpoint(filtroInformeRenovacion);
   }
 
+  serviceTableInformeRenovacionGSE(filtroInformeRenovacion: any) {
+    return this.solicitudService.buscarInformesRenovacionGSE(filtroInformeRenovacion);
+  }
+
   buscar() {
     this.paginator.pageIndex = 0;
     this.cargarTabla();
@@ -456,6 +460,47 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       );
   }
 
+  cargarTablaInformeRenovacionGSE() {
+    const filtro = this.obtenerFiltroInformeRenovacionGSE();
+    this.dataSourceInformeRenovacion.data = [];
+    this.isLoading = true;
+
+    this.serviceTableInformeRenovacionGSE(filtro)
+      .subscribe(
+        (data) => {
+          this.dataSourceInformeRenovacion.data = data.content || [];
+          if (this.paginatorInformeRenovacion) {
+            this.paginatorInformeRenovacion.length = data.totalElements || 0;
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error al cargar datos GSE de informe de renovación:', error);
+          this.isLoading = false;
+        }
+      );
+  }
+
+  obtenerFiltroInformeRenovacionGSE() {
+    let filtroInformeRenovacion: any = {
+      numeroExpediente: this.formGroupInformeRenovacion.controls.nroExpedienteR.value,
+      razSocialSupervisora: this.formGroupInformeRenovacion.controls.contratistaR.value,
+      estadoInforme: this.formGroupInformeRenovacion.controls.estadoAprobacionR.value?.idListadoDetalle,
+      grupoAprobador: 3, // GSE es Grupo 3 según diseño
+      page: this.paginatorInformeRenovacion?.pageIndex ?? 0,
+      size: this.paginatorInformeRenovacion?.pageSize ?? 10,
+    };
+    return filtroInformeRenovacion;
+  }
+
+  buscarInformeRenovacionGSE() {
+    if (this.paginatorInformeRenovacion) {
+      this.paginatorInformeRenovacion.pageIndex = 0;
+    }
+    this.cargarTablaInformeRenovacionGSE();
+    this.listaInformesRenovacionSeleccionados = [];
+  }
+
   pageChangePerfeccionamiento(event: any) {
     this.cargarTablaPerfeccionamiento();
   }
@@ -672,6 +717,35 @@ historyApproveAndSignPerfeccionamiento(row: any) {
         idInformeRenovacion: row.idInformeRenovacion
       }
     });
+  }
+
+  descargarAdjuntoInforme(row: any) {
+    const uuid = row.deUuidInfoRenovacion || row.uuid;
+    const nombreArchivo = row.deNombreArchivo || row.nombreArchivo || `informe_${row.numeroExpediente || row.idInformeRenovacion}.pdf`;
+    
+    if (!uuid) {
+      alert('No se encontró el archivo adjunto para este informe.');
+      return;
+    }
+
+    this.solicitudService.descargarAdjuntoInformeRenovacion(uuid, nombreArchivo)
+      .subscribe(
+        (blob: Blob) => {
+          // Crear un enlace temporal para descargar el archivo
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = nombreArchivo;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+        },
+        (error) => {
+          console.error('Error al descargar adjunto:', error);
+          alert('Error al descargar el archivo. Por favor, intente nuevamente.');
+        }
+      );
   }
 
   redireccionAProbarPaces() {

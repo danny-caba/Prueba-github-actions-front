@@ -233,5 +233,47 @@ export class SolicitudService {
     return this.http.get<any>(urlEndpoint, { params: params });
   }
 
+  descargarAdjuntoInformeRenovacion(uuid: string, nombreArchivo?: string): Observable<Blob> {
+    const urlEndpoint = `${this._path_serve}/informe/renovacion/adjunto/descargar`;
+    let params = functions.obtenerParams({ uuid: uuid });
+    if (nombreArchivo) {
+      params = params.set('nombreArchivo', nombreArchivo);
+    }
+    
+    return this.http.get(urlEndpoint, { 
+      params: params,
+      responseType: 'blob'
+    });
+  }
+
+  buscarInformesRenovacionGSE(filtroInformeRenovacion): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/informe/renovacion/aprobar/buscar`
+    let params = functions.obtenerParams(filtroInformeRenovacion);
+    
+    if (filtroInformeRenovacion.nroExpediente) {
+      params = params.set('numeroExpediente', filtroInformeRenovacion.nroExpediente);
+    }
+    if (filtroInformeRenovacion.tipoSector) {
+      params = params.set('tipoSector', filtroInformeRenovacion.tipoSector);
+    }
+    if (filtroInformeRenovacion.tipoSubSector) {
+      params = params.set('tipoSubSector', filtroInformeRenovacion.tipoSubSector);
+    }
+    if (filtroInformeRenovacion.nombreItem) {
+      params = params.set('nombreItem', filtroInformeRenovacion.nombreItem);
+    }
+    if (filtroInformeRenovacion.razSocialSupervisora) {
+      params = params.set('razSocialSupervisora', filtroInformeRenovacion.razSocialSupervisora);
+    }
+    if (filtroInformeRenovacion.estadoInforme) {
+      params = params.set('estadoInforme', filtroInformeRenovacion.estadoInforme.toString());
+    }
+    if (filtroInformeRenovacion.grupoAprobador) {
+      params = params.set('grupoAprobador', filtroInformeRenovacion.grupoAprobador.toString());
+    }
+    
+    return this.http.get<any>(urlEndpoint, { params: params });
+  }
+
 
 }

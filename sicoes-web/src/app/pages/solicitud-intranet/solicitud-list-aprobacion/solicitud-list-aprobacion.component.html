@@ -528,6 +528,10 @@
       <mat-icon svgIcon="mat:preview"></mat-icon>
       <span>Ver</span>
     </button>
+    <button mat-menu-item (click)="descargarAdjuntoInforme(row)" *ngIf="row.deUuidInfoRenovacion || row.uuid">
+      <mat-icon svgIcon="mat:download"></mat-icon>
+      <span>Descargar Adjunto</span>
+    </button>
     <button mat-menu-item (click)="historyApproveAndSignInformeRenovacion(row)">
       <mat-icon svgIcon="mat:history"></mat-icon>
       <span>Historial Aprobar y firmar</span>

@@ -20,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalAprobadorFirmaAccionComponent } from 'src/app/shared/modal-aprobador-firma-accion/modal-aprobador-firma-accion.component';
 import { LayoutAprobacionHistorialComponent } from 'src/app/shared/layout-aprobacion-historial/layout-aprobacion-historial.component';
 import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { ModalAprobadorContratoComponent } from 'src/app/shared/modal-aprobador-contrato/modal-aprobador-contrato.component';
 import { ModalAprobadorInformeRenovacionComponent } from 'src/app/shared/modal-aprobador-informe-renovacion/modal-aprobador-informe-renovacion.component';
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
@@ -35,10 +36,11 @@ import { InformeAprobacionResponse } from 'src/app/interface/informe-aprobacion.
     stagger80ms
   ]
 })
-export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitud> implements OnInit {
+export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitud> implements OnInit, OnDestroy {
 
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
+  currentUser: any;
   SOLICITUD: any;
 
   ACC_HISTORIAL = 'ACC_HISTORIAL';
@@ -69,9 +71,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   formGroupInformeRenovacion = this.fb.group({
     nroExpedienteR: [''],
-    empresaSupervisoraR: [''],
-    tipoInformeR: [null],
-    estadoEvaluacionR: [null]
+    contratistaR: [''],
+    estadoAprobacionR: [null]
   });
 
   listTipoSolicitud: any[];
@@ -97,6 +98,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   listaSupervisorasAutocomplete: any[] = [];
   isLoadingSupervisoras = false;
+  private destroy$ = new Subject<void>();
 
   displayedColumns: string[] = [
     'nroExpediente',
@@ -130,13 +132,9 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   displayedColumnsInformeRenovacion: string[] = [
     'selectRenovacion',
     'numeroExpedienteR',
-    'empresaSupervisoraR',
-    'tipoInformeR',
-    'fechaPresentacionR',
-    'fechaLimiteEvaluacionR',
-    'estadoEvaluacionR',
-    'estadoAprobacionTecnicaR',
-    'estadoVbGerenciaR',
+    'contratistaR',
+    'fechaIngresoR',
+    'estadoAprobacionR',
     'actionsInformeRenovacion'
   ];
 
@@ -164,10 +162,18 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   }
 
   ngOnInit(): void {
+    this.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
+      this.currentUser = user;
+    });
     this.cargarCombo();
     this.cargarTabla();
     this.cargarTablaPerfeccionamiento();
     this.cargarTablaInformeRenovacion();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   cargarCombo() {
@@ -190,6 +196,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       this.listTipoAprobacionP = listRes[4];
       this.listEstadoAprobacionP = listRes[5];
 
+      // Para informe de renovación - usar estado de aprobación perfeccionamiento como base
+      this.listEstadoAprobacionInforme = listRes[5]; // Reutilizar estados de aprobación
       this.listTipoInformeRenovacion = listRes[6];
       this.listEstadoEvaluacionRenovacion = listRes[7];
     });
@@ -323,13 +331,29 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   obtenerFiltroInformeRenovacion() {
     let filtroInformeRenovacion: any = {
       nroExpediente: this.formGroupInformeRenovacion.controls.nroExpedienteR.value,
-      empresaSupervisora: this.formGroupInformeRenovacion.controls.empresaSupervisoraR.value,
-      idTipoInforme: this.formGroupInformeRenovacion.controls.tipoInformeR.value?.idListadoDetalle,
-      idEstadoEvaluacion: this.formGroupInformeRenovacion.controls.estadoEvaluacionR.value?.idListadoDetalle,
+      // Para el backend, si se ingresa nombre de contratista, debe convertirse a idContratista
+      // Por ahora mantenemos como texto, pero se podría implementar búsqueda de ID
+      nombreContratista: this.formGroupInformeRenovacion.controls.contratistaR.value,
+      idEstadoAprobacion: this.formGroupInformeRenovacion.controls.estadoAprobacionR.value?.idListadoDetalle,
       page: this.paginatorInformeRenovacion?.pageIndex ?? 0,
       size: this.paginatorInformeRenovacion?.pageSize ?? 10,
+      grupoUsuario: this.obtenerGrupoUsuario(),
     };
     return filtroInformeRenovacion;
+  }
+
+  private obtenerGrupoUsuario(): number {
+    if (this.currentUser?.usuario) {
+      // Determinar el grupo basado en el rol del usuario
+      if (this.currentUser.usuario.includes('G1') || this.currentUser.usuario.includes('GRUPO_1')) {
+        return 1;
+      } else if (this.currentUser.usuario.includes('G2') || this.currentUser.usuario.includes('GRUPO_2')) {
+        return 2;
+      } else if (this.currentUser.usuario.includes('G3') || this.currentUser.usuario.includes('GRUPO_3')) {
+        return 3;
+      }
+    }
+    return 3; // Por defecto grupo 3
   }
 
   cargarTablaPerfeccionamiento() {

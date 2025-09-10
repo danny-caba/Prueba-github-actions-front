@@ -70,12 +70,17 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
   ngOnInit(): void {
     this.cargarCombo();
     this.listar();
-    this.formGroup.get('sector').valueChanges.subscribe(value => {
-      this.onChangeSector(value)
-    });
     this.nuExpediente = this.activatedRoute.snapshot.paramMap.get('idRequerimiento');
     this.requerimientoRenovacionService.obtenerPorNumeroExpediente(this.nuExpediente).subscribe(d=>{
       this.requerimiento = d;
+      // Precargar campos de sector y subsector desde el requerimiento
+      if (this.requerimiento) {
+        this.formGroup.patchValue({
+          sector: this.requerimiento.tiSector || 'Sector Energético', // Valor por defecto o del requerimiento
+          subsector: this.requerimiento.tiSubSector || 'Gas Natural', // Valor por defecto o del requerimiento
+          noItem: this.requerimiento.noItem || 1 // Valor por defecto o del requerimiento
+        });
+      }
     });
   }
 
@@ -125,19 +130,11 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
     return false;
   }  
 
-  onChangeSector(obj) {
-    if (!obj) return;
-    this.formGroup.controls.subsector.setValue('');
-    this.parametriaService.obtenerSubListado(ListadoEnum.SUBSECTOR, obj.idListadoDetalle).subscribe(res => {
-      this.listSubSector = res;
-      
-    });
-  }
 
   obtenerFiltro() {
     let filtro: any = {
-      sector: this.formGroup.controls.sector.value?.codigo,
-      subSector: this.formGroup.controls.subsector.value?.codigo,
+      sector: this.formGroup.controls.sector.value,
+      subSector: this.formGroup.controls.subsector.value,
     }
     return filtro;
   }

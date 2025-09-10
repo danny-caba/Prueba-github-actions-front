@@ -156,17 +156,33 @@ export class SolicitudService {
   buscarInformesRenovacionAprobador(filtroInformeRenovacion): Observable<any> {
     const urlEndpoint = `${this._path_serve}/api/renovacion/informes`
     let params = functions.obtenerParams(filtroInformeRenovacion);
-    params = params.set('tipoAprobador', 'GRUPO_3');
+    
+    // Determinar el tipo de aprobador basado en el grupo del usuario
+    const tipoAprobador = this.obtenerTipoAprobador(filtroInformeRenovacion.grupoUsuario);
+    params = params.set('tipoAprobador', tipoAprobador);
+    
     if (filtroInformeRenovacion.nroExpediente) {
       params = params.set('numeroExpediente', filtroInformeRenovacion.nroExpediente);
     }
-    if (filtroInformeRenovacion.idEstadoEvaluacion) {
-      params = params.set('estado', filtroInformeRenovacion.idEstadoEvaluacion.toString());
+    if (filtroInformeRenovacion.idEstadoAprobacion) {
+      params = params.set('estado', filtroInformeRenovacion.idEstadoAprobacion.toString());
     }
     if (filtroInformeRenovacion.idContratista) {
       params = params.set('idContratista', filtroInformeRenovacion.idContratista.toString());
     }
     return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
+  }
+
+  private obtenerTipoAprobador(grupoUsuario?: number): string {
+    switch (grupoUsuario) {
+      case 1:
+        return 'G1';
+      case 2:
+        return 'G2';
+      case 3:
+      default:
+        return 'G3'; // Por defecto G3 (anteriormente GRUPO_3)
+    }
   }
 
   buscarHistorialAprobacionesInformesRenovacion(filtroInformeRenovacion): Observable<any> {

@@ -311,55 +311,24 @@
                     <input [formControl]="formGroupInformeRenovacion.controls.nroExpedienteR" matInput maxlength="15" />
                   </mat-form-field>
                   <mat-form-field class="flex-auto">
-                    <mat-label>Empresa Supervisora</mat-label>
-                    <input 
-                      [formControl]="formGroupInformeRenovacion.controls.empresaSupervisoraR" 
-                      matInput 
-                      maxlength="100"
-                      [matAutocomplete]="autoSupervisoras"
-                      (input)="onEmpresaSupervisoraChange($any($event.target).value)" />
-                    <mat-autocomplete #autoSupervisoras="matAutocomplete" [displayWith]="displaySupervisoraFn">
-                      <mat-option *ngIf="isLoadingSupervisoras" disabled>
-                        <span>Cargando...</span>
-                      </mat-option>
-                      <mat-option *ngFor="let supervisora of listaSupervisorasAutocomplete" [value]="supervisora">
-                        {{ supervisora.nombreRazonSocial || supervisora.nombre }}
-                      </mat-option>
-                    </mat-autocomplete>
+                    <mat-label>Contratista</mat-label>
+                    <input [formControl]="formGroupInformeRenovacion.controls.contratistaR" matInput maxlength="100" />
                   </mat-form-field>
                   <mat-form-field class="flex-auto">
-                    <mat-label>Estado de Evaluación</mat-label>
-                    <mat-select [formControl]="formGroupInformeRenovacion.controls.estadoEvaluacionR" [compareWith]="compareSelecIdListadoDetalle">
-                      <mat-option *ngFor="let obj of listEstadoEvaluacionRenovacion" [value]="obj">
+                    <mat-label>Estado Aprobación</mat-label>
+                    <mat-select [formControl]="formGroupInformeRenovacion.controls.estadoAprobacionR" [compareWith]="compareSelecIdListadoDetalle">
+                      <mat-option *ngFor="let obj of listEstadoAprobacionInforme" [value]="obj">
                         {{ obj.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                </div>
-                <div class="flex flex-col sm:flex-row sm:gap-4">
-                  <mat-form-field class="flex-auto">
-                    <mat-label>Tipo de Informe</mat-label>
-                    <mat-select [formControl]="formGroupInformeRenovacion.controls.tipoInformeR" [compareWith]="compareSelecIdListadoDetalle">
-                      <mat-option *ngFor="let obj of listTipoInformeRenovacion" [value]="obj">
-                        {{ obj.nombre }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <div class="flex-auto"></div>
-                  <div class="flex-auto"></div>
                 </div>
                 <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
                   <button color="primary" style="margin-right: auto;" mat-raised-button type="button" (click)="aprobarVistoBuenoFirmarInformeRenovacion('add')">
-                    Aprobar/Visto Bueno/Firmar
+                    Aprobar
                   </button>
                   <button color="primary" mat-raised-button type="button" (click)="buscarInformeRenovacion()">
                     Buscar
-                  </button>
-                  <button color="accent" mat-raised-button type="button" (click)="buscarInformeRenovacionParaAprobar()">
-                    Buscar para Aprobar
-                  </button>
-                  <button color="warn" mat-raised-button type="button" (click)="buscarInformeRenovacionNuevoEndpoint()">
-                    Buscar Informes API
                   </button>
                   <button color="primary" mat-raised-button type="button" (click)="limpiarInformeRenovacion()">
                     Limpiar
@@ -385,39 +354,19 @@
                 <td mat-cell *matCellDef="let element">{{ element.numeroExpediente }}</td>
               </ng-container>
 
-              <ng-container matColumnDef="empresaSupervisoraR">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa Supervisora</th>
-                <td mat-cell *matCellDef="let element">{{ element.empresaSupervisora }}</td>
+              <ng-container matColumnDef="contratistaR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Contratista</th>
+                <td mat-cell *matCellDef="let element">{{ element.contratista || element.nombreContratista }}</td>
               </ng-container>
 
-              <ng-container matColumnDef="tipoInformeR">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Informe</th>
-                <td mat-cell *matCellDef="let element">{{ element.tipoInforme?.nombre }}</td>
+              <ng-container matColumnDef="fechaIngresoR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Ingreso</th>
+                <td mat-cell *matCellDef="let element">{{ element.fechaIngreso || element.fechaCreacion }}</td>
               </ng-container>
 
-              <ng-container matColumnDef="fechaPresentacionR">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Presentación</th>
-                <td mat-cell *matCellDef="let element">{{ element.fechaPresentacion }}</td>
-              </ng-container>
-
-              <ng-container matColumnDef="fechaLimiteEvaluacionR">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Límite<br>de Evaluación</th>
-                <td mat-cell *matCellDef="let element">{{ element.fechaLimiteEvaluacion }}</td>
-              </ng-container>
-
-              <ng-container matColumnDef="estadoEvaluacionR">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado de Evaluación</th>
-                <td mat-cell *matCellDef="let element">{{ element.estadoEvaluacion?.nombre }}</td>
-              </ng-container>
-
-              <ng-container matColumnDef="estadoAprobacionTecnicaR">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación<br>Técnica</th>
-                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionTecnica?.nombre || ' ' }}</td>
-              </ng-container>
-
-              <ng-container matColumnDef="estadoVbGerenciaR">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado VB<br>Gerencia</th>
-                <td mat-cell *matCellDef="let element">{{ element.estadoVbGerencia?.nombre || ' ' }}</td>
+              <ng-container matColumnDef="estadoAprobacionR">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación</th>
+                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacion?.nombre || element.estado?.nombre }}</td>
               </ng-container>
 
               <ng-container matColumnDef="actionsInformeRenovacion">
@@ -446,12 +395,6 @@
             <mat-paginator #paginatorInformeRenovacion class="sticky left-0" [pageSizeOptions]="[10, 20, 30]" (page)="pageChangeInformeRenovacion($event)" showFirstLastButtons></mat-paginator>
           </div>
 
-          <div class="flex flex-row justify-end gap-4 mt-4">
-
-            <button mat-stroked-button color="primary" (click)="historialAprobaciones()">
-              Historial de aprobaciones
-            </button>
-          </div>
         </mat-tab>
         </mat-tab-group>
     </div>
@@ -548,6 +491,10 @@
     <button mat-menu-item (click)="historyApproveAndSignInformeRenovacion(row)">
       <mat-icon svgIcon="mat:history"></mat-icon>
       <span>Historial Aprobar y firmar</span>
+    </button>
+    <button mat-menu-item (click)="historialAprobaciones()">
+      <mat-icon svgIcon="mat:analytics"></mat-icon>
+      <span>Historial de aprobaciones</span>
     </button>
   </ng-template>
 </mat-menu>

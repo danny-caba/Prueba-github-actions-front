@@ -32,7 +32,7 @@ import { ModalAprobarRechazarInvitacionComponent } from 'src/app/shared/modal-ap
 })
 export class RequerimientoRenovacionInvitacionComponent extends BasePageComponent<InvitacionRenovacion> implements OnInit, OnDestroy {
 
-  displayedColumns: string[] = ['feInvitacion', 'fePlazoConfirmacion', 'feAceptacionInvitacion', 'tiSector', 
+  displayedColumns: string[] = ['feInvitacion', 'fePlazoConfirmacion', 'feAceptacionInvitacion', 'tiSector',
     'tiSubSector', 'noItem','estadoInvitacion', 'actions'];
 
   formGroup = this.fb.group({
@@ -69,18 +69,13 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
 
   ngOnInit(): void {
     this.cargarCombo();
-    this.listar();
     this.nuExpediente = this.activatedRoute.snapshot.paramMap.get('idRequerimiento');
+    this.listar();
+    this.formGroup.get('sector').valueChanges.subscribe(value => {
+      this.onChangeSector(value)
+    });
     this.requerimientoRenovacionService.obtenerPorNumeroExpediente(this.nuExpediente).subscribe(d=>{
       this.requerimiento = d;
-      // Precargar campos de sector y subsector desde el requerimiento
-      if (this.requerimiento) {
-        this.formGroup.patchValue({
-          sector: this.requerimiento.tiSector || 'Sector Energético', // Valor por defecto o del requerimiento
-          subsector: this.requerimiento.tiSubSector || 'Gas Natural', // Valor por defecto o del requerimiento
-          noItem: this.requerimiento.noItem || 1 // Valor por defecto o del requerimiento
-        });
-      }
     });
   }
 
@@ -112,7 +107,7 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
         } else {
         }
     });
-  }  
+  }
 
   cancelar(){
     this.router.navigate([Link.INTRANET, Link.SOLICITUDES_LIST]);
@@ -128,13 +123,22 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
       return true;
     }
     return false;
-  }  
+  }
 
+  onChangeSector(obj) {
+    if (!obj) return;
+    this.formGroup.controls.subsector.setValue('');
+    this.parametriaService.obtenerSubListado(ListadoEnum.SUBSECTOR, obj.idListadoDetalle).subscribe(res => {
+      this.listSubSector = res;
+
+    });
+  }
 
   obtenerFiltro() {
     let filtro: any = {
-      sector: this.formGroup.controls.sector.value,
-      subSector: this.formGroup.controls.subsector.value,
+      numeroExpediente:this.nuExpediente,
+      sector: this.formGroup.controls.sector.value?.codigo,
+      subSector: this.formGroup.controls.subsector.value?.codigo,
     }
     return filtro;
   }
@@ -168,7 +172,7 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
   puedeEvaluarInvitacion(invitacion: any): boolean {
     // Verificar si la invitación está en un estado que permite evaluación
     // Por ejemplo, estado "PENDIENTE" o similar
-    return invitacion?.estadoInvitacion?.codigo === 'PENDIENTE' || 
+    return invitacion?.estadoInvitacion?.codigo === 'PENDIENTE' ||
            invitacion?.estadoInvitacion?.codigo === 'ENVIADA' ||
            !invitacion?.feAceptacion; // Si no tiene fecha de aceptación aún
   }

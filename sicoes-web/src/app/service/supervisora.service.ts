@@ -63,4 +63,10 @@ export class SupervisoraService {
     return this.http.get<Supervisora>(urlEndpoint);
   }
 
+  autocompleteEmpresaSupervisora(nombreSupervisora: string): Observable<any[]> {
+    const urlEndpoint = `${this._path_serve}/api/supervisoras/autocomplete`;
+    const params = { nombreSupervisora: nombreSupervisora };
+    return this.http.get<any[]>(urlEndpoint, { params: params });
+  }
+
 }

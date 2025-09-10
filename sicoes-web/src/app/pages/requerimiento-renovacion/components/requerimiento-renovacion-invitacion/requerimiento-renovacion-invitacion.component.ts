@@ -32,7 +32,7 @@ import { ModalAprobarRechazarInvitacionComponent } from 'src/app/shared/modal-ap
 })
 export class RequerimientoRenovacionInvitacionComponent extends BasePageComponent<InvitacionRenovacion> implements OnInit, OnDestroy {
 
-  displayedColumns: string[] = ['feInvitacion', 'fePlazoConfirmacion', 'feAceptacionInvitacion', 'tiSector', 
+  displayedColumns: string[] = ['feInvitacion', 'fePlazoConfirmacion', 'feAceptacionInvitacion', 'tiSector',
     'tiSubSector', 'noItem','estadoInvitacion', 'actions'];
 
   formGroup = this.fb.group({
@@ -107,7 +107,7 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
         } else {
         }
     });
-  }  
+  }
 
   cancelar(){
     this.router.navigate([Link.INTRANET, Link.SOLICITUDES_LIST]);
@@ -123,14 +123,14 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
       return true;
     }
     return false;
-  }  
+  }
 
   onChangeSector(obj) {
     if (!obj) return;
     this.formGroup.controls.subsector.setValue('');
     this.parametriaService.obtenerSubListado(ListadoEnum.SUBSECTOR, obj.idListadoDetalle).subscribe(res => {
       this.listSubSector = res;
-      
+
     });
   }
 
@@ -172,7 +172,7 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
   puedeEvaluarInvitacion(invitacion: any): boolean {
     // Verificar si la invitación está en un estado que permite evaluación
     // Por ejemplo, estado "PENDIENTE" o similar
-    return invitacion?.estadoInvitacion?.codigo === 'PENDIENTE' || 
+    return invitacion?.estadoInvitacion?.codigo === 'PENDIENTE' ||
            invitacion?.estadoInvitacion?.codigo === 'ENVIADA' ||
            !invitacion?.feAceptacion; // Si no tiene fecha de aceptación aún
   }

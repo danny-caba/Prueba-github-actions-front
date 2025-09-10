@@ -5,7 +5,7 @@
         <div class="flex flex-col sm:flex-row gap-x8">
           <div @fadeInUp class="flex-auto">
             <!--TITULO-->
-            <h2 class="text-lg font-bold">Invitaciones</h2>
+            <h2 class="text-lg font-bold">Enviar invitación</h2>
             <mat-divider></mat-divider>
 
             <!-- Filter -->
@@ -14,24 +14,14 @@
               <div class="flex flex-col">
                   <mat-label class="text-primary text-sm font-medium">Sector</mat-label>
                   <mat-form-field  class="flex-auto">
-                      <mat-select [formControl]="formGroup.controls.sector" [compareWith]="compareSelecIdListadoDetalle" placeholder="Ingresar sector">
-                          <mat-option *ngFor="let obj of listSector" [value]="obj">
-                              {{ obj.nombre }}
-                          </mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="formGroup.get('sector').hasError('required')">Ingrese Sector</mat-error>
+                      <input matInput [formControl]="formGroup.controls.sector" placeholder="Sector" readonly />
                   </mat-form-field>
               </div>
               <!-- SubSector -->
               <div class="flex flex-col">
                   <mat-label class="text-primary text-sm font-medium">Sub sector</mat-label>
                   <mat-form-field  class="flex-auto">
-                      <mat-select [formControl]="formGroup.controls.subsector" [compareWith]="compareSelecIdListadoDetalle" placeholder="Ingresar sub sector">
-                          <mat-option *ngFor="let obj of listSubSector" [value]="obj">
-                              {{ obj.nombre }}
-                          </mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="formGroup.get('sector').hasError('required')">Ingrese Sector</mat-error>
+                      <input matInput [formControl]="formGroup.controls.subsector" placeholder="Sub sector" readonly />
                   </mat-form-field>
               </div>
               <div class="flex flex-col">
@@ -41,8 +31,8 @@
                 </mat-form-field>
               </div>
               <!--BOTONES-->
-              <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
-                <button color="primary" mat-raised-button type="button" (click)="enviarInvitacion()" >Enviar</button>
+              <div class="flex flex-col sm:flex-row sm:gap-2 items-end justify-end">
+                <button color="primary" mat-raised-button type="button" (click)="enviarInvitacion()" >Enviar Invitación</button>
               </div>
             </div>
 
@@ -50,16 +40,16 @@
                 <!-- tabla -->
                 <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
                     <ng-container matColumnDef="feInvitacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Invitación</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Invitación</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.feInvitacion }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="fePlazoConfirmacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Plazo de confirmación</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Plazo de confirmación</th>
                         <td class="text-primary font-medium " mat-cell *matCellDef="let element">{{ element?.fechaVencimiento | date:'yyyy/MM/dd HH:mm' }}</td>
                     </ng-container>
                     <ng-container matColumnDef="feAceptacionInvitacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Aceptación Invitación</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Aceptación Invitación</th>
                         <td class="text-primary font-medium " mat-cell *matCellDef="let element">{{ element?.feAceptacion }}</td>
                     </ng-container>
                     <ng-container matColumnDef="tiSector">

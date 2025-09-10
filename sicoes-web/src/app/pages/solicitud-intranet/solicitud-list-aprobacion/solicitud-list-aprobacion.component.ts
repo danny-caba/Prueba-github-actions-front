@@ -9,6 +9,7 @@ import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
 import { ListadoEnum } from 'src/helpers/constantes.components';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
 import { SolicitudService } from 'src/app/service/solicitud.service';
+import { SupervisoraService } from 'src/app/service/supervisora.service';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { ParametriaService } from 'src/app/service/parametria.service';
@@ -19,10 +20,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalAprobadorFirmaAccionComponent } from 'src/app/shared/modal-aprobador-firma-accion/modal-aprobador-firma-accion.component';
 import { LayoutAprobacionHistorialComponent } from 'src/app/shared/layout-aprobacion-historial/layout-aprobacion-historial.component';
 import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { ModalAprobadorContratoComponent } from 'src/app/shared/modal-aprobador-contrato/modal-aprobador-contrato.component';
 import { ModalAprobadorInformeRenovacionComponent } from 'src/app/shared/modal-aprobador-informe-renovacion/modal-aprobador-informe-renovacion.component';
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
 import { HistorialAprobacion } from 'src/app/interface/historial-aprobacion-renovacion';
+import { InformeAprobacionResponse } from 'src/app/interface/informe-aprobacion.model';
 
 @Component({
   selector: 'vex-solicitud-list-aprobacion',
@@ -33,10 +36,11 @@ import { HistorialAprobacion } from 'src/app/interface/historial-aprobacion-reno
     stagger80ms
   ]
 })
-export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitud> implements OnInit {
+export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitud> implements OnInit, OnDestroy {
 
   intenalUrls: InternalUrls;
   user$ = this.authFacade.user$;
+  currentUser: any;
   SOLICITUD: any;
 
   ACC_HISTORIAL = 'ACC_HISTORIAL';
@@ -67,9 +71,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   formGroupInformeRenovacion = this.fb.group({
     nroExpedienteR: [''],
-    empresaSupervisoraR: [''],
-    tipoInformeR: [null],
-    estadoEvaluacionR: [null]
+    contratistaR: [''],
+    estadoAprobacionR: [null]
   });
 
   listTipoSolicitud: any[];
@@ -92,6 +95,10 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   listaContratosSeleccionadosPerfeccionamiento: SelectedPerfeccionamientoItem[] = [];
 
   listaInformesRenovacionSeleccionados: any[] = [];
+
+  listaSupervisorasAutocomplete: any[] = [];
+  isLoadingSupervisoras = false;
+  private destroy$ = new Subject<void>();
 
   displayedColumns: string[] = [
     'nroExpediente',
@@ -125,13 +132,9 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   displayedColumnsInformeRenovacion: string[] = [
     'selectRenovacion',
     'numeroExpedienteR',
-    'empresaSupervisoraR',
-    'tipoInformeR',
-    'fechaPresentacionR',
-    'fechaLimiteEvaluacionR',
-    'estadoEvaluacionR',
-    'estadoAprobacionTecnicaR',
-    'estadoVbGerenciaR',
+    'contratistaR',
+    'fechaIngresoR',
+    'estadoAprobacionR',
     'actionsInformeRenovacion'
   ];
 
@@ -150,6 +153,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     private intUrls: InternalUrls,
     private parametriaService: ParametriaService,
     private solicitudService: SolicitudService,
+    private supervisoraService: SupervisoraService,
     private adjuntoService: AdjuntosService,
     private dialog: MatDialog,
   ) {
@@ -158,10 +162,18 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   }
 
   ngOnInit(): void {
+    this.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
+      this.currentUser = user;
+    });
     this.cargarCombo();
     this.cargarTabla();
     this.cargarTablaPerfeccionamiento();
     this.cargarTablaInformeRenovacion();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   cargarCombo() {
@@ -184,6 +196,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       this.listTipoAprobacionP = listRes[4];
       this.listEstadoAprobacionP = listRes[5];
 
+      // Para informe de renovación - usar estado de aprobación perfeccionamiento como base
+      this.listEstadoAprobacionInforme = listRes[5]; // Reutilizar estados de aprobación
       this.listTipoInformeRenovacion = listRes[6];
       this.listEstadoEvaluacionRenovacion = listRes[7];
     });
@@ -199,6 +213,14 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   serviceTableInformeRenovacion(filtroInformeRenovacion: any) {
     return this.solicitudService.buscarInformesRenovacionAprobador(filtroInformeRenovacion);
+  }
+
+  serviceTableInformeRenovacionParaAprobar(filtroInformeRenovacion: any) {
+    return this.solicitudService.buscarInformesRenovacionParaAprobar(filtroInformeRenovacion);
+  }
+
+  serviceTableInformeRenovacionNuevoEndpoint(filtroInformeRenovacion: any) {
+    return this.solicitudService.buscarInformesRenovacionNuevoEndpoint(filtroInformeRenovacion);
   }
 
   buscar() {
@@ -222,6 +244,46 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     }
     this.cargarTablaInformeRenovacion();
     this.listaInformesRenovacionSeleccionados = [];
+  }
+
+  buscarInformeRenovacionParaAprobar() {
+    if (this.paginatorInformeRenovacion) {
+      this.paginatorInformeRenovacion.pageIndex = 0;
+    }
+    this.cargarTablaInformeRenovacionParaAprobar();
+    this.listaInformesRenovacionSeleccionados = [];
+  }
+
+  buscarInformeRenovacionNuevoEndpoint() {
+    if (this.paginatorInformeRenovacion) {
+      this.paginatorInformeRenovacion.pageIndex = 0;
+    }
+    this.cargarTablaInformeRenovacionNuevoEndpoint();
+    this.listaInformesRenovacionSeleccionados = [];
+  }
+
+  onEmpresaSupervisoraChange(value: string) {
+    if (value && value.length >= 3) {
+      this.isLoadingSupervisoras = true;
+      this.supervisoraService.autocompleteEmpresaSupervisora(value)
+        .subscribe(
+          (data) => {
+            this.listaSupervisorasAutocomplete = data || [];
+            this.isLoadingSupervisoras = false;
+          },
+          (error) => {
+            console.error('Error al buscar supervisoras:', error);
+            this.listaSupervisorasAutocomplete = [];
+            this.isLoadingSupervisoras = false;
+          }
+        );
+    } else {
+      this.listaSupervisorasAutocomplete = [];
+    }
+  }
+
+  displaySupervisoraFn = (supervisora: any) => {
+    return supervisora ? (supervisora.nombreRazonSocial || supervisora.nombre || supervisora) : '';
   }
 
   limpiar() {
@@ -269,13 +331,29 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   obtenerFiltroInformeRenovacion() {
     let filtroInformeRenovacion: any = {
       nroExpediente: this.formGroupInformeRenovacion.controls.nroExpedienteR.value,
-      empresaSupervisora: this.formGroupInformeRenovacion.controls.empresaSupervisoraR.value,
-      idTipoInforme: this.formGroupInformeRenovacion.controls.tipoInformeR.value?.idListadoDetalle,
-      idEstadoEvaluacion: this.formGroupInformeRenovacion.controls.estadoEvaluacionR.value?.idListadoDetalle,
+      // Para el backend, si se ingresa nombre de contratista, debe convertirse a idContratista
+      // Por ahora mantenemos como texto, pero se podría implementar búsqueda de ID
+      nombreContratista: this.formGroupInformeRenovacion.controls.contratistaR.value,
+      idEstadoAprobacion: this.formGroupInformeRenovacion.controls.estadoAprobacionR.value?.idListadoDetalle,
       page: this.paginatorInformeRenovacion?.pageIndex ?? 0,
       size: this.paginatorInformeRenovacion?.pageSize ?? 10,
+      grupoUsuario: this.obtenerGrupoUsuario(),
     };
     return filtroInformeRenovacion;
+  }
+
+  private obtenerGrupoUsuario(): number {
+    if (this.currentUser?.usuario) {
+      // Determinar el grupo basado en el rol del usuario
+      if (this.currentUser.usuario.includes('G1') || this.currentUser.usuario.includes('GRUPO_1')) {
+        return 1;
+      } else if (this.currentUser.usuario.includes('G2') || this.currentUser.usuario.includes('GRUPO_2')) {
+        return 2;
+      } else if (this.currentUser.usuario.includes('G3') || this.currentUser.usuario.includes('GRUPO_3')) {
+        return 3;
+      }
+    }
+    return 3; // Por defecto grupo 3
   }
 
   cargarTablaPerfeccionamiento() {
@@ -323,6 +401,48 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
         },
         (error) => {
           console.error('Error al cargar datos de informe de renovación:', error);
+          this.isLoading = false;
+        }
+      );
+  }
+
+  cargarTablaInformeRenovacionParaAprobar() {
+    const filtro = this.obtenerFiltroInformeRenovacion();
+    this.dataSourceInformeRenovacion.data = [];
+    this.isLoading = true;
+
+    this.serviceTableInformeRenovacionParaAprobar(filtro)
+      .subscribe(
+        (data) => {
+          this.dataSourceInformeRenovacion.data = data.content || [];
+          if (this.paginatorInformeRenovacion) {
+            this.paginatorInformeRenovacion.length = data.totalElements || 0;
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error al cargar datos de informe de renovación para aprobar:', error);
+          this.isLoading = false;
+        }
+      );
+  }
+
+  cargarTablaInformeRenovacionNuevoEndpoint() {
+    const filtro = this.obtenerFiltroInformeRenovacion();
+    this.dataSourceInformeRenovacion.data = [];
+    this.isLoading = true;
+
+    this.serviceTableInformeRenovacionNuevoEndpoint(filtro)
+      .subscribe(
+        (data) => {
+          this.dataSourceInformeRenovacion.data = data.content || [];
+          if (this.paginatorInformeRenovacion) {
+            this.paginatorInformeRenovacion.length = data.totalElements || 0;
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error al cargar datos con nuevo endpoint de informe de renovación:', error);
           this.isLoading = false;
         }
       );

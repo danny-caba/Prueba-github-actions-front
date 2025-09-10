@@ -101,7 +101,7 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
   registrar() {
     console.log("registrar")
     if (this.validarForm()) return;
-    functionsAlert.questionSiNoEval('¿Seguro de enviar el informe para las firmas?',"Informe...").then((result) => {
+    functionsAlert.questionSiNoEval('¿Seguro de enviar el informe para las firmas?',"Informe de Requerimiento de Renovación").then((result) => {
         if(result.isConfirmed){
         const informe = this.formGroup.value;
         this.requerimiento.solicitudPerfil = {idSolicitud:this.requerimiento.idSoliPerfCont}

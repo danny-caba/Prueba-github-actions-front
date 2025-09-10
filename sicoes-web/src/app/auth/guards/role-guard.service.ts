@@ -56,8 +56,8 @@ export class RoleGuardService implements CanActivate {
           let opcs: any = RolMenu.find(ele => ele.ROL?.CODIGO == codigoRol);
 
           opcs.path.map(value => {
-            console.info('/' + value)
-            console.info(state.url.replace(/\d+/g, ''))
+            /* console.info('/' + value)
+            console.info(state.url.replace(/\d+/g, '')) */
             if(state.url.replace(/\d+/g, '').includes('/' + value)){
               verifica = true;
             }

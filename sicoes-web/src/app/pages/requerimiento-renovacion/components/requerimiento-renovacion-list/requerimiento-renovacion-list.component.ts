@@ -187,20 +187,20 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
   }
 
   formElaborarInforme(solicitud: any){
-  
+    const estadoInforme=solicitud.hasOwnProperty('estadoAprobacionInforme'); 
     return ! this.itemsTable.every(
       (item: RequerimientoRenovacion) =>
         item.estadoReqRenovacion?.codigo === 'CONCLUIDO' ||
         item.estadoReqRenovacion?.codigo === 'ARCHIVADO'
-    );
+    ) && !estadoInforme;
   }
 
   formEnviarInvitacion(solicitud: any){
-  
+    const estado=solicitud?.estadoAprobacionInforme==='En Proceso';
     return ! this.itemsTable.every(
       (item: RequerimientoRenovacion) =>
         item.estadoReqRenovacion?.codigo === 'EN_PROCESO' ||
         item.estadoReqRenovacion?.codigo === 'ARCHIVADO'
-    );
+    ) && estado;
   }
 }

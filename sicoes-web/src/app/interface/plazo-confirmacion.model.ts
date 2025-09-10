@@ -4,6 +4,6 @@ export class PlazoConfirmacion {
     numeroDias?: number;
     estado?: string;
     estadoDescripcion?: string;
-    tipoDia:string
+    tipoDia:number
     fechaBase:string
 }

@@ -8,6 +8,7 @@ import { FormBuilder } from '@angular/forms';
 import { PlazoConfirmacion } from 'src/app/interface/plazo-confirmacion.model';
 import { PlazoConfirmacionService } from 'src/app/service/plazo-confirmacion.service';
 import { functionsAlert } from 'src/helpers/functionsAlert';
+import { MatRadioChange } from '@angular/material/radio';
 
 @Component({
   selector: 'vex-plazo-confirmacion',
@@ -21,7 +22,7 @@ export class PlazoConfirmacionComponent extends BaseComponent implements OnInit 
   
   formGroupPlazo = this.fb.group({
     fechaBase: [null],
-    tipoDia: [null],
+    tipoDia: [1],
     numeroDias: [1],
   });
 
@@ -35,12 +36,12 @@ export class PlazoConfirmacionComponent extends BaseComponent implements OnInit 
   ]
   listOpcion: any = [
     {
-      key: '1',
+      key: 1,
       value: 'Calendario'
     },
     {
-      key: '2',
-      value: 'Habiles'
+      key: 2,
+      value: 'Hábiles'
     },
   ];
 
@@ -65,16 +66,16 @@ export class PlazoConfirmacionComponent extends BaseComponent implements OnInit 
             this.plazo = plazos[0];
             this.formGroupPlazo.patchValue({
               fechaBase: this.plazo.fechaBase, 
-              tipoDia: this.plazo.tipoDia+'' || '1',
+              tipoDia: this.plazo.tipoDia || 1,
               numeroDias: this.plazo.numeroDias
             });
           } else{
-            this.plazo={tipoDia:'1',fechaBase:"Fecha Invitacíón"}
+            this.plazo={tipoDia:1,fechaBase:"Fecha Invitacíón"}
           }
         },
         error: (error) => {
           console.error('Error en la suscripción:', error);
-          this.plazo={tipoDia:'1',fechaBase:"Fecha Invitacíón"}
+          this.plazo={tipoDia:1,fechaBase:"Fecha Invitacíón"}
         }
       });
   }
@@ -119,6 +120,8 @@ export class PlazoConfirmacionComponent extends BaseComponent implements OnInit 
     return {};
   }
 
-  
-
+  tipoDiaChange(change: MatRadioChange): void {
+    console.log(change.value)
+    this.plazo.tipoDia=change.value
+  }
 }

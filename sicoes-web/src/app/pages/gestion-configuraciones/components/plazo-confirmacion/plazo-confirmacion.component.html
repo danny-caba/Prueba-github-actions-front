@@ -16,13 +16,13 @@
                 </mat-form-field>
             </div>
             <div class="flex flex-col w-1/3">
-                <mat-label class="text-primary text-sm font-medium">Tipo de dias:</mat-label>
-                <mat-radio-group aria-label="Select an option" class="flex gap-8 mt-2" [value]="plazo?.tipoDia" >
+                <mat-label class="text-primary text-sm font-medium">Tipo de días:</mat-label>
+                <mat-radio-group aria-label="Select an option" class="flex gap-8 mt-2" [value]="plazo?.tipoDia" (change)="tipoDiaChange($event)">
                     <mat-radio-button *ngFor="let opt of listOpcion" [value]="opt.key">{{opt.value}}</mat-radio-button>
                 </mat-radio-group>
             </div>
             <div class="flex flex-col w-1/3 mt-2">
-                <mat-label class="text-primary text-sm font-medium">Dias</mat-label>
+                <mat-label class="text-primary text-sm font-medium">Días</mat-label>
                 <mat-form-field class="flex-auto">
                   <input matInput type="number" inputmode="numeric" pattern="[0-9]*"  placeholder="# dias" 
                   [formControl]="formGroupPlazo.controls.numeroDias" />
@@ -30,12 +30,10 @@
               </div>
             <!---->
         </div>
-        <button color="primary" mat-raised-button type="button"  >
-            <mat-icon svgIcon="mat:back"></mat-icon> Cancelar
-          </button>
-        <button color="primary" mat-raised-button type="button" (click)="guardarPlazo()" >
-          <mat-icon svgIcon="mat:add"></mat-icon> Guardar
-        </button>
+        <div class="px-6 py-4 flex flex-col sm:flex-row gap-2 items-center justify-end">
+          <button color="primary" mat-raised-button type="button" > Cancelar</button>
+          <button color="primary" mat-raised-button type="button" (click)="guardarPlazo()" > Guardar</button>
+        </div>
       </div>
   </div>
   <div class="overflow-auto shadow-2xl rounded">

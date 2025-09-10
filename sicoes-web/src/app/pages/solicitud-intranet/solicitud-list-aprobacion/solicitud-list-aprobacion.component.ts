@@ -131,10 +131,18 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   displayedColumnsInformeRenovacion: string[] = [
     'selectRenovacion',
+    'tipoAprobacionR',
     'numeroExpedienteR',
+    'informeR',
+    'tpR',
     'contratistaR',
+    'tipoContratoR',
     'fechaIngresoR',
     'estadoAprobacionR',
+    'estadoAprobacionJefeDivisionR',
+    'estadoAprobacionGerenteDivisionR',
+    'estadoAprobacionGPPMR',
+    'estadoAprobacionGSER',
     'actionsInformeRenovacion'
   ];
 

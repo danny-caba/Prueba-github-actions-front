@@ -9,13 +9,13 @@
         </div>
         <form [formGroup]="formGroup">
             <mat-accordion multi="true">
-            <mat-expansion-panel class="mt-2" expanded="false">
+            <mat-expansion-panel class="mt-2" expanded="true">
               <mat-expansion-panel-header>
                 <mat-panel-title class="font-bold">1.- Objeto</mat-panel-title>
               </mat-expansion-panel-header>
               <ng-template matExpansionPanelContent>
                 <mat-form-field class="mat-input-wrapper w-full">
-                  <input matInput formControlName="objeto" placeholder="Ingrese objeto" />
+                  <textarea matInput rows="3" formControlName="objeto" placeholder="Ingrese Objeto" ></textarea>
                 </mat-form-field>
               </ng-template>
             </mat-expansion-panel>
@@ -90,8 +90,8 @@
                 <button color="primary" mat-raised-button type="button" class="hover-class" (click)="cancelar()" >
                   Regresar
                 </button>
-                <button color="primary" mat-raised-button type="button" class="hover-class" (click)="registrar()">
-                    Registrar
+                <button color="primary" mat-raised-button type="button" class="hover-class" (click)="registrar()" [disabled]="estaGuardando()">
+                  Crear Informe
                 </button>
             </div>
         </form>

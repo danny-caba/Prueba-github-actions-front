@@ -172,7 +172,9 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
        idSoliPerfCont: this.solicitudSicoes.idSolicitud,
        noItem: this.solicitudSicoes?.propuesta?.procesoItem?.descripcionItem
       },
-    })
+    }).afterClosed().subscribe(() => {
+      this.cargarTabla();
+    });
   }
 
   estadoSolicitud(requerimiento: RequerimientoRenovacion): string {

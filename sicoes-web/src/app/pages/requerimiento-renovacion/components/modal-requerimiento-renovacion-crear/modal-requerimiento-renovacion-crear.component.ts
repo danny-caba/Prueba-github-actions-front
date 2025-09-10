@@ -70,8 +70,7 @@ export class ModalRequerimientoRenovacionCrearComponent extends BaseComponent im
           this.requerimientoRenovacion.tipoSubSector=this.requerimientoRenovacion.sector.codigo
           this.requerimientoRenovacion.deObservacion = this.formGroup.controls.observacion.value
           this.requerimientoRenovacionService.registrarRequerimientoRenovacion(this.requerimientoRenovacion).subscribe(res => {
-            functionsAlert.success('Requerimiento de evaluacion Creado').then((result) => {
-              // this.requisito = res;
+            functionsAlert.success('Requerimiento de evaluación Creado').then((result) => {
               this.returnValue = res;
               this.closeModal();
             });

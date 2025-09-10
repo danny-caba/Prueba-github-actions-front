@@ -32,8 +32,8 @@ import { Proceso } from 'src/app/interface/proceso.model';
 
 
 export class RequerimientoRenovacionListComponent extends BasePageComponent<RequerimientoRenovacion> implements OnInit {
-  displayedColumns: string[] = ['nuExpediente', 'tiSector', 'tiSubSector', 'noItem', 'fecCreacion', 
-    'estadoAprobacionInforme','estadoAprobacionGPPM','estadoAprobacionGSE','estado', 'actions'];
+  displayedColumns: string[] = ['nuExpediente', 'tiSector', 'tiSubSector', 'noItem', 'fecCreacion','estado', 
+    'estadoAprobacionInforme','estadoAprobacionGPPM','estadoAprobacionGSE', 'actions'];
 
   formGroup = this.fb.group({
     nuExpediente: [null],
@@ -113,8 +113,13 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
     if (!obj) return;
     this.formGroup.controls.subsector.setValue('');
     this.parametriaService.obtenerSubListado(ListadoEnum.SUBSECTOR, obj.idListadoDetalle).subscribe(res => {
-      this.listSubSector = res;
-      
+      const subsectorProceso = this.propuesta.procesoItem.proceso.subsector;
+      this.listSubSector = res.filter(subsector => 
+        subsector.codigo === subsectorProceso.codigo
+      );
+      if (this.listSubSector.length > 0) {
+          this.formGroup.controls.subsector.setValue(this.listSubSector[0]);
+      }
     });
   }
 
@@ -167,7 +172,9 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
        idSoliPerfCont: this.solicitudSicoes.idSolicitud,
        noItem: this.solicitudSicoes?.propuesta?.procesoItem?.descripcionItem
       },
-    })
+    }).afterClosed().subscribe(() => {
+      this.cargarTabla();
+    });
   }
 
   estadoSolicitud(requerimiento: RequerimientoRenovacion): string {

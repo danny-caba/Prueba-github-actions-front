@@ -46,6 +46,11 @@ export class InformeRenovacionService {
     return this.http.post<InformeRenovacion>(urlEndpoint, request);
   }
 
+  obtener(request: string): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/renovacion/informe/${request}`;
+    return this.http.get<InformeRenovacion>(urlEndpoint);
+  }
+
   listarInformes(tipoAprobador: string, numeroExpediente?: string, estado?: number, idContratista?: number, pageable?: any): Observable<any> {
     let params = new URLSearchParams();
     params.append('tipoAprobador', tipoAprobador);

@@ -21,7 +21,7 @@
         </mat-form-field>
     </div>
     <div class="flex flex-col">
-        <mat-label class="text-primary text-sm font-medium">Resultado</mat-label>
+        <mat-label class="text-primary text-sm font-medium">Observación</mat-label>
         <mat-form-field  class="mt-6 flex-auto">
             <textarea #observacionDescripcion rows="4" cdkTextareaAutosize matNativeControl [formControl]="formGroup.controls.observacion" maxlength="5000" [disabled]="true"></textarea>
             <!--mat-error *ngIf="formGroup.get('observaciones').hasError('required')">Ingrese motivo</mat-error-->

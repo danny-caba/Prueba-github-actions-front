@@ -130,6 +130,11 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
   }
 
   formRequerimientoRenovacion(solicitud: any){
-    return solicitud.estadoProcesoSolicitud === '4';
+    const estadoValido = solicitud.estadoProcesoSolicitud === '4';
+    const tipoSolicitudValido = solicitud.tipoSolicitud === '1' || 
+                               solicitud.tipoSolicitud === '2';
+    //const estadoDocInicioValido = solicitud.idDocInicio === 2;
+    const estadoDocInicioValido = true;
+    return estadoValido && tipoSolicitudValido && estadoDocInicioValido;
   }
 }

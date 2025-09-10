@@ -29,9 +29,9 @@ export class RoleGuardService implements CanActivate {
       map(data => {        
 
         //console.info(data)
-        console.info(state.url)
+/*        console.info(state.url)
         console.info(state.root)
-        console.info(route.url)
+        console.info(route.url)*/
       
 
         let verifica = false;
@@ -65,8 +65,8 @@ export class RoleGuardService implements CanActivate {
 
         });
 
-        console.info(data.tipoPersona?.codigo)
-        console.info(state.url)
+        /*console.info(data.tipoPersona?.codigo)
+        console.info(state.url)*/
         if(data.tipoPersona?.codigo == TipoPersonaEnum.JURIDICO && state.url.includes('invitaciones')){
           console.info("aa")
           return false;

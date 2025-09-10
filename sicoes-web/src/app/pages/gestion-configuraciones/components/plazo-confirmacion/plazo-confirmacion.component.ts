@@ -40,7 +40,7 @@ export class PlazoConfirmacionComponent extends BaseComponent implements OnInit 
     },
     {
       key: '2',
-      value: 'Habiles'
+      value: 'Hábiles'
     },
   ];
 

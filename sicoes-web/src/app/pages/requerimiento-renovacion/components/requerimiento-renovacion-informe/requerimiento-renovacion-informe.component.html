@@ -4,7 +4,7 @@
       <div class="card overflow-auto -mt-16">
         <!--TITULO-->
         <div class="px-6 py-4 border-b flex items-center">
-          <h2 class="title m-0">Elaborar Informe</h2>
+          <h2 class="title m-0 font-bold">Elaborar Informe</h2>
           <span class="flex-1"></span>
         </div>
         <form [formGroup]="formGroup">
@@ -15,7 +15,7 @@
               </mat-expansion-panel-header>
               <ng-template matExpansionPanelContent>
                 <mat-form-field class="mat-input-wrapper w-full">
-                  <textarea matInput rows="3" formControlName="objeto" placeholder="Ingrese Objeto" ></textarea>
+                  <textarea matInput rows="3" formControlName="objeto" placeholder="Sustentar la necesidad y justificar la renovación del contrato de locación de servicios, indicando la denominación del proceso o concurso del cual deriva el contrato" ></textarea>
                 </mat-form-field>
               </ng-template>
             </mat-expansion-panel>
@@ -26,7 +26,7 @@
               </mat-expansion-panel-header>
               <ng-template matExpansionPanelContent>
                 <mat-form-field class="mat-input-wrapper w-full">
-                  <input matInput formControlName="baseLegal" placeholder="Ingrese base legal" />
+                  <textarea matInput rows="3" formControlName="baseLegal" placeholder="Ingrese base legal" ></textarea>
                 </mat-form-field>
               </ng-template>
             </mat-expansion-panel>
@@ -90,7 +90,7 @@
                 <button color="primary" mat-raised-button type="button" class="hover-class" (click)="cancelar()" >
                   Regresar
                 </button>
-                <button color="primary" mat-raised-button type="button" class="hover-class" (click)="registrar()" [disabled]="estaGuardando()">
+                <button color="primary" mat-raised-button type="button" class="hover-class" (click)="registrar()" [disabled]="!formGroup.valid">
                   Crear Informe
                 </button>
             </div>

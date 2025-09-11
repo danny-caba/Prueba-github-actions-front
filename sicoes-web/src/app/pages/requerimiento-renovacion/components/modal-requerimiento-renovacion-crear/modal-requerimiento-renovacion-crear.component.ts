@@ -64,13 +64,13 @@ export class ModalRequerimientoRenovacionCrearComponent extends BaseComponent im
   guardar() {
     if (this.validarForm()) return;
     this.requerimientoRenovacion.evaluacion = this.formGroup.controls.observacion.getRawValue();
-    functionsAlert.questionSiNoEval('¿Está seguro de crear requerimiento de renovación?',"Requerimiento renovación").then((result) => {
+    functionsAlert.questionSiNoEval('¿Está seguro de crear el requerimiento de renovación?',"Requerimiento renovación").then((result) => {
       if(result.isConfirmed){
           this.requerimientoRenovacion.tipoSector=this.requerimientoRenovacion.sector.codigo
           this.requerimientoRenovacion.tipoSubSector=this.requerimientoRenovacion.sector.codigo
           this.requerimientoRenovacion.deObservacion = this.formGroup.controls.observacion.value
           this.requerimientoRenovacionService.registrarRequerimientoRenovacion(this.requerimientoRenovacion).subscribe(res => {
-            functionsAlert.success('Requerimiento de renovación Creado').then((result) => {
+            functionsAlert.success('El requerimiento de renovación ha sido creado').then((result) => {
               this.returnValue = res;
               this.closeModal();
             });

@@ -28,12 +28,6 @@ export class PlazoConfirmacionComponent extends BaseComponent implements OnInit 
 
   plazo:PlazoConfirmacion
 
-  listFechaBase: any =[
-    {
-      key: 'Fecha Invitacíón',
-      nombre: 'Fecha Invitacíón'
-    }
-  ]
   listOpcion: any = [
     {
       key: 1,
@@ -81,6 +75,7 @@ export class PlazoConfirmacionComponent extends BaseComponent implements OnInit 
   }
 
   guardarPlazo(): void {
+    console.log("guarda")
     if (this.formGroupPlazo.valid) {
       const formValue = this.formGroupPlazo.value;
       console.log(formValue)

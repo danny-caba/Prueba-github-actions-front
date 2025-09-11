@@ -9,7 +9,7 @@ import { functionsAlert } from 'src/helpers/functionsAlert';
 import { EstadoEvaluacionAdministrativa, EstadoEvaluacionTecnica, EvaluadorRol, TipoPersonaEnum } from 'src/helpers/constantes.components';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthUser } from 'src/app/auth/store/auth.models';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { InformeRenovacionService } from 'src/app/service/informe-renovacion.service';
 import { RequerimientoRenovacionService } from 'src/app/service/requerimiento-renovacion.service';
 import { RequerimientoRenovacion } from 'src/app/interface/requerimiento-renovacion.model';
@@ -47,20 +47,12 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
   ) {
     super();
     this.formGroup = this.fb.group({
-      idInformeRenovacion: [null],
-      usuario: [null],
-      notificacion: [null],
-      requerimiento: [null],
-      aprobaciones: [null],
-      objeto: [''],
-      baseLegal: [''],
-      antecedentes: [''],
-      justificacion: [''],
-      necesidad: [''],
-      conclusiones: [''],
-      registro: [''],
-      completado: [''],
-      estadoAprobacionInforme: [null],
+      objeto: ['',Validators.required],
+      baseLegal: ['',Validators.required],
+      antecedentes: ['',Validators.required],
+      justificacion: ['',Validators.required],
+      necesidad: ['',Validators.required],
+      conclusiones: ['',Validators.required],
     });
   }
 
@@ -72,20 +64,12 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
 
     this.informeRenovacionService.obtener(this.nuExpediente).subscribe(informe=>{
       this.formGroup.patchValue({
-        idInformeRenovacion: informe.idInformeRenovacion || null,
-        usuario: informe.usuario || null,
-        notificacion: informe.notificacion || null,
-        requerimiento: informe.requerimiento || null,
-        aprobaciones: informe.aprobaciones || null,
         objeto: informe.deObjeto || '',
         baseLegal: informe.deBaseLegal || '',
         antecedentes: informe.deAntecedentes || '',
         justificacion: informe.deJustificacion || '',
         necesidad: informe.deNecesidad || '',
         conclusiones: informe.deConclusiones || '',
-        registro: informe.registro || '',
-        completado: informe.completado || '',
-        estadoAprobacionInforme: informe.estadoAprobacionInforme || null
       }, { emitEvent: false }); 
     });
     // Escuchar cambios en TODO el formulario
@@ -104,7 +88,7 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
         const informe = this.formGroup.value;
         this.requerimiento.solicitudPerfil = {idSolicitud:this.requerimiento.idSoliPerfCont}
         informe.requerimiento = this.requerimiento;
-        informe.completado=1;
+        informe.completado='1';
         this.informeRenovacionService.registrar(informe).subscribe({
           next: () => {
             functionsAlert.success('Informe registrado correctamente');
@@ -155,7 +139,7 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
     const informe = this.formGroup.value;
     this.requerimiento.solicitudPerfil = {idSolicitud:this.requerimiento.idSoliPerfCont}
     informe.requerimiento = this.requerimiento;
-    informe.completado=0;
+    informe.completado='0';
     this.informeRenovacionService.registrar(informe).subscribe({
       next: () => {
         this.snackBar.open('Autoguardado exitoso...', 'Cerrar', { duration: 1000 });

@@ -42,18 +42,18 @@
                             </mat-form-field>
                         </div>
 
-                        <!-- Botones -->
-                        <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end">
-                            <button color="primary" mat-stroked-button type="button" (click)="crearRequerimiento()" [disabled]="!puedeCrearRequerimiento()">
-                                Crear Requerimiento
-                            </button>
-                            <button color="primary" mat-stroked-button type="button" (click)="limpiar()">
-                                Limpiar
-                            </button>
-                            <button color="primary" mat-raised-button type="button" (click)="buscar()">
-                                Buscar
-                            </button>
-                        </div>
+                    </div>
+                    <!-- Botones -->
+                    <div class="flex flex-col sm:flex-row sm:gap-2 items-center justify-end mb-3">
+                        <button color="primary" mat-raised-button type="button" (click)="crearRequerimiento()" [disabled]="!puedeCrearRequerimiento()">
+                            Crear Requerimiento
+                        </button>
+                        <button color="primary" mat-raised-button type="button" (click)="buscar()">
+                            Buscar
+                        </button>
+                        <button color="primary" mat-raised-button type="button" (click)="limpiar()">
+                            Limpiar
+                        </button>
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.noItem }}</td>
                     </ng-container>
                     <ng-container matColumnDef="fecCreacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Registro</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Registro</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.feRegistro }}</td>
                     </ng-container>
                     <ng-container matColumnDef="estado"> 

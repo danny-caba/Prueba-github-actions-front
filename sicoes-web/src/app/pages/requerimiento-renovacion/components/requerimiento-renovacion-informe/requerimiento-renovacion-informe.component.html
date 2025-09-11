@@ -90,7 +90,7 @@
                 <button color="primary" mat-raised-button type="button" class="hover-class" (click)="cancelar()" >
                   Regresar
                 </button>
-                <button color="primary" mat-raised-button type="button" class="hover-class" (click)="registrar()" [disabled]="estaGuardando()">
+                <button color="primary" mat-raised-button type="button" class="hover-class" (click)="registrar()" [disabled]="!formGroup.valid">
                   Crear Informe
                 </button>
             </div>

@@ -238,7 +238,9 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   }
 
   buscar() {
-    this.paginator.pageIndex = 0;
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
+    }
     this.cargarTabla();
     this.listaNroExpedienteSeleccionado = [];
     this.listaSolicitudUuidSeleccionado = [];

@@ -36,9 +36,11 @@ export abstract class BasePageComponent<T> extends BaseComponent implements OnDe
   cargarTablaInit() {
     let filtro = this.obtenerFiltro();
     filtro.page = 0;
-    this.paginator._changePageSize(10);
-    this.paginator.pageIndex = 0;
-    filtro.size = this.paginator.pageSize ?? 10;
+    if (this.paginator) {
+      this.paginator._changePageSize(10);
+      this.paginator.pageIndex = 0;
+    }
+    filtro.size = this.paginator?.pageSize ?? 10;
     this.isLoading = true;
 
     this.serviceTable(filtro)
@@ -64,7 +66,7 @@ export abstract class BasePageComponent<T> extends BaseComponent implements OnDe
 
   cargarTabla() {
     let filtro = this.obtenerFiltro();
-    filtro.size = this.paginator.pageSize ?? 10;
+    filtro.size = this.paginator?.pageSize ?? 10;
     this.isLoading = true;
 
     this.serviceTable(filtro)
@@ -137,7 +139,7 @@ export abstract class BasePageComponent<T> extends BaseComponent implements OnDe
 
   cargarTablaNoContent() {
     let filtro = this.obtenerFiltro();
-    filtro.size = this.paginator.pageSize ?? 10;
+    filtro.size = this.paginator?.pageSize ?? 10;
     this.isLoading = true;
 
     this.serviceTable(filtro)
@@ -194,6 +196,6 @@ export abstract class BasePageComponent<T> extends BaseComponent implements OnDe
   }
 
   public getRowIndex(indexOnPage: number): number {
-    return 1 + indexOnPage + this.paginator.pageIndex * this.paginator.pageSize;
+    return 1 + indexOnPage + (this.paginator?.pageIndex ?? 0) * (this.paginator?.pageSize ?? 10);
   }
 }

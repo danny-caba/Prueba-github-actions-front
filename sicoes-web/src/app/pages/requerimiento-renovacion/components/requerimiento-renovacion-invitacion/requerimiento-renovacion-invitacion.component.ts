@@ -98,7 +98,7 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
           this.invitacion.idReqRenovacion=this.requerimiento?.idReqRenovacion;
           console.log(this.invitacion)
           this.invitacionRenovacionService.enviar(this.invitacion).subscribe(res => {
-            functionsAlert.success('Requerimiento de evaluacion Creado').then((result) => {
+            functionsAlert.success('Se ha enviado la invitación con éxito a la empresa supervisora').then((result) => {
               this.invitacion = res;
               console.log(res)
               //this.returnValue = res;
@@ -110,7 +110,7 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
   }
 
   cancelar(){
-    this.router.navigate([Link.INTRANET, Link.SOLICITUDES_LIST]);
+    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTO_RENOVACION_LIST,this.requerimiento.idSoliPerfCont]);
   }
 
   ngOnDestroy(): void {
@@ -145,10 +145,6 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
 
   serviceTable(filtro: any) {
     return this.invitacionRenovacionService.listar(filtro);
-  }
-
-  goToBandejaSolicitudes() {
-    this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST]);
   }
 
   evaluarInvitacion(invitacion: any) {

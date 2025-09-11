@@ -196,7 +196,7 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
   }
 
   formEnviarInvitacion(solicitud: any){
-    const estado=solicitud?.estadoAprobacionInforme==='En Proceso';
+    const estado=solicitud?.estadoAprobacionInforme==='Concluido';
     return ! this.itemsTable.every(
       (item: RequerimientoRenovacion) =>
         item.estadoReqRenovacion?.codigo === 'EN_PROCESO' ||

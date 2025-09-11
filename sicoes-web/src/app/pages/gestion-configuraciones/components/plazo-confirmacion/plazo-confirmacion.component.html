@@ -7,12 +7,8 @@
             <div class="flex flex-col w-1/3">
                 <mat-label class="text-primary text-sm font-medium">Fecha Base:</mat-label>
                 <mat-form-field  class="flex-auto">
-                    <mat-select [formControl]="formGroupPlazo.controls.fechaBase" [compareWith]="compareSelecIdListadoDetalle" placeholder="Ingresar sector">
-                        <mat-option *ngFor="let obj of listFechaBase" [value]="obj">
-                            {{ obj.nombre }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="formGroupPlazo.get('fechaBase').hasError('required')">Fecha base</mat-error>
+                    <input matInput 
+                      [formControl]="formGroupPlazo.controls.fechaBase" />
                 </mat-form-field>
             </div>
             <div class="flex flex-col w-1/3">

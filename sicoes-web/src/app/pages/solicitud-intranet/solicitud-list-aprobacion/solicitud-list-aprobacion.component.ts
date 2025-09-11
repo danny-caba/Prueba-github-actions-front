@@ -98,6 +98,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   listaSupervisorasAutocomplete: any[] = [];
   isLoadingSupervisoras = false;
+  listaContratistasAutocomplete: any[] = [];
+  isLoadingContratistas = false;
   private destroy$ = new Subject<void>();
 
   displayedColumns: string[] = [
@@ -298,6 +300,30 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     return supervisora ? (supervisora.nombreRazonSocial || supervisora.nombre || supervisora) : '';
   }
 
+  onContratistaChange(value: string) {
+    if (value && value.length >= 3) {
+      this.isLoadingContratistas = true;
+      this.supervisoraService.autocompleteEmpresaSupervisora(value)
+        .subscribe(
+          (data) => {
+            this.listaContratistasAutocomplete = data || [];
+            this.isLoadingContratistas = false;
+          },
+          (error) => {
+            console.error('Error al buscar contratistas:', error);
+            this.listaContratistasAutocomplete = [];
+            this.isLoadingContratistas = false;
+          }
+        );
+    } else {
+      this.listaContratistasAutocomplete = [];
+    }
+  }
+
+  displayContratistaFn = (contratista: any) => {
+    return contratista ? (contratista.nombreRazonSocial || contratista.nombre || contratista) : '';
+  }
+
   limpiar() {
     this.formGroup.reset();
     this.buscar();
@@ -341,16 +367,27 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   }
 
   obtenerFiltroInformeRenovacion() {
+    const contratistaValue = this.formGroupInformeRenovacion.controls.contratistaR.value;
+    
     let filtroInformeRenovacion: any = {
       nroExpediente: this.formGroupInformeRenovacion.controls.nroExpedienteR.value,
-      // Para el backend, si se ingresa nombre de contratista, debe convertirse a idContratista
-      // Por ahora mantenemos como texto, pero se podría implementar búsqueda de ID
-      nombreContratista: this.formGroupInformeRenovacion.controls.contratistaR.value,
       idEstadoAprobacion: this.formGroupInformeRenovacion.controls.estadoAprobacionR.value?.idListadoDetalle,
       page: this.paginatorInformeRenovacion?.pageIndex ?? 0,
       size: this.paginatorInformeRenovacion?.pageSize ?? 10,
       grupoUsuario: this.obtenerGrupoUsuario(),
     };
+    
+    // Si hay información de contratista, usar el ID si está disponible
+    if (contratistaValue) {
+      if (typeof contratistaValue === 'object' && contratistaValue !== null && (contratistaValue as any).idSupervisora) {
+        // Si es un objeto de autocomplete con ID
+        filtroInformeRenovacion.idContratista = (contratistaValue as any).idSupervisora;
+      } else if (typeof contratistaValue === 'string') {
+        // Si es texto libre, usar como nombre
+        filtroInformeRenovacion.nombreContratista = contratistaValue;
+      }
+    }
+    
     return filtroInformeRenovacion;
   }
 
@@ -366,6 +403,20 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       }
     }
     return 3; // Por defecto grupo 3
+  }
+
+  private obtenerCodigoGrupoUsuario(): string {
+    if (this.currentUser?.usuario) {
+      // Determinar el código del grupo basado en el rol del usuario
+      if (this.currentUser.usuario.includes('G1') || this.currentUser.usuario.includes('GRUPO_1')) {
+        return 'G1';
+      } else if (this.currentUser.usuario.includes('G2') || this.currentUser.usuario.includes('GRUPO_2')) {
+        return 'G2';
+      } else if (this.currentUser.usuario.includes('G3') || this.currentUser.usuario.includes('GRUPO_3')) {
+        return 'G3';
+      }
+    }
+    return 'G3'; // Por defecto grupo G3
   }
 
   cargarTablaPerfeccionamiento() {
@@ -405,9 +456,22 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     this.serviceTableInformeRenovacion(filtro)
       .subscribe(
         (data) => {
-          this.dataSourceInformeRenovacion.data = data.content || [];
+          // Filtrar por grupo basado en el grupoLd.codigo de las aprobaciones
+          const grupoUsuario = this.obtenerCodigoGrupoUsuario();
+          let informesFiltrados = data.content || [];
+          
+          if (grupoUsuario) {
+            informesFiltrados = informesFiltrados.filter(informe => {
+              // Verificar si el informe tiene aprobaciones con el grupo del usuario
+              return informe.aprobaciones && informe.aprobaciones.some(aprobacion => 
+                aprobacion.grupoLd && aprobacion.grupoLd.codigo === grupoUsuario
+              );
+            });
+          }
+          
+          this.dataSourceInformeRenovacion.data = informesFiltrados;
           if (this.paginatorInformeRenovacion) {
-            this.paginatorInformeRenovacion.length = data.totalElements || 0;
+            this.paginatorInformeRenovacion.length = informesFiltrados.length;
           }
           this.isLoading = false;
         },

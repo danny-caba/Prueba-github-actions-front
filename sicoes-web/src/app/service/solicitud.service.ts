@@ -157,10 +157,13 @@ export class SolicitudService {
     const urlEndpoint = `${this._path_serve}/api/renovacion/informes`
     let params = functions.obtenerParams(filtroInformeRenovacion);
     
-    // Determinar el tipo de aprobador basado en el grupo del usuario
-    const tipoAprobador = this.obtenerTipoAprobador(filtroInformeRenovacion.grupoUsuario);
-    params = params.set('tipoAprobador', tipoAprobador);
-    
+    // Parámetros requeridos según el nuevo endpoint
+    if (filtroInformeRenovacion.page !== undefined) {
+      params = params.set('page', filtroInformeRenovacion.page.toString());
+    }
+    if (filtroInformeRenovacion.size !== undefined) {
+      params = params.set('size', filtroInformeRenovacion.size.toString());
+    }
     if (filtroInformeRenovacion.nroExpediente) {
       params = params.set('numeroExpediente', filtroInformeRenovacion.nroExpediente);
     }
@@ -170,6 +173,10 @@ export class SolicitudService {
     if (filtroInformeRenovacion.idContratista) {
       params = params.set('idContratista', filtroInformeRenovacion.idContratista.toString());
     }
+    
+    // Filtrado por grupo usando el campo grupoLd del response
+    // Este filtrado se hará en el componente después de recibir los datos
+    
     return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
   }
 

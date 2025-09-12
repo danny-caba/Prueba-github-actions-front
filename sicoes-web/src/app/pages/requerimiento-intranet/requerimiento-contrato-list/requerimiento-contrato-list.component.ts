@@ -25,7 +25,6 @@ import { Division } from "src/app/interface/division.model";
 import { MatTableDataSource } from "@angular/material/table";
 import { GestionUsuarioService } from "src/app/service/gestion-usuarios.service";
 import { SupervisoraService } from "src/app/service/supervisora.service";
-import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "vex-requerimiento-contrato-list",

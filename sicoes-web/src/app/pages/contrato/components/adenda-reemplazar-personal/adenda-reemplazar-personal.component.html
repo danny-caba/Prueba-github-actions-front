@@ -18,14 +18,6 @@
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
-            <!--mat-form-field class="flex-auto">
-              <mat-label>Contratista</mat-label>
-              <mat-select formControlName="contratista">
-                <mat-option *ngFor="let obj of listContratista" [value]="obj">
-                  {{ obj.nombre }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field-->
 
             <mat-form-field class="flex-auto">
               <mat-label>Tipo de Contrato</mat-label>
@@ -93,26 +85,18 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="documento" *ngIf="tipousuario.EVALUADOR">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Documento</th>
-      <td mat-cell *matCellDef="let element">{{ element.informe }}
-        <button mat-icon-button type="button">
-          <mat-icon (click)="descargar(element.idArchivo,element.informe)">get_app</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="documento" *ngIf="!tipousuario.EVALUADOR">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-center">Informe</th>
+    <ng-container matColumnDef="documento">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ tipousuario.EVALUADOR ? 'Documento' : 'Informe' }}
+      </th>
       <td mat-cell *matCellDef="let element">
         <div style="display: flex; align-items: center;">
           <span>{{ element.informe }}</span>
           <button mat-icon-button type="button">
-            <mat-icon (click)="descargar(element.idArchivo,element.informe)">get_app</mat-icon>
+            <mat-icon (keyup)="$event.preventDefault()" (click)="descargar(element.idArchivo, element.informe)">get_app</mat-icon>
           </button>
         </div>
       </td>
-
     </ng-container>
 
     <ng-container matColumnDef="tp">
@@ -178,7 +162,7 @@
     <ng-container matColumnDef="actionsPersonal" *ngIf="rol!==roles.APROBADOR_G4">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Acciones</th>
       <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-        <button  mat-icon-button type="button">
+        <button mat-icon-button type="button">
           <mat-icon svgIcon="mat:more_horiz"></mat-icon>
         </button>
       </td>
@@ -203,12 +187,8 @@
     showFirstLastButtons></mat-paginator>
 </div>
 
-<mat-menu #actionsPersonal="matMenu" xPosition="before" yPosition="below" > 
-  <ng-template let-row="row" matMenuContent >
-    <!--button mat-menu-item (click)="verPersonal(row)">
-      <mat-icon svgIcon="mat:preview"></mat-icon>
-      <span>Ver</span>
-    </button-->
+<mat-menu #actionsPersonal="matMenu" xPosition="before" yPosition="below">
+  <ng-template let-row="row" matMenuContent>
     <button mat-menu-item (click)="historyApproveAndSignPersonal(row)">
       <mat-icon svgIcon="mat:history"></mat-icon>
       <span>Historial Aprobar y firmar</span>

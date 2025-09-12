@@ -14,7 +14,6 @@ import { SelectedReemplazarItem } from 'src/app/interface/reemplazo-personal.mod
 import { ModalFirmaDigitalComponent } from '../modal-firma-digital/modal-firma-digital.component';
 import { EvaluadorService } from 'src/app/service/evaluador.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { DialogFirmasComponent } from '../modal-dialog-firmas/modal-dialog-firmas.component';
 
 interface ArchivoFirmado {
   firmaExitosa: string;
@@ -291,15 +290,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
     }
   }
 
-  mostrarPop(): void {
-    this.dialog.open(DialogFirmasComponent, {
-      width: '60vw',
-      height: '80vh',
-      panelClass: 'custom-dialog',
-      disableClose: true, // Hace que el diálogo sea modal (como [modal]="true")
-      data: { iframeUrl: this.iframeUrl }
-    });
-  }
+
 
 
 }

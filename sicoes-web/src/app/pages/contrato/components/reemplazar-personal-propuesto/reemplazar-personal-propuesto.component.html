@@ -18,14 +18,6 @@
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
-            <!--mat-form-field class="flex-auto">
-              <mat-label>Contratista</mat-label>
-              <mat-select formControlName="contratista">
-                <mat-option *ngFor="let obj of listContratista" [value]="obj">
-                  {{ obj.nombre }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field-->
 
             <mat-form-field class="flex-auto">
               <mat-label>Tipo de Solicitud</mat-label>
@@ -113,7 +105,7 @@
         <div style="display: flex; align-items: center;">
           <span>{{ element.informe }}</span>
           <button mat-icon-button type="button" (click)="descargar(element.idArchivo,element.informe)">
-            <mat-icon>get_app</mat-icon>
+            <mat-icon (keyup)="$event.preventDefault()">get_app</mat-icon>
           </button>
         </div>
       </td>
@@ -193,13 +185,5 @@
 
 <mat-menu #actionsPersonal="matMenu" xPosition="before" yPosition="below">
   <ng-template let-row="row" matMenuContent>
-    <!--button mat-menu-item (click)="verPersonal(row)">
-      <mat-icon svgIcon="mat:preview"></mat-icon>
-      <span>Ver</span>
-    </button-->
-    <!--button mat-menu-item>
-      <mat-icon svgIcon="mat:history"></mat-icon>
-      <span>Revisar documento<br>de personal de reemplazo</span>
-    </button-->
   </ng-template>
 </mat-menu>

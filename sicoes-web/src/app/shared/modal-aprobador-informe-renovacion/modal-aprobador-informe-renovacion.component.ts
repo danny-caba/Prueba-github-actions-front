@@ -8,6 +8,7 @@ import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { AuthUser } from 'src/app/auth/store/auth.models';
 import { InformeRenovacionService } from 'src/app/service/informe-renovacion.service';
 import { FirmaDigitalService } from 'src/app/service/firma-digital.service';
+import { SolicitudService } from 'src/app/service/solicitud.service';
 
 @Component({
   selector: 'app-modal-aprobador-informe-renovacion',
@@ -35,7 +36,8 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
     },
     private informeRenovacionService: InformeRenovacionService,
     private authFacade: AuthFacade,
-    private firmaDigitalService: FirmaDigitalService
+    private firmaDigitalService: FirmaDigitalService,
+    private solicitudService: SolicitudService
   ) {
     super();
   }
@@ -95,76 +97,96 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
         this.loadingAccion = true;
         this.progreso = 0;
 
-        const totalInformes = this.data.elementosSeleccionados.length;
-        let informesProcesados = 0;
-
-        for (const informe of this.data.elementosSeleccionados) {
-          let requestPayload: any;
-          
+        try {
           if (tipoAccion === 'APROBAR') {
-            requestPayload = {
-              idInformeRenovacion: informe.idInformeRenovacion,
-              idUsuario: this.usuario?.idUsuario,
-              observacion: this.observacionControl.value || ''
+            // Usar el nuevo endpoint de aprobación masiva
+            const idRequerimientosAprobacion = this.data.elementosSeleccionados.map(informe => 
+              informe.idRequermientoAprobacion || informe.idInformeRenovacion
+            );
+
+            const requestPayload = {
+              idRequerimientosAprobacion: idRequerimientosAprobacion,
+              observaciones: this.observacionControl.value || 'Aprobación masiva de informes de renovación'
             };
+
+            await firstValueFrom(
+              this.solicitudService.aprobarInformesRenovacionBandeja(requestPayload)
+            );
+
+            this.progreso = 100;
+            functionsAlert.success('Los informes han sido aprobados exitosamente.').then(() => {
+              this.enviarNotificacion(1); // ID para aprobación
+              this.activarFirmaDigital();
+            });
+
           } else if (tipoAccion === 'RECHAZAR') {
-            requestPayload = {
-              idInformeRenovacion: informe.idInformeRenovacion,
-              motivoRechazo: this.observacionControl.value || '',
-              idUsuario: this.usuario?.idUsuario,
-              observaciones: this.observacionControl.value || '',
-              idGrupoAprobador: 3 // Grupo 3 as specified
-            };
-          }
+            // Para rechazar, continuar con el proceso individual por ahora
+            const totalInformes = this.data.elementosSeleccionados.length;
+            let informesProcesados = 0;
 
-          try {
-            if (tipoAccion === 'APROBAR') {
-              await firstValueFrom(
-                this.informeRenovacionService.aprobarInformeRenovacion(requestPayload)
-              );
-            } else if (tipoAccion === 'RECHAZAR') {
-              await firstValueFrom(
-                this.informeRenovacionService.rechazarInformeRenovacion(requestPayload)
-              );
-            }
+            for (const informe of this.data.elementosSeleccionados) {
+              const requestPayload = {
+                idInformeRenovacion: informe.idInformeRenovacion,
+                motivoRechazo: this.observacionControl.value || '',
+                idUsuario: this.usuario?.idUsuario,
+                observaciones: this.observacionControl.value || '',
+                idGrupoAprobador: 3
+              };
 
-          } catch (error) {
-            console.error(`Error al procesar el informe ${informe.numeroExpedienteR}:`, error);
-            this.errores.push(informe.numeroExpedienteR);
-          } finally {
-            informesProcesados++;
-            this.progreso = (informesProcesados / totalInformes) * 100;
-
-            if (informesProcesados === totalInformes) {
-              this.loadingAccion = false;
-
-              if (this.errores.length > 0) {
-                let errorMessage = 'Hubo errores al procesar los siguientes expedientes: ' + this.errores.join(', ');
-                if (this.errores.length === totalInformes && totalInformes === 1) {
-                  errorMessage = 'Error al procesar el expediente: ' + this.errores[0];
-                }
-                functionsAlert.error(errorMessage);
-                this.dialogRef.close('OK');
-              } else {
-                functionsAlert.success('Acción completada con éxito.').then(() => {
-                  if (tipoAccion === 'APROBAR') {
-                    // Enviar notificación después de aprobar
-                    this.enviarNotificacion(1); // ID para aprobación
-                    this.activarFirmaDigital();
-                  } else if (tipoAccion === 'RECHAZAR') {
-                    // Enviar notificación después de rechazar
-                    this.enviarNotificacion(2); // ID para rechazo
-                    this.dialogRef.close('OK');
-                  } else {
-                    this.dialogRef.close('OK');
-                  }
-                });
+              try {
+                await firstValueFrom(
+                  this.informeRenovacionService.rechazarInformeRenovacion(requestPayload)
+                );
+              } catch (error) {
+                console.error(`Error al rechazar el informe ${informe.numeroExpedienteR}:`, error);
+                this.errores.push(informe.numeroExpedienteR);
               }
+
+              informesProcesados++;
+              this.progreso = Math.round((informesProcesados / totalInformes) * 100);
             }
+
+            this.finalizarProceso(tipoAccion);
           }
+
+        } catch (error: any) {
+          console.error('Error al procesar informes:', error);
+          
+          // Manejar errores de validación del backend
+          if (error?.error?.meta?.mensajes) {
+            const mensajesError = error.error.meta.mensajes
+              .filter(m => m.tipo === 'ERROR')
+              .map(m => m.message)
+              .join('\n');
+            functionsAlert.error(mensajesError || 'Error al procesar los informes');
+          } else {
+            functionsAlert.error('Error al procesar los informes. Por favor, intente nuevamente.');
+          }
+          
+          this.loadingAccion = false;
         }
       }
     });
+  }
+
+  private finalizarProceso(tipoAccion: string): void {
+    this.loadingAccion = false;
+
+    if (this.errores.length > 0) {
+      let errorMessage = 'Hubo errores al procesar los siguientes expedientes: ' + this.errores.join(', ');
+      if (this.errores.length === this.data.elementosSeleccionados.length && this.data.elementosSeleccionados.length === 1) {
+        errorMessage = 'Error al procesar el expediente: ' + this.errores[0];
+      }
+      functionsAlert.error(errorMessage);
+      this.dialogRef.close('OK');
+    } else {
+      functionsAlert.success('Acción completada con éxito.').then(() => {
+        if (tipoAccion === 'RECHAZAR') {
+          this.enviarNotificacion(2); // ID para rechazo
+        }
+        this.dialogRef.close('OK');
+      });
+    }
   }
 
   private async activarFirmaDigital(): Promise<void> {

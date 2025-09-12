@@ -135,7 +135,6 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     'selectRenovacion',
     'tipoAprobacionR',
     'numeroExpedienteR',
-    'informeR',
     'tpR',
     'contratistaR',
     'tipoContratoR',
@@ -221,9 +220,10 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     return this.solicitudService.buscarSolicitudesAprobadorPerfeccionamiento(filtroPerfeccionamiento);
   }
 
-  serviceTableInformeRenovacion(filtroInformeRenovacion: any) {
-    return this.solicitudService.buscarInformesRenovacionAprobador(filtroInformeRenovacion);
-  }
+  // DEPRECATED: Usar serviceTableBandejaAprobacionesInformesRenovacion en su lugar
+  // serviceTableInformeRenovacion(filtroInformeRenovacion: any) {
+  //   return this.solicitudService.buscarInformesRenovacionAprobador(filtroInformeRenovacion);
+  // }
 
   serviceTableInformeRenovacionParaAprobar(filtroInformeRenovacion: any) {
     return this.solicitudService.buscarInformesRenovacionParaAprobar(filtroInformeRenovacion);
@@ -235,6 +235,10 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   serviceTableInformeRenovacionGSE(filtroInformeRenovacion: any) {
     return this.solicitudService.buscarInformesRenovacionGSE(filtroInformeRenovacion);
+  }
+
+  serviceTableBandejaAprobacionesInformesRenovacion(filtroInformeRenovacion: any) {
+    return this.solicitudService.buscarBandejaAprobacionesInformesRenovacion(filtroInformeRenovacion);
   }
 
   buscar() {
@@ -455,25 +459,43 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     this.dataSourceInformeRenovacion.data = [];
     this.isLoading = true;
 
-    this.serviceTableInformeRenovacion(filtro)
+    // Usar únicamente el nuevo endpoint de bandeja de aprobaciones
+    this.serviceTableBandejaAprobacionesInformesRenovacion(filtro)
       .subscribe(
         (data) => {
-          // Filtrar por grupo basado en el grupoLd.codigo de las aprobaciones
-          const grupoUsuario = this.obtenerCodigoGrupoUsuario();
-          let informesFiltrados = data.content || [];
-          
-          if (grupoUsuario) {
-            informesFiltrados = informesFiltrados.filter(informe => {
-              // Verificar si el informe tiene aprobaciones con el grupo del usuario
-              return informe.aprobaciones && informe.aprobaciones.some(aprobacion => 
-                aprobacion.grupoLd && aprobacion.grupoLd.codigo === grupoUsuario
-              );
-            });
-          }
-          
-          this.dataSourceInformeRenovacion.data = informesFiltrados;
+          // Mapear los datos de la nueva estructura a la estructura esperada por la tabla
+          const mappedData = data.content?.map(item => ({
+            // Mapear campos de la nueva respuesta a los campos esperados por la tabla
+            idRequermientoAprobacion: item.idRequermientoAprobacion,
+            tipoAprobacion: item.tipoAprobacion,
+            numeroExpediente: item.numeroExpediente,
+            tp: item.tp,
+            contratista: item.contratista,
+            tipoContrato: item.tipoContrato,
+            fechaIngresoInforme: item.fechaIngresoInforme,
+            estadoAprobacionInforme: item.estadoAprobacionInforme,
+            estadoAprobacionJefeDivision: item.estadoAprobacionJefeDivision,
+            estadoAprobacionGerenteDivision: item.estadoAprobacionGerenteDivision,
+            estadoAprobacionGPPM: item.estadoAprobacionGPPM,
+            estadoAprobacionGSE: item.estadoAprobacionGSE,
+            // Mapear campos para compatibilidad con funciones existentes
+            idInformeRenovacion: item.idRequermientoAprobacion, // Usar el id de requerimiento como id de informe
+            numeroExpedienteR: item.numeroExpediente,
+            tpR: item.tp,
+            contratistaR: item.contratista,
+            tipoContratoR: item.tipoContrato,
+            fechaIngresoR: item.fechaIngresoInforme,
+            estadoAprobacionR: item.estadoAprobacionInforme,
+            estadoAprobacionJefeDivisionR: item.estadoAprobacionJefeDivision,
+            estadoAprobacionGerenteDivisionR: item.estadoAprobacionGerenteDivision,
+            estadoAprobacionGPPMR: item.estadoAprobacionGPPM,
+            estadoAprobacionGSER: item.estadoAprobacionGSE,
+            tipoAprobacionR: item.tipoAprobacion
+          })) || [];
+
+          this.dataSourceInformeRenovacion.data = mappedData;
           if (this.paginatorInformeRenovacion) {
-            this.paginatorInformeRenovacion.length = informesFiltrados.length;
+            this.paginatorInformeRenovacion.length = data.totalElements || 0;
           }
           this.isLoading = false;
         },
@@ -547,6 +569,11 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       );
   }
 
+  // Este método ya no es necesario porque cargarTablaInformeRenovacion ahora usa el nuevo endpoint
+  // cargarTablaBandejaAprobacionesInformesRenovacion() {
+  //   // Eliminado - usar cargarTablaInformeRenovacion directamente
+  // }
+
   obtenerFiltroInformeRenovacionGSE() {
     let filtroInformeRenovacion: any = {
       numeroExpediente: this.formGroupInformeRenovacion.controls.nroExpedienteR.value,
@@ -566,6 +593,11 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     this.cargarTablaInformeRenovacionGSE();
     this.listaInformesRenovacionSeleccionados = [];
   }
+
+  // Este método ya no es necesario - usar buscarInformeRenovacion directamente
+  // buscarBandejaAprobacionesInformesRenovacion() {
+  //   // Eliminado - el método buscarInformeRenovacion ahora usa el nuevo endpoint
+  // }
 
   pageChangePerfeccionamiento(event: any) {
     this.cargarTablaPerfeccionamiento();

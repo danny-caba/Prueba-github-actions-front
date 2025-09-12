@@ -153,32 +153,34 @@ export class SolicitudService {
     return this.http.put<Solicitud>(urlEndpoint, null);
   }
 
-  buscarInformesRenovacionAprobador(filtroInformeRenovacion): Observable<any> {
-    const urlEndpoint = `${this._path_serve}/api/renovacion/informes`
-    let params = functions.obtenerParams(filtroInformeRenovacion);
-    
-    // Parámetros requeridos según el nuevo endpoint
-    if (filtroInformeRenovacion.page !== undefined) {
-      params = params.set('page', filtroInformeRenovacion.page.toString());
-    }
-    if (filtroInformeRenovacion.size !== undefined) {
-      params = params.set('size', filtroInformeRenovacion.size.toString());
-    }
-    if (filtroInformeRenovacion.nroExpediente) {
-      params = params.set('numeroExpediente', filtroInformeRenovacion.nroExpediente);
-    }
-    if (filtroInformeRenovacion.idEstadoAprobacion) {
-      params = params.set('estado', filtroInformeRenovacion.idEstadoAprobacion.toString());
-    }
-    if (filtroInformeRenovacion.idContratista) {
-      params = params.set('idContratista', filtroInformeRenovacion.idContratista.toString());
-    }
-    
-    // Filtrado por grupo usando el campo grupoLd del response
-    // Este filtrado se hará en el componente después de recibir los datos
-    
-    return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
-  }
+  // DEPRECATED: Usar buscarBandejaAprobacionesInformesRenovacion en su lugar
+  // Este endpoint ya no debe ser utilizado: /api/renovacion/informes
+  // buscarInformesRenovacionAprobador(filtroInformeRenovacion): Observable<any> {
+  //   const urlEndpoint = `${this._path_serve}/api/renovacion/informes`
+  //   let params = functions.obtenerParams(filtroInformeRenovacion);
+  //   
+  //   // Parámetros requeridos según el nuevo endpoint
+  //   if (filtroInformeRenovacion.page !== undefined) {
+  //     params = params.set('page', filtroInformeRenovacion.page.toString());
+  //   }
+  //   if (filtroInformeRenovacion.size !== undefined) {
+  //     params = params.set('size', filtroInformeRenovacion.size.toString());
+  //   }
+  //   if (filtroInformeRenovacion.nroExpediente) {
+  //     params = params.set('numeroExpediente', filtroInformeRenovacion.nroExpediente);
+  //   }
+  //   if (filtroInformeRenovacion.idEstadoAprobacion) {
+  //     params = params.set('estado', filtroInformeRenovacion.idEstadoAprobacion.toString());
+  //   }
+  //   if (filtroInformeRenovacion.idContratista) {
+  //     params = params.set('idContratista', filtroInformeRenovacion.idContratista.toString());
+  //   }
+  //   
+  //   // Filtrado por grupo usando el campo grupoLd del response
+  //   // Este filtrado se hará en el componente después de recibir los datos
+  //   
+  //   return this.http.get<Pageable<any>>(urlEndpoint, { params: params });
+  // }
 
   private obtenerTipoAprobador(grupoUsuario?: number): string {
     switch (grupoUsuario) {
@@ -280,6 +282,35 @@ export class SolicitudService {
     }
     
     return this.http.get<any>(urlEndpoint, { params: params });
+  }
+
+  buscarBandejaAprobacionesInformesRenovacion(filtroInformeRenovacion): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/renovacion/bandeja/aprobaciones`;
+    let params = functions.obtenerParams(filtroInformeRenovacion);
+    
+    // Parámetros requeridos según el nuevo endpoint
+    if (filtroInformeRenovacion.page !== undefined) {
+      params = params.set('page', filtroInformeRenovacion.page.toString());
+    }
+    if (filtroInformeRenovacion.size !== undefined) {
+      params = params.set('size', filtroInformeRenovacion.size.toString());
+    }
+    if (filtroInformeRenovacion.nroExpediente) {
+      params = params.set('numeroExpediente', filtroInformeRenovacion.nroExpediente);
+    }
+    if (filtroInformeRenovacion.idEstadoAprobacion) {
+      params = params.set('estado', filtroInformeRenovacion.idEstadoAprobacion.toString());
+    }
+    if (filtroInformeRenovacion.idContratista) {
+      params = params.set('idContratista', filtroInformeRenovacion.idContratista.toString());
+    }
+    
+    return this.http.get<any>(urlEndpoint, { params: params });
+  }
+
+  aprobarInformesRenovacionBandeja(request: { idRequerimientosAprobacion: number[], observaciones: string }): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/renovacion/bandeja/aprobar-informe-renovacion`;
+    return this.http.post<any>(urlEndpoint, request);
   }
 
 

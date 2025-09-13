@@ -101,6 +101,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   listaContratistasAutocomplete: any[] = [];
   isLoadingContratistas = false;
   private destroy$ = new Subject<void>();
+  private informeRenovacionCargado = false;
 
   displayedColumns: string[] = [
     'nroExpediente',
@@ -177,12 +178,20 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     this.cargarCombo();
     this.cargarTabla();
     this.cargarTablaPerfeccionamiento();
-    this.cargarTablaInformeRenovacion();
+    // No cargar la tabla de informe de renovación aquí, se cargará cuando se seleccione la pestaña
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  onTabChange(event: any): void {
+    // La pestaña de Informe de Renovación es la tercera (índice 2)
+    if (event.index === 2 && !this.informeRenovacionCargado) {
+      this.cargarTablaInformeRenovacion();
+      this.informeRenovacionCargado = true;
+    }
   }
 
   cargarCombo() {

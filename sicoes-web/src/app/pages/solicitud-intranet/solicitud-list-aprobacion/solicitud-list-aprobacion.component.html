@@ -2,7 +2,7 @@
   <vex-page-layout-header class="h-6" [class.px-gutter]="true"></vex-page-layout-header>
   <vex-page-layout-content class="-mt-6" [class.px-gutter]="true">
     <div *ngIf="mostrarCards" class="card px-6 py-4">
-      <mat-tab-group  [(selectedIndex)]="selectedTabIndex">
+      <mat-tab-group  [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onTabChange($event)">
         <mat-tab label="Bandeja de Solicitudes de Aprobaciones">
           <div class="flex flex-col sm:flex-row gap-4">
             <div @fadeInUp class="flex-auto">

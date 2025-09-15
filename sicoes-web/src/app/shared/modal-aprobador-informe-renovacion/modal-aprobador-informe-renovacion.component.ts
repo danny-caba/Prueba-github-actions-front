@@ -64,6 +64,13 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
     }
     return false;
   }
+
+  esRolG1(): boolean {
+    if (this.usuario?.usuario) {
+      return this.usuario.usuario.includes('G1') || this.usuario.usuario.includes('GRUPO_1');
+    }
+    return false;
+  }
   async adjuntarArchivo (): Promise<void> {
 
     console.log("adjuntarArchivo");
@@ -86,7 +93,9 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
 
   async realizarAccion(tipoAccion: string): Promise<void> {
     this.errores = [];
-    let msj = `¿Está seguro de que desea ${tipoAccion.toLowerCase()} los informes de renovación seleccionados?`;
+    const cantidadInformes = this.data.elementosSeleccionados.length;
+    const informeTexto = cantidadInformes === 1 ? 'el informe de renovación seleccionado' : 'los informes de renovación seleccionados';
+    let msj = `¿Está seguro de que desea ${tipoAccion.toLowerCase()} ${informeTexto}?`;
 
     if (tipoAccion === 'RECHAZAR' && this.validarObservacion()) {
       return;

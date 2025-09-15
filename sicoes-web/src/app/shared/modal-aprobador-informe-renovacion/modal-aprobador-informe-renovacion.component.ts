@@ -66,8 +66,10 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
   }
 
   esRolG1(): boolean {
-    if (this.usuario?.usuario) {
-      return this.usuario.usuario.includes('G1') || this.usuario.usuario.includes('GRUPO_1');
+    if (this.usuario?.roles) {
+      return this.usuario.roles.some(rol => 
+        rol.codigo?.includes('G1') || rol.codigo?.includes('GRUPO_1')
+      );
     }
     return false;
   }

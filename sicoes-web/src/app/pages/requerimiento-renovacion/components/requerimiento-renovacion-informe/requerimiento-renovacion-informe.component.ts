@@ -29,6 +29,7 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
   formGroup: any;
   nuExpediente: string
   requerimiento: RequerimientoRenovacion;
+  informeExistente: any; // Para almacenar el informe completo con idInformeRenovacion
   tieneCambios = false;
   private destroy$ = new Subject<void>();
   private guardando = false;
@@ -63,6 +64,7 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
     });
 
     this.informeRenovacionService.obtener(this.nuExpediente).subscribe(informe=>{
+      this.informeExistente = informe; // Guardar el informe completo
       this.formGroup.patchValue({
         objeto: informe.deObjeto || '',
         baseLegal: informe.deBaseLegal || '',
@@ -85,7 +87,10 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
     if (this.validarForm()) return;
     functionsAlert.questionSiNoEval('¿Seguro de enviar el informe para las firmas?',"Informe de Requerimiento de Renovación").then((result) => {
         if(result.isConfirmed){
-        const informe = this.formGroup.value;
+        const informe = {
+          ...this.formGroup.value,
+          idInformeRenovacion: this.informeExistente?.idInformeRenovacion || null
+        };
         this.requerimiento.solicitudPerfil = {idSolicitud:this.requerimiento.idSoliPerfCont}
         informe.requerimiento = this.requerimiento;
         informe.completado='1';
@@ -136,12 +141,17 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
 
   guardarBorrador() {
     this.guardando=true;
-    const informe = this.formGroup.value;
+    const informe = {
+      ...this.formGroup.value,
+      idInformeRenovacion: this.informeExistente?.idInformeRenovacion || null
+    };
     this.requerimiento.solicitudPerfil = {idSolicitud:this.requerimiento.idSoliPerfCont}
     informe.requerimiento = this.requerimiento;
     informe.completado='0';
     this.informeRenovacionService.registrar(informe).subscribe({
-      next: () => {
+      next: (response) => {
+        // Actualizar el informe existente con la respuesta del servidor
+        this.informeExistente = response;
         this.snackBar.open('Autoguardado exitoso...', 'Cerrar', { duration: 1000 });
         this.guardando=false;
       },

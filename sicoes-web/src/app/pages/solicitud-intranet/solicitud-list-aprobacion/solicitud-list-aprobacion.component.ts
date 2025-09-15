@@ -472,12 +472,14 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     this.serviceTableBandejaAprobacionesInformesRenovacion(filtro)
       .subscribe(
         (data) => {
-          // Mapear los datos de la nueva estructura a la estructura esperada por la tabla
+          // Mapear los datos de la nueva estructura del endpoint /api/renovacion/bandeja/aprobaciones
+          // Estructura basada en BandejaAprobacionResponseDTO
           const mappedData = data.content?.map(item => ({
-            // Mapear campos de la nueva respuesta a los campos esperados por la tabla
+            // Campos primarios del DTO
             idRequermientoAprobacion: item.idRequermientoAprobacion,
             tipoAprobacion: item.tipoAprobacion,
             numeroExpediente: item.numeroExpediente,
+            informe: item.informe,
             tp: item.tp,
             contratista: item.contratista,
             tipoContrato: item.tipoContrato,
@@ -487,24 +489,52 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
             estadoAprobacionGerenteDivision: item.estadoAprobacionGerenteDivision,
             estadoAprobacionGPPM: item.estadoAprobacionGPPM,
             estadoAprobacionGSE: item.estadoAprobacionGSE,
-            // Mapear campos para compatibilidad con funciones existentes
-            idInformeRenovacion: item.idRequermientoAprobacion, // Usar el id de requerimiento como id de informe
+            
+            // Objetos DTO relacionados
+            tipoAprobacionLd: item.tipoAprobacionLd,
+            estadoLd: item.estadoLd,
+            grupoAprobadorLd: item.grupoAprobadorLd,
+            
+            // Mapeos para compatibilidad con la tabla (alias R)
+            idInformeRenovacion: item.idRequermientoAprobacion,
             numeroExpedienteR: item.numeroExpediente,
+            informeR: item.informe,
             tpR: item.tp,
             contratistaR: item.contratista,
             tipoContratoR: item.tipoContrato,
             fechaIngresoR: item.fechaIngresoInforme,
-            estadoAprobacionR: item.estadoAprobacionInforme,
-            estadoAprobacionJefeDivisionR: item.estadoAprobacionJefeDivision,
-            estadoAprobacionGerenteDivisionR: item.estadoAprobacionGerenteDivision,
-            estadoAprobacionGPPMR: item.estadoAprobacionGPPM,
-            estadoAprobacionGSER: item.estadoAprobacionGSE,
-            tipoAprobacionR: item.tipoAprobacion
+            estadoAprobacionR: item.estadoLd, // Objeto con nombre
+            estadoAprobacionJefeDivisionR: {nombre: item.estadoAprobacionJefeDivision},
+            estadoAprobacionGerenteDivisionR: {nombre: item.estadoAprobacionGerenteDivision},
+            estadoAprobacionGPPMR: {nombre: item.estadoAprobacionGPPM},
+            estadoAprobacionGSER: {nombre: item.estadoAprobacionGSE},
+            tipoAprobacionR: item.tipoAprobacion,
+            
+            // Campos adicionales para compatibilidad
+            fechaIngreso: item.fechaIngresoInforme,
+            fechaCreacion: item.fechaIngresoInforme,
+            nombreDocumento: item.informe,
+            tipoPersona: item.tp,
+            nombreContratista: item.contratista,
+            estado: item.estadoLd,
+            estadoJefe: {nombre: item.estadoAprobacionJefeDivision},
+            estadoGerente: {nombre: item.estadoAprobacionGerenteDivision},
+            estadoGPPM: {nombre: item.estadoAprobacionGPPM},
+            estadoGSE: {nombre: item.estadoAprobacionGSE}
           })) || [];
 
-          this.dataSourceInformeRenovacion.data = mappedData;
+          // Filtrar por grupo del usuario
+          const codigoGrupoUsuario = this.obtenerCodigoGrupoUsuario();
+          const dataFiltrada = mappedData.filter(item => {
+            // Filtrar solo los elementos que corresponden al grupo del usuario
+            return !item.grupoAprobadorLd || 
+                   item.grupoAprobadorLd.codigo === codigoGrupoUsuario ||
+                   codigoGrupoUsuario === 'G3'; // G3 puede ver todos los grupos por defecto
+          });
+
+          this.dataSourceInformeRenovacion.data = dataFiltrada;
           if (this.paginatorInformeRenovacion) {
-            this.paginatorInformeRenovacion.length = data.totalElements || 0;
+            this.paginatorInformeRenovacion.length = dataFiltrada.length;
           }
           this.isLoading = false;
         },

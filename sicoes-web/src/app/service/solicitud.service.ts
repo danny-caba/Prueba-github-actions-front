@@ -299,7 +299,7 @@ export class SolicitudService {
       params = params.set('numeroExpediente', filtroInformeRenovacion.nroExpediente);
     }
     if (filtroInformeRenovacion.idEstadoAprobacion) {
-      params = params.set('estado', filtroInformeRenovacion.idEstadoAprobacion.toString());
+      params = params.set('estadoAprobacionInforme', filtroInformeRenovacion.idEstadoAprobacion.toString());
     }
     if (filtroInformeRenovacion.idContratista) {
       params = params.set('idContratista', filtroInformeRenovacion.idContratista.toString());

@@ -136,6 +136,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     'selectRenovacion',
     'tipoAprobacionR',
     'numeroExpedienteR',
+    'informeR',
     'tpR',
     'contratistaR',
     'tipoContratoR',
@@ -202,6 +203,8 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       ListadoEnum.TIPO_CONTRATO,
       ListadoEnum.TIPO_APROBACION_PERFECCIONAMIENTO,
       ListadoEnum.ESTADO_APROBACION_PERFECCIONAMIENTO,
+      ListadoEnum.ESTADO_APROBACION_INFORME_RENOVACION,
+      ListadoEnum.ESTADO_REQUERIMIENTO_RENOVACION,
       ListadoEnum.TIPO_INFORME_RENOVACION,
       ListadoEnum.ESTADO_EVALUACION_RENOVACION
     ]).subscribe(listRes => {
@@ -214,10 +217,22 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       this.listTipoAprobacionP = listRes[4];
       this.listEstadoAprobacionP = listRes[5];
 
-      // Para informe de renovación - usar estado de aprobación perfeccionamiento como base
-      this.listEstadoAprobacionInforme = listRes[5]; // Reutilizar estados de aprobación
-      this.listTipoInformeRenovacion = listRes[6];
-      this.listEstadoEvaluacionRenovacion = listRes[7];
+      // Para informe de renovación - probar con estado requerimiento renovación
+      this.listEstadoAprobacionInforme = listRes[7]; // ESTADO_REQUERIMIENTO_RENOVACION (puede tener estados como EN_PROCESO, etc.)
+      this.listTipoInformeRenovacion = listRes[8]; // TIPO_INFORME_RENOVACION  
+      this.listEstadoEvaluacionRenovacion = listRes[9]; // ESTADO_EVALUACION_RENOVACION
+      
+      // Debug: Verificar qué valores están cargados
+      console.log('Lista Estados Aprobación Informe (usando ESTADO_REQUERIMIENTO_RENOVACION):', this.listEstadoAprobacionInforme);
+      console.log('Lista Tipo Informe Renovación:', this.listTipoInformeRenovacion);
+      console.log('Lista Estado Evaluación Renovación:', this.listEstadoEvaluacionRenovacion);
+      
+      // Mostrar los valores exactos del combo para comparar
+      if (this.listEstadoAprobacionInforme) {
+        console.log('Valores exactos en dropdown Estado Aprobación (ESTADO_REQUERIMIENTO):', 
+          this.listEstadoAprobacionInforme.map(item => ({ id: item.idListadoDetalle, nombre: item.nombre }))
+        );
+      }
     });
   }
 
@@ -383,14 +398,23 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
   obtenerFiltroInformeRenovacion() {
     const contratistaValue = this.formGroupInformeRenovacion.controls.contratistaR.value;
+    const estadoAprobacionValue = this.formGroupInformeRenovacion.controls.estadoAprobacionR.value;
     
     let filtroInformeRenovacion: any = {
       nroExpediente: this.formGroupInformeRenovacion.controls.nroExpedienteR.value,
-      idEstadoAprobacion: this.formGroupInformeRenovacion.controls.estadoAprobacionR.value?.idListadoDetalle,
       page: this.paginatorInformeRenovacion?.pageIndex ?? 0,
       size: this.paginatorInformeRenovacion?.pageSize ?? 10,
       grupoUsuario: this.obtenerGrupoUsuario(),
     };
+    
+    // Agregar idEstadoAprobacion por separado para que el servicio lo maneje manualmente
+    if (estadoAprobacionValue && estadoAprobacionValue.idListadoDetalle) {
+      filtroInformeRenovacion.idEstadoAprobacion = estadoAprobacionValue.idListadoDetalle;
+      console.log('Filtro Estado Aprobación aplicado:', estadoAprobacionValue.idListadoDetalle, estadoAprobacionValue.nombre);
+      console.log('Valor completo del estado seleccionado:', estadoAprobacionValue);
+    } else {
+      console.log('No se aplicó filtro Estado Aprobación. Valor:', estadoAprobacionValue);
+    }
     
     // Si hay información de contratista, usar el ID si está disponible
     if (contratistaValue) {
@@ -403,6 +427,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
       }
     }
     
+    console.log('Filtro completo para informe renovación:', filtroInformeRenovacion);
     return filtroInformeRenovacion;
   }
 
@@ -536,6 +561,21 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
           if (this.paginatorInformeRenovacion) {
             this.paginatorInformeRenovacion.length = dataFiltrada.length;
           }
+          
+          // Debug: Ver qué estados únicos aparecen en los datos reales
+          if (dataFiltrada.length > 0) {
+            const estadosUnicos = [...new Set(dataFiltrada.map(item => item.estadoAprobacionInforme || item.estadoAprobacionR?.nombre))];
+            console.log('Estados únicos en la grilla:', estadosUnicos);
+            
+            // Ver también algunos registros de ejemplo
+            console.log('Muestra de datos de la grilla (primeros 3):', dataFiltrada.slice(0, 3).map(item => ({
+              expediente: item.numeroExpediente,
+              estadoInforme: item.estadoAprobacionInforme,
+              estadoR: item.estadoAprobacionR?.nombre,
+              estadoLd: item.estadoLd?.nombre
+            })));
+          }
+          
           this.isLoading = false;
         },
         (error) => {

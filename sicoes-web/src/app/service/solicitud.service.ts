@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { functions } from 'src/helpers/functions';
@@ -286,9 +286,13 @@ export class SolicitudService {
 
   buscarBandejaAprobacionesInformesRenovacion(filtroInformeRenovacion): Observable<any> {
     const urlEndpoint = `${this._path_serve}/api/renovacion/bandeja/aprobaciones`;
-    let params = functions.obtenerParams(filtroInformeRenovacion);
     
-    // Parámetros requeridos según el nuevo endpoint
+    console.log('Servicio: Filtro recibido:', filtroInformeRenovacion);
+    
+    // Construir parámetros manualmente para evitar conflictos
+    let params = new HttpParams();
+    
+    // Parámetros requeridos según el endpoint
     if (filtroInformeRenovacion.page !== undefined) {
       params = params.set('page', filtroInformeRenovacion.page.toString());
     }
@@ -300,11 +304,14 @@ export class SolicitudService {
     }
     if (filtroInformeRenovacion.idEstadoAprobacion) {
       params = params.set('estadoAprobacionInforme', filtroInformeRenovacion.idEstadoAprobacion.toString());
+      console.log('Servicio: Estado Aprobación enviado al backend:', filtroInformeRenovacion.idEstadoAprobacion);
+      console.log('Servicio: Parámetro estadoAprobacionInforme configurado:', filtroInformeRenovacion.idEstadoAprobacion.toString());
     }
     if (filtroInformeRenovacion.idContratista) {
       params = params.set('idContratista', filtroInformeRenovacion.idContratista.toString());
     }
     
+    console.log('Servicio: URL final:', urlEndpoint, 'Params:', params.toString());
     return this.http.get<any>(urlEndpoint, { params: params });
   }
 

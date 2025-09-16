@@ -386,27 +386,27 @@
 
               <ng-container matColumnDef="estadoAprobacionR">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación</th>
-                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionR?.nombre || element.estadoLd?.nombre || element.estado?.nombre }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionR?.nombre || element.estadoAprobacionInforme || element.estado?.nombre }}</td>
               </ng-container>
 
               <ng-container matColumnDef="estadoAprobacionJefeDivisionR">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación<br>Jefe División</th>
-                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionJefeDivisionR?.nombre || element.estadoAprobacionJefeDivision || element.estadoJefe?.nombre || 'Pendiente' }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionJefeDivisionR?.nombre || element.estadoAprobacionJefeDivision || '' }}</td>
               </ng-container>
 
               <ng-container matColumnDef="estadoAprobacionGerenteDivisionR">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación<br>Gerente División</th>
-                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionGerenteDivisionR?.nombre || element.estadoAprobacionGerenteDivision || element.estadoGerente?.nombre || 'Pendiente' }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionGerenteDivisionR?.nombre || element.estadoAprobacionGerenteDivision || '' }}</td>
               </ng-container>
 
               <ng-container matColumnDef="estadoAprobacionGPPMR">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación<br>GPPM</th>
-                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionGPPMR?.nombre || element.estadoAprobacionGPPM || element.estadoGPPM?.nombre || 'Pendiente' }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionGPPMR?.nombre || element.estadoAprobacionGPPM || '' }}</td>
               </ng-container>
 
               <ng-container matColumnDef="estadoAprobacionGSER">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Aprobación<br>GSE</th>
-                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionGSER?.nombre || element.estadoAprobacionGSE || element.estadoGSE?.nombre || 'Pendiente' }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.estadoAprobacionGSER?.nombre || element.estadoAprobacionGSE || '' }}</td>
               </ng-container>
 
               <ng-container matColumnDef="actionsInformeRenovacion">

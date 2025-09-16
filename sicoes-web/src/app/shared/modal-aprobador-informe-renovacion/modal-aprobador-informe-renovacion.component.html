@@ -2,18 +2,20 @@
 
 <mat-dialog-content>
   <div class="flex flex-col gap-4">
-    <p>¿Qué acción desea realizar sobre los siguientes informes de renovación seleccionados?</p>
+    <div *ngIf="!esRolG1OG2()">
+      <p>¿Qué acción desea realizar sobre el siguiente informe de renovación seleccionado?</p>
 
-    <div *ngIf="data.elementosSeleccionados && data.elementosSeleccionados.length > 0">
-      <h3>Informes de renovación a afectar:</h3>
-      <ul>
-        <li *ngFor="let item of data.elementosSeleccionados">
-          {{ item.numeroExpedienteR }} - {{ item.empresaSupervisoraR }}
-        </li>
-      </ul>
+      <div *ngIf="data.elementosSeleccionados && data.elementosSeleccionados.length > 0">
+        <h3>Informe de renovación a afectar:</h3>
+        <ul>
+          <li *ngFor="let item of data.elementosSeleccionados">
+            {{ item.numeroExpedienteR }} - {{ item.empresaSupervisoraR }}
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <div *ngIf="!esRolG1()" class="border rounded-lg p-4 bg-gray-50">
+    <div *ngIf="!esRolG1OG2()" class="border rounded-lg p-4 bg-gray-50">
       <h4 class="font-medium mb-3">Gestión de Archivos Adjuntos</h4>
       
       <div class="flex items-center gap-3">
@@ -64,9 +66,8 @@
     <mat-form-field class="w-full">
       <mat-label>Observación</mat-label>
       <textarea matInput [formControl]="observacionControl" rows="4" maxlength="500"
-                placeholder="Ingrese una observación para esta acción."></textarea>
+                placeholder="Ingrese una observación para esta acción (opcional)."></textarea>
       <mat-hint align="end">{{ observacionControl.value?.length || 0 }}/500</mat-hint>
-      <mat-error *ngIf="observacionControl.hasError('required')">La observación es requerida.</mat-error>
       <mat-error *ngIf="observacionControl.hasError('maxlength')">La observación no puede exceder los 500 caracteres.</mat-error>
     </mat-form-field>
 
@@ -83,14 +84,10 @@
 
 <mat-dialog-actions align="end">
   <button mat-raised-button color="primary" (click)="realizarAccion('APROBAR')" [disabled]="loadingAccion">
-    <mat-icon *ngIf="!loadingAccion">check_circle</mat-icon>
-    <mat-icon *ngIf="loadingAccion">refresh</mat-icon>
     Aprobar
   </button>
-  <button mat-raised-button color="accent" (click)="realizarAccion('RECHAZAR')" [disabled]="loadingAccion">
-    <mat-icon *ngIf="!loadingAccion">cancel</mat-icon>
-    <mat-icon *ngIf="loadingAccion">refresh</mat-icon>
+  <button mat-raised-button color="primary" (click)="realizarAccion('RECHAZAR')" [disabled]="loadingAccion">
     Rechazar
   </button>
-  <button mat-button color="warn" (click)="cancelar()" [disabled]="loadingAccion">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="cancelar()" [disabled]="loadingAccion">Cancelar</button>
 </mat-dialog-actions>

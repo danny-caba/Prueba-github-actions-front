@@ -94,23 +94,31 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
   enviarInvitacion() {
     functionsAlert.questionSiNoEval('¿Está seguro de que desea enviar la invitación?',"Invitación").then((result) => {
       if(result.isConfirmed){
-        console.log(this.requerimiento)
-          this.invitacion.idReqRenovacion=this.requerimiento?.idReqRenovacion;
-          console.log(this.invitacion)
-          this.invitacionRenovacionService.enviar(this.invitacion).subscribe(res => {
-            functionsAlert.success('Se ha enviado la invitación con éxito a la empresa supervisora').then((result) => {
+        console.log('Requerimiento:', this.requerimiento)
+        this.invitacion.idReqRenovacion = this.requerimiento?.idReqRenovacion;
+        console.log('Payload a enviar:', this.invitacion)
+        
+        this.invitacionRenovacionService.enviar(this.invitacion).subscribe({
+          next: (res) => {
+            console.log('Respuesta del servidor:', res)
+            functionsAlert.success('Se ha enviado la invitación con éxito a la empresa supervisora').then(() => {
               this.invitacion = res;
-              console.log(res)
-              //this.returnValue = res;
+              // Recargar la tabla para mostrar la nueva invitación
+              this.cargarTabla();
             });
-          });
-        } else {
-        }
+          },
+          error: (error) => {
+            console.error('Error al enviar invitación:', error);
+            functionsAlert.error('Error al enviar la invitación. Por favor, intente nuevamente.');
+          }
+        });
+      }
     });
   }
 
   cancelar(){
-    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTO_RENOVACION_LIST,this.requerimiento.idSoliPerfCont]);
+    console.log('Navegando a requerimiento renovación, idSoliPerfCont:', this.requerimiento?.idSoliPerfCont);
+    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTO_RENOVACION_LIST, this.requerimiento?.idSoliPerfCont]);
   }
 
   ngOnDestroy(): void {

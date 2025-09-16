@@ -17,7 +17,7 @@ import { SolicitudService } from 'src/app/service/solicitud.service';
 })
 export class ModalAprobadorInformeRenovacionComponent extends BaseComponent implements OnInit {
 
-  observacionControl = new FormControl('', [Validators.required, Validators.maxLength(500)]);
+  observacionControl = new FormControl('', [Validators.maxLength(500)]);
 
   progreso: number = 0;
   loadingAccion: boolean = false;
@@ -53,6 +53,20 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
     }
   }
 
+  obtenerTextoModalSegunCantidad(): string {
+    const cantidadInformes = this.data.elementosSeleccionados.length;
+    return cantidadInformes === 1 
+      ? '¿Qué acción desea realizar sobre el siguiente informe de renovación seleccionado?'
+      : '¿Qué acción desea realizar sobre los siguientes informes de renovación seleccionados?';
+  }
+
+  obtenerTextoListaSegunCantidad(): string {
+    const cantidadInformes = this.data.elementosSeleccionados.length;
+    return cantidadInformes === 1 
+      ? 'Informe de renovación a afectar:'
+      : 'Informes de renovación a afectar:';
+  }
+
   cancelar(): void {
     this.dialogRef.close('cancel');
   }
@@ -70,6 +84,27 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
       return this.usuario.roles.some(rol => 
         rol.codigo?.includes('G1') || rol.codigo?.includes('GRUPO_1')
       );
+    }
+    return false;
+  }
+
+  esRolG1OG2(): boolean {
+    if (this.usuario?.roles) {
+      // Debug: Log para ver los roles del usuario
+      console.log('Roles del usuario:', this.usuario.roles.map(r => r.codigo));
+      
+      // Verificar si tiene roles '01' (G1) o '02' (G2) que NO deben ver la sección
+      return this.usuario.roles.some(rol => 
+        rol.codigo === '01' || rol.codigo === '02'
+      );
+    }
+    return false;
+  }
+
+  esRolG2(): boolean {
+    if (this.usuario?.roles) {
+      // Solo verificar si es rol G2 ('02') para firma digital
+      return this.usuario.roles.some(rol => rol.codigo === '02');
     }
     return false;
   }
@@ -99,9 +134,7 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
     const informeTexto = cantidadInformes === 1 ? 'el informe de renovación seleccionado' : 'los informes de renovación seleccionados';
     let msj = `¿Está seguro de que desea ${tipoAccion.toLowerCase()} ${informeTexto}?`;
 
-    if (tipoAccion === 'RECHAZAR' && this.validarObservacion()) {
-      return;
-    }
+    // Observación es opcional para todas las acciones
 
     functionsAlert.questionSiNo(msj).then(async (result) => {
       if (result.isConfirmed) {
@@ -117,17 +150,32 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
 
             const requestPayload = {
               idRequerimientosAprobacion: idRequerimientosAprobacion,
-              observaciones: this.observacionControl.value || 'Aprobación masiva de informes de renovación'
+              observacion: this.observacionControl.value || 'Aprobación masiva de informes de renovación'
             };
 
+            console.log('Llamando al endpoint de aprobación con payload:', requestPayload);
+            
             await firstValueFrom(
               this.solicitudService.aprobarInformesRenovacionBandeja(requestPayload)
             );
+            
+            console.log('Endpoint de aprobación llamado exitosamente');
 
             this.progreso = 100;
-            functionsAlert.success('Los informes han sido aprobados exitosamente.').then(() => {
+            const cantidadInformes = this.data.elementosSeleccionados.length;
+            const mensajeExito = cantidadInformes === 1 
+              ? 'El informe ha sido aprobado exitosamente.'
+              : 'Los informes han sido aprobados exitosamente.';
+              
+            functionsAlert.success(mensajeExito).then(() => {
               this.enviarNotificacion(1); // ID para aprobación
-              this.activarFirmaDigital();
+              // Solo activar firma digital si es rol G2 ('02')
+              if (this.esRolG2()) {
+                this.activarFirmaDigital();
+              } else {
+                console.log('Usuario NO es G2 - Saltando firma digital');
+                this.dialogRef.close('OK');
+              }
             });
 
           } else if (tipoAccion === 'RECHAZAR') {
@@ -140,7 +188,7 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
                 idInformeRenovacion: informe.idInformeRenovacion,
                 motivoRechazo: this.observacionControl.value || '',
                 idUsuario: this.usuario?.idUsuario,
-                observaciones: this.observacionControl.value || '',
+                observacion: this.observacionControl.value || '',
                 idGrupoAprobador: 3
               };
 

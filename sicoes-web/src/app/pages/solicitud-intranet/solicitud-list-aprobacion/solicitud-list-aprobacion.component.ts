@@ -503,11 +503,11 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
             contratistaR: item.contratista,
             tipoContratoR: item.tipoContrato,
             fechaIngresoR: item.fechaIngresoInforme,
-            estadoAprobacionR: item.estadoLd, // Objeto con nombre
-            estadoAprobacionJefeDivisionR: {nombre: item.estadoAprobacionJefeDivision},
-            estadoAprobacionGerenteDivisionR: {nombre: item.estadoAprobacionGerenteDivision},
-            estadoAprobacionGPPMR: {nombre: item.estadoAprobacionGPPM},
-            estadoAprobacionGSER: {nombre: item.estadoAprobacionGSE},
+            estadoAprobacionR: {nombre: item.estadoAprobacionInforme}, // Estado del informe de renovación
+            estadoAprobacionJefeDivisionR: item.estadoAprobacionJefeDivision ? {nombre: item.estadoAprobacionJefeDivision} : null,
+            estadoAprobacionGerenteDivisionR: item.estadoAprobacionGerenteDivision ? {nombre: item.estadoAprobacionGerenteDivision} : null,
+            estadoAprobacionGPPMR: item.estadoAprobacionGPPM ? {nombre: item.estadoAprobacionGPPM} : null,
+            estadoAprobacionGSER: item.estadoAprobacionGSE ? {nombre: item.estadoAprobacionGSE} : null,
             tipoAprobacionR: item.tipoAprobacion,
             
             // Campos adicionales para compatibilidad
@@ -516,11 +516,11 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
             nombreDocumento: item.informe,
             tipoPersona: item.tp,
             nombreContratista: item.contratista,
-            estado: item.estadoLd,
-            estadoJefe: {nombre: item.estadoAprobacionJefeDivision},
-            estadoGerente: {nombre: item.estadoAprobacionGerenteDivision},
-            estadoGPPM: {nombre: item.estadoAprobacionGPPM},
-            estadoGSE: {nombre: item.estadoAprobacionGSE}
+            estado: {nombre: item.estadoAprobacionInforme},
+            estadoJefe: item.estadoAprobacionJefeDivision ? {nombre: item.estadoAprobacionJefeDivision} : null,
+            estadoGerente: item.estadoAprobacionGerenteDivision ? {nombre: item.estadoAprobacionGerenteDivision} : null,
+            estadoGPPM: item.estadoAprobacionGPPM ? {nombre: item.estadoAprobacionGPPM} : null,
+            estadoGSE: item.estadoAprobacionGSE ? {nombre: item.estadoAprobacionGSE} : null
           })) || [];
 
           // Filtrar por grupo del usuario

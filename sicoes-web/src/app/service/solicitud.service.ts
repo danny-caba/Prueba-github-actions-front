@@ -308,8 +308,10 @@ export class SolicitudService {
     return this.http.get<any>(urlEndpoint, { params: params });
   }
 
-  aprobarInformesRenovacionBandeja(request: { idRequerimientosAprobacion: number[], observaciones: string }): Observable<any> {
+  aprobarInformesRenovacionBandeja(request: { idRequerimientosAprobacion: number[], observacion: string }): Observable<any> {
     const urlEndpoint = `${this._path_serve}/api/renovacion/bandeja/aprobar-informe-renovacion`;
+    console.log('Servicio: Llamando a URL:', urlEndpoint);
+    console.log('Servicio: Con request:', request);
     return this.http.post<any>(urlEndpoint, request);
   }
 

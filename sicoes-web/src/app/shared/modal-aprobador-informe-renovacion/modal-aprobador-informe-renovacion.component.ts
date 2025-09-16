@@ -102,10 +102,18 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
   }
 
   esRolG2(): boolean {
+    console.log('esRolG2() - Usuario:', this.usuario);
+    console.log('esRolG2() - Roles:', this.usuario?.roles);
     if (this.usuario?.roles) {
-      // Solo verificar si es rol G2 ('02') para firma digital
-      return this.usuario.roles.some(rol => rol.codigo === '02');
+      // Verificar si tiene perfil G2 basado en códigos de grupo, no roles individuales
+      // G2 debe tener roles que contengan 'G2' o 'GRUPO_2' en el código
+      const esG2 = this.usuario.roles.some(rol => 
+        rol.codigo?.includes('G2') || rol.codigo?.includes('GRUPO_2')
+      );
+      console.log('esRolG2() - ¿Es G2?:', esG2);
+      return esG2;
     }
+    console.log('esRolG2() - No hay roles, retornando false');
     return false;
   }
   async adjuntarArchivo (): Promise<void> {
@@ -170,7 +178,11 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
             functionsAlert.success(mensajeExito).then(() => {
               this.enviarNotificacion(1); // ID para aprobación
               // Solo activar firma digital si es rol G2 ('02')
-              if (this.esRolG2()) {
+              console.log('Decidiendo si mostrar firma digital...');
+              const esG2 = this.esRolG2();
+              console.log('Resultado esRolG2():', esG2);
+              if (esG2) {
+                console.log('Usuario ES G2 - Activando firma digital');
                 this.activarFirmaDigital();
               } else {
                 console.log('Usuario NO es G2 - Saltando firma digital');
@@ -269,7 +281,7 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
       });
     } catch (error) {
       console.error('Error iniciando firma digital:', error);
-      functionsAlert.info('La aprobación se completó, pero no se pudo iniciar la firma digital: ' + error.message);
+      functionsAlert.info('La aprobación se completó, pero no se pudo iniciar la firma digital: ' + (error?.message || error?.toString() || 'Error desconocido'));
       this.dialogRef.close('OK');
     }
   }

@@ -310,6 +310,9 @@ export class SolicitudService {
     if (filtroInformeRenovacion.idContratista) {
       params = params.set('idContratista', filtroInformeRenovacion.idContratista.toString());
     }
+    if (filtroInformeRenovacion.nombreContratista) {
+      params = params.set('nombreContratista', filtroInformeRenovacion.nombreContratista);
+    }
     
     console.log('Servicio: URL final:', urlEndpoint, 'Params:', params.toString());
     return this.http.get<any>(urlEndpoint, { params: params });

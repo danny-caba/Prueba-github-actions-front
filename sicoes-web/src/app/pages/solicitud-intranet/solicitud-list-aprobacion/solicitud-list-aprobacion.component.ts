@@ -521,7 +521,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
             grupoAprobadorLd: item.grupoAprobadorLd,
             
             // Mapeos para compatibilidad con la tabla (alias R)
-            idInformeRenovacion: item.idRequermientoAprobacion,
+            idInformeRenovacion: item.idInformeRenovacion,
             numeroExpedienteR: item.numeroExpediente,
             informeR: item.informe,
             tpR: item.tp,

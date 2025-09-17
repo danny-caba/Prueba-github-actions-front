@@ -325,5 +325,14 @@ export class SolicitudService {
     return this.http.post<any>(urlEndpoint, request);
   }
 
+  /**
+   * Obtiene el tipo de aprobador del usuario actual (G1, G2, G3, etc.)
+   */
+  obtenerTipoAprobador(): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/renovacion/bandeja/tipo-aprobador`;
+    console.log('Servicio: Obteniendo tipo de aprobador desde:', urlEndpoint);
+    return this.http.get<any>(urlEndpoint);
+  }
+
 
 }

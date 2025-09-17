@@ -24,6 +24,12 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
   errores: string[] = [];
 
   usuario$: any;
+  
+  // Información del tipo de aprobador obtenida del backend
+  tipoAprobadorInfo: any = null;
+  esAprobadorG1 = false;
+  esAprobadorG2 = false;
+  esAprobadorG3 = false;
   usuario: AuthUser;
   archivoSeleccionado: File | null = null;
 
@@ -46,6 +52,9 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
     this.usuario$ = this.authFacade.user$;
     this.usuario$.subscribe(usu => {
       this.usuario = usu;
+      
+      // Obtener tipo de aprobador del backend
+      this.obtenerTipoAprobadorDelBackend();
     });
 
     if (this.data.elementosSeleccionados.length === 0) {
@@ -158,7 +167,7 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
 
             const requestPayload = {
               idRequerimientosAprobacion: idRequerimientosAprobacion,
-              observacion: this.observacionControl.value || 'Aprobación masiva de informes de renovación'
+              observacion: this.observacionControl.value || ''
             };
 
             console.log('Llamando al endpoint de aprobación con payload:', requestPayload);
@@ -177,10 +186,14 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
               
             functionsAlert.success(mensajeExito).then(() => {
               this.enviarNotificacion(1); // ID para aprobación
-              // Solo activar firma digital si es rol G2 ('02')
+              // Solo activar firma digital si es aprobador G2
               console.log('Decidiendo si mostrar firma digital...');
-              const esG2 = this.esRolG2();
-              console.log('Resultado esRolG2():', esG2);
+              console.log('Información del aprobador desde backend:', this.tipoAprobadorInfo);
+              
+              // Usar información del backend (con fallback al método anterior)
+              const esG2 = this.esAprobadorG2 || this.esRolG2();
+              console.log('¿Es aprobador G2?:', esG2);
+              
               if (esG2) {
                 console.log('Usuario ES G2 - Activando firma digital');
                 this.activarFirmaDigital();
@@ -343,4 +356,25 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
       }
     });
   }
-}
+
+  /**
+   * Obtiene el tipo de aprobador del backend y actualiza las propiedades del componente
+   */
+  private obtenerTipoAprobadorDelBackend(): void {
+    this.solicitudService.obtenerTipoAprobador().subscribe({
+      next: (response) => {
+        console.log('Tipo de aprobador obtenido del backend:', response);
+        this.tipoAprobadorInfo = response;
+        this.esAprobadorG1 = response.esAprobadorG1 || false;
+        this.esAprobadorG2 = response.esAprobadorG2 || false;
+        this.esAprobadorG3 = response.esAprobadorG3 || false;
+      },
+      error: (error) => {
+        console.error('Error al obtener tipo de aprobador del backend:', error);
+        // Mantener identificación por roles como fallback
+        this.esAprobadorG1 = this.esRolG1();
+        this.esAprobadorG2 = this.esRolG2();
+        this.esAprobadorG3 = false; // Fallback básico
+      }
+    });
+  }

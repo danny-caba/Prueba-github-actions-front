@@ -231,7 +231,7 @@
 
               <ng-container matColumnDef="tp">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Modalidad de Pago</th>
-                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.tipoContratacion.nombre }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont?.tipoContratacion?.nombre }}</td>
               </ng-container>
 
               <ng-container matColumnDef="contratista">
@@ -241,7 +241,7 @@
 
               <ng-container matColumnDef="tipoContrato">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Contrato</th>
-                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.tipoContratacion.nombre }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont?.tipoContratacion?.nombre }}</td>
               </ng-container>
 
               <ng-container matColumnDef="fechaIngreso">

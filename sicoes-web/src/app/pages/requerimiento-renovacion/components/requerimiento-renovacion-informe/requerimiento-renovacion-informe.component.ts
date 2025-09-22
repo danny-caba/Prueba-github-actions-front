@@ -95,9 +95,54 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
         informe.requerimiento = this.requerimiento;
         informe.completado='1';
         this.informeRenovacionService.registrar(informe).subscribe({
-          next: () => {
-            functionsAlert.success('Informe registrado correctamente');
-            this.router.navigate([Link.INTRANET, Link.REQUERIMIENTO_RENOVACION_LIST,this.requerimiento.idSoliPerfCont]);
+          next: (response) => {
+            // Guardar el informe con su ID
+            this.informeExistente = response;
+            
+            // Si el informe se completó (no es borrador), enviar notificación
+            if (informe.completado === '1' && response.idInformeRenovacion) {
+              // Tipo 1 para notificación de registro de informe
+              this.informeRenovacionService.notificarRenovacionInforme(1).subscribe({
+                next: (notifResponse) => {
+                  console.log('Notificación enviada exitosamente', notifResponse);
+                  
+                  // Si la notificación devuelve un ID, actualizar el informe con el ID_NOTIFICACION
+                  if (notifResponse && notifResponse.idNotificacion) {
+                    const informeActualizado = {
+                      ...response,
+                      idNotificacion: notifResponse.idNotificacion
+                    };
+                    
+                    // Actualizar el informe con el ID de notificación
+                    this.informeRenovacionService.registrar(informeActualizado).subscribe({
+                      next: () => {
+                        functionsAlert.success('Informe registrado y notificado correctamente');
+                        this.router.navigate([Link.INTRANET, Link.REQUERIMIENTO_RENOVACION_LIST,this.requerimiento.idSoliPerfCont]);
+                      },
+                      error: (error) => {
+                        console.error('Error al actualizar ID de notificación', error);
+                        // Continuar aunque falle la actualización del ID
+                        functionsAlert.success('Informe registrado correctamente');
+                        this.router.navigate([Link.INTRANET, Link.REQUERIMIENTO_RENOVACION_LIST,this.requerimiento.idSoliPerfCont]);
+                      }
+                    });
+                  } else {
+                    functionsAlert.success('Informe registrado correctamente');
+                    this.router.navigate([Link.INTRANET, Link.REQUERIMIENTO_RENOVACION_LIST,this.requerimiento.idSoliPerfCont]);
+                  }
+                },
+                error: (error) => {
+                  console.error('Error al enviar notificación', error);
+                  // Continuar aunque falle la notificación
+                  functionsAlert.success('Informe registrado correctamente');
+                  this.router.navigate([Link.INTRANET, Link.REQUERIMIENTO_RENOVACION_LIST,this.requerimiento.idSoliPerfCont]);
+                }
+              });
+            } else {
+              // Es un borrador, no enviar notificación
+              functionsAlert.success('Informe guardado como borrador');
+              this.router.navigate([Link.INTRANET, Link.REQUERIMIENTO_RENOVACION_LIST,this.requerimiento.idSoliPerfCont]);
+            }
           },
           error: () => {
             functionsAlert.error('Ocurrio un error al registrar el informe');
@@ -143,7 +188,8 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
     this.guardando=true;
     const informe = {
       ...this.formGroup.value,
-      idInformeRenovacion: this.informeExistente?.idInformeRenovacion || null
+      idInformeRenovacion: this.informeExistente?.idInformeRenovacion || null,
+      idNotificacion: this.informeExistente?.idNotificacion || null // Preservar ID de notificación si existe
     };
     this.requerimiento.solicitudPerfil = {idSolicitud:this.requerimiento.idSoliPerfCont}
     informe.requerimiento = this.requerimiento;
@@ -154,7 +200,12 @@ export class RequerimientoRenovacionInformeComponent extends BaseComponent imple
         this.informeExistente = response;
         this.snackBar.open('Autoguardado exitoso...', 'Cerrar', { duration: 1000 });
         this.guardando=false;
+        this.tieneCambios = false; // Resetear flag de cambios
       },
+      error: (error) => {
+        console.error('Error al guardar borrador:', error);
+        this.guardando=false;
+      }
     });
   }
 

@@ -5,6 +5,7 @@ import { RequerimientoRenovacion } from './requerimiento-renovacion.model';
 
 export class InformeRenovacion {
     idInformeRenovacion: number | null;
+    idNotificacion?: number | null; // ID de la notificación enviada
     usuario: any; // segun tu modelo AuthUser
     notificacion: any; // segun tu modelo
     aprobaciones: any; // segun tu modelo

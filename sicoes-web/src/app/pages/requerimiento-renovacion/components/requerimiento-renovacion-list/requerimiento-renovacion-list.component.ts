@@ -63,7 +63,6 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
 
   ngOnInit(): void {
     this.cargarCombo();
-    this.obtenerDetalleSolicitud();
     this.formGroup.get('sector').valueChanges.subscribe(value => {
       this.onChangeSector(value)
     })
@@ -74,6 +73,7 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
       ListadoEnum.SECTOR,
     ]).subscribe(listRes => {
       this.listSector = listRes[0];
+      this.obtenerDetalleSolicitud();
     })
   }
 
@@ -114,11 +114,12 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
     this.formGroup.controls.subsector.setValue('');
     this.parametriaService.obtenerSubListado(ListadoEnum.SUBSECTOR, obj.idListadoDetalle).subscribe(res => {
       const subsectorProceso = this.propuesta.procesoItem.proceso.subsector;
-      this.listSubSector = res.filter(subsector => 
+      this.listSubSector = res;
+      const subsectorEncontrado = this.listSubSector.find(subsector => 
         subsector.codigo === subsectorProceso.codigo
       );
-      if (this.listSubSector.length > 0) {
-          this.formGroup.controls.subsector.setValue(this.listSubSector[0]);
+      if (subsectorEncontrado) {
+          this.formGroup.controls.subsector.setValue(subsectorEncontrado);
       }
     });
   }

@@ -219,7 +219,7 @@
 
               <ng-container matColumnDef="numeroExpediente">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Número Expediente</th>
-                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.propuesta.procesoItem.proceso.numeroExpediente }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont?.propuesta?.procesoItem?.proceso?.numeroExpediente }}</td>
               </ng-container>
 
               <ng-container matColumnDef="documento">
@@ -231,17 +231,17 @@
 
               <ng-container matColumnDef="tp">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Modalidad de Pago</th>
-                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.tipoContratacion.nombre }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont?.tipoContratacion?.nombre }}</td>
               </ng-container>
 
               <ng-container matColumnDef="contratista">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Contratista</th>
-                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.propuesta.supervisora.nombreRazonSocial }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont?.propuesta?.supervisora?.nombreRazonSocial }}</td>
               </ng-container>
 
               <ng-container matColumnDef="tipoContrato">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Contrato</th>
-                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont.tipoContratacion.nombre }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.solicitudPerfCont?.tipoContratacion?.nombre }}</td>
               </ng-container>
 
               <ng-container matColumnDef="fechaIngreso">
@@ -361,7 +361,19 @@
 
               <ng-container matColumnDef="informeR">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Informe</th>
-                <td mat-cell *matCellDef="let element">{{ element.informe || '' }}</td>
+                <td mat-cell *matCellDef="let element">
+                  <div class="flex items-center gap-2">
+                    <span>{{ element.informe || '' }}</span>
+                    <button 
+                      *ngIf="element.uuidInformeRenovacion" 
+                      mat-icon-button 
+                      color="primary"
+                      matTooltip="Descargar informe"
+                      (click)="descargarInformeClick(element)">
+                      <mat-icon svgIcon="mat:download"></mat-icon>
+                    </button>
+                  </div>
+                </td>
               </ng-container>
 
               <ng-container matColumnDef="tpR">
@@ -528,7 +540,7 @@
       <mat-icon svgIcon="mat:preview"></mat-icon>
       <span>Ver</span>
     </button>
-    <button mat-menu-item (click)="descargarAdjuntoInforme(row)" *ngIf="row.deUuidInfoRenovacion || row.uuid">
+    <button mat-menu-item (click)="descargarAdjuntoInforme(row)" *ngIf="row.uuidInformeRenovacion || row.deUuidInfoRenovacion || row.uuid">
       <mat-icon svgIcon="mat:download"></mat-icon>
       <span>Descargar Adjunto</span>
     </button>

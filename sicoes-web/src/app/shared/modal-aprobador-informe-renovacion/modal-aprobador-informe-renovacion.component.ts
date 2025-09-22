@@ -90,8 +90,9 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
 
   esRolG1(): boolean {
     if (this.usuario?.roles) {
+      // G1 - Aprobador técnico (Jefe de Línea) - CO_ROL = "05"
       return this.usuario.roles.some(rol => 
-        rol.codigo?.includes('G1') || rol.codigo?.includes('GRUPO_1')
+        rol.codigo === '05' && (rol.descripcion?.includes('Jefe') || rol.descripcion?.includes('G1'))
       );
     }
     return false;
@@ -100,11 +101,11 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
   esRolG1OG2(): boolean {
     if (this.usuario?.roles) {
       // Debug: Log para ver los roles del usuario
-      console.log('Roles del usuario:', this.usuario.roles.map(r => r.codigo));
+      console.log('Roles del usuario:', this.usuario.roles.map(r => ({ codigo: r.codigo, descripcion: r.descripcion })));
       
-      // Verificar si tiene roles '01' (G1) o '02' (G2) que NO deben ver la sección
+      // Verificar si tiene roles de aprobador técnico (G1/G2) - CO_ROL = "05"
       return this.usuario.roles.some(rol => 
-        rol.codigo === '01' || rol.codigo === '02'
+        rol.codigo === '05' // Aprobador Técnico (tanto G1 como G2 usan este código)
       );
     }
     return false;
@@ -112,17 +113,51 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
 
   esRolG2(): boolean {
     console.log('esRolG2() - Usuario:', this.usuario);
-    console.log('esRolG2() - Roles:', this.usuario?.roles);
+    console.log('esRolG2() - Roles:', this.usuario?.roles?.map(r => ({ codigo: r.codigo, descripcion: r.descripcion })));
     if (this.usuario?.roles) {
-      // Verificar si tiene perfil G2 basado en códigos de grupo, no roles individuales
-      // G2 debe tener roles que contengan 'G2' o 'GRUPO_2' en el código
+      // G2 - Aprobador técnico (Gerente de División) - CO_ROL = "05"
+      // Distinguir G2 de G1 por descripción o contexto adicional
       const esG2 = this.usuario.roles.some(rol => 
-        rol.codigo?.includes('G2') || rol.codigo?.includes('GRUPO_2')
+        rol.codigo === '05' && (
+          rol.descripcion?.includes('Gerente') || 
+          rol.descripcion?.includes('G2') ||
+          rol.descripcion?.includes('División')
+        )
       );
       console.log('esRolG2() - ¿Es G2?:', esG2);
       return esG2;
     }
     console.log('esRolG2() - No hay roles, retornando false');
+    return false;
+  }
+
+  esRolG3(): boolean {
+    if (this.usuario?.roles) {
+      // G3 - Responsable Aprobador GSE - CO_ROL = "14"
+      return this.usuario.roles.some(rol => 
+        rol.codigo === '14' || (rol.codigo === '05' && rol.descripcion?.includes('GSE'))
+      );
+    }
+    return false;
+  }
+
+  esEvaluadorTecnico(): boolean {
+    if (this.usuario?.roles) {
+      // Evaluador Técnico - CO_ROL = "04"
+      return this.usuario.roles.some(rol => 
+        rol.codigo === '04'
+      );
+    }
+    return false;
+  }
+
+  esUsuarioExterno(): boolean {
+    if (this.usuario?.roles) {
+      // Usuario Externo (Empresa Supervisora) - CO_ROL = "06"
+      return this.usuario.roles.some(rol => 
+        rol.codigo === '06'
+      );
+    }
     return false;
   }
   async adjuntarArchivo (): Promise<void> {
@@ -185,7 +220,6 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
               : 'Los informes han sido aprobados exitosamente.';
               
             functionsAlert.success(mensajeExito).then(() => {
-              this.enviarNotificacion(1); // ID para aprobación
               // Solo activar firma digital si es aprobador G2
               console.log('Decidiendo si mostrar firma digital...');
               console.log('Información del aprobador desde backend:', this.tipoAprobadorInfo);
@@ -196,9 +230,12 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
               
               if (esG2) {
                 console.log('Usuario ES G2 - Activando firma digital');
+                // Firma digital primero, notificación después del éxito
                 this.activarFirmaDigital();
               } else {
-                console.log('Usuario NO es G2 - Saltando firma digital');
+                console.log('Usuario NO es G2 - Enviando notificación directamente');
+                // Si no es G2, enviar notificación inmediatamente
+                this.enviarNotificacion(1); // ID para aprobación
                 this.dialogRef.close('OK');
               }
             });
@@ -283,18 +320,28 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
         next: (resultado) => {
           if (resultado === 'success') {
             console.log('Firma digital completada exitosamente');
+            // Registrar firma completada en base de datos
+            this.registrarFirmaCompletada();
+          } else {
+            console.log('Firma digital cancelada o falló');
+            // Aún así enviar notificación porque la aprobación ya se completó
+            this.enviarNotificacion(1); // ID para aprobación
+            this.dialogRef.close('OK');
           }
-          this.dialogRef.close('OK');
         },
         error: (error) => {
           console.error('Error en firma digital:', error);
           functionsAlert.info('La aprobación se completó, pero hubo un problema con la firma digital.');
+          // Enviar notificación aunque la firma haya fallado, porque la aprobación ya se completó
+          this.enviarNotificacion(1); // ID para aprobación
           this.dialogRef.close('OK');
         }
       });
     } catch (error) {
       console.error('Error iniciando firma digital:', error);
       functionsAlert.info('La aprobación se completó, pero no se pudo iniciar la firma digital: ' + (error?.message || error?.toString() || 'Error desconocido'));
+      // Enviar notificación aunque la firma no se haya podido iniciar
+      this.enviarNotificacion(1); // ID para aprobación
       this.dialogRef.close('OK');
     }
   }
@@ -361,7 +408,7 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
    * Obtiene el tipo de aprobador del backend y actualiza las propiedades del componente
    */
   private obtenerTipoAprobadorDelBackend(): void {
-    this.solicitudService.obtenerTipoAprobador().subscribe({
+    this.solicitudService.obtenerTipoAprobadorBackend().subscribe({
       next: (response) => {
         console.log('Tipo de aprobador obtenido del backend:', response);
         this.tipoAprobadorInfo = response;
@@ -378,3 +425,40 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
       }
     });
   }
+
+  /**
+   * Registra en base de datos que la firma digital fue completada exitosamente
+   */
+  private registrarFirmaCompletada(): void {
+    console.log('Registrando firma completada en base de datos...');
+    
+    // Procesar cada informe firmado
+    const promises = this.data.elementosSeleccionados.map(informe => {
+      const requestPayload = {
+        idInformeRenovacion: informe.idInformeRenovacion,
+        idUsuario: this.usuario?.idUsuario,
+        observacion: this.observacionControl.value || '',
+        firmaCompletada: true,
+        fechaFirma: new Date().toISOString()
+      };
+
+      console.log('Registrando firma para informe:', requestPayload);
+      
+      return firstValueFrom(
+        this.informeRenovacionService.aprobarInformeRenovacion(requestPayload)
+      );
+    });
+
+    Promise.all(promises).then(() => {
+      console.log('Firma registrada exitosamente en base de datos');
+      // Después de registrar la firma, enviar notificación
+      this.enviarNotificacion(1); // ID para aprobación
+      this.dialogRef.close('OK');
+    }).catch(error => {
+      console.error('Error al registrar firma en base de datos:', error);
+      // Aún así enviar notificación
+      this.enviarNotificacion(1); // ID para aprobación
+      this.dialogRef.close('OK');
+    });
+  }
+}

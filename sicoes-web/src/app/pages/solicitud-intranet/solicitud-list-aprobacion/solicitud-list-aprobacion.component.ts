@@ -519,6 +519,7 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
             tipoAprobacionLd: item.tipoAprobacionLd,
             estadoLd: item.estadoLd,
             grupoAprobadorLd: item.grupoAprobadorLd,
+            uuidInformeRenovacion: item.uuidInformeRenovacion,
             
             // Mapeos para compatibilidad con la tabla (alias R)
             idInformeRenovacion: item.idInformeRenovacion,
@@ -897,8 +898,8 @@ historyApproveAndSignPerfeccionamiento(row: any) {
   }
 
   descargarAdjuntoInforme(row: any) {
-    const uuid = row.deUuidInfoRenovacion || row.uuid;
-    const nombreArchivo = row.deNombreArchivo || row.nombreArchivo || `informe_${row.numeroExpediente || row.idInformeRenovacion}.pdf`;
+    const uuid = row.uuidInformeRenovacion || row.deUuidInfoRenovacion || row.uuid;
+    const nombreArchivo = row.deNombreArchivo || row.nombreArchivo || row.informe || `informe_${row.numeroExpediente || row.idInformeRenovacion}.pdf`;
     
     if (!uuid) {
       alert('No se encontró el archivo adjunto para este informe.');
@@ -997,5 +998,24 @@ historyApproveAndSignPerfeccionamiento(row: any) {
   }
   irAInformeRenovacion() {
     this.selectedTabIndex = 2; 
+  }
+
+  descargarInformeClick(element: any): void {
+    console.log('Descargando informe:', element);
+    
+    const uuid = element.uuidInformeRenovacion;
+    if (!uuid) {
+      alert('No se encontró el UUID del documento para descargar.');
+      return;
+    }
+
+    try {
+      // Usar el método existente del servicio para descargar
+      const nombreArchivo = element.informe || `informe_renovacion_${element.numeroExpediente || 'documento'}.pdf`;
+      this.adjuntoService.descargarWindowsJWT(uuid, nombreArchivo);
+    } catch (error) {
+      console.error('Error al descargar el documento:', error);
+      alert('Error al intentar descargar el documento. Por favor, inténtelo nuevamente.');
+    }
   }
 }

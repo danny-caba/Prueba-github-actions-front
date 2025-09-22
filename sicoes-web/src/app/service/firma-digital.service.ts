@@ -118,6 +118,7 @@ export class FirmaDigitalService {
     };
     
     return new Promise((resolve, reject) => {
+      // Primero llamar al endpoint general de parámetros con el token del usuario
       this.evaluadorService.obtenerParametrosfirmaDigital(token).subscribe({
         next: (parametros) => {
           if (parametros && parametros.action) {
@@ -160,30 +161,49 @@ export class FirmaDigitalService {
 
   /**
    * Obtiene los IDs de archivos para los informes de renovación dados
+   * Flujo: 1) Obtener parámetros generales 2) Obtener ID archivo específico
    */
   private async obtenerArchivosInformesRenovacion(informes: any[]): Promise<ArchivoFirma[]> {
-    const observables = informes.map(informe => 
-      this.informeRenovacionService.obtenerParametrosFirmaDigital(informe.idInformeRenovacion).pipe(
-        map(response => ({
-          id: response.data?.[0]?.firmaDigital?.idArchivo?.toString() || informe.idInformeRenovacion.toString(),
-          nombre: `Informe ${informe.numeroExpedienteR || informe.empresaSupervisoraR}`
-        })),
-        catchError(error => {
-          console.error(`Error obteniendo parámetros de firma para informe ${informe.idInformeRenovacion}:`, error);
-          return of({ 
-            id: informe.idInformeRenovacion.toString(), 
-            nombre: `Informe ${informe.numeroExpedienteR || informe.empresaSupervisoraR}` 
+    const archivos: ArchivoFirma[] = [];
+    
+    // Para cada informe, llamar al endpoint específico para obtener el ID del archivo
+    for (const informe of informes) {
+      try {
+        // Llamar al endpoint POST /api/informe/renovacion/firma/obtenerIdArchivo
+        const requestBody = {
+          idRequerimientoAprobacion: informe.idRequermientoAprobacion || informe.idInformeRenovacion
+        };
+        
+        const response = await this.http.post<any>(`${this._path_serve}/api/informe/renovacion/firma/obtenerIdArchivo`, requestBody).toPromise();
+        
+        if (response?.data?.[0]?.firmaInforme?.idArchivo) {
+          archivos.push({
+            id: response.data[0].firmaInforme.idArchivo.toString(),
+            nombre: `Informe ${informe.numeroExpedienteR || informe.empresaSupervisoraR}`
           });
-        })
-      )
-    );
-
-    return new Promise((resolve, reject) => {
-      forkJoin(observables).subscribe({
-        next: (archivos) => resolve(archivos),
-        error: (error) => reject(error)
-      });
-    });
+        } else {
+          console.warn(`No se pudo obtener ID de archivo para informe ${informe.idInformeRenovacion}`);
+          // Fallback: usar UUID si existe
+          if (informe.uuidInformeRenovacion) {
+            archivos.push({
+              id: informe.uuidInformeRenovacion,
+              nombre: `Informe ${informe.numeroExpedienteR || informe.empresaSupervisoraR}`
+            });
+          }
+        }
+      } catch (error) {
+        console.error(`Error obteniendo ID archivo para informe ${informe.idInformeRenovacion}:`, error);
+        // Fallback: usar UUID si existe
+        if (informe.uuidInformeRenovacion) {
+          archivos.push({
+            id: informe.uuidInformeRenovacion,
+            nombre: `Informe ${informe.numeroExpedienteR || informe.empresaSupervisoraR}`
+          });
+        }
+      }
+    }
+    
+    return archivos;
   }
 
   /**

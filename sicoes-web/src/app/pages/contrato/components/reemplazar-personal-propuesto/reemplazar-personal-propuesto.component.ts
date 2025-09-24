@@ -81,14 +81,14 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   @ViewChild('paginatorReemplazar') paginatorReemplazar: MatPaginator;
 
   constructor(
-    private authFacade: AuthFacade,
-    private router: Router,
-    private fb: FormBuilder,
-    private intUrls: InternalUrls,
-    private parametriaService: ParametriaService,
-    private solicitudService: SolicitudService,
-    private adjuntoService: AdjuntosService,
-    private dialog: MatDialog,
+    private readonly authFacade: AuthFacade,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly intUrls: InternalUrls,
+    private readonly parametriaService: ParametriaService,
+    private readonly solicitudService: SolicitudService,
+    private readonly adjuntoService: AdjuntosService,
+    private readonly dialog: MatDialog,
   ) {
     super();
     this.intenalUrls = intUrls;
@@ -193,11 +193,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   obtenerFiltro() {
     let filtro: any = {
       idTipoSolicitud: this.formGroup.controls.tipoSolicitud.value?.idListadoDetalle,
-      //idEstadoRevision: this.formGroup.controls.estadoRevision.value?.idListadoDetalle,
-      //idEstadoEvaluacionTecnica: this.formGroup.controls.estadoEvalTecnica.value?.idListadoDetalle,
-      //idEstadoEvaluacionAdministrativa: this.formGroup.controls.estadoEvalAdministrativa.value?.idListadoDetalle,
       nroExpediente: this.formGroup.controls.nroExpediente.value,
-      // solicitante: this.formGroup.controls.solicitante.value,
     };
     return filtro;
   }

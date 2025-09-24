@@ -101,7 +101,6 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
   ngOnInit(): void {
     this.cargarCombo();
     this.dataSourceReemplazar.data = [];
-    //this.cargarTabla();
      this.nomUs=sessionStorage.getItem("NOMUS")
     this.usuario = JSON.parse(sessionStorage.getItem("rolesusuario") || "[]");
     this.idRoles = this.usuario.map(u => u.codigo);
@@ -129,8 +128,9 @@ export class AdendaReemplazarPersonalComponent extends BasePageComponent<Solicit
   }
 
   displayContratista(obj: any): string {
-    return obj && obj.valor ? obj.valor : '';
+    return obj?.valor ?? '';
   }
+
   cargarCombo() {
     this.parametriaService.obtenerMultipleListadoDetalle([
       ListadoEnum.TIPO_SOLICITUD,

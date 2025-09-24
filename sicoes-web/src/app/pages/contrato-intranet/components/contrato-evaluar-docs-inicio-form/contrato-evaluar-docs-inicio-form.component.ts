@@ -24,9 +24,9 @@ export class ContratoEvaluarDocsInicioFormComponent extends BaseComponent implem
   fechaInicioContrato: string = null;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private reemplazoService: PersonalReemplazoService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly reemplazoService: PersonalReemplazoService
   ) {
     super();
   }

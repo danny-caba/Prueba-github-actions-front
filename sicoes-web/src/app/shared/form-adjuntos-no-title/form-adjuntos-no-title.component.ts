@@ -10,11 +10,9 @@ import {
 } from "@angular/core";
 import { AdjuntosService } from "src/app/service/adjuntos.service";
 import { catchError, finalize, map, of } from "rxjs";
-import { EvidenciaService } from "src/app/service/evidencia.service";
 import { HttpErrorResponse, HttpEventType } from "@angular/common/http";
 import { functions } from "src/helpers/functions";
 import { Adjunto, AdjuntoRequisto } from "src/app/interface/adjuntos.model";
-import { LayoutMiemboComponent } from "../layout-datos-proceso/layout-miembro/layout-miembro.component";
 import { functionsAlert } from "src/helpers/functionsAlert";
 import * as uuid from "uuid";
 import { Solicitud } from "src/app/interface/solicitud.model";
@@ -60,11 +58,13 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
   nuevo: boolean = true;
 
   constructor(
-    private adjuntoService: AdjuntosService,
-    private reemplazoService: PersonalReemplazoService
+    private readonly adjuntoService: AdjuntosService,
+    private readonly reemplazoService: PersonalReemplazoService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log("iniciando")
+  }
 
   clickFile(adj) {
     this.adjuntoInput = adj;
@@ -156,8 +156,8 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
     }
   }
 
-  validateFile(name: String, ext_: String) {
-    var ext = name.substring(name.lastIndexOf(".") + 1);
+  validateFile(name: string, ext_: string) {
+    let ext = name.substring(name.lastIndexOf(".") + 1);
     if (ext.toLowerCase() == ext_) {
       return true;
     } else {
@@ -166,7 +166,7 @@ export class FormAdjuntosNoTitleComponent implements OnInit {
   }
 
   descargar(adj) {
-    let nombreAdjunto = adj.archivo.nombre != null ? adj.archivo.nombre : adj.archivo.nombreReal;
+    let nombreAdjunto =  adj.archivo.nombre ?? adj.archivo.nombreReal;
     this.adjuntoService.descargarWindowsJWT(adj.archivo.codigo, nombreAdjunto);
   }
 

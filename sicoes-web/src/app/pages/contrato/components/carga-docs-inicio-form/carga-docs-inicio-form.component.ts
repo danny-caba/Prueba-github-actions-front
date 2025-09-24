@@ -50,7 +50,7 @@ export class CargaDocsInicioFormComponent extends BaseComponent implements OnIni
   }
 
   doNothing(): void {
-
+    console.log("muestra")
   }
 
 }

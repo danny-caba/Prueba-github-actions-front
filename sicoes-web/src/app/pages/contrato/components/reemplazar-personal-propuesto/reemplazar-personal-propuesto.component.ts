@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, ViewChild,Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
@@ -10,13 +10,10 @@ import { ListadoEnum, REQUERIMIENTO, UsuariosRoles } from 'src/helpers/constante
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
 import { SolicitudService } from 'src/app/service/solicitud.service';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
-import { ListadoDetalle } from 'src/app/interface/listado.model';
 import { ParametriaService } from 'src/app/service/parametria.service';
 import { Solicitud } from 'src/app/interface/solicitud.model';
-import { Contrato, SelectedPerfeccionamientoItem } from 'src/app/interface/contrato.model';
 import { AdjuntosService } from 'src/app/service/adjuntos.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalAprobadorFirmaAccionComponent } from 'src/app/shared/modal-aprobador-firma-accion/modal-aprobador-firma-accion.component';
 import { LayoutAprobacionHistorialComponent } from 'src/app/shared/layout-aprobacion-historial/layout-aprobacion-historial.component';
 import { ModalAprobadorHistorialContratoComponent } from 'src/app/shared/modal-aprobador-historial-contrato/modal-aprobador-historial-contrato.component';
 import { ModalAprobadorPersonalComponent } from 'src/app/shared/modal-aprobador-personal/modal-aprobador-personal.component';
@@ -96,8 +93,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
 
   ngOnInit(): void {
     this.cargarCombo();
-    this.dataSourceReemplazar.data = []
-    //this.cargarTabla();
+    this.dataSourceReemplazar.data = [];
 
     this.filteredContratistas = this.formGroup.valueChanges.pipe(
       startWith(''),
@@ -126,7 +122,7 @@ export class ReemplazarPersonalComponent extends BasePageComponent<Solicitud> im
   }
 
   displayContratista(obj: any): string {
-    return obj && obj.valor ? obj.valor : '';
+    return obj?.valor ?? '';
   }
 
   cargarCombo() {

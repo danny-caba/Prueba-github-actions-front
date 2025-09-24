@@ -38,7 +38,7 @@ export class ReemplazoPersFormEditComponent extends BaseComponent implements OnI
   perfilBaja: any = null;
 
   constructor(
-    private personalReemplazoService: PersonalReemplazoService
+    private readonly personalReemplazoService: PersonalReemplazoService
   ) {
     super();
    }

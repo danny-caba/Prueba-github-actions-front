@@ -19,7 +19,7 @@ export class OptionRoleCheckDirective implements OnInit {
 
   constructor(
     private authFacade: AuthFacade,
-    private cd: ChangeDetectorRef
+    private readonly cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {

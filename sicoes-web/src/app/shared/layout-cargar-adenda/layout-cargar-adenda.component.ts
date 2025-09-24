@@ -24,9 +24,13 @@ export class LayoutCargarAdendaComponent
     super();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("inicio carga")
+  }
 
-  setValueCheckedCartaReemplazo(even) {}
+  setValueCheckedCartaReemplazo(even) {
+    console.log(even)
+  }
 
   onAdjuntoSuccess(valor: boolean) {
     this.adjuntoCargado = valor;

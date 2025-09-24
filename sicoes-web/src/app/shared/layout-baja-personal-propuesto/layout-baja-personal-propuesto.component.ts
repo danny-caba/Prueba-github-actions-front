@@ -1,15 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BaseComponent } from '../components/base.component';
-import { functionsAlert } from 'src/helpers/functionsAlert';
-import { PersonalPropuesto, PersonalReemplazo } from 'src/app/interface/reemplazo-personal.model';
+import { PersonalReemplazo } from 'src/app/interface/reemplazo-personal.model';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
-import { ContratoService } from 'src/app/service/contrato.service';
 import * as CryptoJS from 'crypto-js';
 import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
 import { Supervisora, SupervisoraPerfil } from 'src/app/interface/supervisora.model';
-import { id } from 'date-fns/locale';
 
 const URL_DECRYPT = '3ncr1pt10nK3yuR1';
 
@@ -45,9 +42,8 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   perfilBaja: any = null;
 
   constructor(
-    private fb: FormBuilder,
-    private contratoService: ContratoService,
-    private reemplazoService: PersonalReemplazoService
+    private readonly fb: FormBuilder,
+    private readonly reemplazoService: PersonalReemplazoService
   ) {
     super();
   }
@@ -71,7 +67,7 @@ export class LayoutBajaPersonalPropuestoComponent extends BaseComponent implemen
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-      if (changes['personalReemplazo'] && changes['personalReemplazo'].currentValue) {
+      if (changes['personalReemplazo']?.currentValue) {
         const nuevoPersonal = changes['personalReemplazo'].currentValue;
         this.cargarTablaReview(nuevoPersonal);
       }

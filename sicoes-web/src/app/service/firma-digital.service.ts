@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ConfigService } from '../core/services';
@@ -9,21 +9,13 @@ const base_url = `${environment.URL_MRTD}/organizacion-funciones-rest/oyf`;
 })
 
 export class FirmaDigitalService {
-    private _path_serve: String;
-    constructor(private configService: ConfigService) {
+    private _path_serve: string;
+    constructor(private readonly configService: ConfigService) {
         this._path_serve = this.configService.getAPIUrl();
     }
     private readonly http = inject(HttpClient)
-    // Paso 01: Llamar al servicio para firmar el archivo
     firmarArchivo(body: any): Observable<any> {
-        /*const body = {
-            "idAdenda": idDocumento,
-            "observacion": "Documento revisado y aprobado",
-            "cookie": "ABC123XYZ",
-            "visto": true,
-            "firmaJefe": true,
-            "firmaGerente": false
-        }*/
+
     const url = `${base_url}/reemplazo/solicitud/firmar/`;
         console.log('firmarArchivo - URL:', url);
         console.log('firmarArchivo - Body:', body);
@@ -36,10 +28,8 @@ export class FirmaDigitalService {
     );
     }
 
-// Paso 02: Llamar al servicio para finalizar la firma
 finalizarFirmaArchivo(idDocumento: number, cookie: string, hayMotivo: boolean): Observable < any > {
     const url = `${base_url}/elaborar/expediente/perfil/puesto/informe/grh/finalizar-firma`;
-    //const url = `http://localhost:8090/organizacion-funciones-rest/oyf/elaborar/expediente/perfil/puesto/informe/grh/finalizar-firma`;
 
     const body = {
         idDocumento: idDocumento,
@@ -59,7 +49,6 @@ finalizarFirmaArchivo(idDocumento: number, cookie: string, hayMotivo: boolean): 
 }
 
 revertirFirma(request: { idDocumento: number }): Observable < any > {
-    //const url = `http://localhost:8090/organizacion-funciones-rest/oyf/elaborar/expediente/perfil/puesto/informe/grh/firmar/revertir`;
     const url = `${base_url}/elaborar/expediente/perfil/puesto/informe/grh/firmar/revertir`;
     console.log('revertirFirma - URL:', url);
     console.log('revertirFirma - Body:', request);
@@ -73,7 +62,6 @@ revertirFirma(request: { idDocumento: number }): Observable < any > {
 }
 
 descargarDocumento(nroExpediente: string, idArchivoSiged: number, nombreDocumento: string): Observable < Blob > {
-    //const url = `http://localhost:8090/organizacion-funciones-rest/oyf/elaborar/expediente/perfil/puesto/descargar`;
     const url = `${base_url}/elaborar/expediente/perfil/puesto/descargar`;
     const params = {
         nroExpediente,

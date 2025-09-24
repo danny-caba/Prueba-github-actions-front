@@ -26,10 +26,11 @@ export class LayoutActaInicioComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("iniciando");
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['personalReemplazo'] && changes['personalReemplazo'].currentValue) {
+    if (changes['personalReemplazo']?.currentValue) {
       const nuevoPersonalReemplazo = changes['personalReemplazo'].currentValue;
       this.personalReemplazo = nuevoPersonalReemplazo;
     }
@@ -51,7 +52,6 @@ export class LayoutActaInicioComponent extends BaseComponent implements OnInit {
     return this.adjuntoCargadoActaInicio && !!this.fechaSeleccionada;
   }
 
-  setValueCheckedContratoLab(even) {
-  }
+ 
 
 }

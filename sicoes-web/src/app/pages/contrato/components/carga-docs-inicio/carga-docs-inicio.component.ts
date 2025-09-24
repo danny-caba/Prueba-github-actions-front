@@ -15,7 +15,7 @@ export class CargaDocsInicioComponent extends BaseComponent implements OnInit {
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'fechaInicioContractual', 'estadoReemplazo', 'estadoDocumento', 'actions'];
   allowedToReplace: boolean = true;
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   id: number = 0;
   dummyDataSource = [
     {
@@ -50,7 +50,7 @@ export class CargaDocsInicioComponent extends BaseComponent implements OnInit {
   }
 
   doNothing(): void {
-
+    console.log("donotig");
   }
 
   cargarDatos() {

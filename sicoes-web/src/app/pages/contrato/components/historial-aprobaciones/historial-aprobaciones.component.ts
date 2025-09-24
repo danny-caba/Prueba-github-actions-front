@@ -36,9 +36,9 @@ export class HistoriaAprobacionesComponent extends BasePageComponent<Solicitud> 
 dataSourceHistorial = new MatTableDataSource<any>();
   @ViewChild('paginatorHistorial') paginatorHistorial: MatPaginator;
   constructor(
-    private router: Router,
-    private intUrls: InternalUrls,
-     private solicitudService: SolicitudService,
+    private readonly router: Router,
+    private readonly intUrls: InternalUrls,
+     private readonly solicitudService: SolicitudService,
   ) {
     super();
     this.intenalUrls = intUrls;
@@ -71,14 +71,12 @@ dataSourceHistorial = new MatTableDataSource<any>();
   }
 
 
-  public mostrarAccion(row: any) { }
-
   serviceTable(filtro: any) {
-
+    console.log("service")
   }
 
   obtenerFiltro() {
-
+console.log("filtro")
   }
 
   regresar() {

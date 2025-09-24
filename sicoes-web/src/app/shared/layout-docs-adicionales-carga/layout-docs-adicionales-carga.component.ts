@@ -37,38 +37,39 @@ export class LayoutDocsAdicionalesCargaComponent extends BaseComponent implement
   codRolRevisorNum: number;
 
   constructor(
-    private reemplazoService: PersonalReemplazoService,
+    private readonly reemplazoService: PersonalReemplazoService,
   ) {
     super();
   }
 
   ngOnInit(): void {
+    console.log("inicia")
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['idDocAlqCamioneta'] && changes['idDocAlqCamioneta'].currentValue) {
+    if (changes['idDocAlqCamioneta']?.currentValue) {
       const nuevoIdDocumento = changes['idDocAlqCamioneta'].currentValue;
       this.idDocAlqCamioneta = nuevoIdDocumento;
     }
   
-    if (changes['idDocSeguroSoat'] && changes['idDocSeguroSoat'].currentValue) {
+    if (changes['idDocSeguroSoat']?.currentValue) {
       const nuevoIdDocumento = changes['idDocSeguroSoat'].currentValue;
       this.idDocSeguroSoat = nuevoIdDocumento;
     }
 
-    if (changes['adjAlqCamioneta'] && changes['adjAlqCamioneta'].currentValue) {
+    if (changes['adjAlqCamioneta']?.currentValue) {
       const nuevoAdjunto = changes['adjAlqCamioneta'].currentValue;
       this.adjAlqCamioneta = nuevoAdjunto;
       this.adjuntoCargadoAlqCamioneta = nuevoAdjunto?.adjunto?.archivo != null;
     }
 
-    if (changes['adjSeguroSoat'] && changes['adjSeguroSoat'].currentValue) {
+    if (changes['adjSeguroSoat']?.currentValue) {
       const nuevoAdjunto = changes['adjSeguroSoat'].currentValue;
       this.adjSeguroSoat = nuevoAdjunto;
       this.adjuntoCargadoSeguroSoat = nuevoAdjunto?.adjunto?.archivo != null;
     }
 
-    if (changes['codRolRevisor'] && changes['codRolRevisor'].currentValue) {
+    if (changes['codRolRevisor']?.currentValue) {
       const nuevoCodRolRevisor = changes['codRolRevisor'].currentValue;
       this.codRolRevisor = nuevoCodRolRevisor;
       this.codRolRevisorNum = parseInt(this.codRolRevisor, 10);
@@ -125,6 +126,7 @@ export class LayoutDocsAdicionalesCargaComponent extends BaseComponent implement
   }
 
   setValueCheckedContratoLab(even) {
+    console.log(even)
   }
 
 }

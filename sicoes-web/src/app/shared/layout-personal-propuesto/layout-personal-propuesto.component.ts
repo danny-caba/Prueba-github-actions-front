@@ -5,7 +5,6 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewEncapsulation,
 } from "@angular/core";
 import { BaseComponent } from "../components/base.component";
 import {
@@ -18,12 +17,7 @@ import {
   PersonalPropuesto,
   PersonalReemplazo,
 } from "src/app/interface/reemplazo-personal.model";
-import { ActivatedRoute } from "@angular/router";
-import { SeccionService } from "src/app/service/seccion.service";
-import { ContratoService } from "src/app/service/contrato.service";
-import { Seccion } from "src/app/interface/seccion.model";
 import * as CryptoJS from "crypto-js";
-import { SolicitudService } from "src/app/service/solicitud.service";
 import { fadeInUp400ms } from "src/@vex/animations/fade-in-up.animation";
 import { stagger80ms } from "src/@vex/animations/stagger.animation";
 import { PersonalReemplazoService } from "src/app/service/personal-reemplazo.service";
@@ -144,9 +138,9 @@ export class LayoutPersonalPropuestoComponent
   observacionOtros: string;
 
   constructor(
-    private fb: FormBuilder,
-    private reemplazoService: PersonalReemplazoService,
-    private adjuntoService: AdjuntosService
+    private readonly fb: FormBuilder,
+    private readonly reemplazoService: PersonalReemplazoService,
+    private readonly adjuntoService: AdjuntosService
   ) {
     super();
   }
@@ -174,107 +168,87 @@ export class LayoutPersonalPropuestoComponent
       this.cargarCombo();
     }
 
-    if (
-      changes["idDocDjNepotismo"] &&
-      changes["idDocDjNepotismo"].currentValue
+    if (changes["idDocDjNepotismo"]?.currentValue
     ) {
       const nuevoIdDocumento = changes["idDocDjNepotismo"].currentValue;
       this.idDocDjNepotismo = nuevoIdDocumento;
     }
 
-    if (
-      changes["idDocDjImpedimento"] &&
-      changes["idDocDjImpedimento"].currentValue
+    if (changes["idDocDjImpedimento"]?.currentValue
     ) {
       const nuevoIdDocumento = changes["idDocDjImpedimento"].currentValue;
       this.idDocDjImpedimento = nuevoIdDocumento;
     }
 
-    if (
-      changes["idDocDjNoVinculo"] &&
-      changes["idDocDjNoVinculo"].currentValue
+    if (changes["idDocDjNoVinculo"]?.currentValue
     ) {
       const nuevoIdDocumento = changes["idDocDjNoVinculo"].currentValue;
       this.idDocDjNoVinculo = nuevoIdDocumento;
     }
 
-    if (changes["idDocOtros"] && changes["idDocOtros"].currentValue) {
+    if (changes["idDocOtros"]?.currentValue) {
       const nuevoIdDocumento = changes["idDocOtros"].currentValue;
       this.idDocOtros = nuevoIdDocumento;
     }
 
-    if (
-      changes["adjuntoDjNepotismo"] &&
-      changes["adjuntoDjNepotismo"].currentValue
+    if (changes["adjuntoDjNepotismo"]?.currentValue
     ) {
       const nuevoAdjunto = changes["adjuntoDjNepotismo"].currentValue;
       this.adjuntoDjNepotismo = nuevoAdjunto;
       this.adjuntoCargadoDjNepotismo = nuevoAdjunto?.adjunto?.archivo != null;
     }
 
-    if (
-      changes["adjuntoDjImpedimento"] &&
-      changes["adjuntoDjImpedimento"].currentValue
+    if (changes["adjuntoDjImpedimento"]?.currentValue
     ) {
       const nuevoAdjunto = changes["adjuntoDjImpedimento"].currentValue;
       this.adjuntoDjImpedimento = nuevoAdjunto;
       this.adjuntoCargadoDjImpedimento = nuevoAdjunto?.adjunto?.archivo != null;
     }
 
-    if (
-      changes["adjuntoDjNoVinculo"] &&
-      changes["adjuntoDjNoVinculo"].currentValue
+    if (changes["adjuntoDjNoVinculo"]?.currentValue
     ) {
       const nuevoAdjunto = changes["adjuntoDjNoVinculo"].currentValue;
       this.adjuntoDjNoVinculo = nuevoAdjunto;
       this.adjuntoCargadoDjNoVinculo = nuevoAdjunto?.adjunto?.archivo != null;
     }
 
-    if (changes["adjuntoOtros"] && changes["adjuntoOtros"].currentValue) {
+    if (changes["adjuntoOtros"]?.currentValue) {
       const nuevoAdjunto = changes["adjuntoOtros"].currentValue;
       this.adjuntoOtros = nuevoAdjunto;
       this.adjuntoCargadoOtros = nuevoAdjunto?.adjunto?.archivo != null;
     }
 
-    if (
-      changes["personalReemplazo"] &&
-      changes["personalReemplazo"].currentValue
+    if (changes["personalReemplazo"]?.currentValue
     ) {
       const nuevoPersonalReemplazo = changes["personalReemplazo"].currentValue;
       this.cargarTablaReview(nuevoPersonalReemplazo);
     }
 
-    if (changes["codRolRevisor"] && changes["codRolRevisor"].currentValue) {
+    if (changes["codRolRevisor"]?.currentValue) {
       const nuevoCodRolRevisor = changes["codRolRevisor"].currentValue;
       this.codRolRevisor = nuevoCodRolRevisor;
       this.codRolRevisorNum = parseInt(this.codRolRevisor, 10);
     }
 
-    if (
-      changes["obsAdjuntoDjNepotismo"] &&
-      changes["obsAdjuntoDjNepotismo"].currentValue
+    if (changes["obsAdjuntoDjNepotismo"]?.currentValue
     ) {
       const nuevaObsAdjunto = changes["obsAdjuntoDjNepotismo"].currentValue;
       this.obsAdjuntoDjNepotismo = nuevaObsAdjunto;
     }
 
-    if (
-      changes["obsAdjuntoDjImpedimento"] &&
-      changes["obsAdjuntoDjImpedimento"].currentValue
+    if (changes["obsAdjuntoDjImpedimento"]?.currentValue
     ) {
       const nuevaObsAdjunto = changes["obsAdjuntoDjImpedimento"].currentValue;
       this.obsAdjuntoDjImpedimento = nuevaObsAdjunto;
     }
 
-    if (
-      changes["obsAdjuntoDjNoVinculo"] &&
-      changes["obsAdjuntoDjNoVinculo"].currentValue
+    if (changes["obsAdjuntoDjNoVinculo"]?.currentValue
     ) {
       const nuevaObsAdjunto = changes["obsAdjuntoDjNoVinculo"].currentValue;
       this.obsAdjuntoDjNoVinculo = nuevaObsAdjunto;
     }
 
-    if (changes["obsAdjuntoOtros"] && changes["obsAdjuntoOtros"].currentValue) {
+    if (changes["obsAdjuntoOtros"].currentValue) {
       const nuevaObsAdjunto = changes["obsAdjuntoOtros"].currentValue;
       this.obsAdjuntoOtros = nuevaObsAdjunto;
     }

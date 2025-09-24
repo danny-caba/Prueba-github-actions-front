@@ -54,18 +54,14 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
   listPersonalAgregado: PersonalPropuesto[] = [];
   adjuntoCargadoInforme: boolean = false;
 
-  //evaluadoPor: string = null;
-  //fechaHora: string = null;
 
   editable: boolean = false;
   isValidFechaDesvinculacion: boolean = false;
-
-  //marcaInformeCarta: 'SI' | 'NO' | null = null;
   observacion: string;
 
   constructor(
-    private fb: FormBuilder,
-    private reemplazoService: PersonalReemplazoService
+    private readonly fb: FormBuilder,
+    private readonly reemplazoService: PersonalReemplazoService
   ) {
     super();
   }
@@ -115,37 +111,33 @@ export class LayoutInformeComponent extends BaseComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (
-      changes["fechaDesvinculacion"] &&
-      changes["fechaDesvinculacion"].currentValue
+    if (changes["fechaDesvinculacion"]?.currentValue
     ) {
       const nuevaFecha = changes["fechaDesvinculacion"].currentValue;
       this.setFechaDesvinculacion(nuevaFecha);
     }
 
-    if (changes["adjuntoInforme"] && changes["adjuntoInforme"].currentValue) {
+    if (changes["adjuntoInforme"]?.currentValue) {
       const nuevoAdjunto = changes["adjuntoInforme"].currentValue;
       this.adjuntoInforme = nuevoAdjunto;
     }
 
-    if (changes["idDocumento"] && changes["idDocumento"].currentValue) {
+    if (changes["idDocumento"]?.currentValue) {
       const nuevoIdInforme = changes["idDocumento"].currentValue;
       this.idDocumento = nuevoIdInforme;
     }
 
-    if (changes["codRolRevisor"] && changes["codRolRevisor"].currentValue) {
+    if (changes["codRolRevisor"]?.currentValue) {
       const nuevoCodRolRevisor = changes["codRolRevisor"].currentValue;
       this.codRolRevisor = nuevoCodRolRevisor;
     }
 
-    if (changes["obsAdjunto"] && changes["obsAdjunto"].currentValue) {
+    if (changes["obsAdjunto"]?.currentValue) {
       const nuevaObsAdjunto = changes["obsAdjunto"].currentValue;
       this.obsAdjunto = nuevaObsAdjunto;
     }
 
-    if (
-      changes["personalReemplazo"] &&
-      changes["personalReemplazo"].currentValue
+    if (changes["personalReemplazo"]?.currentValue
     ) {
       const nuevoPersonalReemplazo = changes["personalReemplazo"].currentValue;
       this.personalReemplazo = nuevoPersonalReemplazo;

@@ -92,8 +92,8 @@
       <td mat-cell *matCellDef="let element">
         <div class="documento-cell">
           {{ element.documento }}
-          <button mat-icon-button type="button" class="icon-button-small" >
-            <mat-icon fontSet="material-icons" fontSize="16px" (click)="descargar(element.idArchivo,element.documento)">get_app</mat-icon>
+          <button mat-icon-button type="button" class="icon-button-small" (click)="descargar(element.idArchivo,element.documento)">
+            <mat-icon fontSet="material-icons" fontSize="16px" (keyup)="$event.preventDefault()">get_app</mat-icon>
           </button>
         </div>
       </td>

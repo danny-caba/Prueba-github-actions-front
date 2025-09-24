@@ -8,7 +8,6 @@ import { estadosIndexPerfCont, estadosPerfCont, reemplazoPersonalPropuesto, tipo
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { InternalUrls, Link } from 'src/helpers/internal-urls.components';
 import { solicitudContrato } from '../../../../../helpers/constantes.components';
-import { ProcesoService } from 'src/app/service/proceso.service';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { Subject, Subscription, takeUntil } from 'rxjs';
@@ -40,7 +39,7 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   ACCION_EDITAR: string = solicitudContrato.ACCION_EDITAR;
   ACCION_REEMPLAZAR: string = reemplazoPersonalPropuesto.ACCION_REEMPLAZAR;
   ACCION_REVISAR: string = reemplazoPersonalPropuesto.ACCION_REVISAR;
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   formGroup = this.fb.group({
     nroConcurso: [null],
@@ -51,10 +50,10 @@ export class ContratoListComponent extends BasePageComponent<Contrato> implement
   });
 
   constructor(
-    private authFacade: AuthFacade,
-    private router: Router,
-    private contratoService: ContratoService,
-    private fb: FormBuilder
+    private readonly authFacade: AuthFacade,
+    private readonly router: Router,
+    private readonly contratoService: ContratoService,
+    private readonly fb: FormBuilder
   ) {
     super();
   }

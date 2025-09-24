@@ -42,32 +42,32 @@ export class LayoutSolicitudReemplazoSupervisorComponent
 
   observacion: string;
 
-  constructor(private reemplazoService: PersonalReemplazoService) {
+  constructor(private readonly reemplazoService: PersonalReemplazoService) {
     super();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("inicia")
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (
-      changes["adjuntoSolicitud"] &&
-      changes["adjuntoSolicitud"].currentValue
+    if (changes["adjuntoSolicitud"]?.currentValue
     ) {
       const nuevoAdjunto = changes["adjuntoSolicitud"].currentValue;
       this.adjuntoSolicitud = nuevoAdjunto;
     }
 
-    if (changes["idDocSolicitud"] && changes["idDocSolicitud"].currentValue) {
+    if (changes["idDocSolicitud"]?.currentValue) {
       const nuevoIdInforme = changes["idDocSolicitud"].currentValue;
       this.idDocSolicitud = nuevoIdInforme;
     }
 
-    if (changes["codRolRevisor"] && changes["codRolRevisor"].currentValue) {
+    if (changes["codRolRevisor"]?.currentValue) {
       const nuevoCodRolRevisor = changes["codRolRevisor"].currentValue;
       this.codRolRevisor = nuevoCodRolRevisor;
     }
 
-    if (changes["obsAdjunto"] && changes["obsAdjunto"].currentValue) {
+    if (changes["obsAdjunto"]?.currentValue) {
       const nuevaObsAdjunto = changes["obsAdjunto"].currentValue;
       this.obsAdjunto = nuevaObsAdjunto;
     }
@@ -94,7 +94,9 @@ export class LayoutSolicitudReemplazoSupervisorComponent
     });
   }
 
-  setValueCheckedCartaReemplazo(even) {}
+  setValueCheckedCartaReemplazo(even) {
+    console.log(even)
+  }
 
   onSolicitudAdjunta(valor: boolean) {
     this.adjuntoCargadoSolicitud = valor;

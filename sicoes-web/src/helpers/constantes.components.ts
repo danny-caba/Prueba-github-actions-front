@@ -275,12 +275,12 @@ export enum flagEnum {
 
 
 export class UsuariosRoles{
-   static GER_G2='04';
-   static GER_03='05';
-   static EVALUADOR='12';
-   static APROBADOR_G2='18';
-   static APROBADOR_G3='17';
-   static APROBADOR_G4='16';
+   public static GER_G2='04';
+   public static GER_03='05';
+   public static EVALUADOR='12';
+   public static APROBADOR_G2='18';
+   public static APROBADOR_G3='17';
+   public static APROBADOR_G4='16';
 }
 
 export enum SeccionAdenda {
@@ -293,13 +293,13 @@ export enum SeccionAdenda {
 
 
 export class REQUERIMIENTO {
-  static EVAL_INFO_APROB_G2_GER_DIV = "EVAL_INFO_APROB_G2_GER_DIV";
-  static EVAL_INFO_APROB_G3_GER_LIN = "EVAL_INFO_APROB_G3_GER_LIN";
-  static APROB_EVAL_CONTR = "APROB_EVAL_CONTR";
-  static VB_APROB_G2_APROB_ADMIN = "VB_APROB_G2_APROB_ADMIN";
-  static FIRMA_APROB_G3_APROB_ADMIN = "FIRMA_APROB_G3_APROB_ADMIN";
-  static APROB_ADMIN_G4_GAF = "APROB_ADMIN_G4_GAF";
-  static EVAL_DOC_EVAL_TEC_CONT = "EVAL_DOC_EVAL_TEC_CONT";
-  static EVAL_INF_APROB_TEC_G2 = "EVAL_INF_APROB_TEC_G2";
-  static EVAL_INF_APROB_TEC_G3 = "EVAL_INF_APROB_TEC_G3";
+  public static EVAL_INFO_APROB_G2_GER_DIV = "EVAL_INFO_APROB_G2_GER_DIV";
+  public static EVAL_INFO_APROB_G3_GER_LIN = "EVAL_INFO_APROB_G3_GER_LIN";
+  public static APROB_EVAL_CONTR = "APROB_EVAL_CONTR";
+  public static VB_APROB_G2_APROB_ADMIN = "VB_APROB_G2_APROB_ADMIN";
+  public static FIRMA_APROB_G3_APROB_ADMIN = "FIRMA_APROB_G3_APROB_ADMIN";
+  public static APROB_ADMIN_G4_GAF = "APROB_ADMIN_G4_GAF";
+  public static EVAL_DOC_EVAL_TEC_CONT = "EVAL_DOC_EVAL_TEC_CONT";
+  public static EVAL_INF_APROB_TEC_G2 = "EVAL_INF_APROB_TEC_G2";
+  public static EVAL_INF_APROB_TEC_G3 = "EVAL_INF_APROB_TEC_G3";
 }

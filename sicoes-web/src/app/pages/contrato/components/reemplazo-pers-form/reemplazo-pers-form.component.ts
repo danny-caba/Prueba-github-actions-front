@@ -24,10 +24,10 @@ export class ReemplazoPersFormComponent extends BaseComponent implements OnInit 
   perfilBaja: any = null;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private personalReemplazoService: PersonalReemplazoService,
-    private adjunto:AdjuntosService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly personalReemplazoService: PersonalReemplazoService,
+    private readonly adjunto:AdjuntosService
   ) {
     super();
   }

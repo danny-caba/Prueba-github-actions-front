@@ -34,7 +34,7 @@ export class ContratoFormEvalReempComponent extends BaseComponent implements OnI
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly reemplazoPersonalService: PersonalReemplazoService,
-    private adjunto:AdjuntosService
+    private readonly adjunto:AdjuntosService
   ) {
     super();
   }

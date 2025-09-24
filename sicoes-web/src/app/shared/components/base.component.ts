@@ -10,11 +10,9 @@ export abstract class BaseComponent {
   dateHoy = new Date();
 
   compareSelecIdListadoDetalle(a, b){
-    //if (functions.esVacio(a) || functions.esVacio(b)) return false;
     return a?.idListadoDetalle === b?.idListadoDetalle;
   }
   compareSelecIdArea(a, b){
-    //if (functions.esVacio(a) || functions.esVacio(b)) return false;
     return a?.idUnidad === b?.idUnidad;
   }
 
@@ -23,7 +21,6 @@ export abstract class BaseComponent {
   }
 
   compareSelecIdPersonal(a, b){
-    //if (functions.esVacio(a) || functions.esVacio(b)) return false;
     return a?.idPersona === b?.idPersona;
   }
 
@@ -70,12 +67,6 @@ export abstract class BaseComponent {
     return invalid;
 }
 
-  /*private clearValidator(active: boolean, controls: string[], formGroup: FormGroup) {
-    ['nombreRazonSocial'].forEach(name => {
-      if (active) this.formGroup.controls[name].disable({ emitEvent: false })
-      else this.formGroup.controls[name].enable({ emitEvent: false })
-    })
-  }*/
 
   decimalOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;

@@ -48,36 +48,34 @@ export class LayoutProyectoAdendaComponent
   adjuntoCargadoAdenda: boolean = false;
   idReemplazo: string = null;
 
-  constructor(private reemplazoService: PersonalReemplazoService) {
+  constructor(private readonly reemplazoService: PersonalReemplazoService) {
     super();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("iniciando")
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (
-      changes["adjuntoProyAdenda"] &&
-      changes["adjuntoProyAdenda"].currentValue
+    if (changes["adjuntoProyAdenda"]?.currentValue
     ) {
       const nuevoAdjunto = changes["adjuntoProyAdenda"].currentValue;
       this.adjuntoProyAdenda = nuevoAdjunto;
     }
 
-    if (changes["idDocAdenda"] && changes["idDocAdenda"].currentValue) {
+    if (changes["idDocAdenda"]?.currentValue) {
       const nuevoIdDocAdenda = changes["idDocAdenda"].currentValue;
       this.idDocAdenda = nuevoIdDocAdenda;
     }
 
-    if (
-      changes["personalReemplazo"] &&
-      changes["personalReemplazo"].currentValue
+    if (changes["personalReemplazo"]?.currentValue
     ) {
       const nuevoPersonalReemplazo = changes["personalReemplazo"].currentValue;
       this.personalReemplazo = nuevoPersonalReemplazo;
       this.idReemplazo = this.personalReemplazo?.idReemplazo.toString();
     }
 
-    if (changes["codRolRevisor"] && changes["codRolRevisor"].currentValue) {
+    if (changes["codRolRevisor"]?.currentValue) {
       const nuevoCodRolRevisor = changes["codRolRevisor"].currentValue;
       this.codRolRevisor = nuevoCodRolRevisor;
       if (["15", "12"].some((value) => value === this.codRolRevisor)) {
@@ -92,7 +90,7 @@ export class LayoutProyectoAdendaComponent
       }
     }
 
-    if (changes["obsAdjunto"] && changes["obsAdjunto"].currentValue) {
+    if (changes["obsAdjunto"]?.currentValue) {
       const nuevaObsAdjunto = changes["obsAdjunto"].currentValue;
       this.obsAdjunto = nuevaObsAdjunto;
     }
@@ -129,5 +127,7 @@ export class LayoutProyectoAdendaComponent
     this.observacionChange.emit(this.observacion);
   }
 
-  setValueCheckedCartaReemplazo(even) {}
+  setValueCheckedCartaReemplazo(even) {
+    console.log(even)
+  }
 }

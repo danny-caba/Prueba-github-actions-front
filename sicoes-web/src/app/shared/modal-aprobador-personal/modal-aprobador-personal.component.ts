@@ -4,16 +4,13 @@ import { FormControl, Validators } from '@angular/forms';
 import { BaseComponent } from '../components/base.component';
 import { functionsAlert } from 'src/helpers/functionsAlert';
 import { SolicitudService } from 'src/app/service/solicitud.service';
-import { firstValueFrom, Observable } from 'rxjs';
 import { AuthFacade } from 'src/app/auth/store/auth.facade';
 import { AuthUser } from 'src/app/auth/store/auth.models';
-import { SelectedPerfeccionamientoItem } from 'src/app/interface/contrato.model';
-import { ContratoService } from 'src/app/service/contrato.service';
 import { REQUERIMIENTO, UsuariosRoles } from 'src/helpers/constantes.components';
 import { SelectedReemplazarItem } from 'src/app/interface/reemplazo-personal.model';
 import { ModalFirmaDigitalComponent } from '../modal-firma-digital/modal-firma-digital.component';
 import { EvaluadorService } from 'src/app/service/evaluador.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 interface ArchivoFirmado {
   firmaExitosa: string;
@@ -49,19 +46,16 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
   codUsuario: any;
   mostrarPopup: boolean = false;
   constructor(
-    private dialogRef: MatDialogRef<ModalAprobadorPersonalComponent>,
+    private readonly dialogRef: MatDialogRef<ModalAprobadorPersonalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
       accion: any;
       elementosSeleccionados: SelectedReemplazarItem[];
       tipo: any;
     },
-    private solicitudService: SolicitudService,
-    private authFacade: AuthFacade,
-    private evaluadorService: EvaluadorService,
-    private dialog: MatDialog,
-    private sanitizer: DomSanitizer,
-    //private ref: DynamicDialogRef
-    // MatDialog ya no se inyecta aquí
+    private readonly solicitudService: SolicitudService,
+    private readonly authFacade: AuthFacade,
+    private readonly evaluadorService: EvaluadorService,
+    private readonly dialog: MatDialog,
   ) {
     super();
   }
@@ -75,15 +69,7 @@ export class ModalAprobadorPersonalComponent extends BaseComponent implements On
       this.usuario = usu;
     });
     this.idArchivo = this.data.elementosSeleccionados[0]?.idArchivo;
-    /* if (this.data.elementosSeleccionados.length === 0) {
-       this.observacion.disable();
-     }*/
     this.nomUs = sessionStorage.getItem("NOMUS")
-    /*if (typeof window !== 'undefined') {
-      window.addEventListener(
-        'message',
-        this.onFirmaCompletada.bind(this), false);
-    }*/
   }
 
   cancelar(): void {

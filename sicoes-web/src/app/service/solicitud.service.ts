@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable} from 'rxjs';
 import { functions } from 'src/helpers/functions';
 import { ConfigService } from '../core/services';
 import { Pageable } from '../interface/pageable.model';
@@ -11,12 +11,12 @@ import { Solicitud, SolicitudListado } from '../interface/solicitud.model';
 })
 export class SolicitudService {
 
-  private solicitudSubject = new BehaviorSubject<Partial<Solicitud>>(null);
-  private _path_serve: String;
+  private readonly solicitudSubject = new BehaviorSubject<Partial<Solicitud>>(null);
+  _path_serve: string;
 
   constructor(
-    private http: HttpClient,
-    private configService: ConfigService
+    private readonly http: HttpClient,
+    private readonly configService: ConfigService
   ) {
     this._path_serve = this.configService.getAPIUrl();
   }
@@ -147,7 +147,7 @@ export class SolicitudService {
     return this.http.put<Solicitud>(urlEndpoint,request);
   }
 
-  modificarSolicitud(solicitudUuid: String){
+  modificarSolicitud(solicitudUuid: string){
     let urlEndpoint = `${this._path_serve}/api/solicitudes/modificar/${solicitudUuid}`
     return this.http.put<Solicitud>(urlEndpoint, null);
   }

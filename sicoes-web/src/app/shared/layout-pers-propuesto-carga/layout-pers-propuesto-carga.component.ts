@@ -3,7 +3,7 @@ import { BaseComponent } from '../components/base.component';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger80ms } from 'src/@vex/animations/stagger.animation';
 import { PersonalReemplazoService } from 'src/app/service/personal-reemplazo.service';
-
+type Marcacion = 'SI' | 'NO' | null;
 @Component({
   selector: 'vex-layout-pers-propuesto-carga',
   templateUrl: './layout-pers-propuesto-carga.component.html',
@@ -25,10 +25,10 @@ export class LayoutPersPropuestoCargaComponent extends BaseComponent implements 
   @Output() seccionCompletada = new EventEmitter<any>();
 
   editable: boolean = true;
-  marcacionContratoLab: 'SI' | 'NO' | null = null;
-  marcacionScrt: 'SI' | 'NO' | null = null;
-  marcacionPoliza: 'SI' | 'NO' | null = null;
-  marcacionExMed: 'SI' | 'NO' | null = null;
+  marcacionContratoLab: Marcacion = null;
+  marcacionScrt: Marcacion = null;
+  marcacionPoliza: Marcacion = null;
+  marcacionExMed: Marcacion = null;
 
   templates = [
     {
@@ -74,7 +74,7 @@ export class LayoutPersPropuestoCargaComponent extends BaseComponent implements 
   ];
   
   constructor(
-    private reemplazoService: PersonalReemplazoService
+    private readonly reemplazoService: PersonalReemplazoService
   ) {
     super();
   }
@@ -84,14 +84,14 @@ export class LayoutPersPropuestoCargaComponent extends BaseComponent implements 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['adjContLaboral'] && changes['adjContLaboral'].currentValue) {
+    if (changes['adjContLaboral']?.currentValue) {
       const nuevoAdj = changes['adjContLaboral'].currentValue;
       this.templates[0].files = Array.isArray(nuevoAdj) ? nuevoAdj : [nuevoAdj];
       this.templates[0].fechaInicio = nuevoAdj?.fechaInicio;
       this.templates[0].fechaFin = nuevoAdj?.fechaFin;
     }
 
-    if (changes['adjSctr'] && changes['adjSctr'].currentValue) {
+    if (changes['adjSctr']?.currentValue) {
       const nuevoAdj = changes['adjSctr'].currentValue;
       if (nuevoAdj.length === 2) {
         this.templates[1].files = nuevoAdj;
@@ -100,7 +100,7 @@ export class LayoutPersPropuestoCargaComponent extends BaseComponent implements 
       }
     }
 
-    if (changes['adjPoliza'] && changes['adjPoliza'].currentValue) {
+    if (changes['adjPoliza']?.currentValue) {
       const nuevoAdj = changes['adjPoliza'].currentValue;
       if (nuevoAdj.length === 2) {
         this.templates[2].files = nuevoAdj;
@@ -109,7 +109,7 @@ export class LayoutPersPropuestoCargaComponent extends BaseComponent implements 
       }
     }
 
-    if (changes['adjExMedico'] && changes['adjExMedico'].currentValue) {
+    if (changes['adjExMedico']?.currentValue) {
       const nuevoAdj = changes['adjExMedico'].currentValue;
       this.templates[3].files = Array.isArray(nuevoAdj) ? nuevoAdj : [nuevoAdj];
       this.templates[3].fechaInicio = nuevoAdj?.fechaInicio;
@@ -118,10 +118,11 @@ export class LayoutPersPropuestoCargaComponent extends BaseComponent implements 
   }
 
   setValueCheckedContratoLab(even) {
+    console.log(even)
   }
 
   validarExistenciaFiles(files: any[]): boolean {  
-    return !files.find(file => file != null && file?.adjunto?.archivo != null);
+   return !files.find(file => file?.adjunto?.archivo);
   }
 
   onMarcaChange(valor: string, template: any) {

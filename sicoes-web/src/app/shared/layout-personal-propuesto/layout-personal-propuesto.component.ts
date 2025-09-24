@@ -39,7 +39,7 @@ function alMenosUnDocumentoMarcado(
     ? null
     : { alMenosUnoRequerido: true };
 }
-
+type Marcacion = 'SI' | 'NO' | null;
 @Component({
   selector: "vex-layout-personal-propuesto",
   templateUrl: "./layout-personal-propuesto.component.html",
@@ -82,10 +82,10 @@ export class LayoutPersonalPropuestoComponent
   @Input() djNoVinculoFechaHora: string | null = null;
   @Input() otrosFechaHora: string | null = null;
 
-  @Input() marcaDjNepotismo: "SI" | "NO" | null = null;
-  @Input() marcaDjImpedimento: "SI" | "NO" | null = null;
-  @Input() marcaDjNoVinculo: "SI" | "NO" | null = null;
-  @Input() marcaOtros: "SI" | "NO" | null = null;
+  @Input() marcaDjNepotismo: Marcacion = null;
+  @Input() marcaDjImpedimento: Marcacion = null;
+  @Input() marcaDjNoVinculo: Marcacion = null;
+  @Input() marcaOtros: Marcacion = null;
 
   @Output() seccionCompletada = new EventEmitter<any>();
   @Output() allConforme = new EventEmitter<any>();

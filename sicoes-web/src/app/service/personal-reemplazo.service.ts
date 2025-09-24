@@ -10,9 +10,9 @@ import { SeccionReemplazoPersonal } from "../interface/seccion.model";
   providedIn: "root",
 })
 export class PersonalReemplazoService {
-  private _path_serve: String;
+  _path_serve: string;
 
-  constructor(private http: HttpClient, private configService: ConfigService) {
+  constructor(private readonly http: HttpClient, private readonly configService: ConfigService) {
     this._path_serve = this.configService.getAPIUrl();
   }
 

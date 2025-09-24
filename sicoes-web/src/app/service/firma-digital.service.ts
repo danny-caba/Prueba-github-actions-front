@@ -9,7 +9,7 @@ const base_url = `${environment.URL_MRTD}/organizacion-funciones-rest/oyf`;
 })
 
 export class FirmaDigitalService {
-    private _path_serve: string;
+    _path_serve: string;
     constructor(private readonly configService: ConfigService) {
         this._path_serve = this.configService.getAPIUrl();
     }

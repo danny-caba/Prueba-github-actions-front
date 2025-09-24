@@ -16,8 +16,8 @@ export class CargaDocsInicioFormComponent extends BaseComponent implements OnIni
   uuidSolicitud: string= '';
   data:any;
   constructor(
-    private route: ActivatedRoute,
-    private router: Router
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) {
     super();
     const navigation = this.router.getCurrentNavigation();

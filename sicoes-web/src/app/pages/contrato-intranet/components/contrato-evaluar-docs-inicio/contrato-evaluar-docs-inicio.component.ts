@@ -26,14 +26,14 @@ export class ContratoEvaluarDocsInicioComponent extends BaseComponent implements
 
   displayedColumns: string[] = ['tipoDocumento', 'numeroDocumento', 'nombreCompleto', 'perfil', 'fechaRegistro', 'estadoEvalDocReemp', 'estadoAprobInforme', 'estadoAprobAdenda', 'estadoEvalDocIniServ', 'actions'];
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   idSolicitud: number;
   listPersonalReemplazo: PersonalReemplazo[] = [];
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private personalReemplazoService: PersonalReemplazoService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly personalReemplazoService: PersonalReemplazoService
   ) {
     super();
    }

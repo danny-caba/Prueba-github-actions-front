@@ -27,12 +27,12 @@ export class ContratoEvaluarReemplazoComponent extends BaseComponent implements 
   
   idSolicitud: number;
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private personalReemplazoService: PersonalReemplazoService
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly personalReemplazoService: PersonalReemplazoService
   ) {
     super();
    }

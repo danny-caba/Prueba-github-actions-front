@@ -44,7 +44,6 @@ export class OptionRoleCheckDirective implements OnInit {
       let opcs: any = OpcionPorRol.find(ele => ele.rol == element.codigo);
       if (opcs?.opciones?.includes(this.vexOptionRoleCheck)){
         buscarOpcion = true;
-        return;
       }
     
     });

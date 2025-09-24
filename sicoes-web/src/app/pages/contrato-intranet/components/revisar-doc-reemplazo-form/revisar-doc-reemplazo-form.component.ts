@@ -34,10 +34,10 @@ export class RevisarDocReemplazoFormComponent
   uploadData: any;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private reemplazoService: PersonalReemplazoService,
-    private adjunto: AdjuntosService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly reemplazoService: PersonalReemplazoService,
+    private readonly adjunto: AdjuntosService
   ) {
     super();
   }

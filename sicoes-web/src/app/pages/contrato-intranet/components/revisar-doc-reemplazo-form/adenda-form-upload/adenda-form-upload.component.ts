@@ -4,7 +4,7 @@ import { AuthUser } from "src/app/auth/store/auth.models";
 import { PersonalReemplazo } from "src/app/interface/reemplazo-personal.model";
 import { PersonalReemplazoService } from "src/app/service/personal-reemplazo.service";
 import { BaseComponent } from "src/app/shared/components/base.component";
-
+type OpcionSiNo = "SI" | "NO" | null;
 @Component({
   selector: "vex-adenda-form-upload",
   templateUrl: "./adenda-form-upload.component.html",
@@ -68,18 +68,17 @@ export class AdendaFormUploadComponent extends BaseComponent implements OnInit {
   fechaEvaluacionSolReemplazo: string = null;
   nombreEvaluadorProyAdenda: string = null;
   fechaEvaluacionProyAdenda: string = null;
-
-  marcaInforme: "SI" | "NO" | null = null;
-  marcaDjNepotismo: "SI" | "NO" | null = null;
-  marcaDjImpedimento: "SI" | "NO" | null = null;
-  marcaDjNoVinculo: "SI" | "NO" | null = null;
-  marcaOtros: "SI" | "NO" | null = null;
-  marcaSolReemplazo: "SI" | "NO" | null = null;
-  marcaProyAdenda: "SI" | "NO" | null = null;
+  marcaInforme: OpcionSiNo = null;
+  marcaDjNepotismo: OpcionSiNo = null;
+  marcaDjImpedimento: OpcionSiNo = null;
+  marcaDjNoVinculo: OpcionSiNo = null;
+  marcaOtros: OpcionSiNo = null;
+  marcaSolReemplazo: OpcionSiNo = null;
+  marcaProyAdenda: OpcionSiNo = null;
 
   constructor(
-    private authFacade: AuthFacade,
-    private personalReemplazoService: PersonalReemplazoService
+    private readonly authFacade: AuthFacade,
+    private readonly personalReemplazoService: PersonalReemplazoService
   ) {
     super();
   }

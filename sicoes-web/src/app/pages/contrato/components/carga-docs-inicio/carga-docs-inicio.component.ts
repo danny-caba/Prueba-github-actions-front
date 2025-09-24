@@ -31,9 +31,9 @@ export class CargaDocsInicioComponent extends BaseComponent implements OnInit {
   ];
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private contratoService: ContratoService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly contratoService: ContratoService,
   ) {
     super();
   }

@@ -20,6 +20,7 @@ export class CargaDocsInicioAddComponent extends BaseComponent implements OnInit
    }
 
   ngOnInit(): void {
+    console.log("entrando")
   }
 
 }

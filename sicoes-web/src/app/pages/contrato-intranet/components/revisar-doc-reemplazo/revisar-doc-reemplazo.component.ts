@@ -37,14 +37,14 @@ export class RevisarDocReemplazoComponent
   ];
   allowedToReplace: boolean = true;
   btnReplace: string = "Reemplazar";
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   listPersonalReemplazo: PersonalReemplazo[] = [];
   idSolicitud: number;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private personalReemplazoService: PersonalReemplazoService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly personalReemplazoService: PersonalReemplazoService
   ) {
     super();
   }

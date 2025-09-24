@@ -31,9 +31,9 @@ export class ContratoFormEvalReempComponent extends BaseComponent implements OnI
   allDocsConforme: boolean = false;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private reemplazoPersonalService: PersonalReemplazoService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly reemplazoPersonalService: PersonalReemplazoService,
     private adjunto:AdjuntosService
   ) {
     super();

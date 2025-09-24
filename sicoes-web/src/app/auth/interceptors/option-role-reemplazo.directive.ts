@@ -21,10 +21,10 @@ export class OptionRoleReemplazoDirective implements OnInit, OnChanges, OnDestro
   opcionPagina: any[]
 
   constructor(
-    private activeRoute: ActivatedRoute,
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    private authFacade: AuthFacade
+    private readonly activeRoute: ActivatedRoute,
+    private readonly templateRef: TemplateRef<any>,
+    private readonly viewContainer: ViewContainerRef,
+    private readonly authFacade: AuthFacade
   ) {
     this.activeRoute.data.subscribe(data => {
       if(data.opcionPagina){
@@ -63,7 +63,6 @@ export class OptionRoleReemplazoDirective implements OnInit, OnChanges, OnDestro
       let opcs: any = OpcionPorRol.find(ele => ele.rol == element.codigo);
       if (opcs?.opciones?.includes(this.vexOptionRoleReemplazo)){
         buscarOpcion = true;
-        return;
       }
     
     });

@@ -65,8 +65,8 @@ export class ContratoFormEvalReempReviewComponent extends BaseComponent implemen
   isEvalDocReemplazo: boolean = true;
 
   constructor(
-    private reemplazoService: PersonalReemplazoService,
-    private authFacade: AuthFacade
+    private readonly reemplazoService: PersonalReemplazoService,
+    private readonly authFacade: AuthFacade
   ) {
     super();
    }

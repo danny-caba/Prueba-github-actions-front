@@ -10,7 +10,6 @@ import { Contrato } from 'src/app/interface/contrato.model';
 import { ContratoService } from 'src/app/service/contrato.service';
 import { BasePageComponent } from 'src/app/shared/components/base-page.component';
 import { estadosPerfCont, solicitudContrato } from 'src/helpers/constantes.components';
-import { functionsAlert } from 'src/helpers/functionsAlert';
 import { Link } from 'src/helpers/internal-urls.components';
 
 @Component({
@@ -43,10 +42,10 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
   });
   
   constructor(
-    private authFacade: AuthFacade,
-    private router: Router,
-    private contratoService: ContratoService,
-    private fb: FormBuilder,
+    private readonly authFacade: AuthFacade,
+    private readonly router: Router,
+    private readonly contratoService: ContratoService,
+    private readonly fb: FormBuilder,
   ) {
     super();
   }
@@ -87,11 +86,8 @@ export class ContratoIntranetListComponent extends BasePageComponent<Contrato> i
 
   goToFormContrato(contrato: any, accion: string) {
     this.contratoService.validarFechaPresentacion(contrato.idSolicitud).subscribe((response) => {
-     // if (response) {
         this.router.navigate([Link.INTRANET, Link.CONTRATOS_LIST, accion === this.ACCION_VER ? Link.CONTRATO_SOLICITUD_VIEW : Link.CONTRATO_SOLICITUD_EVALUAR, contrato.idSolicitud]);
-     // } else {
-     //   functionsAlert.error('La fecha límite de presentación ha expirado.');
-     // }
+ 
     });
   }
 

@@ -81,8 +81,8 @@ export class RevisarDocReemplazoFormReviewComponent extends BaseComponent implem
   observacionProyAdenda: string;
 
   constructor(
-    private reemplazoService: PersonalReemplazoService,
-    private authFacade: AuthFacade
+    private readonly reemplazoService: PersonalReemplazoService,
+    private readonly authFacade: AuthFacade
   ) {
     super();
    }

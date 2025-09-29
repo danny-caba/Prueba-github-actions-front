@@ -55,13 +55,17 @@ export class RoleGuardService implements CanActivate {
           let codigoRol = element.codigo;
           let opcs: any = RolMenu.find(ele => ele.ROL?.CODIGO == codigoRol);
 
-          opcs.path.map(value => {
-            /* console.info('/' + value)
-            console.info(state.url.replace(/\d+/g, '')) */
-            if(state.url.replace(/\d+/g, '').includes('/' + value)){
-              verifica = true;
-            }
-          })
+          if (opcs && opcs.path) {
+            console.log(`Role ${codigoRol} - Checking paths:`, opcs.path);
+            console.log('Current URL:', state.url);
+            
+            opcs.path.map(value => {
+              if(state.url.replace(/\d+/g, '').includes('/' + value)){
+                console.log(`Matched path: /${value}`);
+                verifica = true;
+              }
+            })
+          }
 
         });
 
@@ -74,9 +78,12 @@ export class RoleGuardService implements CanActivate {
         
         //console.info(verifica)
         
+        console.log('Final verification result:', verifica);
+        
         if(verifica){
           return verifica;
-        }else{          
+        }else{
+          console.log('Access denied to:', state.url);          
           //this.router.navigate(data[0].route.split('/'));
           return verifica;
         }

@@ -46,6 +46,8 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
   solicitudSicoes: SolicitudSicoes
   propuesta: Propuesta
   idSolicitud: string
+  // Variable para almacenar todos los requerimientos sin filtros
+  todosLosRequerimientos: RequerimientoRenovacion[] = []
   
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -79,14 +81,14 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
 
   puedeCrearRequerimiento(): boolean {
     
-    // Validar que no existan requerimientos activos
-    const sinRequerimientosActivos = this.dataSource?.data?.length === 0 || 
-        this.dataSource?.data?.every(req => 
+    // Validar contra todos los requerimientos, no solo los filtrados
+    const sinRequerimientosActivos = this.todosLosRequerimientos.length === 0 || 
+        this.todosLosRequerimientos.every(req => 
             req.estadoReqRenovacion?.codigo === 'CONCLUIDO' || 
             req.estadoReqRenovacion?.codigo === 'ARCHIVADO'
         );
     
-    return sinRequerimientosActivos ;
+    return sinRequerimientosActivos;
 }
 
   obtenerDetalleSolicitud() {
@@ -102,7 +104,22 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
         }
       });
     });
+    this.cargarTodosLosRequerimientos();
     this.cargarTabla();
+  }
+
+  cargarTodosLosRequerimientos() {
+    // Cargar todos los requerimientos sin aplicar filtros
+    const filtroSinBusqueda = {
+      idSolicitud: this.idSolicitud,
+      nuExpediente: null,
+      sector: null,
+      subSector: null,
+    };
+    
+    this.requerimientoRenovacionService.obtenerRequerimientos(filtroSinBusqueda).subscribe(res => {
+      this.todosLosRequerimientos = res.content || [];
+    });
   }
 
   serviceTable(filtro: any) {
@@ -174,6 +191,7 @@ export class RequerimientoRenovacionListComponent extends BasePageComponent<Requ
        noItem: this.solicitudSicoes?.propuesta?.procesoItem?.descripcionItem
       },
     }).afterClosed().subscribe(() => {
+      this.cargarTodosLosRequerimientos();
       this.cargarTabla();
     });
   }

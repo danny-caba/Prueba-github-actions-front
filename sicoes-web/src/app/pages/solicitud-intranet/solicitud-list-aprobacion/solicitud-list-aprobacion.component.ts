@@ -432,31 +432,101 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
   }
 
   private obtenerGrupoUsuario(): number {
+    console.log("=== DEBUG DETECCIÓN GRUPO USUARIO ===");
+    console.log("currentUser completo:", this.currentUser);
+    console.log("currentUser.usuario:", this.currentUser?.usuario);
+    console.log("currentUser.roles:", this.currentUser?.roles);
+    console.log("currentUser.perfiles:", this.currentUser?.perfiles);
+    
     if (this.currentUser?.usuario) {
+      const usuario = this.currentUser.usuario;
+      console.log("Analizando usuario:", usuario);
+      
       // Determinar el grupo basado en el rol del usuario
-      if (this.currentUser.usuario.includes('G1') || this.currentUser.usuario.includes('GRUPO_1')) {
+      if (usuario.includes('G1') || usuario.includes('GRUPO_1')) {
+        console.log("Detectado como G1 por nombre de usuario");
         return 1;
-      } else if (this.currentUser.usuario.includes('G2') || this.currentUser.usuario.includes('GRUPO_2')) {
+      } else if (usuario.includes('G2') || usuario.includes('GRUPO_2')) {
+        console.log("Detectado como G2 por nombre de usuario");
         return 2;
-      } else if (this.currentUser.usuario.includes('G3') || this.currentUser.usuario.includes('GRUPO_3')) {
+      } else if (usuario.includes('G3') || usuario.includes('GRUPO_3')) {
+        console.log("Detectado como G3 por nombre de usuario");
         return 3;
       }
+      
+      // Verificar también por roles si están disponibles
+      if (this.currentUser.roles) {
+        console.log("Verificando roles:");
+        this.currentUser.roles.forEach((rol, index) => {
+          console.log(`  Rol ${index + 1}:`, {
+            codigo: rol.codigo,
+            nombre: rol.nombre,
+            descripcion: rol.descripcion,
+            idRol: rol.idRol
+          });
+        });
+        
+        const esG1 = this.currentUser.roles.some(rol => 
+          rol.codigo === "04" || 
+          (rol.nombre && rol.nombre.toUpperCase().includes("G1")) ||
+          (rol.nombre && rol.nombre.toUpperCase().includes("JEFE"))
+        );
+        const esG2 = this.currentUser.roles.some(rol => 
+          rol.codigo === "05" || 
+          (rol.nombre && rol.nombre.toUpperCase().includes("G2")) ||
+          (rol.nombre && rol.nombre.toUpperCase().includes("GERENTE"))
+        );
+        
+        console.log("Evaluación de roles:");
+        console.log("  esG1:", esG1);
+        console.log("  esG2:", esG2);
+        
+        // CAMBIO: Lógica mejorada para diferenciar G1 vs G2
+        if (esG1 && esG2) {
+          // Ambos usuarios tienen roles G1 y G2, usar criterios adicionales para diferenciar
+          const tieneResponsableAdm = this.currentUser.roles.some(rol => rol.codigo === "01");
+          const tieneEvaluadorContratos = this.currentUser.roles.some(rol => rol.codigo === "12");
+          const tieneAdminConfiguraciones = this.currentUser.roles.some(rol => rol.codigo === "11");
+          
+          console.log("Usuario tiene ambos roles G1 y G2. Analizando criterios adicionales:");
+          console.log("  - Responsable Administrativo (01):", tieneResponsableAdm);
+          console.log("  - Evaluador de Contratos (12):", tieneEvaluadorContratos);
+          console.log("  - Admin Configuraciones (11):", tieneAdminConfiguraciones);
+          
+          // Si tiene roles más administrativos/gerenciales, probablemente es G2
+          if (tieneResponsableAdm || tieneEvaluadorContratos || tieneAdminConfiguraciones) {
+            console.log("Detectado como G2 por roles gerenciales/administrativos");
+            return 2;
+          } else {
+            console.log("Detectado como G1 por ausencia de roles gerenciales");
+            return 1;
+          }
+        }
+        
+        // Si solo tiene uno de los roles, usar ese
+        if (esG2) {
+          console.log("Detectado como G2 por roles");
+          return 2;
+        } else if (esG1) {
+          console.log("Detectado como G1 por roles");
+          return 1;
+        }
+      }
     }
+    
+    console.log("Usando grupo por defecto: 3");
+    console.log("=====================================");
     return 3; // Por defecto grupo 3
   }
 
   private obtenerCodigoGrupoUsuario(): string {
-    if (this.currentUser?.usuario) {
-      // Determinar el código del grupo basado en el rol del usuario
-      if (this.currentUser.usuario.includes('G1') || this.currentUser.usuario.includes('GRUPO_1')) {
-        return 'G1';
-      } else if (this.currentUser.usuario.includes('G2') || this.currentUser.usuario.includes('GRUPO_2')) {
-        return 'G2';
-      } else if (this.currentUser.usuario.includes('G3') || this.currentUser.usuario.includes('GRUPO_3')) {
-        return 'G3';
-      }
+    const grupoNumerico = this.obtenerGrupoUsuario();
+    switch (grupoNumerico) {
+      case 1: return 'G1';
+      case 2: return 'G2';
+      case 3: return 'G3';
+      default: return 'G3';
     }
-    return 'G3'; // Por defecto grupo G3
   }
 
   cargarTablaPerfeccionamiento() {
@@ -497,6 +567,25 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
     this.serviceTableBandejaAprobacionesInformesRenovacion(filtro)
       .subscribe(
         (data) => {
+          console.log("=== DEBUG DATOS RECIBIDOS DEL BACKEND ===");
+          console.log("Filtro enviado:", filtro);
+          console.log("Respuesta completa:", data);
+          console.log("Total registros recibidos:", data?.content?.length || 0);
+          
+          if (data?.content && data.content.length > 0) {
+            console.log("Muestra de primeros 3 registros:");
+            data.content.slice(0, 3).forEach((item, index) => {
+              console.log(`Registro ${index + 1}:`, {
+                id: item.idRequermientoAprobacion,
+                expediente: item.numeroExpediente,
+                estadoAprobacionJefeDivision: item.estadoAprobacionJefeDivision,
+                estadoAprobacionGerenteDivision: item.estadoAprobacionGerenteDivision,
+                grupoAprobadorLd: item.grupoAprobadorLd
+              });
+            });
+          }
+          console.log("========================================");
+          
           // Mapear los datos de la nueva estructura del endpoint /api/renovacion/bandeja/aprobaciones
           // Estructura basada en BandejaAprobacionResponseDTO
           const mappedData = data.content?.map(item => ({
@@ -551,12 +640,92 @@ export class SolicitudListAprobacionComponent extends BasePageComponent<Solicitu
 
           // Filtrar por grupo del usuario
           const codigoGrupoUsuario = this.obtenerCodigoGrupoUsuario();
-          const dataFiltrada = mappedData.filter(item => {
-            // Filtrar solo los elementos que corresponden al grupo del usuario
-            return !item.grupoAprobadorLd || 
-                   item.grupoAprobadorLd.codigo === codigoGrupoUsuario ||
-                   codigoGrupoUsuario === 'G3'; // G3 puede ver todos los grupos por defecto
+          const grupoNumerico = this.obtenerGrupoUsuario();
+          
+          console.log("=== DEBUG FILTRADO DE DATOS ===");
+          console.log("Código grupo usuario:", codigoGrupoUsuario);
+          console.log("Grupo numérico:", grupoNumerico);
+          console.log("Datos antes del filtro:", mappedData.length);
+          
+          // Filtrar registros para G1 - NO mostrar si estadoAprobacionJefeDivision es "Aprobado"
+          let dataFiltrada = mappedData;
+          
+          if (grupoNumerico === 1) { // G1
+            console.log("Aplicando filtro G1 - ocultando registros con estadoAprobacionJefeDivision: 'Aprobado'");
+            const originalLength = dataFiltrada.length;
+            
+            dataFiltrada = dataFiltrada.filter(item => {
+              const debeOcultar = item.estadoAprobacionJefeDivision === "Aprobado";
+              if (debeOcultar) {
+                console.log("Ocultando registro G1:", {
+                  id: item.idRequermientoAprobacion,
+                  expediente: item.numeroExpediente,
+                  estadoJefe: item.estadoAprobacionJefeDivision,
+                  motivo: "estadoAprobacionJefeDivision = Aprobado"
+                });
+              }
+              return !debeOcultar;
+            });
+            
+            console.log(`Registros filtrados para G1: ${originalLength} -> ${dataFiltrada.length}`);
+          } else {
+            console.log("No se aplica filtro G1 (usuario no es G1)");
+          }
+          
+          // Filtro adicional por grupo aprobador (el filtro original)
+          console.log("=== DEBUG FILTRO GRUPO APROBADOR ===");
+          console.log("Antes del filtro grupo aprobador:", dataFiltrada.length);
+          
+          dataFiltrada.forEach((item, index) => {
+            console.log(`Registro ${index + 1} - Grupo Aprobador:`, {
+              expediente: item.numeroExpediente,
+              grupoAprobadorLd: item.grupoAprobadorLd,
+              codigoGrupoAprobador: item.grupoAprobadorLd?.codigo,
+              nombreGrupoAprobador: item.grupoAprobadorLd?.nombre,
+              codigoGrupoUsuario: codigoGrupoUsuario,
+              coincide: !item.grupoAprobadorLd || item.grupoAprobadorLd.codigo === codigoGrupoUsuario || codigoGrupoUsuario === 'G3'
+            });
           });
+          
+          dataFiltrada = dataFiltrada.filter(item => {
+            // Lógica mejorada para mapear códigos de grupo
+            let pasaFiltro = false;
+            
+            if (!item.grupoAprobadorLd) {
+              pasaFiltro = true; // Sin grupo aprobador, mostrar siempre
+            } else if (codigoGrupoUsuario === 'G3') {
+              pasaFiltro = true; // G3 puede ver todos los grupos
+            } else if (codigoGrupoUsuario === 'G2' && item.grupoAprobadorLd.codigo === 'GERENTE') {
+              pasaFiltro = true; // G2 puede ver registros de GERENTE
+            } else if (codigoGrupoUsuario === 'G1' && (item.grupoAprobadorLd.codigo === 'JEFE' || item.grupoAprobadorLd.codigo === 'JEFE_UNIDAD')) {
+              pasaFiltro = true; // G1 puede ver registros de JEFE
+            } else if (item.grupoAprobadorLd.codigo === codigoGrupoUsuario) {
+              pasaFiltro = true; // Coincidencia exacta de códigos
+            }
+            
+            if (!pasaFiltro) {
+              console.log("Registro FILTRADO por grupo aprobador:", {
+                expediente: item.numeroExpediente,
+                grupoAprobadorLd: item.grupoAprobadorLd?.codigo,
+                codigoGrupoUsuario: codigoGrupoUsuario,
+                motivo: "No coincide mapeo de grupos"
+              });
+            } else {
+              console.log("Registro PERMITIDO por grupo aprobador:", {
+                expediente: item.numeroExpediente,
+                grupoAprobadorLd: item.grupoAprobadorLd?.codigo,
+                codigoGrupoUsuario: codigoGrupoUsuario
+              });
+            }
+            
+            return pasaFiltro;
+          });
+          
+          console.log("Después del filtro grupo aprobador:", dataFiltrada.length);
+          console.log("====================================");
+          
+          console.log("Datos después de todos los filtros:", dataFiltrada.length);
+          console.log("===============================");
 
           this.dataSourceInformeRenovacion.data = dataFiltrada;
           if (this.paginatorInformeRenovacion) {

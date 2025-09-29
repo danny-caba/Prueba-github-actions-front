@@ -181,4 +181,57 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
            !invitacion?.feAceptacion; // Si no tiene fecha de aceptación aún
   }
 
+  puedeEnviarInvitacion(): boolean {
+    // Verificar si hay invitaciones con estado "Invitado" (736) o "Aceptado" (738)
+    if (!this.dataSource?.data || this.dataSource.data.length === 0) {
+      return true; // Si no hay invitaciones, puede enviar
+    }
+
+    // Buscar si hay alguna invitación con estado "Invitado" (736) o "Aceptado" (738)
+    const tieneInvitacionActiva = this.dataSource.data.some(invitacion => {
+      // Verificar estadoInvitacion (puede ser número o ListadoDetalle)
+      let estadoId: number | undefined;
+      
+      if (typeof invitacion?.estadoInvitacion === 'number') {
+        estadoId = invitacion.estadoInvitacion;
+      } else if (invitacion?.estadoInvitacion?.idListadoDetalle) {
+        estadoId = invitacion.estadoInvitacion.idListadoDetalle;
+      } else if (invitacion?.estado?.idListadoDetalle) {
+        estadoId = invitacion.estado.idListadoDetalle;
+      }
+      
+      return estadoId === 736 || estadoId === 738; // Invitado o Aceptado
+    });
+
+    return !tieneInvitacionActiva; // Si no tiene invitaciones activas, puede enviar
+  }
+
+  obtenerNombreEstadoInvitacion(estado: any): string {
+    // Mapear IDs de estado a nombres
+    const estadosMap = {
+      736: 'Invitado',
+      738: 'Aceptado', 
+      969: 'Archivado',
+      739: 'Rechazado',
+      1148: 'Eliminado'
+    };
+    
+    // Si es un objeto ListadoDetalle con nombre (preferido)
+    if (estado?.nombre) {
+      return estado.nombre;
+    }
+    
+    // Si es un objeto con idListadoDetalle
+    if (estado?.idListadoDetalle) {
+      return estadosMap[estado.idListadoDetalle] || estado.nombre || 'Desconocido';
+    }
+    
+    // Si es un número directo
+    if (typeof estado === 'number') {
+      return estadosMap[estado] || 'Desconocido';
+    }
+    
+    return 'Sin estado';
+  }
+
 }

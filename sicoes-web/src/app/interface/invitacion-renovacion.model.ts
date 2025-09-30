@@ -15,7 +15,8 @@ export class InvitacionRenovacion {
     feAceptacion?: string;
     feCaducidad?: string;
     noItem?: string;
-    estadoInvitacion?: ListadoDetalle;
+    estadoInvitacion?: number | ListadoDetalle; // Puede ser número o objeto
+    estado?: ListadoDetalle; // Campo adicional para el estado completo
     observacion?: string;
     fechaCreacion?: Date;
     fechaModificacion?: Date;

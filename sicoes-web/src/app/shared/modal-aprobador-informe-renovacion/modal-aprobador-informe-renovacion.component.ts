@@ -195,50 +195,47 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
 
         try {
           if (tipoAccion === 'APROBAR') {
-            // Usar el nuevo endpoint de aprobación masiva
-            const idRequerimientosAprobacion = this.data.elementosSeleccionados.map(informe => 
-              informe.idRequermientoAprobacion || informe.idInformeRenovacion
-            );
-
-            const requestPayload = {
-              idRequerimientosAprobacion: idRequerimientosAprobacion,
-              observacion: this.observacionControl.value || ''
-            };
-
-            console.log('Llamando al endpoint de aprobación con payload:', requestPayload);
+            // Determinar si es aprobador G2
+            const esG2 = this.esAprobadorG2 || this.esRolG2();
+            console.log('¿Es aprobador G2?:', esG2);
             
-            await firstValueFrom(
-              this.solicitudService.aprobarInformesRenovacionBandeja(requestPayload)
-            );
-            
-            console.log('Endpoint de aprobación llamado exitosamente');
+            if (esG2) {
+              console.log('Usuario ES G2 - Solo firma, aprobación después');
+              // Para G2: Solo mostrar firma, NO llamar endpoint aún
+              this.progreso = 50;
+              this.activarFirmaDigitalG2();
+            } else {
+              console.log('Usuario NO es G2 - Aprobación inmediata');
+              // Para no-G2: Llamar endpoint inmediatamente
+              const idRequerimientosAprobacion = this.data.elementosSeleccionados.map(informe => 
+                informe.idRequermientoAprobacion || informe.idInformeRenovacion
+              );
 
-            this.progreso = 100;
-            const cantidadInformes = this.data.elementosSeleccionados.length;
-            const mensajeExito = cantidadInformes === 1 
-              ? 'El informe ha sido aprobado exitosamente.'
-              : 'Los informes han sido aprobados exitosamente.';
+              const requestPayload = {
+                idRequerimientosAprobacion: idRequerimientosAprobacion,
+                observacion: this.observacionControl.value || ''
+              };
+
+              console.log('Llamando al endpoint de aprobación inmediata con payload:', requestPayload);
               
-            functionsAlert.success(mensajeExito).then(() => {
-              // Solo activar firma digital si es aprobador G2
-              console.log('Decidiendo si mostrar firma digital...');
-              console.log('Información del aprobador desde backend:', this.tipoAprobadorInfo);
+              await firstValueFrom(
+                this.solicitudService.aprobarInformesRenovacionBandeja(requestPayload)
+              );
               
-              // Usar información del backend (con fallback al método anterior)
-              const esG2 = this.esAprobadorG2 || this.esRolG2();
-              console.log('¿Es aprobador G2?:', esG2);
-              
-              if (esG2) {
-                console.log('Usuario ES G2 - Activando firma digital');
-                // Firma digital primero, notificación después del éxito
-                this.activarFirmaDigital();
-              } else {
-                console.log('Usuario NO es G2 - Enviando notificación directamente');
-                // Si no es G2, enviar notificación inmediatamente
+              console.log('Endpoint de aprobación llamado exitosamente');
+
+              this.progreso = 100;
+              const cantidadInformes = this.data.elementosSeleccionados.length;
+              const mensajeExito = cantidadInformes === 1 
+                ? 'El informe ha sido aprobado exitosamente.'
+                : 'Los informes han sido aprobados exitosamente.';
+                
+              functionsAlert.success(mensajeExito).then(() => {
+                // Enviar notificación para no-G2
                 this.enviarNotificacion(1); // ID para aprobación
                 this.dialogRef.close('OK');
-              }
-            });
+              });
+            }
 
           } else if (tipoAccion === 'RECHAZAR') {
             // Para rechazar, continuar con el proceso individual por ahora
@@ -301,12 +298,111 @@ export class ModalAprobadorInformeRenovacionComponent extends BaseComponent impl
       functionsAlert.error(errorMessage);
       this.dialogRef.close('OK');
     } else {
-      functionsAlert.success('Acción completada con éxito.').then(() => {
-        if (tipoAccion === 'RECHAZAR') {
-          this.enviarNotificacion(2); // ID para rechazo
+      if (tipoAccion === 'RECHAZAR') {
+        // Para rechazo, mostrar modal personalizado
+        this.mostrarModalRechazoExitoso();
+      } else {
+        // Para otras acciones, usar alert normal
+        functionsAlert.success('Acción completada con éxito.').then(() => {
+          this.dialogRef.close('OK');
+        });
+      }
+    }
+  }
+
+  private mostrarModalRechazoExitoso(): void {
+    functionsAlert.info('Se ha registrado el rechazo del informe').then(() => {
+      this.enviarNotificacion(2); // ID para rechazo
+      this.dialogRef.close('OK');
+    });
+  }
+
+
+
+  /**
+   * Activar firma digital para G2 - SIN llamar endpoint primero
+   * El endpoint de aprobación se llama DESPUÉS de la firma exitosa
+   */
+  private async activarFirmaDigitalG2(): Promise<void> {
+    try {
+      console.log('G2: Iniciando SOLO firma digital, sin aprobación previa...');
+      const result = await this.firmaDigitalService.firmarInformesRenovacion(
+        this.data.elementosSeleccionados
+      );
+      
+      result.subscribe({
+        next: async (resultado) => {
+          if (resultado === 'success') {
+            console.log('G2: Firma exitosa, AHORA sí llamando endpoint de aprobación...');
+            this.progreso = 75;
+            
+            // AHORA SÍ llamar al endpoint de aprobación
+            await this.procesarAprobacionPostFirma();
+          } else {
+            console.log('G2: Firma cancelada o falló');
+            this.loadingAccion = false;
+            functionsAlert.info('El proceso fue cancelado.');
+            this.dialogRef.close('cancel');
+          }
+        },
+        error: (error) => {
+          console.error('G2: Error en firma digital:', error);
+          this.loadingAccion = false;
+          functionsAlert.error('Error en el proceso de firma digital: ' + (error?.message || 'Error desconocido'));
+          this.dialogRef.close('cancel');
         }
+      });
+    } catch (error) {
+      console.error('G2: Error iniciando firma digital:', error);
+      this.loadingAccion = false;
+      functionsAlert.error('No se pudo iniciar la firma digital: ' + (error?.message || error?.toString() || 'Error desconocido'));
+      this.dialogRef.close('cancel');
+    }
+  }
+
+  /**
+   * Procesa la aprobación después de que la firma fue exitosa (para G2)
+   */
+  private async procesarAprobacionPostFirma(): Promise<void> {
+    try {
+      console.log('Procesando aprobación post-firma para G2...');
+      
+      const idRequerimientosAprobacion = this.data.elementosSeleccionados.map(informe => 
+        informe.idRequermientoAprobacion || informe.idInformeRenovacion
+      );
+
+      const requestPayload = {
+        idRequerimientosAprobacion: idRequerimientosAprobacion,
+        observacion: this.observacionControl.value || ''
+      };
+
+      console.log('Llamando al endpoint de aprobación post-firma con payload:', requestPayload);
+      
+      await firstValueFrom(
+        this.solicitudService.aprobarInformesRenovacionBandeja(requestPayload)
+      );
+      
+      console.log('Aprobación post-firma completada exitosamente');
+
+      this.progreso = 100;
+      this.loadingAccion = false;
+      
+      const cantidadInformes = this.data.elementosSeleccionados.length;
+      const mensajeExito = cantidadInformes === 1 
+        ? 'El informe ha sido firmado y aprobado exitosamente.'
+        : 'Los informes han sido firmados y aprobados exitosamente.';
+        
+      functionsAlert.success(mensajeExito).then(() => {
+        // Enviar notificación para G2
+        this.enviarNotificacion(1); // ID para aprobación
         this.dialogRef.close('OK');
       });
+      
+    } catch (error) {
+      console.error('Error en aprobación post-firma:', error);
+      this.loadingAccion = false;
+      functionsAlert.error('La firma fue exitosa, pero hubo un error en la aprobación: ' + (error?.message || 'Error desconocido'));
+      this.dialogRef.close('cancel');
     }
   }
 

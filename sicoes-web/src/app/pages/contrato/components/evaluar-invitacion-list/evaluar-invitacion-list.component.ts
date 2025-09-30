@@ -79,7 +79,7 @@ export class EvaluarInvitacionListComponent extends BasePageComponent<Invitacion
   }
 
   goToBandejaSolicitudes() {
-    this.router.navigate([Link.EXTRANET, Link.SOLICITUDES_LIST]);
+    this.router.navigate([Link.EXTRANET, Link.CONTRATOS_LIST]);
   }
 
   limpiar() {

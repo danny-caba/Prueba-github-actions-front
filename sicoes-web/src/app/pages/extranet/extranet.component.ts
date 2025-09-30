@@ -79,19 +79,19 @@ export class ExtranetComponent implements OnInit {
     xxyyxxx: 'NEbs3MYOAEWJmSf3V8IOfAvzUi4JPwRutSgvwBUQkB4WMBBYkSSs9 kk6p5U9/dPYT2MTQ6Rfl99nD601UsaY5AdC2bd2HoSARNza0d6M3L0LgHHOHfgnXo4ZzGAXX2uo5ldWhdC0RW2gU0e0duv0C/2QQ btvRkFwCjU4Dykxo='
   }, {
     username: 'RVERAC',
-    codigo: 'APROB-TEC',
+    codigo: '05',
     xxyyxxx: 'P7DPENzlY/TtfrnvZq7vuZRQHoX3DQCz1W 8rs01QhxyjBf4HJkQoS16A07EatNm0zcGjoYvkDJwMTta5HEG5ZAdC2bd2HoSARNza0d6M3L0LgHHOHfgnXo4ZzGAXX2uE9JS TsiFHHfsQVeY7mVFC/2QQ btvRkFwCjU4Dykxo='
   }, {
     username: 'JVASQUEZG',
-    codigo: 'APROB-ADM',
+    codigo: '07',
     xxyyxxx: '43ZbRa/R7YztgmDLfOaPQp6FrXMsCTEdJQCSaIZYQ7tgsuOtFG43/MQq3l5T4fYcFBZp4w0wde3PV1ZHGgFt1jzesw7Evf/RCj9bN8Fi62OEHG9InnPkia/JJ25LJ42UpQipZWAjnXG/2jpbA4pmm/cu7zwp5OQbGJGBvjxoLW2cbV4nPKCUyHM91d06Jux0'
   }, {
     username: 'AOYOLA',
-    codigo: 'APROB-TEC',
+    codigo: '05',
     xxyyxxx: 'uGmFzocPo3LHlpylRfL4hzwa/EdLzRdQkVgmgCnza4p3edtouUApcbPHNTF96VzfeWZoFT1KtFglUhQC1KNFx5AdC2bd2HoSARNza0d6M3L0LgHHOHfgnXo4ZzGAXX2ukqS j0cV696OtL9L YfxHS/2QQ btvRkFwCjU4Dykxo='
   }, {
     username: 'AOLIVERA',
-    codigo: 'APROB-TEC',
+    codigo: '05',
     xxyyxxx: 'wKRW7lL5/eUDGKeRPe7yXOJ8nk39BBQmL9mVMcDUywytAF14rsHYifamG1j3 HcIZJUjkR85K8XZrLXT1wpYvxB9o8zf02BB58RAsEDuKASZYJ7w5GYS9H9XT5ceCikMoSc21yZe/A8TSLCXAWm/m35nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
   }, {
     username: 'AALFARO',
@@ -111,15 +111,15 @@ export class ExtranetComponent implements OnInit {
     xxyyxxx: '8l5GaJTvB8D2KdlKdMZJ7ctOiQDEoB/ZnJDfVrxTxuWrCagj61EeFzihjJ MB/n4EHHC R8ZyMQZToKSr2S0GpAdC2bd2HoSARNza0d6M3L0LgHHOHfgnXo4ZzGAXX2uo7rM7Vyi1lnRtEq0mn8A i/2QQ btvRkFwCjU4Dykxo='
   }, {
     username: 'CBANDINI',
-    codigo: 'APROB-TEC',
+    codigo: '05',
     xxyyxxx: 'f L1QfTIWWczOpDXWkqEHbMspq64aIowm6UC9dUNEdU4RbJrVmm/ERb1YGtAzB v7d3usC9xTLAFFdI97  1pBB9o8zf02BB58RAsEDuKASZYJ7w5GYS9H9XT5ceCikM4M3U5cEvJdVmUV/1cPmEGX5nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
   }, {
     username: 'CBARREDA',
-    codigo: 'APROB-TEC',
+    codigo: '05',
     xxyyxxx: 'uOAGbR97MIpnmMrnZ0vJLJR61W Zxx 9o/9Fy5mmAQ2/fUIpZgcn/SxEhsAVXy5VmN65 np7xICI2jhl5v2jkRB9o8zf02BB58RAsEDuKASZYJ7w5GYS9H9XT5ceCikMdzQ ZaNKuR5oPOTdMna2835nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
   }, {
     username: 'CBARRENO',
-    codigo: 'APROB-TEC',
+    codigo: '05',
     xxyyxxx: 'uOAGbR97MIpnmMrnZ0vJLP2FOjCj/mn5J9Z5aP4McgnjmPWKmA2Ccf5rrSCXclVIvKuhLWLVf1BGBUkQ4Ue6sxB9o8zf02BB58RAsEDuKASZYJ7w5GYS9H9XT5ceCikMTG9xhtO8E5Mp46X0nOVwYX5nlT35CYsbnObjUpjoyDNzcvJ4UHLLcOUZXmrj8Q0g'
   }]
 
@@ -219,6 +219,8 @@ export class ExtranetComponent implements OnInit {
   }
 
   sendFakeIntra(usu) {
+    // Store username for role simulation in custom-layout
+    localStorage.setItem('currentUser', JSON.stringify({ username: usu.username }));
     this.usuarioService.setTipoUser(this.validateUsuInt(usu));
     this.router.navigate([Link.INTRANET, Link.LOGIN_INTRANET], {
       queryParams: {

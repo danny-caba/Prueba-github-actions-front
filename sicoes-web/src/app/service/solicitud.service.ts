@@ -313,6 +313,10 @@ export class SolicitudService {
     if (filtroInformeRenovacion.nombreContratista) {
       params = params.set('nombreContratista', filtroInformeRenovacion.nombreContratista);
     }
+    if (filtroInformeRenovacion.grupoUsuario !== undefined) {
+      params = params.set('grupoUsuario', filtroInformeRenovacion.grupoUsuario.toString());
+      console.log('Servicio: grupoUsuario enviado al backend:', filtroInformeRenovacion.grupoUsuario);
+    }
     
     console.log('Servicio: URL final:', urlEndpoint, 'Params:', params.toString());
     return this.http.get<any>(urlEndpoint, { params: params });

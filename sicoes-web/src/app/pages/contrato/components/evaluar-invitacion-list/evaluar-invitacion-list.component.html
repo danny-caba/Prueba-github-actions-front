@@ -11,16 +11,16 @@
                 <!-- tabla -->
                 <table @stagger [dataSource]="dataSource" class="w-full rounded" mat-table matSort>
                     <ng-container matColumnDef="feInvitacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Invitación</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Invitación</th>
                         <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.feInvitacion }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="fePlazoConfirmacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Plazo de confirmación</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Plazo Confirmación</th>
                         <td class="text-primary font-medium " mat-cell *matCellDef="let element">{{ element?.feCaducidad }}</td>
                     </ng-container>
                     <ng-container matColumnDef="feAceptacionInvitacion">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Aceptación Invitación</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Aceptación Invitación</th>
                         <td class="text-primary font-medium " mat-cell *matCellDef="let element">{{ element?.feAceptacion }}</td>
                     </ng-container>
                     <ng-container matColumnDef="tiSector">

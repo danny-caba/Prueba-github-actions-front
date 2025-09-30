@@ -60,10 +60,15 @@ export class CustomLayoutComponent implements OnInit {
 
       let itemsDupliados: NavigationItem[] = [];
 
+      console.log('User data received:', this.usuario);
+      console.log('User roles:', this.usuario?.roles);
+
       this.usuario?.roles?.forEach(element => {
         let menu: any = RolMenu.find(item => item.ROL.CODIGO === element.codigo);
         
-        itemsDupliados.push(...menu?.MENU);
+        if (menu && menu.MENU) {
+          itemsDupliados.push(...menu.MENU);
+        }
 
         if(this.usuario?.tipoPersona?.codigo == TipoPersonaEnum.JURIDICO){
           //remove menu 10 Bdj Invitados

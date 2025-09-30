@@ -17,7 +17,7 @@
 
                     <ng-container matColumnDef="fePlazoConfirmacion">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Plazo de confirmación</th>
-                        <td class="text-primary font-medium " mat-cell *matCellDef="let element">{{ element?.fechaVencimiento | date:'yyyy/MM/dd HH:mm' }}</td>
+                        <td class="text-primary font-medium " mat-cell *matCellDef="let element">{{ element?.feCaducidad }}</td>
                     </ng-container>
                     <ng-container matColumnDef="feAceptacionInvitacion">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Aceptación Invitación</th>
@@ -25,19 +25,19 @@
                     </ng-container>
                     <ng-container matColumnDef="tiSector">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Sector</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.sector }}</td>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.requerimientoRenovacion?.tiSector }}</td>
                     </ng-container>
                     <ng-container matColumnDef="tiSubSector">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Sub Sector</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.subSector }}</td>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.requerimientoRenovacion?.tiSubSector }}</td>
                     </ng-container>
                     <ng-container matColumnDef="noItem">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Item</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.noItem }}</td>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.requerimientoRenovacion?.noItem }}</td>
                     </ng-container>
                     <ng-container matColumnDef="estadoInvitacion">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Invitación</th>
-                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estado?.nombre || 'Otro' }}</td>
+                        <td class="text-primary font-medium" mat-cell *matCellDef="let element">{{ element?.estadoInvitacion?.nombre || 'Otro' }}</td>
                     </ng-container>
                     
                     <!-- Action Column -->

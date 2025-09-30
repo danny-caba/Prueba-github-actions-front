@@ -71,11 +71,14 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
     this.cargarCombo();
     this.nuExpediente = this.activatedRoute.snapshot.paramMap.get('idRequerimiento');
     this.listar();
-    this.formGroup.get('sector').valueChanges.subscribe(value => {
-      this.onChangeSector(value)
-    });
+    // this.formGroup.get('sector').valueChanges.subscribe(value => {
+    //   this.onChangeSector(value)
+    // });
     this.requerimientoRenovacionService.obtenerPorNumeroExpediente(this.nuExpediente).subscribe(d=>{
       this.requerimiento = d;
+      this.formGroup.controls.sector.setValue(this.requerimiento.tiSector);
+      this.formGroup.controls.subsector.setValue(this.requerimiento.tiSubSector);
+      this.formGroup.controls.noItem.setValue(this.requerimiento.noItem);
     });
   }
 
@@ -94,13 +97,9 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
   enviarInvitacion() {
     functionsAlert.questionSiNoEval('¿Está seguro de que desea enviar la invitación?',"Invitación").then((result) => {
       if(result.isConfirmed){
-        console.log('Requerimiento:', this.requerimiento)
         this.invitacion.idReqRenovacion = this.requerimiento?.idReqRenovacion;
-        console.log('Payload a enviar:', this.invitacion)
-        
         this.invitacionRenovacionService.enviar(this.invitacion).subscribe({
           next: (res) => {
-            console.log('Respuesta del servidor:', res)
             functionsAlert.success('Se ha enviado la invitación con éxito a la empresa supervisora').then(() => {
               this.invitacion = res;
               // Recargar la tabla para mostrar la nueva invitación
@@ -109,7 +108,6 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
           },
           error: (error) => {
             console.error('Error al enviar invitación:', error);
-            functionsAlert.error('Error al enviar la invitación. Por favor, intente nuevamente.');
           }
         });
       }
@@ -133,14 +131,14 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
     return false;
   }
 
-  onChangeSector(obj) {
-    if (!obj) return;
-    this.formGroup.controls.subsector.setValue('');
-    this.parametriaService.obtenerSubListado(ListadoEnum.SUBSECTOR, obj.idListadoDetalle).subscribe(res => {
-      this.listSubSector = res;
+  // onChangeSector(obj) {
+  //   if (!obj) return;
+  //   this.formGroup.controls.subsector.setValue('');
+  //   this.parametriaService.obtenerSubListado(ListadoEnum.SUBSECTOR, obj.idListadoDetalle).subscribe(res => {
+  //     this.listSubSector = res;
 
-    });
-  }
+  //   });
+  // }
 
   obtenerFiltro() {
     let filtro: any = {
@@ -179,6 +177,18 @@ export class RequerimientoRenovacionInvitacionComponent extends BasePageComponen
     return invitacion?.estadoInvitacion?.codigo === 'PENDIENTE' ||
            invitacion?.estadoInvitacion?.codigo === 'ENVIADA' ||
            !invitacion?.feAceptacion; // Si no tiene fecha de aceptación aún
+  }
+
+  eliminarInvitacion(uuid: string) {
+    functionsAlert.questionSiNo('¿Está seguro de querer eliminar la invitación?').then((result) => {
+      if (result.isConfirmed) {
+        this.invitacionRenovacionService.eliminarInvitacion({uuid}).subscribe(res => {
+          functionsAlert.success('Invitación eliminada exitosamente').then(() => {
+            this.cargarTabla();
+          });
+        });
+      }
+    });
   }
 
 }

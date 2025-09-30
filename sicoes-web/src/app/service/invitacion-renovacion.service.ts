@@ -32,7 +32,6 @@ export class InvitacionRenovacionService {
     return this.http.post<any>(urlEndpoint,request);
   }
 
-
   aceptarInvitacion(invitacionData: any): Observable<any> {
     const urlEndpoint = `${this._path_serve}/renovaciones/invitacion/aceptar`;
     return this.http.post<any>(urlEndpoint, invitacionData);
@@ -46,5 +45,10 @@ export class InvitacionRenovacionService {
   notificarRenovacion(idTipoNotifica: number): Observable<any> {
     const urlEndpoint = `${this._path_serve}/informe/renovacion/notifica/${idTipoNotifica}`;
     return this.http.post<any>(urlEndpoint, {});
+  }
+
+  eliminarInvitacion(uuid: any): Observable<any> {
+    const urlEndpoint = `${this._path_serve}/api/renovaciones/invitaciones/eliminar`;
+    return this.http.post<any>(urlEndpoint, uuid);
   }
 }

@@ -962,15 +962,19 @@ historyApproveAndSignPerfeccionamiento(row: any) {
   }
 
   pageChangeHistorialInformeRenovacion(event: any) {
-    this.historialAprobaciones();
+    // this.historialAprobaciones();
   }
 
-  historialAprobaciones(){
+  historialAprobaciones(row: any){
     this.mostrarHistorial = !this.mostrarHistorial;
     this.mostrarCards = !this.mostrarCards;
 
-    const filtro = this.obtenerFiltroHistorialInformeRenovacion();
-    console.log('historialAprobaciones', filtro);
+    // const filtro = this.obtenerFiltroHistorialInformeRenovacion();
+    // console.log('historialAprobaciones', filtro);
+
+    const filtro = {
+      idInformeRenovacion: row.idInformeRenovacion
+    }
 
     this.dataSourceHistorial.data = [];
     this.isLoading = true;
@@ -979,7 +983,7 @@ historyApproveAndSignPerfeccionamiento(row: any) {
       .subscribe(
         (data) => {
           console.log('historialAprobaciones', JSON.stringify(data));
-          this.dataSourceHistorial.data = data.historial_aprobaciones || [];
+          this.dataSourceHistorial.data = data.content || [];
           if (this.paginatorHistoriaInformeRenovacion) {
             this.paginatorHistoriaInformeRenovacion.length = data.total_registros || 0;
           }

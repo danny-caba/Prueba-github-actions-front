@@ -459,37 +459,37 @@
     <table mat-table [dataSource]="dataSourceHistorial" class="w-full border">
       <ng-container matColumnDef="tipo">
         <th mat-header-cell *matHeaderCellDef>Tipo</th>
-        <td mat-cell *matCellDef="let element">{{ element.tipo }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.tipoAprobador?.nombre }}</td>
       </ng-container>
 
       <ng-container matColumnDef="grupo">
         <th mat-header-cell *matHeaderCellDef>Grupo</th>
-        <td mat-cell *matCellDef="let element">{{ element.grupo }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.grupo?.nombre }}</td>
       </ng-container>
 
       <ng-container matColumnDef="fecha_hora_designacion">
         <th mat-header-cell *matHeaderCellDef>Fecha Hora designación</th>
-        <td mat-cell *matCellDef="let element">{{ element.fecha_hora_designacion }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.feAsignacion }}</td>
       </ng-container>
 
       <ng-container matColumnDef="aprobador">
         <th mat-header-cell *matHeaderCellDef>Aprobador</th>
-        <td mat-cell *matCellDef="let element">{{ element.aprobador  }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.usuario?.nombreUsuario  }}</td>
       </ng-container>
 
       <ng-container matColumnDef="fecha_hora_aprobacion">
         <th mat-header-cell *matHeaderCellDef>Fecha Hora Aprobación</th>
-        <td mat-cell *matCellDef="let element">{{ element.fecha_hora_aprobacion }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.feAprobacion }}</td>
       </ng-container>
 
       <ng-container matColumnDef="resultado">
         <th mat-header-cell *matHeaderCellDef>Resultado</th>
-        <td mat-cell *matCellDef="let element">{{ element.resultado }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.estado?.nombre }}</td>
       </ng-container>
 
       <ng-container matColumnDef="observacion">
         <th mat-header-cell *matHeaderCellDef>Observación</th>
-        <td mat-cell *matCellDef="let element">{{ element.observacion }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.deObservacion }}</td>
       </ng-container>
 
 
@@ -548,7 +548,7 @@
       <mat-icon svgIcon="mat:history"></mat-icon>
       <span>Historial Aprobar y firmar</span>
     </button>
-    <button mat-menu-item (click)="historialAprobaciones()">
+    <button mat-menu-item (click)="historialAprobaciones(row)">
       <mat-icon svgIcon="mat:analytics"></mat-icon>
       <span>Historial de aprobaciones</span>
     </button>

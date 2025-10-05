@@ -3,7 +3,8 @@ name: Build and Analyze (SonarQube)
 on:
   workflow_dispatch:
   push:
-    branches: [ develop-1709-sonar ]
+    branches:
+     - develop-1709-sonar
 
 jobs:
   sonar:

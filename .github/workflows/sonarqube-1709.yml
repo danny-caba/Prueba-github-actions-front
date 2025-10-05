@@ -3,8 +3,7 @@ name: Build and Analyze (SonarQube)
 on:
   workflow_dispatch:
   push:
-    branches:
-      - develop-1709-sonar
+    branches: [ develop-1709-sonar ]
 
 jobs:
   sonar:
@@ -62,5 +61,16 @@ jobs:
         working-directory: ${{ steps.loc.outputs.dir }}
         run: npm run build --if-present
 
-      - name: SonarQu
-
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          projectBaseDir: ${{ steps.loc.outputs.dir }}
+          args: >
+            -Dsonar.projectKey=PRUEBA-FRONT
+            -Dsonar.projectName=PRUEBA-FRONT
+            -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
+            # Descomenta si generas cobertura:
+            # -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info

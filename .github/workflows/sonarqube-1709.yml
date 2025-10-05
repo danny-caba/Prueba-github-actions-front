@@ -3,7 +3,7 @@ name: Sonarqube-1709
 on:
   push:
     branches:
-      - main
+      - develop-1709-sonar
 
 
 jobs:

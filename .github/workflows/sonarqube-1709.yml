@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-     - develop-1709-sonar
+      - develop-1709-sonar
 
 jobs:
   sonar:

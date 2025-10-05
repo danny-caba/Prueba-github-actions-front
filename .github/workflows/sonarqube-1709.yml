@@ -3,42 +3,63 @@ name: Build and Analyze (SonarQube)
 on:
   workflow_dispatch:
   push:
-    branches:
-      - develop-1709-sonar
+    branches: [ develop-1709-sonar ]
 
 jobs:
   sonar:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js (for Angular projects)
+      - name: Locate Angular project folder
+        id: loc
+        shell: bash
+        run: |
+          set -e
+          # Busca un package.json que conviva con angular.json (evita /node_modules)
+          dir=$(dirname "$(grep -rl --exclude-dir=node_modules -m1 '"@angular/core"' -n . || true)")
+          # Plan B: angular.json cercano
+          if [ -z "$dir" ]; then
+            dir=$(dirname "$(find . -maxdepth 4 -name angular.json | head -n1)")
+          fi
+          # Plan C: primer package.json que no esté en node_modules
+          if [ -z "$dir" ]; then
+            dir=$(dirname "$(find . -maxdepth 4 -name package.json -not -path '*/node_modules/*' | head -n1)")
+          fi
+          if [ -z "$dir" ] || [ ! -f "$dir/package.json" ]; then
+            echo "No se encontró package.json. Revisa la estructura del repo." >&2
+            exit 1
+          fi
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+          echo "Angular dir: $dir"
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: npm
+          cache-dependency-path: ${{ steps.loc.outputs.dir }}/package-lock.json
 
-      - name: Set up Java (required by SonarQube scanner)
+      - name: Set up Java (for SonarQube scanner)
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
       - name: Install dependencies
-        run: npm install
+        working-directory: ${{ steps.loc.outputs.dir }}
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Build project
+        working-directory: ${{ steps.loc.outputs.dir }}
         run: npm run build --if-present
 
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v6
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.projectKey=PRUEBA-FRONT
-            -Dsonar.projectName="PRUEBA-FRONT"
-            -Dsonar.sources=src
-            -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+      - name: SonarQu
+
